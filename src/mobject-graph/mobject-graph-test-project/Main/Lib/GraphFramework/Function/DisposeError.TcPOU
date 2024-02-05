@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="DisposeError" Id="{cdd60d21-8aa0-0adb-2045-b5c59ca8feaa}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION DisposeError : BOOL
+VAR_INPUT
+	error : I_Error;
+END_VAR
+VAR
+	disposableError : I_Disposable;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF __QUERYINTERFACE(error,disposableError) THEN
+ 	disposableError.Dispose();
+	Disposeerror := TRUE;
+END_IF;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

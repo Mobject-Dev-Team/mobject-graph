@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="InputPortNotConnectedError" Id="{a9aca9eb-4d4e-0fe7-2725-b8601bc91b2d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC InputPortNotConnectedError EXTENDS Error
+VAR
+	state : (CLEARED, RAISED);
+	port : I_InputPort;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="Active" Id="{20dacd62-8743-05f0-3c18-e8d466902c6a}">
+      <Declaration><![CDATA[PROPERTY Active : BOOL]]></Declaration>
+      <Get Name="Get" Id="{3cbcd73e-5293-02a1-0e43-ffd0b12811c6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Active := state <> CLEARED;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Clear" Id="{e4f6c949-0a3c-0b39-2976-4cfca73cc781}">
+      <Declaration><![CDATA[METHOD PUBLIC Clear
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[port := 0;
+state := CLEARED;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="ErrorCode" Id="{3e4f3eac-df0a-0738-3a38-5241491187a2}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ErrorCode : HRESULT]]></Declaration>
+      <Get Name="Get" Id="{3eb1f540-7be6-0f27-0627-b2277b01249b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ErrorCode := Tc2_System.E_HRESULTAdsErr.SYMBOLNOTFOUND;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Message" Id="{a79cdaa9-a00f-0bbb-1419-8ca11269f95c}">
+      <Declaration><![CDATA[PROPERTY Message : T_MaxString]]></Declaration>
+      <Get Name="Get" Id="{b6073a34-82f2-07ab-07b4-1ed615d4082f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Message := 'Input port not connected';]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Raise" Id="{607bc740-3a89-00d3-0198-7e2ea960ebdf}">
+      <Declaration><![CDATA[METHOD PUBLIC Raise
+VAR_INPUT
+	Port : I_InputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.port := Port;
+state := RAISED;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Reason" Id="{ae2c560c-d56b-0f09-016d-71d5008526e2}">
+      <Declaration><![CDATA[PROPERTY Reason : T_MaxString]]></Declaration>
+      <Get Name="Get" Id="{aaa15406-0d20-0f38-1da9-6a652dd4b3ea}">
+        <Declaration><![CDATA[VAR
+	message : STRING;
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF state = CLEARED THEN
+	RETURN;
+END_IF
+
+Reason := port.Name;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

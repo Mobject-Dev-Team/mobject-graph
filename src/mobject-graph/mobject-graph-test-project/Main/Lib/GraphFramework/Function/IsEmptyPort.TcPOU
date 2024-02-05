@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="IsEmptyPort" Id="{ed526687-3cbe-0bbf-011b-976186cb0e13}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION IsEmptyPort : BOOL
+VAR_INPUT
+	Port : I_Port;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IsEmptyPort := Port = 0;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

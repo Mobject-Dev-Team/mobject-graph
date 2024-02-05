@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_MetadataCollection" Id="{619eb29d-439c-0725-21c7-7b98cf8a07ad}">
+    <Declaration><![CDATA[INTERFACE I_MetadataCollection
+]]></Declaration>
+    <Method Name="GetEnumerator" Id="{85f4aa9d-cf3a-0092-3c7e-23ce4e9e0477}">
+      <Declaration><![CDATA[METHOD PUBLIC GetEnumerator : I_ForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetByName" Id="{200434b9-6768-0aad-25b5-1885345c8750}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetByName : BOOL
+VAR_INPUT
+	Name : STRING;
+	Destination : REFERENCE TO I_Metadatum;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NodeFactory_Literal_BOOL" Id="{40e820c9-6ab1-083f-1936-ca01744bb371}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK NodeFactory_Literal_BOOL EXTENDS NodeFactory]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Create" Id="{3a6095c4-583b-025f-0bfd-409922db5993}">
+      <Declaration><![CDATA[METHOD PUBLIC Create : I_Node
+VAR
+	pointerToNode : POINTER TO Node_Literal_BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pointerToNode := __NEW(Node_Literal_BOOL);
+Create := pointerToNode^;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_PropertyCollection" Id="{4ba627a9-63df-0edd-30dd-699f1a143552}">
+    <Declaration><![CDATA[INTERFACE I_PropertyCollection
+]]></Declaration>
+    <Method Name="GetEnumerator" Id="{646f5606-1ba6-07b7-10cd-b19e40dedbba}">
+      <Declaration><![CDATA[METHOD PUBLIC GetEnumerator : I_ForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetByName" Id="{816cfa84-ac0c-0a44-34ec-af16a76d05fb}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetByName : BOOL
+VAR_INPUT
+	Name : STRING;
+	Destination : REFERENCE TO I_Property;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

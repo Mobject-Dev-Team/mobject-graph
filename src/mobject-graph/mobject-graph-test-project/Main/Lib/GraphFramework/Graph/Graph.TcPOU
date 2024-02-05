@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Graph" Id="{bc650401-8298-0fc9-2fc1-27c637239109}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK Graph EXTENDS BaseElement IMPLEMENTS I_Graph
+VAR
+	nodeFactories : I_NodeFactoryCollection;
+	linkFactory : I_LinkFactory;
+	currentGraphUuid : Uuid;	
+	nodes : NodeCollection;
+	links : LinkCollection;	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{a293f140-7386-0971-1795-6d18ede4b434}" />
+    <Folder Name="Destructor" Id="{b9a66c15-86af-0a69-1a53-9c709ccc1fa3}" />
+    <Folder Name="Private" Id="{a5ead5a1-6f01-0184-2335-e91d2c05d4a8}" />
+    <Method Name="Accept" Id="{9759288d-5f0e-0b2c-0d87-315eec92f3c5}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_GraphVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitGraph(this^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Clear" Id="{fa166676-0f3d-0fcb-3385-10008bb949c7}">
+      <Declaration><![CDATA[METHOD PUBLIC Clear
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[links.DisposeAndRemoveAll();
+nodes.DisposeAll();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Configure" Id="{8ca2cf39-da7f-0268-2882-9e8979c54c68}">
+      <Declaration><![CDATA[METHOD PUBLIC Configure
+VAR_INPUT
+	Settings : I_GraphSettings;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF currentGraphUuid <> Settings.Uuid THEN
+
+	currentGraphUuid := Settings.Uuid;
+	
+	Clear();
+	
+	IF Settings.NodeCount > 0 THEN
+		CreateNodes(Settings);
+	END_IF
+	
+	IF Settings.LinkCount > 0 THEN
+		CreateLinks(Settings);
+	END_IF
+
+ELSE
+
+	IF Settings.NodeCount > 0 THEN
+		UpdateNodeSettings(Settings);
+	END_IF
+
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateLinks" Id="{d76133aa-fb5b-0afd-18d9-5b60757eff4b}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateLinks
+VAR_INPUT
+	GraphSettings : I_GraphSettings;
+END_VAR
+VAR
+	linkCount : UDINT;
+	linkSettings : I_LinkSettings;
+	nodeSettings : I_NodeSettings;
+	linkIndex : UDINT;	
+	sourcePortName : STRING;
+	destinationPortName : STRING;
+	link : I_Link;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[linkCount:= GraphSettings.LinkCount;
+
+FOR linkIndex := 0 TO linkCount - 1  DO
+	
+	linkSettings := GraphSettings.GetLinkByIndex(linkIndex);
+	
+	nodeSettings := GraphSettings.GetNodeById(linkSettings.SourceId);
+	sourcePortName := nodeSettings.GetOutputById(linkSettings.SourcePortId).Name;
+	
+	nodeSettings := GraphSettings.GetNodeById(linkSettings.DestinationId);
+	destinationPortName := nodeSettings.GetInputById(linkSettings.DestinationPortId).Name;
+	 
+	link := linkFactory.Create(
+		linkId := linkSettings.Id,
+		linkSourceNode := nodes.GetById(linkSettings.SourceId),
+		linkSourcePortName := sourcePortName,
+		LinkDestinationNode := nodes.GetById(linkSettings.DestinationId),
+		LinkDestinationPortName := destinationPortName
+	);
+
+	link.Configure(linkSettings);
+	links.Insert(link);
+
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateNodes" Id="{7a45191b-d493-03e5-1c4f-ed833b99b315}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateNodes : BOOL
+VAR_INPUT
+	GraphSettings : I_GraphSettings;
+END_VAR
+VAR
+	nodeCount : UDINT;
+	nodeSettings : I_NodeSettings;
+	nodeIndex : UDINT;	
+	nodeFactory : I_NodeFactory;
+	node : I_Node;
+	nodeId : NodeId;
+	nodeType : T_MAXSTRING;
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodeCount := GraphSettings.NodeCount; 
+
+FOR nodeIndex := 0 TO nodeCount - 1  DO
+		
+	nodeSettings := GraphSettings.GetNodeByIndex(nodeIndex);	
+	nodeType := nodeSettings.NodeType;  	
+	nodeFactory := nodeFactories.GetByType(nodeType);
+	node := nodeFactory.Create();
+	node.Configure(nodeSettings);
+	nodes.Insert(node);
+	
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{9dcfff24-3381-0760-25fd-bc1afba0c65f}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+Clear();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{dedf069a-1e51-0fed-0932-2607f7394698}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	NodeFactories : I_NodeFactoryCollection;
+	LinkFactory : I_LinkFactory;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.nodeFactories := NodeFactories;
+THIS^.linkFactory := LinkFactory;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetCurrentUuid" Id="{30251427-f92a-0542-2186-e6e8b51c826c}">
+      <Declaration><![CDATA[METHOD PUBLIC GetCurrentUuid : Uuid
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetCurrentUuid := currentGraphUuid;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetNodes" Id="{06360e34-fba5-0320-1e31-5f26e23cab86}">
+      <Declaration><![CDATA[METHOD PUBLIC GetNodes : I_NodeCollection
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetNodes := nodes;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Run" Id="{1dc36582-e7a3-03d2-2e77-7abd714e98fa}">
+      <Declaration><![CDATA[METHOD Run
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodes.ExecuteInOrder();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="UpdateNodeSettings" Id="{a64e672b-fe24-07b0-1a23-509f2ff892c9}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE UpdateNodeSettings : BOOL
+VAR_INPUT
+	GraphSettings : I_GraphSettings;
+END_VAR
+VAR
+	nodeSettings : I_NodeSettings;
+	nodeIndex : UDINT;	
+	node : I_Node;
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR nodeIndex := 0 TO GraphSettings.NodeCount - 1  DO
+	
+	nodeSettings := GraphSettings.GetNodeByIndex(nodeIndex);
+	
+	node := nodes.GetById(nodeSettings.Id);
+	
+	node.Configure(nodeSettings);
+
+END_FOR]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

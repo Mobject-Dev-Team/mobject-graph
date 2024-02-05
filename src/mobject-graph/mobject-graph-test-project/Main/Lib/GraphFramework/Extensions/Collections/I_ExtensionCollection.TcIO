@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_ExtensionCollection" Id="{5b9cf50f-aef5-082d-1af3-bb2de885c41d}">
+    <Declaration><![CDATA[INTERFACE I_ExtensionCollection
+]]></Declaration>
+    <Method Name="GetEnumerator" Id="{201248d0-5483-0146-00d9-a4410a52e921}">
+      <Declaration><![CDATA[METHOD PUBLIC GetEnumerator : I_ForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetByName" Id="{07e2870d-2eaa-081f-3130-85709c491d53}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetByName : BOOL
+VAR_INPUT
+	Name : STRING;
+	Destination : REFERENCE TO I_Extension;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

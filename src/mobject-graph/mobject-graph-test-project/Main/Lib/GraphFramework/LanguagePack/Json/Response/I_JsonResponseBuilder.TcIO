@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_JsonResponseBuilder" Id="{35125eb8-87c9-0126-04de-a2940cb152de}">
+    <Declaration><![CDATA[INTERFACE I_JsonResponseBuilder EXTENDS I_ResponseBuilder
+]]></Declaration>
+    <Method Name="CopyJsonDocument" Id="{0dc04f0a-6081-08c3-3a21-9420297de638}">
+      <Declaration><![CDATA[METHOD PUBLIC CopyJsonDocument : UDINT
+VAR_INPUT
+	pString : POINTER TO STRING;
+	Size : UDINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="GetJsonDocument" Id="{3d8eb2c5-d2e0-0444-39f0-ed668c2dab0b}">
+      <Declaration><![CDATA[METHOD PUBLIC GetJsonDocument : T_MAXSTRING
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="GetJsonDocumentLength" Id="{f9095613-93ed-05db-35ad-079c3ed56b28}">
+      <Declaration><![CDATA[METHOD PUBLIC GetJsonDocumentLength : UDINT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="ResetDocument" Id="{9f156676-272d-0047-38e6-4ac6651ef141}">
+      <Declaration><![CDATA[METHOD PUBLIC ResetDocument
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

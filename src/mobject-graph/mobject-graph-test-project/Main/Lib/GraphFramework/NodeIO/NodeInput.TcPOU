@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NodeInput" Id="{10802ae6-8a8a-071e-2d26-05e82b94d749}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK NodeInput
+VAR
+	nodeInputPort : InputPort_ANY('','',0);
+	nodeProperty : Property_ANY('','',0);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{4ab81438-292e-0b42-35f8-eb745116569b}" />
+    <Property Name="DataSize" Id="{bfa5741f-a3ba-009e-28e7-7a3709d5d03a}">
+      <Declaration><![CDATA[PROPERTY PUBLIC DataSize : UDINT]]></Declaration>
+      <Get Name="Get" Id="{581a9aba-4202-0da4-2ff2-cafaf48e5556}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF nodeInputPort.IsConnected THEN
+	DataSize := nodeInputPort.DataSize;
+	RETURN;
+END_IF
+
+DataSize := nodeProperty.DataSize;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_init" Id="{908adb2a-2122-0b07-1549-3373dcc9a3b7}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Name : STRING;
+	DataType : T_MAXSTRING;
+	Parent : I_Node;
+END_VAR
+VAR
+	ParentWithPorts : I_HaveInputPorts;
+	ParentWithProperties : I_HaveProperties;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF __QUERYINTERFACE(Parent, ParentWithPorts) THEN
+	nodeInputPort.FB_init(FALSE,FALSE,Name,DataType,ParentWithPorts);
+END_IF
+
+IF __QUERYINTERFACE(Parent, ParentWithProperties) THEN
+	nodeProperty.FB_init(FALSE,FALSE,Name,DataType,ParentWithProperties);
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Get" Id="{8043ea42-3e63-01c6-14d5-e8ccc41ce922}">
+      <Declaration><![CDATA[METHOD PUBLIC Get
+VAR_INPUT
+	Value : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF nodeInputPort.IsConnected THEN
+	nodeInputPort.Get(Value);
+	RETURN;
+END_IF
+
+nodeProperty.Get(Value);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Name" Id="{ba67be14-d9ba-0736-2696-44d60c9d40e8}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : STRING]]></Declaration>
+      <Get Name="Get" Id="{bd35af1d-570e-02b1-2adc-459ce3da8370}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Name := nodeInputPort.Name;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

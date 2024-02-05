@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NodeFactoryCollection" Id="{3a71411c-013f-04b4-2fdb-abd75ba10395}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK NodeFactoryCollection IMPLEMENTS I_NodeFactoryCollection
+VAR
+	nodeFactories : Dictionary;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="GetByType" Id="{ca3ebbc1-de44-0bf3-2840-81a4910c38fe}">
+      <Declaration><![CDATA[METHOD PUBLIC GetByType : I_NodeFactory
+VAR_INPUT
+	NodeType : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodeFactories.TryGetValue(NodeType, GetByType);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="HasType" Id="{2598df50-d563-0c6e-0aca-47ba8cbbf0c4}">
+      <Declaration><![CDATA[METHOD PUBLIC HasType : BOOL
+VAR_INPUT
+	NodeType : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodeFactories.ContainsKey(NodeType);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InsertByType" Id="{4d3a5f0c-8074-09fb-2906-a4aa05ab5434}">
+      <Declaration><![CDATA[METHOD PUBLIC InsertByType
+VAR_INPUT
+	NodeType : T_MAXSTRING;
+	NodeFactory : I_NodeFactory;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodeFactories.AddOrUpdate(NodeType, NodeFactory);
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

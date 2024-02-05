@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="IsValidMetadatum" Id="{5d7b0806-07d4-0466-38a3-7d4f521ef374}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION IsValidMetadatum : BOOL
+VAR_INPUT
+	Metadatum : I_Metadatum;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IsValidMetadatum := Metadatum <> 0;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

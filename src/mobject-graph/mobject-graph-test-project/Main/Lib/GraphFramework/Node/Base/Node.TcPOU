@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Node" Id="{8b8910db-ad72-05a5-0556-4fd11e61a0b6}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ABSTRACT Node extends BaseElement IMPLEMENTS I_Node
+VAR
+	_id : NodeId;
+	_order : DINT;
+	_mode : DINT;
+	
+	// node extensions
+	nodeProfilerExtension : NodeProfilerExtension('NodeProfilerExtension',THIS^);
+	nodeTriggerExtension : NodeTriggerExtension('NodeTrigger',THIS^);
+	//nodeProtectionAbility : NodeProtectionAbility(THIS^);
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Abstract" Id="{dbd4d2fd-33d8-0c09-0e75-48a8aa9fa6b2}" />
+    <Folder Name="Private" Id="{f0af3386-ca84-0b52-03e7-a20a015d9afb}" />
+    <Method Name="Accept" Id="{4230f410-f451-039d-2604-d2edaf4d13f7}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_NodeVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitNode(this^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Configure" Id="{0d8590ca-baee-09dd-1834-0876a5653808}">
+      <Declaration><![CDATA[METHOD PUBLIC Configure
+VAR_INPUT
+	Settings : I_NodeSettings;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_id := Settings.Id;
+_order := Settings.Order;
+_mode := Settings.Mode;
+
+ConfigureProperties(Settings);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ConfigureProperties" Id="{932ba540-86b9-0fbd-3187-cd69e0f0eb92}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PROTECTED ConfigureProperties
+VAR_INPUT
+	NodeSettings : I_NodeSettings;
+END_VAR
+VAR
+	i: UDINT;
+	propertySettings : I_PropertySettings;
+	localProperty : I_Property;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NodeSettings.HasProperties THEN
+
+	FOR i := 0 TO NodeSettings.PropertiesCount -1 DO
+		
+		propertySettings := NodeSettings.GetPropertyByIndex(i);
+
+		IF NOT properties.TryGetByName(propertySettings.name, localProperty) THEN
+			CONTINUE;
+		END_IF
+		
+		localProperty.Configure(propertySettings);
+		
+	END_FOR
+
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitNodeExecuteBeginEvent" Id="{446e8833-be75-08b5-20ae-de0735b20b11}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitNodeExecuteBeginEvent : BOOL;
+VAR
+	pNodeExecuteBeginEvent : POINTER TO NodeExecuteBeginEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pNodeExecuteBeginEvent := __NEW(NodeExecuteBeginEvent(TargetNode := THIS^));
+eventEmitter.Emit('OnNodeExecuteBegin',pNodeExecuteBeginEvent^);
+pNodeExecuteBeginEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitNodeExecuteEndEvent" Id="{a7ad8910-3e19-0f65-0e88-7dce16ea71b6}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitNodeExecuteEndEvent : BOOL;
+VAR
+	pNodeExecuteEndEvent : POINTER TO NodeExecuteEndEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pNodeExecuteEndEvent := __NEW(NodeExecuteEndEvent(TargetNode := THIS^));
+eventEmitter.Emit('OnNodeExecuteEnd',pNodeExecuteEndEvent^);
+pNodeExecuteEndEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnNodePreExecuteEvent" Id="{78e8301b-1d71-0189-3c20-c1b779dc4500}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitOnNodePreExecuteEvent : BOOL;
+VAR_INPUT
+	CancelRequested : REFERENCE TO BOOL;
+END_VAR
+VAR
+	pNodePreExecuteEvent : POINTER TO NodePreExecuteEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pNodePreExecuteEvent := __NEW(NodePreExecuteEvent(TargetNode := THIS^));
+eventEmitter.Emit('OnNodePreExecute',pNodePreExecuteEvent^);
+
+IF pNodePreExecuteEvent^.ExecuteCancelled THEN
+	CancelRequested := TRUE;
+END_IF
+
+pNodePreExecuteEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Execute" Id="{d408825d-3e00-0ecb-23c4-0596c3d88698}">
+      <Declaration><![CDATA[METHOD PUBLIC Execute
+VAR
+	cancelExecuteResponse : BOOL := FALSE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[EmitOnNodePreExecuteEvent(cancelExecuteResponse);
+
+IF cancelExecuteResponse THEN
+	RETURN;
+END_IF
+
+EmitNodeExecuteBeginEvent();
+OnExecute();
+EmitNodeExecuteEndEvent();]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Id" Id="{83736b4e-b1bc-0adb-2e43-a65e1cb4d5a3}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Id : NodeId]]></Declaration>
+      <Get Name="Get" Id="{e5d6cfcc-06b4-0c3a-347e-7067097be358}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Id := _id;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Mode" Id="{7c0c904d-4b3b-026a-34c8-a61976b560fb}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Mode : NodeId]]></Declaration>
+      <Get Name="Get" Id="{e082d771-5c44-02f0-0e53-87177d47eeff}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Mode := _mode;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="OnExecute" Id="{3305d23e-f58f-0290-011d-0ef3d43fdad1}" FolderPath="Abstract\">
+      <Declaration><![CDATA[METHOD PROTECTED ABSTRACT OnExecute : HRESULT]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Order" Id="{b8b6cab5-3d18-0865-3a46-18681789df72}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Order : DINT]]></Declaration>
+      <Get Name="Get" Id="{0242dc0d-dd4a-0656-266d-688e1d427b8a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Order := _order;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

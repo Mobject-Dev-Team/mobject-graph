@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="JsonAnyConverter" Id="{c6a99ded-35e7-0e6d-33ed-3a631b84b24b}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK JsonAnyConverter EXTENDS Disposable IMPLEMENTS I_JsonTypeConverter, I_DataDisposer
+VAR
+	linkedVariableAddress : PVOID;
+	linkedVariableSize : UDINT;
+	linkedVariableOfficialName : T_MaxString;
+	linkedVariableOfficialDataType : T_MaxString;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{98f493c6-0f78-0b92-13d8-c122bdf6724c}" />
+    <Method Name="DataToJsonString" Id="{41eb63fe-122a-0656-3427-8c7f622a9518}">
+      <Declaration><![CDATA[METHOD PUBLIC DataToJsonString : HRESULT
+VAR_INPUT
+	Source : I_DataAccess;
+	JsonStringAddress : POINTER TO STRING;
+	JsonStringSize : UDINT;
+END_VAR
+VAR
+	transform : FB_JsonReadWriteDataType;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Source.Get(linkedVariableAddress);
+transform.CopyJsonStringFromSymbol(linkedVariableOfficialDataType, linkedVariableSize, linkedVariableAddress, JsonStringAddress^, JsonStringSize);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DataToJsonStringSize" Id="{e7504e6d-4b31-0ebe-3f49-db794c0dd561}">
+      <Declaration><![CDATA[METHOD PUBLIC DataToJsonStringSize : UDINT
+VAR_INPUT
+	Source : I_DataAccess;
+END_VAR
+VAR
+	transform : FB_JsonReadWriteDataType;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Source.Get(linkedVariableAddress);
+DataToJsonStringSize := transform.GetSizeJsonStringFromSymbol(linkedVariableOfficialDataType, linkedVariableSize, linkedVariableAddress);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeData" Id="{bd325162-f0ac-0788-3053-30ea175e57ad}">
+      <Declaration><![CDATA[METHOD DisposeData
+VAR_INPUT
+	Source : I_DataAccess;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// any converters do not need any special disposing.]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{77a854ba-0a28-0501-1e86-c59d2b6dde33}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	LinkedVariable : ANY;
+END_VAR
+VAR
+	transform : FB_JsonReadWriteDataType;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[linkedVariableAddress := LinkedVariable.pValue;
+linkedVariableSize := DINT_TO_UDINT(LinkedVariable.diSize);
+linkedVariableOfficialName := transform.GetSymbolNameByAddress(linkedVariableSize, linkedVariableAddress);
+linkedVariableOfficialDataType := transform.GetDataTypeNameByAddress(linkedVariableSize,linkedVariableAddress);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="JsonStringToData" Id="{de482790-69a2-0f75-141c-2923a778176c}">
+      <Declaration><![CDATA[METHOD PUBLIC JsonStringToData : I_DataDisposer
+VAR_INPUT
+	JsonStringPointer : POINTER TO STRING;
+	Destination : I_DataAccess;
+END_VAR
+VAR
+	transform : FB_JsonReadWriteDataType;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[transform.SetSymbolFromJson(JsonStringPointer^, linkedVariableOfficialDataType, linkedVariableSize, linkedVariableAddress);
+Destination.SetFrom(linkedVariableAddress,linkedVariableSize);
+JsonStringToData := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,13 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
-  <POU Name="MAIN" Id="{88a55e1a-3981-42a5-9f30-8c2daf9756cc}">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MAIN" Id="{1c7dbdb3-3ad9-058e-2a75-807bd1bcee45}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
-VAR
-END_VAR
-]]>
-    </Declaration>
+VAR	
+	jsonLanguagePack : JsonLanguagePack;	
+	graphApi : JsonGraphApi(graph,jsonLanguagePack);
+	
+	tcGraph : TcGraph;
+	graph : I_Graph;
+	nodePack_PlcBasic : NodePack_PlcBasic;
+	initialise: BOOL;
+END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[IF NOT initialise THEN
+	initialise := TRUE;
+	tcGraph.InstallNodePack(nodePack_PlcBasic);
+	graph := tcGraph.NewGraph();
+END_IF
+
+graph.Run();
+graphApi.CyclicCall();]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

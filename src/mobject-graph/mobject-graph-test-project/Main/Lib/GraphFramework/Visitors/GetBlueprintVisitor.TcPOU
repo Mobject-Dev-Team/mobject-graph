@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="GetBlueprintVisitor" Id="{aebd2441-509d-0d3c-0e27-d150be94dd61}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK GetBlueprintVisitor
+VAR
+	response : I_ResponseBuilder;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{4cbdd883-0847-0002-0a09-8fc08ea563bb}" />
+    <Folder Name="Private" Id="{6b78b35a-b566-09b1-3105-31d9b49f4ce8}" />
+    <Method Name="FB_init" Id="{0307417a-cb8f-0fb2-3c9e-ef3535e28d87}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	ResponseBuilder : I_ResponseBuilder;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[This^.response := ResponseBuilder;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MetadataCollection" Id="{d4b0ff48-d878-04ac-1814-bf7a496cd6c1}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK MetadataCollection IMPLEMENTS I_MetadataCollection
+VAR
+	metadata : Stack;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="GetEnumerator" Id="{b3e14664-f931-0abc-3a9e-83b712e76bcc}">
+      <Declaration><![CDATA[METHOD PUBLIC GetEnumerator : I_ForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetEnumerator := metadata.GetEnumerator();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Insert" Id="{912794a7-c6b6-050e-2b3f-1470aef8d028}">
+      <Declaration><![CDATA[METHOD PUBLIC Insert
+VAR_INPUT
+	MetadatumToAdd : I_Metadatum;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[metadata.Push(MetadatumToAdd);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetByName" Id="{cbaf7bca-e459-0b60-310e-3808dd545bde}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetByName : BOOL
+VAR_INPUT
+	Name : STRING;
+	Destination : REFERENCE TO I_Metadatum;
+END_VAR
+VAR
+	metadatumEnumerator : I_ForwardEnumerator;
+	currentMetadatum : I_Metadatum;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[metadatumEnumerator := metadata.GetEnumerator();
+
+WHILE metadatumEnumerator.MoveNext() DO 
+	IF NOT metadatumEnumerator.TryGet(currentMetadatum) THEN
+		CONTINUE;
+	END_IF
+	
+	IF currentMetadatum.Name = Name THEN 
+		TryGetByName := TRUE;
+		Destination := currentMetadatum;
+		EXIT;
+	END_IF
+
+END_WHILE
+
+metadatumEnumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

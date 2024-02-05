@@ -15,14 +15,14 @@
     "Base-Dark": {
       "resources": [
         {
-          "name": "Themes/Base-Dark/Base-DarkStyle.css",
-          "description": "",
-          "type": "Stylesheet"
-        },
-        {
           "name": "Themes/Base-Dark/Base-Dark.theme",
           "description": "",
           "type": "ThemedValues"
+        },
+        {
+          "name": "Themes/Base-Dark/Base-DarkStyle.css",
+          "description": "",
+          "type": "Stylesheet"
         }
       ],
       "replacesThemeForControls": [],
@@ -47,7 +47,192 @@
   },
   "dependencyFiles": [
     {
+      "name": "Imports/litegraph/litegraph.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Imports/base64/Base64.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Imports/iec61131-3/iec61131-3.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Imports/uuid-gen/UuidGen.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Imports/json-viewer/json-viewer.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/PlcApi.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Ability/Base/AbilityBase.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Ability/GraphRouterMemoryAbility.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Ability/NodeProtectionAbility.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Ability/NodeTriggerAbility.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Dialog/Base/HtmlDialogBase.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Graph/Base/Graph.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/GraphCanvas/Base/GraphCanvas.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Node/Base/NodeBase.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/NodeFactory/DefaultInputPortFactory.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/NodeFactory/DefaultNodeClassFactory.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Widget/Collection/WidgetCollection.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Widget/Base/WidgetBase.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Widget/Default/Widget_Blank.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Widget/Default/Widget_Bool.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Widget/Default/Widget_Combo.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Widget/Default/Widget_Number.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Widget/Default/Widget_Separator.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Widget/Default/Widget_Slider.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Widget/Default/Widget_String.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Widget/IEC/Widget_IecAnyFloat.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Widget/IEC/Widget_IecAnyInteger.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/Widget/IEC/Widget_IecEnum.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/GraphFramework/LiteGraph/LiteGraphPatch.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/PlcBasicNodePack/NodePack_PlcBasic.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/PlcBasicNodePack/Node/Display/NodePack_PlcBasicDisplay.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/PlcBasicNodePack/Node/Display/Node_Display_BOOL.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/PlcBasicNodePack/Node/Literals/NodePack_PlcBasicLiterals.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
+      "name": "Lib/PlcBasicNodePack/Node/Literals/Node_Literal_BOOL.js",
+      "description": "",
+      "type": "JavaScript"
+    },
+    {
       "name": "Fonts/Fonts.css",
+      "description": "",
+      "type": "Stylesheet"
+    },
+    {
+      "name": "Lib/GraphFramework/LiteGraph/LiteGraphPatch.css",
+      "description": "",
+      "type": "Stylesheet"
+    },
+    {
+      "name": "Imports/json-viewer/json-viewer.css",
+      "description": "",
+      "type": "Stylesheet"
+    },
+    {
+      "name": "Imports/litegraph/litegraph.css",
       "description": "",
       "type": "Stylesheet"
     }

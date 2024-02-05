@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="ExtensionAddedEvent" Id="{a9f5865a-d75b-09b8-3919-8c34d903a3cd}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ExtensionAddedEvent EXTENDS Disposable IMPLEMENTS I_ExtensionAddedEvent
+VAR
+	_targetExtension : I_Extension;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{66b93b96-b1a5-09b9-0313-bce0f662c236}" />
+    <Method Name="FB_init" Id="{36fde647-f6ef-0e5f-36a9-6d6f0eb5fa80}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	TargetExtension : I_Extension;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[This^._targetExtension := TargetExtension;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="TargetExtension" Id="{da7f9daa-cffa-0f6f-2261-c334d6063528}">
+      <Declaration><![CDATA[PROPERTY PUBLIC TargetExtension : I_Extension]]></Declaration>
+      <Get Name="Get" Id="{778a7e33-5f38-09de-2989-dbeb695c0a42}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TargetExtension := _targetExtension;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

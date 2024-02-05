@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Content_Any" Id="{0d9cf418-5c17-01af-15e9-b437781a1d71}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Content_Any IMPLEMENTS I_Content
+VAR
+	_name : T_MAXSTRING;
+	_dataType : T_MAXSTRING;
+	_parent : I_HaveContent;
+	internalBuffer : POINTER TO BYTE;
+	internalBufferSize : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{837d23f4-e080-04af-1c00-afd1f5791c19}" />
+    <Folder Name="Destructor" Id="{001eee58-3848-0ec8-1d78-8a829f6fe30e}" />
+    <Folder Name="Private" Id="{c301d883-606a-0ec8-3158-8103e2bb7b04}" />
+    <Method Name="Accept" Id="{4deecd26-05a3-087a-0d9b-39d9f2ed6081}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_ContentVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitContent(this^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CopyInternalBufferToDestination" Id="{c7cde0c4-cdb3-0c87-3ee0-a97bbfd2ab00}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CopyInternalBufferToDestination
+VAR_INPUT
+	DestinationAddress : PVOID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[memcpy(DestinationAddress,internalBuffer,internalBufferSize);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CopySourceToInternalBuffer" Id="{76e2d79d-0c1e-07b5-2543-83bc79d13b19}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CopySourceToInternalBuffer
+VAR_INPUT
+	SourceAddress : PVOID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[memcpy(internalBuffer,SourceAddress,internalBufferSize);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="DataSize" Id="{0977794f-015b-0bc3-3567-75918447ac81}">
+      <Declaration><![CDATA[PROPERTY PUBLIC DataSize : UDINT]]></Declaration>
+      <Get Name="Get" Id="{7a6e738b-22e3-054c-07fb-4baf6095e59f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[DataSize := internalBufferSize;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="DataType" Id="{84f51fb0-45ab-000a-2b80-8ac17966921c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC DataType : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{4a624fc3-292a-0b2c-3065-c19a38ab6b07}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[DataType := _dataType;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="DeleteInternalBuffer" Id="{ff6ee059-02de-0bb1-2055-17782010b172}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DeleteInternalBuffer
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF internalBuffer <> 0 THEN
+	__DELETE(internalBuffer);
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{b672a23b-d435-01d2-350e-a4bc6300f057}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DeleteInternalBuffer();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{2d9dcb5d-b2bf-00b6-3905-b549a314f45c}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Name : STRING;
+	DataType : T_MAXSTRING;
+	Parent : I_HaveContent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_name := Name;
+_dataType := DataType;
+
+RegisterWithParent(Parent);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Get" Id="{99062d0a-b5e6-0d1b-0f2e-6aade05fedd5}">
+      <Declaration><![CDATA[METHOD PUBLIC Get
+VAR_INPUT
+	Value : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetTo(Value.pValue, DINT_TO_UDINT(Value.diSize));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetTo" Id="{c947bae2-127a-0d1f-34fd-7c8b404785df}">
+      <Declaration><![CDATA[METHOD PUBLIC GetTo
+VAR_INPUT
+	Destination : PVOID;
+	DestinationSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT IsInternalBufferSameSizeAs(DestinationSize) THEN
+	RETURN;
+END_IF
+
+CopyInternalBufferToDestination(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="HasData" Id="{8da8e0a9-012e-001c-3e6c-82f2c59ff440}">
+      <Declaration><![CDATA[PROPERTY HasData : BOOL]]></Declaration>
+      <Get Name="Get" Id="{dc5b8b99-b812-069e-24ea-29a23f3bdb0d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasData := internalBuffer <> 0 and internalBufferSize <> 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="IsInternalBufferSameSizeAs" Id="{5ea2fd3d-c497-0aea-0151-2334551293dc}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE IsInternalBufferSameSizeAs : BOOL
+VAR_INPUT
+	Size : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF internalBuffer = 0 THEN
+	RETURN;
+END_IF
+
+IF internalBufferSize <> Size THEN
+	RETURN;
+END_IF
+
+IsInternalBufferSameSizeAs := TRUE;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MakeInternalBufferOfSize" Id="{54e824bd-1945-0b16-24ff-941afdc4f13d}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE MakeInternalBufferOfSize
+VAR_INPUT
+	Size : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[internalBufferSize := Size;
+internalBuffer := __NEW(BYTE, internalBufferSize);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Name" Id="{e0fe422f-2992-0a7a-3a67-4d74882b6ea4}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{6e49c007-b4a0-041b-1088-5b57730553f3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Name := _name;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Parent" Id="{2024bed4-f17f-0a30-1b47-bca1f219aa82}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parent : I_HaveContent]]></Declaration>
+      <Get Name="Get" Id="{5956cbec-13e7-03c8-3e5e-1d37acadef69}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parent := _parent;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="RegisterWithParent" Id="{5e8e70e3-cedb-09b8-1c96-4b1b0a7fd098}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterWithParent
+VAR_INPUT
+	Parent : I_HaveContent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Parent = 0 THEN
+	RETURN;
+END_IF
+
+THIS^._parent := Parent;
+Parent.AddContent(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Set" Id="{f88de315-2c2e-0fa9-1f07-572cdeb913e9}">
+      <Declaration><![CDATA[METHOD PUBLIC Set
+VAR_INPUT
+	Value : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SetFrom(Value.pValue, DINT_TO_UDINT(Value.diSize));
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetFrom" Id="{b36cf2a2-5940-02b0-22ff-8f488ea1a931}">
+      <Declaration><![CDATA[METHOD PUBLIC SetFrom
+VAR_INPUT
+	SourceAddress : PVOID;
+	SourceSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DeleteInternalBuffer();
+MakeInternalBufferOfSize(SourceSize);
+CopySourceToInternalBuffer(SourceAddress);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

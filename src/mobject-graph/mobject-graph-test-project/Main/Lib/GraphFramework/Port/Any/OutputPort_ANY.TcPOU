@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="OutputPort_ANY" Id="{4c7e0bce-9eb0-0f6a-044f-6a3cfc8b783d}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK OutputPort_ANY EXTENDS Disposable IMPLEMENTS I_OutputPort
+VAR
+	_name : T_MAXSTRING;
+	_dataType : T_MAXSTRING;
+	internalBuffer : POINTER TO BYTE;
+	internalBufferSize : UDINT;
+	eventEmitter : EventEmitter;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{677256cd-e8af-081b-2804-5689f5f4149b}" />
+    <Folder Name="Destructor" Id="{98956262-b478-014c-3a4b-e5a55f558cc8}" />
+    <Folder Name="Private" Id="{6f5f4b13-ef19-01e5-075e-0ea3b801d3d7}" />
+    <Method Name="Accept" Id="{685a8b40-a5b2-0491-3a06-acbf37dad5a1}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_OutputPortVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitOutputPort(this^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CopyInternalBufferToDestination" Id="{7ebcbeb6-b02d-0411-1889-2e34c4062c87}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CopyInternalBufferToDestination
+VAR_INPUT
+	DestinationAddress : PVOID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[memcpy(DestinationAddress,internalBuffer,internalBufferSize);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CopySourceToInternalBuffer" Id="{dfe21f9e-a5b4-027e-1e44-3be7358a5e65}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CopySourceToInternalBuffer
+VAR_INPUT
+	SourceAddress : PVOID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[memcpy(internalBuffer,SourceAddress,internalBufferSize);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="DataSize" Id="{7a8abb9b-e67f-0be5-36ec-3437e6158ced}">
+      <Declaration><![CDATA[PROPERTY PUBLIC DataSize : UDINT]]></Declaration>
+      <Get Name="Get" Id="{1762b04d-6048-02f1-27c3-298a0a2eb6a2}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF internalBuffer = 0 THEN
+	RETURN;
+END_IF
+
+DataSize := internalBufferSize;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="DataType" Id="{eb163034-b0fd-0fe3-0fa5-fd0220399dfb}">
+      <Declaration><![CDATA[PROPERTY PUBLIC DataType : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{7534416c-ca26-06ef-2b8b-0ad13dd0d8f6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[DataType := _dataType;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="DeleteInternalBuffer" Id="{d61f4872-b9ca-0743-3d16-144280366585}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DeleteInternalBuffer
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF internalBuffer <> 0 THEN
+	__DELETE(internalBuffer);
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnOutputPortChangeEvent" Id="{4cedd9f2-3d84-035e-18ce-b7ebc3af2524}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitOnOutputPortChangeEvent
+VAR_INPUT
+	PortChanged : I_OutputPort;
+END_VAR
+VAR
+	pOutputPortChangeEvent : POINTER TO OutputPortChangedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pOutputPortChangeEvent := __NEW(OutputPortChangedEvent(TargetOutputPort := PortChanged));
+eventEmitter.Emit('OnOutputPortChanged',pOutputPortChangeEvent^);
+pOutputPortChangeEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{dad2c4bc-10fa-09e1-1929-9db4c4aa6f25}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DeleteInternalBuffer();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{1ba1d2d7-341d-0e8e-05ef-f5346255db4e}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Name : T_MAXSTRING;
+	DataType : T_MAXSTRING;
+	Parent : I_HaveOutputPorts;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_name := Name;
+_dataType := DataType;
+
+IF Parent = 0 THEN
+	RETURN;
+END_IF
+
+Parent.AddOutputPort(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Get" Id="{d7f053a1-edb3-045f-2e85-d7d160cdb265}">
+      <Declaration><![CDATA[METHOD PUBLIC Get
+VAR_INPUT
+	Value : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetTo(Value.pValue, DINT_TO_UDINT(Value.diSize));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetTo" Id="{6e5c850e-5dc7-0ca4-0094-d63313848019}">
+      <Declaration><![CDATA[METHOD PUBLIC GetTo
+VAR_INPUT
+	Destination : PVOID;
+	DestinationSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT IsInternalBufferSameSizeAs(DestinationSize) THEN
+	RETURN;
+END_IF
+
+CopyInternalBufferToDestination(Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="HasData" Id="{4031d1bf-7fc9-0b4f-1821-1051bd3aca54}">
+      <Declaration><![CDATA[PROPERTY HasData : BOOL]]></Declaration>
+      <Get Name="Get" Id="{b11abb15-38ab-0cf1-0107-22a33b095416}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasData := internalBuffer <> 0 and internalBufferSize <> 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="IsInternalBufferSameSizeAs" Id="{200fc8fe-6281-0aa7-2e38-670988812e63}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE IsInternalBufferSameSizeAs : BOOL
+VAR_INPUT
+	Size : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF internalBuffer = 0 THEN
+	RETURN;
+END_IF
+
+IF internalBufferSize <> Size THEN
+	RETURN;
+END_IF
+
+IsInternalBufferSameSizeAs := TRUE;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MakeInternalBufferOfSize" Id="{d976a026-eec1-07cb-2e0e-d0646f2868ef}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE MakeInternalBufferOfSize
+VAR_INPUT
+	Size : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[internalBufferSize := Size;
+internalBuffer := __NEW(BYTE, internalBufferSize);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Name" Id="{a6251d93-37b5-06d7-00eb-bc1261f23075}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{66530c4b-9811-0535-0d83-3db73e2195f3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Name := _name;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="OffEvent" Id="{5f0c98a6-efae-06ce-0d53-00d24017a360}">
+      <Declaration><![CDATA[METHOD PUBLIC OffEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OffEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnceEvent" Id="{33aa55e6-cc64-0804-1f68-fe127e9ffd59}">
+      <Declaration><![CDATA[METHOD PUBLIC OnceEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnceEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnEvent" Id="{83584882-e2df-000f-0211-5ef5ee02b990}">
+      <Declaration><![CDATA[METHOD PUBLIC OnEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Set" Id="{1e1c2da9-f2e1-0401-2df7-d89f92cc9a3e}">
+      <Declaration><![CDATA[METHOD PUBLIC Set
+VAR_INPUT
+	Value : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SetFrom(Value.pValue, DINT_TO_UDINT(Value.diSize));
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetFrom" Id="{76d02626-79e8-0585-25de-a6810fcf20bc}">
+      <Declaration><![CDATA[METHOD PUBLIC SetFrom
+VAR_INPUT
+	SourceAddress : PVOID;
+	SourceSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DeleteInternalBuffer();
+MakeInternalBufferOfSize(SourceSize);
+CopySourceToInternalBuffer(SourceAddress);
+EmitOnOutputPortChangeEvent(this^);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

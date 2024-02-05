@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_ResponseBuilder" Id="{d46afe14-da07-0083-2d5b-0e99e65ff3ce}">
+    <Declaration><![CDATA[INTERFACE I_ResponseBuilder
+]]></Declaration>
+    <Method Name="AddKey" Id="{7ce22d8b-c735-075a-1fa4-e68e29c769a5}">
+      <Declaration><![CDATA[METHOD AddKey
+VAR_INPUT
+	Key : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyBase64" Id="{ea9945d2-bfb4-03f4-18a5-5521312ef9d5}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyBase64
+VAR_INPUT
+	Key : T_MAXSTRING;
+	pByte : POINTER TO BYTE;
+	Size : DINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyBool" Id="{b4f71666-c8a2-0c70-0848-7c2649aa5eac}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyBool
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : BOOL;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyData" Id="{f3e70dc3-419d-0879-0421-f6e677a08433}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyData
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Source : I_DataAccess;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddKeyDateTime" Id="{42364b2a-f877-0fc8-3ed1-1a5c6acdf9cc}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyDateTime
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : DATE_AND_TIME;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyDcTime" Id="{736ea08d-b3d7-0715-083e-595612b0abf7}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyDcTime
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : DCTIME;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyDint" Id="{967270d4-4148-0689-0eb3-fcf31360315d}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyDint
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : DINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyFileTime" Id="{b2b2888a-7f8b-09b1-1a02-8e5c7902165e}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyFileTime
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : FILETIME;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyHexBinary" Id="{da07fac1-785b-0d4e-118e-46cd07acaa3f}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyHexBinary
+VAR_INPUT
+	Key : T_MAXSTRING;
+	SourceAddress : POINTER TO BYTE;
+	SourceSize : DINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyLint" Id="{fb84859f-0fb4-0edb-3f6d-1ef9ab6f0cf7}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyLint
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : LINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyLongString" Id="{c680328b-c1e1-0b41-3401-edc21468efbd}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyLongString
+VAR_INPUT
+	Key : T_MAXSTRING;
+	pString : POINTER TO STRING;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyLreal" Id="{4dc49e07-2f3e-0bfd-03b6-c6c53c99cb94}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyLreal
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : LREAL;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyNull" Id="{75df72ae-e9fe-05e7-11b7-1fa981f057ab}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyNull
+VAR_INPUT
+	Key : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyNumber" Id="{508c6ea1-248f-0ede-24ad-9932c6104b2e}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyNumber
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : DINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyRawArray" Id="{2f88f185-4868-008c-0976-e8938e4de296}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyRawArray
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Json : POINTER TO STRING;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyRawObject" Id="{622e2caa-c817-0762-3e09-8eedf8ea9f83}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyRawObject
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Json : POINTER TO STRING;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyReal" Id="{0ef27f17-aa73-0f96-0436-456090e0054a}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyReal
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : REAL;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyString" Id="{4aed6871-d8c2-0a41-1d04-4c21df39bf3c}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyString
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyUdint" Id="{f90d8110-e758-0fb4-3afe-3ab2e561359a}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyUdint
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : UDINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddKeyUlint" Id="{de02fb4f-44a1-0eb5-2e32-a93afa647e68}">
+      <Declaration><![CDATA[METHOD PUBLIC AddKeyUlint
+VAR_INPUT
+	Key : T_MAXSTRING;
+	Value : ULINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="EndArray" Id="{84c96553-ed3b-024e-1fb0-eeb88122e7fc}">
+      <Declaration><![CDATA[METHOD EndArray
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="EndObject" Id="{cc078633-f949-0dc2-26cf-e7d01fa2eac9}">
+      <Declaration><![CDATA[METHOD PUBLIC EndObject]]></Declaration>
+    </Method>
+    <Method Name="StartArray" Id="{bcca4699-9c88-0cde-0c5e-d844a80f3a29}">
+      <Declaration><![CDATA[METHOD PUBLIC StartArray]]></Declaration>
+    </Method>
+    <Method Name="StartObject" Id="{b48a52af-34ba-078e-1ee2-73174fbb600d}">
+      <Declaration><![CDATA[METHOD PUBLIC StartObject]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

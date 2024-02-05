@@ -27,7 +27,128 @@
     "DEFAULTTIMEFORMATLOCALE": "client",
     "DEFAULTTIMEZONE": "client",
     "DEFAULTUSERGROUP": "__SystemUsers",
-    "DEFINITIONS": {},
+    "DEFINITIONS": {
+        "PLC1.JsonGraphApi": {
+            "properties": {
+                "graphBlueprint": {
+                    "allOf": [
+                        {
+                            "maxLength": 255,
+                            "propertyOrder": 3
+                        },
+                        {
+                            "$ref": "tchmi:general#/definitions/String"
+                        }
+                    ]
+                },
+                "graphStatus": {
+                    "allOf": [
+                        {
+                            "comment": "outgoing symbol",
+                            "maxLength": 500000,
+                            "propertyOrder": 2
+                        },
+                        {
+                            "$ref": "tchmi:general#/definitions/String"
+                        }
+                    ]
+                },
+                "receivedGraphJson": {
+                    "allOf": [
+                        {
+                            "comment": "incoming symbol",
+                            "maxLength": 500000,
+                            "propertyOrder": 1
+                        },
+                        {
+                            "$ref": "tchmi:general#/definitions/String"
+                        }
+                    ]
+                },
+                "ton": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Tc2_Standard.TON"
+                        },
+                        {
+                            "comment": "local",
+                            "propertyOrder": 4
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.Tc2_Standard.TON": {
+            "properties": {
+                "ET": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/TIME"
+                        },
+                        {
+                            "comment": "elapsed time",
+                            "propertyOrder": 4
+                        }
+                    ]
+                },
+                "IN": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "starts timer with rising edge, resets timer with falling edge",
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "M": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "propertyOrder": 5
+                        }
+                    ]
+                },
+                "PT": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/TIME"
+                        },
+                        {
+                            "comment": "time to pass, before Q is set",
+                            "propertyOrder": 2
+                        }
+                    ]
+                },
+                "Q": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "gets TRUE, delay time (PT) after a rising edge at IN",
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "StartTime": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/TIME"
+                        },
+                        {
+                            "propertyOrder": 6
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        }
+    },
     "DEFLATECOMPRESSIONLEVEL": 5,
     "DIAGNOSTICS_DOMAINS": [],
     "DISABLED_CONFIGURATION_HINTS": [],
@@ -2499,6 +2620,63 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.MAIN.graphApi": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::MAIN::graphApi",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "attributes": {
+                            "old_input_assignments": ""
+                        }
+                    },
+                    {
+                        "$ref": "tchmi:server#/definitions/PLC1.JsonGraphApi"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.MAIN.graphApi.graphStatus": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::MAIN::graphApi::graphStatus",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "comment": "outgoing symbol",
+                        "maxLength": 500000,
+                        "propertyOrder": 2
+                    },
+                    {
+                        "$ref": "tchmi:general#/definitions/String"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.MAIN.graphApi.receivedGraphJson": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::MAIN::graphApi::receivedGraphJson",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "comment": "incoming symbol",
+                        "maxLength": 500000,
+                        "propertyOrder": 1
+                    },
+                    {
+                        "$ref": "tchmi:general#/definitions/String"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
         "RefreshDefinitions": {
             "ACCESS": 3,
             "DOMAIN": "TcHmiSrv",
@@ -3418,6 +3596,9 @@
                 "LocalizeText": 3,
                 "Login": 3,
                 "Logout": 3,
+                "PLC1.MAIN.graphApi": 3,
+                "PLC1.MAIN.graphApi.graphStatus": 3,
+                "PLC1.MAIN.graphApi.receivedGraphJson": 3,
                 "SetLocale": 3,
                 "SubscribeEvents": 3,
                 "TcHmiSqliteLogger.Diagnostics": 1,

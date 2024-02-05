@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="IsValidStatus" Id="{52289197-8d57-0a07-3a3e-607899a0d302}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION IsValidStatus : BOOL
+VAR_INPUT
+	Status : I_Content;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IsValidStatus := Status <> 0;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

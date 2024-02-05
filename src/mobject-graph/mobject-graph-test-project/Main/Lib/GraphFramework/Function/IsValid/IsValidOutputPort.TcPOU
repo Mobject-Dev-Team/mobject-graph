@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="IsValidOutputPort" Id="{9449dc11-2905-0e27-09f9-d6c303c2e5af}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION IsValidOutputPort : BOOL
+VAR_INPUT
+	OutputPort : I_OutputPort;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IsValidOutputPort := OutputPort <> 0;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

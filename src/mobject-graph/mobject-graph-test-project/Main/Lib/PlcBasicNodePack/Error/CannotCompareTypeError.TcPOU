@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="CannotCompareTypeError" Id="{20ad30a3-ffe9-04b8-0a3b-f5bfd151bb67}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC CannotCompareTypeError EXTENDS Error
+VAR
+	state : (CLEARED, RAISED);
+	dataType1 : T_MAXSTRING;
+	dataType2 : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="Active" Id="{d0fc6167-f943-0d82-3d79-ae21b715b3a1}">
+      <Declaration><![CDATA[PROPERTY Active : BOOL]]></Declaration>
+      <Get Name="Get" Id="{321841b4-b7c0-0b0c-3270-fd32ae1e2105}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Active := state <> CLEARED;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Clear" Id="{a38ad8cc-90a2-09f0-3b8a-5efd1b85f959}">
+      <Declaration><![CDATA[METHOD PUBLIC Clear
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[dataType1 := '';
+dataType2 := '';
+state := CLEARED;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="ErrorCode" Id="{02c83b7d-492d-0c72-0be7-506cd8c888d1}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ErrorCode : HRESULT]]></Declaration>
+      <Get Name="Get" Id="{ca749e32-de49-0b0d-0f4d-8a170a8bc9e5}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ErrorCode := Tc2_System.E_HRESULTAdsErr.INCOMPATIBLE;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Message" Id="{a19432c6-7047-0c39-0081-126df0120760}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Message : T_MaxString]]></Declaration>
+      <Get Name="Get" Id="{883c1809-31db-082b-027a-6cb77882c81a}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Message := 'Cannot compare datatypes';]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Raise" Id="{6355238d-9bca-0acd-0570-1a86c648189d}">
+      <Declaration><![CDATA[METHOD PUBLIC Raise
+VAR_INPUT
+	DataType1 : T_MAXSTRING;
+	DataType2 : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.dataType1 := DataType1;
+THIS^.dataType2 := DataType2;
+state := RAISED;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Reason" Id="{8ccf31cc-fc88-02ca-3e10-a91176d3b285}">
+      <Declaration><![CDATA[PROPERTY Reason : T_MaxString]]></Declaration>
+      <Get Name="Get" Id="{b96fce93-9620-0ca4-2dc7-e1059408d91d}">
+        <Declaration><![CDATA[VAR
+	message : STRING;
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF state = CLEARED THEN
+	RETURN;
+END_IF
+
+message := CONCAT(message, dataType1);
+message := CONCAT(message, ' with ');
+message := CONCAT(message, dataType2);
+
+Reason := message;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

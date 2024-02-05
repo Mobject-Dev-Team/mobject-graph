@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="JsonLanguagePack" Id="{b22d15f2-0a2d-001f-1a19-cc7953f2d76f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK JsonLanguagePack IMPLEMENTS I_JsonLanguagePack
+VAR
+	jsonTypeConverters : JsonTypeConverters;
+
+	// generic type convertion variables	
+	_bool : BOOL; 	
+	_byte : BYTE;	
+	_word : WORD;	
+	_dword : DWORD;	
+	_lword : LWORD;	
+	_sint : SINT;	
+	_usint : USINT;	
+	_int : INT; 	
+	_uint : UINT;	
+	_dint : DINT; 	
+	_udint : UDINT; 	
+	_lint : LINT;	
+	_ulint : ULINT;	
+	_real : REAL; 	
+	_lreal : LREAL;	
+	_date : DATE;	
+	_dt : DT;	
+	_date_and_time : DATE_AND_TIME;	
+	_tod : TOD;	
+	_time_of_day : TIME_OF_DAY;	
+	_time : TIME;
+	_t_maxstring : T_MAXSTRING;
+	
+	// extras
+	routerMemory : RouterMemory;
+	nodeProfile : NodeProfile;
+	
+	// dispose 
+	selfCreatedConverters : DisposableCollection;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{527cbb80-98fa-0b50-2797-fa2b5dfb6c13}" />
+    <Folder Name="Destructor" Id="{7d2ed291-1a6e-03b9-0bd3-5e547551cfb2}" />
+    <Folder Name="Private" Id="{a277473a-4cd6-04b7-0f9d-180561b653b4}" />
+    <Method Name="AddDataTypeConversionUsingConverter" Id="{112636ff-8264-048c-2057-167c14c773a7}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataTypeConversionUsingConverter
+VAR_INPUT
+	DataType : T_MAXSTRING;
+	TypeConversion : I_JsonTypeConverter;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonTypeConverters.InsertByDataType(DataType, TypeConversion);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataTypeConversionUsingVariable" Id="{53fadbef-a634-0b66-229d-8fa7e6be32e0}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataTypeConversionUsingVariable
+VAR_INPUT
+	DataType : T_MAXSTRING;
+	VariableOfType : ANY;
+END_VAR
+VAR
+	genericConverter : POINTER TO JsonAnyConverter;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[genericConverter := __NEW(JsonAnyConverter(LinkedVariable := VariableOfType));
+jsonTypeConverters.InsertByDataType(DataType, genericConverter^);
+selfCreatedConverters.Insert(genericConverter^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DataToJsonString" Id="{d710c385-2ba8-030f-171b-32935d5e0bcb}">
+      <Declaration><![CDATA[METHOD PUBLIC DataToJsonString : HRESULT
+VAR_INPUT
+	Source : I_DataAccess;
+	JsonStringAddress : POINTER TO STRING;
+	JsonStringSize : UDINT;
+END_VAR
+VAR
+	typeConverter : I_JsonTypeConverter;
+END_VAR
+VAR CONSTANT
+	INCOMPATIBLE : HRESULT := 16#70E;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonTypeConverters.HasDataType(Source.DataType) THEN
+	DataToJsonString := INCOMPATIBLE;
+	RETURN;
+END_IF
+
+typeConverter := jsonTypeConverters.GetByDataType(Source.DataType);
+DataToJsonString := typeConverter.DataToJsonString(Source,JsonStringAddress,JsonStringSize);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DataToJsonStringSize" Id="{740086d3-fc2c-0304-3f5a-b56367d5d716}">
+      <Declaration><![CDATA[METHOD PUBLIC DataToJsonStringSize : UDINT
+VAR_INPUT
+	Source : I_DataAccess;
+END_VAR
+VAR
+	typeConverter : I_JsonTypeConverter;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonTypeConverters.HasDataType(Source.DataType) THEN
+	RETURN;
+END_IF
+
+typeConverter := jsonTypeConverters.GetByDataType(Source.DataType);
+DataToJsonStringSize := typeConverter.DataToJsonStringSize(Source);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{8e1fb204-8098-0ff2-0524-bb9869d0397c}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+selfCreatedConverters.DisposeAndRemoveAll();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{c5bb3665-237d-0ffe-1c4e-e728d03790ad}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RegisterPrimativeTypes();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Install" Id="{270c7f82-c2c0-00ba-1ff4-173f4b65a917}">
+      <Declaration><![CDATA[METHOD PUBLIC Install
+VAR_INPUT
+	DataTypePack : I_JsonDataTypePack;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DataTypePack.RegisterWithLanguagePack(This^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="JsonStringToData" Id="{26547d09-bc4e-07f0-1b57-9ad02febe8ee}">
+      <Declaration><![CDATA[METHOD PUBLIC JsonStringToData : I_DataDisposer
+VAR_INPUT
+	JsonStringPointer : POINTER TO STRING;
+	Destination : I_DataAccess;
+END_VAR
+VAR
+	typeConverter : I_JsonTypeConverter;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT jsonTypeConverters.HasDataType(Destination.DataType) THEN
+	RETURN;
+END_IF
+
+typeConverter := jsonTypeConverters.GetByDataType(Destination.DataType);
+JsonStringToData := typeConverter.JsonStringToData(JsonStringPointer,Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterPrimativeTypes" Id="{0a388d4d-d43c-042f-1788-b9c9ecd1aa7b}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterPrimativeTypes
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// primitives 
+AddDataTypeConversionUsingVariable('BOOL',_bool);
+AddDataTypeConversionUsingVariable('BYTE',_byte);
+AddDataTypeConversionUsingVariable('WORD',_word);
+AddDataTypeConversionUsingVariable('DWORD',_dword);
+AddDataTypeConversionUsingVariable('LWORD',_lword);
+AddDataTypeConversionUsingVariable('SINT',_sint);
+AddDataTypeConversionUsingVariable('USINT',_usint);
+AddDataTypeConversionUsingVariable('INT',_int);
+AddDataTypeConversionUsingVariable('UINT',_uint);
+AddDataTypeConversionUsingVariable('DINT' ,_dint);
+AddDataTypeConversionUsingVariable('UDINT',_udint);
+AddDataTypeConversionUsingVariable('LINT' ,_lint);
+AddDataTypeConversionUsingVariable('ULINT',_ulint);
+AddDataTypeConversionUsingVariable('REAL' ,_real);
+AddDataTypeConversionUsingVariable('LREAL',_lreal);
+AddDataTypeConversionUsingVariable('DATE',_date);
+AddDataTypeConversionUsingVariable('DT',_dt);
+AddDataTypeConversionUsingVariable('DATE_AND_TIME',_date_and_time);
+AddDataTypeConversionUsingVariable('TOD',_tod);
+AddDataTypeConversionUsingVariable('TIME_OF_DAY',_time_of_day);
+AddDataTypeConversionUsingVariable('TIME',_time );
+AddDataTypeConversionUsingVariable('STRING',_t_maxstring);
+AddDataTypeConversionUsingVariable('T_MAXSTRING',_t_maxstring);
+
+// extras
+AddDataTypeConversionUsingVariable('RouterMemory',routerMemory);
+AddDataTypeConversionUsingVariable('NodeProfile',nodeProfile);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

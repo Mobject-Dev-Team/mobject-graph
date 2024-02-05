@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="ContentCollection" Id="{1def75d3-5565-0fe4-3612-d21a56184e52}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ContentCollection IMPLEMENTS I_ContentCollection
+VAR
+	contents : Stack;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="GetEnumerator" Id="{019ffe09-1fd9-0e51-1027-51f2c74291ce}">
+      <Declaration><![CDATA[METHOD PUBLIC GetEnumerator : I_ForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetEnumerator := contents.GetEnumerator();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Insert" Id="{648c5496-cfa7-07d8-3d0d-c88b3dcf6ad3}">
+      <Declaration><![CDATA[METHOD PUBLIC Insert
+VAR_INPUT
+	ContentToAdd : I_Content;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[contents.Push(ContentToAdd);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetByName" Id="{edbb8fd1-89ca-0968-2295-bfb960669b42}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetByName : BOOL
+VAR_INPUT
+	Name : STRING;
+	Destination : REFERENCE TO I_Content;
+END_VAR
+VAR
+	contentEnumerator : I_ForwardEnumerator;
+	currentContent : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[contentEnumerator := contents.GetEnumerator();
+
+WHILE contentEnumerator.MoveNext() DO 
+	IF NOT contentEnumerator.TryGet(currentContent) THEN
+		CONTINUE;
+	END_IF
+	
+	IF currentContent.Name = Name THEN 
+		TryGetByName := TRUE;
+		Destination := currentContent;
+		EXIT;
+	END_IF
+
+END_WHILE
+
+contentEnumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

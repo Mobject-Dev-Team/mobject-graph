@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Node" Id="{7e28b21d-6b2a-0b88-18bc-3ad32fd1a6c2}">
+    <Declaration><![CDATA[INTERFACE I_Node EXTENDS I_BaseElement
+]]></Declaration>
+    <Method Name="Accept" Id="{9a7ac280-4430-0727-2fa0-fc419b9e7a74}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_NodeVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Configure" Id="{da25a7ed-2d43-0a52-3287-cecc0f4764e8}">
+      <Declaration><![CDATA[METHOD PUBLIC Configure
+VAR_INPUT
+	Settings : I_NodeSettings;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="Execute" Id="{7f9f5b88-6b3e-01b0-3c44-302ecbab1d70}">
+      <Declaration><![CDATA[METHOD PUBLIC Execute
+]]></Declaration>
+    </Method>
+    <Property Name="Id" Id="{3f0a605f-e0ca-0b68-32ae-dc045045cbef}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Id : NodeId]]></Declaration>
+      <Get Name="Get" Id="{9693ab0f-432b-03b3-2695-d2bcd82c6f64}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Mode" Id="{ec3476cc-9f6e-0390-3d95-a2e1e0263e0e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Mode : NodeId]]></Declaration>
+      <Get Name="Get" Id="{d5d5fc57-033b-053e-0bee-8afed9f6afe1}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Order" Id="{7def7f08-10ff-0b9f-31cc-0ffdbdb8a639}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Order : DINT]]></Declaration>
+      <Get Name="Get" Id="{e8fce107-543d-02d8-0594-172e06e8a866}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

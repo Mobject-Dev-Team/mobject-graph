@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="DisposeNode" Id="{c412776f-3e2d-0642-38f7-75ac19500c35}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION DisposeNode : BOOL
+VAR_INPUT
+	node : I_Node;
+END_VAR
+VAR
+	disposableNode : I_Disposable;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF __QUERYINTERFACE(node,disposableNode) THEN
+ 	disposableNode.Dispose();
+	DisposeNode := TRUE;
+END_IF;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

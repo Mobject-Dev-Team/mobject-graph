@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_HaveProperties" Id="{c5806033-3adc-0f99-304c-e569fa5b2b9f}">
+    <Declaration><![CDATA[INTERFACE I_HaveProperties EXTENDS __SYSTEM.IQueryInterface
+]]></Declaration>
+    <Method Name="AddProperty" Id="{629b0de3-c6af-0abc-2e2a-6709cf7d0165}">
+      <Declaration><![CDATA[METHOD AddProperty
+VAR_INPUT
+	PropertyToAdd : I_Property;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="GetProperties" Id="{83aea430-01cb-0969-3ea6-7616f2695ec6}">
+      <Declaration><![CDATA[METHOD PUBLIC GetProperties : I_PropertyCollection
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetPropertyByName" Id="{54f7a4bd-70df-0013-2d50-559760c48b28}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetPropertyByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Property;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

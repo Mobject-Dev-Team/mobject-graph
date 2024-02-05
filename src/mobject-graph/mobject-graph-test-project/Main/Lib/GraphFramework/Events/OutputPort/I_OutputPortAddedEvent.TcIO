@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_OutputPortAddedEvent" Id="{2d6d7a66-53d7-007c-1669-46c2f43e40ee}">
+    <Declaration><![CDATA[INTERFACE I_OutputPortAddedEvent extends I_Event
+]]></Declaration>
+    <Property Name="TargetOutputPort" Id="{99b1bcc0-933b-0e7f-24b3-88682ed63cc1}">
+      <Declaration><![CDATA[PROPERTY PUBLIC TargetOutputPort : I_OutputPort]]></Declaration>
+      <Get Name="Get" Id="{03871bbf-c0bf-0939-0439-4e70c887bcda}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

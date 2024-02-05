@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_OutputPortCollection" Id="{163b19e5-d345-08ff-03d9-b191836f5176}">
+    <Declaration><![CDATA[INTERFACE I_OutputPortCollection
+]]></Declaration>
+    <Method Name="GetEnumerator" Id="{0211864d-593d-0f5b-3c42-14358deb2347}">
+      <Declaration><![CDATA[METHOD PUBLIC GetEnumerator : I_ForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetByName" Id="{345d34fa-c16e-04d5-3366-81bce0db7c4b}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetByName : BOOL
+VAR_INPUT
+	Name : STRING;
+	Destination : REFERENCE TO I_OutputPort;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

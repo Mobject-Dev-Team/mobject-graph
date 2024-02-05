@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="HasExtensionNamespace" Id="{72ed1bbb-a749-0ec4-31e0-d56410b294d3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION HasExtensionNamespace : BOOL
+VAR_INPUT
+	Symbol : T_MAXSTRING;
+END_VAR
+VAR
+	splitNamespace : t_MAXSTRING;
+    splitSymbol : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[HasExtensionNamespace := FindAndSplitChar( 
+	sSeparatorChar := '.',  
+	pSrcString := ADR(Symbol),                                  
+	pLeftString := ADR(splitNamespace),   
+	nLeftSize := SIZEOF(splitNamespace),                                  
+	pRightString := ADR(splitSymbol), 
+	nRightSize := SIZEOF(splitSymbol),                                
+	bSearchFromRight := FALSE 
+);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

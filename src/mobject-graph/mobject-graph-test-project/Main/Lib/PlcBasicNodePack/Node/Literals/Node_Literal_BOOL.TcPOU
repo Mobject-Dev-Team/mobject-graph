@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Node_Literal_BOOL" Id="{12053a2d-1811-05b8-274f-6b729ca726b1}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK FINAL Node_Literal_BOOL EXTENDS Node
+VAR
+	
+	// properties
+	nodeProperty_Value : NodeProperty('value','BOOL',THIS^);
+	
+	// outputs
+	nodeOutput_Out : NodeOutput('out','BOOL',THIS^);
+	
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="OnExecute" Id="{17896f32-d471-0aa9-3949-762ff3592dce}">
+      <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT
+VAR
+	currentValue : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodeProperty_Value.Get(currentValue);
+nodeOutput_Out.Set(currentValue);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

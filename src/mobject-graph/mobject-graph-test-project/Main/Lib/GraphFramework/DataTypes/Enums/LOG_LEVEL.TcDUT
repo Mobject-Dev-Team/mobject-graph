@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="LOG_LEVEL" Id="{0c97a951-e67f-0680-371b-f3de4149bbe4}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE LOG_LEVEL :
+(
+	OFF,
+	WARN
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

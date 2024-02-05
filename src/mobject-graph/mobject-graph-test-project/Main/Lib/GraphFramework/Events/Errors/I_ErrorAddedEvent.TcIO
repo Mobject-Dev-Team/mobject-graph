@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_ErrorAddedEvent" Id="{08a8faaf-cc56-0deb-204e-ea3cc40f76e7}">
+    <Declaration><![CDATA[INTERFACE I_ErrorAddedEvent EXTENDS I_Event
+]]></Declaration>
+    <Property Name="TargetError" Id="{9891ecd7-4ffb-01cb-0e25-f7863c3091df}">
+      <Declaration><![CDATA[PROPERTY PUBLIC TargetError : I_Error]]></Declaration>
+      <Get Name="Get" Id="{083afae4-be20-0091-31ac-e587bd138cc5}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="ErrorCollection" Id="{68f90357-7237-0af2-388f-e56794399946}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ErrorCollection implements I_ErrorCollection
+VAR
+	errors : Stack;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="GetEnumerator" Id="{f628d4ae-9a9e-04e7-1fb4-f954de25a9aa}">
+      <Declaration><![CDATA[METHOD PUBLIC GetEnumerator : I_ForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetEnumerator := errors.GetEnumerator();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Insert" Id="{7e5598c6-1f95-0eb6-0614-4bf48418e5c0}">
+      <Declaration><![CDATA[METHOD PUBLIC Insert
+VAR_INPUT
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[errors.Push(error);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

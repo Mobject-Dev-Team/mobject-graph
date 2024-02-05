@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_LinkSettings" Id="{08907437-7ef4-003d-3793-9239ea2b7c04}">
+    <Declaration><![CDATA[INTERFACE I_LinkSettings
+
+]]></Declaration>
+    <Property Name="DestinationId" Id="{3937ae85-5bb6-0884-3ce8-f1549db5687e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC DestinationId : NodeId]]></Declaration>
+      <Get Name="Get" Id="{c2d9ba1c-30ba-0746-22c0-4a1611e6eb99}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="DestinationPortId" Id="{06043390-ce54-0b3b-3673-0637911b9648}">
+      <Declaration><![CDATA[PROPERTY PUBLIC DestinationPortId : PortId]]></Declaration>
+      <Get Name="Get" Id="{7eb5ca01-eb3e-0f8f-36b6-3d7fab74d57a}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Id" Id="{652dd274-2840-098e-2266-c453e39cbfdf}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Id : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{f633d26c-9260-06e3-34ad-2c867522c6ef}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="SourceId" Id="{11226632-74f3-06b9-179c-749e74957fbe}">
+      <Declaration><![CDATA[PROPERTY SourceId : NodeId]]></Declaration>
+      <Get Name="Get" Id="{d985f42b-da47-08bd-3365-d0b0c3bd6a67}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="SourcePortId" Id="{50699104-2f07-0615-0eeb-4187ac02e054}">
+      <Declaration><![CDATA[PROPERTY PUBLIC SourcePortId : PortId]]></Declaration>
+      <Get Name="Get" Id="{d65033b3-0873-0357-28ce-e5cc87b4252c}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

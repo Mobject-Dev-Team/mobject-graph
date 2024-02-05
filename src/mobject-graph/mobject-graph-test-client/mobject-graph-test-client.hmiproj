@@ -30,7 +30,7 @@
     <HmiCommunicationRouterPort>10100</HmiCommunicationRouterPort>
     <HmiCommunicationServerAuthPort>13000</HmiCommunicationServerAuthPort>
     <HmiInitial>1.12.760.44</HmiInitial>
-    <HmiRecent>1.12.760.44</HmiRecent>
+    <HmiRecent>1.12.760.59</HmiRecent>
     <HmiServerNodeAdvancedView>False</HmiServerNodeAdvancedView>
   </PropertyGroup>
   <PropertyGroup>
@@ -114,10 +114,38 @@
     <Folder Include="Images" />
     <Folder Include="Images\Manifest" />
     <Folder Include="Imports" />
+    <Folder Include="Imports\base64" />
+    <Folder Include="Imports\iec61131-3" />
     <Folder Include="Imports\Images" />
+    <Folder Include="Imports\json-viewer" />
+    <Folder Include="Imports\litegraph" />
+    <Folder Include="Imports\uuid-gen" />
     <Folder Include="Imports\Videos" />
     <Folder Include="KeyboardLayouts\" />
+    <Folder Include="Lib\GraphFramework" />
+    <Folder Include="Lib\GraphFramework\Ability" />
+    <Folder Include="Lib\GraphFramework\Ability\Base" />
+    <Folder Include="Lib\GraphFramework\Dialog" />
+    <Folder Include="Lib\GraphFramework\Dialog\Base" />
+    <Folder Include="Lib\GraphFramework\Graph" />
+    <Folder Include="Lib\GraphFramework\GraphCanvas" />
+    <Folder Include="Lib\GraphFramework\GraphCanvas\Base" />
+    <Folder Include="Lib\GraphFramework\Graph\Base" />
+    <Folder Include="Lib\GraphFramework\LiteGraph" />
+    <Folder Include="Lib\GraphFramework\Node" />
+    <Folder Include="Lib\GraphFramework\NodeFactory" />
+    <Folder Include="Lib\GraphFramework\Node\Base" />
+    <Folder Include="Lib\GraphFramework\Widget" />
+    <Folder Include="Lib\GraphFramework\Widget\Base" />
+    <Folder Include="Lib\GraphFramework\Widget\Collection" />
+    <Folder Include="Lib\GraphFramework\Widget\Default" />
+    <Folder Include="Lib\GraphFramework\Widget\IEC" />
+    <Folder Include="Lib\PlcBasicNodePack" />
+    <Folder Include="Lib\PlcBasicNodePack\Node" />
+    <Folder Include="Lib\PlcBasicNodePack\Node\Display" />
+    <Folder Include="Lib\PlcBasicNodePack\Node\Literals" />
     <Folder Include="Localization" />
+    <Folder Include="Lib" />
     <Folder Include="Themes" />
     <Folder Include="Themes\Base-Dark\Images\" />
     <Folder Include="Themes\Base\" />
@@ -128,6 +156,117 @@
     <Folder Include="Properties" />
     <Content Include=".eslintrc.json">
       <Visible>false</Visible>
+    </Content>
+    <Content Include="Imports\base64\Base64.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Imports\iec61131-3\iec61131-3.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Imports\json-viewer\json-viewer.css">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Imports\json-viewer\json-viewer.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Imports\litegraph\litegraph.css">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Imports\litegraph\litegraph.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Imports\uuid-gen\UuidGen.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Ability\Base\AbilityBase.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Ability\GraphRouterMemoryAbility.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Ability\NodeProtectionAbility.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Ability\NodeTriggerAbility.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Dialog\Base\HtmlDialogBase.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\GraphCanvas\Base\GraphCanvas.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Graph\Base\Graph.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\LiteGraph\LiteGraphPatch.css">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\LiteGraph\LiteGraphPatch.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\NodeFactory\DefaultInputPortFactory.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\NodeFactory\DefaultNodeClassFactory.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Node\Base\NodeBase.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\PlcApi.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Widget\Base\WidgetBase.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Widget\Collection\WidgetCollection.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Widget\Default\Widget_Blank.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Widget\Default\Widget_Bool.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Widget\Default\Widget_Combo.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Widget\Default\Widget_Number.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Widget\Default\Widget_Separator.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Widget\Default\Widget_Slider.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Widget\Default\Widget_String.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Widget\IEC\Widget_IecAnyFloat.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Widget\IEC\Widget_IecAnyInteger.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\GraphFramework\Widget\IEC\Widget_IecEnum.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\PlcBasicNodePack\NodePack_PlcBasic.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\PlcBasicNodePack\Node\Display\NodePack_PlcBasicDisplay.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\PlcBasicNodePack\Node\Display\Node_Display_BOOL.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\PlcBasicNodePack\Node\Literals\NodePack_PlcBasicLiterals.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Lib\PlcBasicNodePack\Node\Literals\Node_Literal_BOOL.js">
+      <SubType>Content</SubType>
     </Content>
     <Content Include="Server\TcHmiLua\TcHmiLua.Config.default.json">
       <SubType>Content</SubType>

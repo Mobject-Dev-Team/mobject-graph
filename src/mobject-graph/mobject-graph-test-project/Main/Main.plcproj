@@ -18,6 +18,520 @@
     <LibraryReferences>{0316d8aa-5460-44e8-a6c7-40422389f1e0}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Lib\GraphFramework\API\JsonGraphApi.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\BaseElement\BaseElement.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\BaseElement\I_BaseElement.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Content\Any\Content_Any.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Content\Collection\ContentCollection.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Content\Collection\I_ContentCollection.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Content\Interface\I_Content.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Content\Interface\I_HaveContent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\DataAccess\I_DataAccess.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\DataAccess\I_DataDisposer.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\DataTypes\Enums\LOG_LEVEL.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\DataTypes\FilePath.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\DataTypes\HugeString.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\DataTypes\NodeId.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\DataTypes\NodeProfile.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\DataTypes\PortId.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\DataTypes\RouterMemory.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\DataTypes\Uuid.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Disposable\Collection\DisposableCollection.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Error\Base\Error.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Error\Base\I_Error.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Error\Collection\ErrorCollection.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Error\Collection\I_ErrorCollection.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Error\FileExtensionNotSupportedError.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Error\FunctionFailedError.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Error\InputPortNotConnectedError.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Error\Interfaces\I_HaveErrors.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Error\NodeNotSupportedError.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Error\OutOfRangeError.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Error\StandardMessageError.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Contents\ContentAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Contents\I_ContentAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Errors\ErrorAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Errors\I_ErrorAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Extensions\ExtensionAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Extensions\I_ExtensionAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\InputPort\InputPortAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\InputPort\InputPortChangedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\InputPort\I_InputPortAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\InputPort\I_InputPortChangedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Metadatum\I_MetadatumAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Metadatum\MetadatumAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Node\I_NodeExecuteBeginEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Node\I_NodeExecuteEndEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Node\I_NodePreExecuteEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Node\NodeExecuteBeginEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Node\NodeExecuteEndEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Node\NodePreExecuteEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\OutputPort\I_OutputPortAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\OutputPort\I_OutputPortChangedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\OutputPort\OutputPortAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\OutputPort\OutputPortChangedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Property\I_PropertyAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Events\Property\PropertyAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Extensions\Base\ExtensionBase.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Extensions\Collections\ExtensionsCollection.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Extensions\Collections\I_ExtensionCollection.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Extensions\Interface\I_Extension.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Extensions\Interface\I_HaveExtensions.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Extensions\NodeProfilerExtension\NodeProfilerExtension.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Extensions\NodeProtectionExtension\Interface\I_NodeWithProtection.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Extensions\NodeProtectionExtension\NodeProtectionExtension.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Extensions\NodeTriggerExtension\NodeTriggerExtension.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\AnyToString.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\DisposeError.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\DisposeNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\FrameworkAdsLogger.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\IsEmptyPort.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidError.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidExtension.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidInputPort.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidLink.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidMetadatum.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidOutputPort.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidProperty.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidStatus.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValueEven.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\LongStringLen.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\Namespace\GetLastSegmentFromNamespace.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\Namespace\GetLeadingSegmentFromNamespace.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\Namespace\HasExtensionNamespace.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\Namespace\RemoveLastSegmentFromNamespace.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Function\Namespace\RemoveLeadingSegmentFromNamespace.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\GraphFramework.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Graph\Graph.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Graph\I_Graph.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Interfaces\I_GraphSettings.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Interfaces\I_LinkSettings.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Interfaces\I_NodeSettings.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Interfaces\I_PortSettings.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Interfaces\I_PropertySettings.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Interfaces\I_ResponseBuilder.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Json\I_JsonDataTypePack.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Json\I_JsonLanguagePack.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Json\JsonLanguagePack.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Json\Parsers\JsonGraphSettingsParser.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Json\Parsers\JsonLinkSettingsParser.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Json\Parsers\JsonNodeSettingsParser.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Json\Parsers\JsonPortSettingsParser.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Json\Parsers\JsonPropertySettingsParser.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Json\Response\I_JsonResponseBuilder.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Json\Response\JsonResponseBuilder.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Json\TypeConverter\AnySymbol\JsonAnyConverter.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Json\TypeConverter\Collection\I_JsonTypeConverters.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Json\TypeConverter\Collection\JsonTypeConverters.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LanguagePack\Json\TypeConverter\I_JsonTypeConverter.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LinkFactory\I_LinkFactory.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\LinkFactory\LinkFactory.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Link\Base\I_Link.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Link\Base\Link.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Link\Collection\LinkCollection.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Metadata\Collections\I_MetadataCollection.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Metadata\Collections\MetadataCollection.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Metadata\Interface\I_HaveMetadata.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Metadata\Interface\I_Metadatum.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\NodeFactory\Collection\I_NodeFactoryCollection.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\NodeFactory\Collection\NodeFactoryCollection.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\NodeFactory\I_NodeFactory.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\NodeFactory\NodeFactory.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\NodeIO\NodeContent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\NodeIO\NodeInput.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\NodeIO\NodeOutput.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\NodeIO\NodeProperty.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\NodeIO\NodeTriggerOutput.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\NodePack\I_NodePack.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Node\Base\Node.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Node\Collection\I_NodeCollection.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Node\Collection\NodeCollection.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Node\Interface\I_HaveNodes.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Node\Interface\I_Node.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Port\Any\InputPort_ANY.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Port\Any\OutputPort_ANY.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Port\Collections\InputPortCollection.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Port\Collections\I_InputPortCollection.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Port\Collections\I_OutputPortCollection.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Port\Collections\OutputPortCollection.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Port\Interface\I_HaveInputPorts.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Port\Interface\I_HaveOutputPorts.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Port\Interface\I_InputPort.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Port\Interface\I_OutputPort.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Port\Trigger\InputPort_Trigger.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Port\Trigger\I_TriggerPort.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Property\Any\Property_ANY.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Property\Collection\I_PropertyCollection.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Property\Collection\PropertyCollection.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Property\Interface\I_HaveProperties.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Property\Interface\I_Property.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\TcGraph\I_TcGraph.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\TcGraph\TcGraph.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Visitors\GetBlueprintVisitor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Visitors\GetStatusVisitor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_ContentVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_ErrorVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_ExtensionVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_GraphVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_InputPortVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_MetadatumVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_NodeFactoryVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_NodeVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_OutputPortVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_PropertyVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_TcGraphVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\PlcBasicNodePack\Error\CannotCompareTypeError.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\PlcBasicNodePack\NodePack_PlcBasic.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\PlcBasicNodePack\Node\Display\NodeFactory_Display_BOOL.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\PlcBasicNodePack\Node\Display\NodePack_PlcBasicDisplay.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\PlcBasicNodePack\Node\Display\Node_Display_BOOL.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\PlcBasicNodePack\Node\Literals\NodeFactory_Literal_BOOL.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\PlcBasicNodePack\Node\Literals\NodePack_PlcBasicLiterals.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\PlcBasicNodePack\Node\Literals\Node_Literal_BOOL.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
@@ -26,6 +540,84 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Lib" />
+    <Folder Include="Lib\GraphFramework" />
+    <Folder Include="Lib\GraphFramework\API" />
+    <Folder Include="Lib\GraphFramework\BaseElement" />
+    <Folder Include="Lib\GraphFramework\Content" />
+    <Folder Include="Lib\GraphFramework\Content\Any" />
+    <Folder Include="Lib\GraphFramework\Content\Collection" />
+    <Folder Include="Lib\GraphFramework\Content\Interface" />
+    <Folder Include="Lib\GraphFramework\DataAccess" />
+    <Folder Include="Lib\GraphFramework\DataTypes" />
+    <Folder Include="Lib\GraphFramework\DataTypes\Enums" />
+    <Folder Include="Lib\GraphFramework\Disposable" />
+    <Folder Include="Lib\GraphFramework\Disposable\Collection" />
+    <Folder Include="Lib\GraphFramework\Error" />
+    <Folder Include="Lib\GraphFramework\Error\Base" />
+    <Folder Include="Lib\GraphFramework\Error\Collection" />
+    <Folder Include="Lib\GraphFramework\Error\Interfaces" />
+    <Folder Include="Lib\GraphFramework\Events" />
+    <Folder Include="Lib\GraphFramework\Events\Contents" />
+    <Folder Include="Lib\GraphFramework\Events\Errors" />
+    <Folder Include="Lib\GraphFramework\Events\Extensions" />
+    <Folder Include="Lib\GraphFramework\Events\InputPort" />
+    <Folder Include="Lib\GraphFramework\Events\Metadatum" />
+    <Folder Include="Lib\GraphFramework\Events\Node" />
+    <Folder Include="Lib\GraphFramework\Events\OutputPort" />
+    <Folder Include="Lib\GraphFramework\Events\Property" />
+    <Folder Include="Lib\GraphFramework\Extensions" />
+    <Folder Include="Lib\GraphFramework\Extensions\Base" />
+    <Folder Include="Lib\GraphFramework\Extensions\Collections" />
+    <Folder Include="Lib\GraphFramework\Extensions\Interface" />
+    <Folder Include="Lib\GraphFramework\Extensions\NodeProfilerExtension" />
+    <Folder Include="Lib\GraphFramework\Extensions\NodeProtectionExtension" />
+    <Folder Include="Lib\GraphFramework\Extensions\NodeProtectionExtension\Interface" />
+    <Folder Include="Lib\GraphFramework\Extensions\NodeTriggerExtension" />
+    <Folder Include="Lib\GraphFramework\Function" />
+    <Folder Include="Lib\GraphFramework\Function\IsValid" />
+    <Folder Include="Lib\GraphFramework\Function\Namespace" />
+    <Folder Include="Lib\GraphFramework\Graph" />
+    <Folder Include="Lib\GraphFramework\LanguagePack" />
+    <Folder Include="Lib\GraphFramework\LanguagePack\Interfaces" />
+    <Folder Include="Lib\GraphFramework\LanguagePack\Json" />
+    <Folder Include="Lib\GraphFramework\LanguagePack\Json\Parsers" />
+    <Folder Include="Lib\GraphFramework\LanguagePack\Json\Response" />
+    <Folder Include="Lib\GraphFramework\LanguagePack\Json\TypeConverter" />
+    <Folder Include="Lib\GraphFramework\LanguagePack\Json\TypeConverter\AnySymbol" />
+    <Folder Include="Lib\GraphFramework\LanguagePack\Json\TypeConverter\Collection" />
+    <Folder Include="Lib\GraphFramework\Link" />
+    <Folder Include="Lib\GraphFramework\LinkFactory" />
+    <Folder Include="Lib\GraphFramework\Link\Base" />
+    <Folder Include="Lib\GraphFramework\Link\Collection" />
+    <Folder Include="Lib\GraphFramework\Metadata" />
+    <Folder Include="Lib\GraphFramework\Metadata\Collections" />
+    <Folder Include="Lib\GraphFramework\Metadata\Interface" />
+    <Folder Include="Lib\GraphFramework\Node" />
+    <Folder Include="Lib\GraphFramework\NodeFactory" />
+    <Folder Include="Lib\GraphFramework\NodeFactory\Collection" />
+    <Folder Include="Lib\GraphFramework\NodeIO" />
+    <Folder Include="Lib\GraphFramework\NodePack" />
+    <Folder Include="Lib\GraphFramework\Node\Base" />
+    <Folder Include="Lib\GraphFramework\Node\Collection" />
+    <Folder Include="Lib\GraphFramework\Node\Interface" />
+    <Folder Include="Lib\GraphFramework\Port" />
+    <Folder Include="Lib\GraphFramework\Port\Any" />
+    <Folder Include="Lib\GraphFramework\Port\Collections" />
+    <Folder Include="Lib\GraphFramework\Port\Interface" />
+    <Folder Include="Lib\GraphFramework\Port\Trigger" />
+    <Folder Include="Lib\GraphFramework\Property" />
+    <Folder Include="Lib\GraphFramework\Property\Any" />
+    <Folder Include="Lib\GraphFramework\Property\Collection" />
+    <Folder Include="Lib\GraphFramework\Property\Interface" />
+    <Folder Include="Lib\GraphFramework\TcGraph" />
+    <Folder Include="Lib\GraphFramework\Visitors" />
+    <Folder Include="Lib\GraphFramework\Visitors\Interfaces" />
+    <Folder Include="Lib\PlcBasicNodePack" />
+    <Folder Include="Lib\PlcBasicNodePack\Error" />
+    <Folder Include="Lib\PlcBasicNodePack\Node" />
+    <Folder Include="Lib\PlcBasicNodePack\Node\Display" />
+    <Folder Include="Lib\PlcBasicNodePack\Node\Literals" />
     <Folder Include="Tests" />
     <Folder Include="POUs" />
   </ItemGroup>
@@ -38,17 +630,47 @@
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
     </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Utilities">
+      <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Utilities</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_DynamicMemory">
+      <DefaultResolution>Tc3_DynamicMemory, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_DynamicMemory</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_JsonXml">
+      <DefaultResolution>Tc3_JsonXml, * (Beckhoff Automation GmbH)</DefaultResolution>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc3_Module</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="TcUnit">
       <DefaultResolution>TcUnit, * (www.tcunit.org)</DefaultResolution>
+      <Namespace>TcUnit</Namespace>
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
+    <LibraryReference Include="mobject-collections,1.0.0,mobject">
+      <Namespace>mobject_collections</Namespace>
+    </LibraryReference>
+    <LibraryReference Include="mobject-disposable,1.0.0,mobject">
+      <Namespace>mobject_disposable</Namespace>
+    </LibraryReference>
+    <LibraryReference Include="mobject-enumerable,1.0.0,mobject">
+      <Namespace>mobject_enumerable</Namespace>
+    </LibraryReference>
+    <LibraryReference Include="mobject-events,1.0.0,mobject">
+      <Namespace>mobject_events</Namespace>
+    </LibraryReference>
     <LibraryReference Include="mobject-graph,0.1.0,mobject">
       <Namespace>mobject_graph</Namespace>
+    </LibraryReference>
+    <LibraryReference Include="mobject-serialization,0.1.0,mobject">
+      <Namespace>mobject_serialization</Namespace>
+    </LibraryReference>
+    <LibraryReference Include="mobject-server,0.1.0,mobject">
+      <Namespace>mobject_server</Namespace>
     </LibraryReference>
   </ItemGroup>
   <ItemGroup>

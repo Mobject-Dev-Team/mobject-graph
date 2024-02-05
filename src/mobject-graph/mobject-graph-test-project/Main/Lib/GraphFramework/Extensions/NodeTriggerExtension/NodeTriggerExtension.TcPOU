@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NodeTriggerExtension" Id="{33e0a2d7-9483-08c7-064c-13c37845f3c6}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK NodeTriggerExtension EXTENDS ExtensionBase IMPLEMENTS I_EventHandler
+VAR
+	parent : I_Node;
+	nodeInput_Trigger : InputPort_Trigger('trigger','HRESULT',THIS^);
+	nodeOutput_Trigger : OutputPort_ANY('result','HRESULT',THIS^);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{ede2f570-9df8-03ad-3f5d-9c9a6b23db22}" />
+    <Folder Name="Destructor" Id="{f9bb0db8-25f5-04cb-3fad-e1dd95a9193b}" />
+    <Folder Name="Protected" Id="{eac92252-fb76-0f6f-076f-07b51cf3bcc3}" />
+    <Method Name="FB_exit" Id="{0976737d-d648-0a05-3fe5-2805e42e0e5a}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+UnregisterWithParent();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{552aaaf2-c686-0d38-32c4-997aac180a0c}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Name : T_MAXSTRING;
+	Parent : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.parent := Parent;
+RegisterWithParent();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="HandleEvent" Id="{425c6d59-f4b3-0dfd-36e8-c98c705cef2a}">
+      <Declaration><![CDATA[METHOD PUBLIC HandleEvent
+VAR_INPUT
+	Event : I_Event;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[{warning 'This needs to be implemented'} ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterWithParent" Id="{fe73466f-9102-0cc2-0083-a78a8d592deb}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterWithParent
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF parent = 0 THEN
+	RETURN;
+END_IF
+
+parent.AddExtension(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="UnregisterWithParent" Id="{875f0b67-3383-09e1-0c65-fe05d6b3969e}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED UnregisterWithParent
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF parent = 0 THEN
+	RETURN;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

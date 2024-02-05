@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_DataAccess" Id="{82e99dec-d205-085b-0b23-3522cd3d2d7e}">
+    <Declaration><![CDATA[INTERFACE I_DataAccess
+]]></Declaration>
+    <Property Name="DataSize" Id="{fceb079f-60f4-0f20-11dc-4fb7d06d4646}">
+      <Declaration><![CDATA[PROPERTY PUBLIC DataSize : UDINT]]></Declaration>
+      <Get Name="Get" Id="{5acca034-12ff-0c9a-3f40-36b172cee10f}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="DataType" Id="{84f3927d-b920-049e-3a20-a7d5ec9724c8}">
+      <Declaration><![CDATA[PROPERTY PUBLIC DataType : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{8361453c-60ec-047c-0222-4168cbda952b}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="Get" Id="{33239db5-298f-0f43-1757-b2fb9ec949c8}">
+      <Declaration><![CDATA[METHOD PUBLIC Get
+VAR_INPUT
+	Value : ANY;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="GetTo" Id="{d98c94e4-9b11-052f-047f-329220f0064f}">
+      <Declaration><![CDATA[METHOD PUBLIC GetTo
+VAR_INPUT
+	Destination : PVOID;
+	DestinationSize : UDINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="HasData" Id="{711ee7f7-c374-0169-396b-e0290893b7a7}">
+      <Declaration><![CDATA[PROPERTY HasData : BOOL]]></Declaration>
+      <Get Name="Get" Id="{5acb2b4e-1930-01de-39bd-feb2067ee370}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Name" Id="{19e1924d-e57a-0e8d-0c6a-cc41578575fe}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{96c10f74-bed4-0aa0-260d-eac0be7c74b9}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="Set" Id="{3640be87-7bd3-0aad-1758-3fc7bef34f99}">
+      <Declaration><![CDATA[METHOD PUBLIC Set
+VAR_INPUT
+	Value : ANY;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="SetFrom" Id="{2e29ffb2-fdc9-093d-3560-4a690fd36105}">
+      <Declaration><![CDATA[METHOD PUBLIC SetFrom
+VAR_INPUT
+	SourceAddress : PVOID;
+	SourceSize : UDINT;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

@@ -1,0 +1,312 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="JsonNodeSettingsParser" Id="{f1a26c4a-ea68-0e38-255b-514367792f9c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK JsonNodeSettingsParser IMPLEMENTS I_NodeSettings
+VAR
+	parser : REFERENCE TO FB_JsonDomParser;
+	baseJsonValue : SJsonValue;
+	jsonLanguagePack : I_JsonLanguagePack;
+	
+	propertyParser : JsonPropertySettingsParser(0);
+	inputPortParser : JsonPortSettingsParser(0);
+	outputPortParser : JsonPortSettingsParser(0);	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{159144d5-e6c0-051b-3ad1-448b2d37afaf}" />
+    <Folder Name="Private" Id="{e758ed82-d627-0921-2203-e81f3e76808d}" />
+    <Method Name="FB_init" Id="{2678bb0f-405a-0143-3e9e-6f3a078a73bb}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	JsonLanguagePack : I_JsonLanguagePack;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.jsonLanguagePack := JsonLanguagePack;
+
+propertyParser.FB_init(bInitRetains, bInCopyCode, JsonLanguagePack);
+inputPortParser.FB_init(bInitRetains, bInCopyCode, JsonLanguagePack);
+outputPortParser.FB_init(bInitRetains, bInCopyCode, JsonLanguagePack);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetInputById" Id="{8b509cf3-f068-0e02-351b-53a8bb60c15a}">
+      <Declaration><![CDATA[METHOD PUBLIC GetInputById : I_PortSettings
+VAR_INPUT
+	Id : PortId;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[inputPortParser.Update(parser,GetInputObjectById(Id));
+GetInputById := inputPortParser;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetInputObjectById" Id="{875bd275-8200-0d09-2ebe-abe489e7032f}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE GetInputObjectById : SJsonValue
+VAR_INPUT
+	Id : PortId;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetInputObjectById := parser.GetArrayValueByIdx(GetInputsArray(),INT_TO_UDINT(Id));  ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetInputsArray" Id="{6023f5c1-40b7-0d48-0c94-f46658739782}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE GetInputsArray : SJsonValue]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetInputsArray := parser.FindMember(baseJsonValue, 'inputs');]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetOutputById" Id="{01991eba-41f2-02eb-0621-3497916786ce}">
+      <Declaration><![CDATA[METHOD PUBLIC GetOutputById : I_PortSettings
+VAR_INPUT
+	Id : PortId;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[outputPortParser.Update(parser,GetOutputObjectById(Id));
+GetOutputById := outputPortParser;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetOutputObjectById" Id="{50bc1f10-e42d-00f3-2bb7-fcf2c658a1e2}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE GetOutputObjectById : SJsonValue
+VAR_INPUT
+	Id : PortId;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetOutputObjectById := parser.GetArrayValueByIdx(GetOutputsArray(),INT_TO_UDINT(Id));  ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetOutputsArray" Id="{80e55ae0-8e59-06dd-16da-9c4772ced595}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE GetOutputsArray : SJsonValue]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetOutputsArray := parser.FindMember(baseJsonValue, 'outputs');]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetPropertiesObject" Id="{0a150fcf-5b22-0b42-19c5-0fa8374b8d4e}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE GetPropertiesObject : SJsonValue]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetPropertiesObject := parser.FindMember(baseJsonValue, 'properties');]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetPropertyByIndex" Id="{9a6a3e5d-55de-0544-1c0b-03d386fffb0a}">
+      <Declaration><![CDATA[METHOD PUBLIC GetPropertyByIndex : I_PropertySettings
+VAR_INPUT
+	Index : UDINT;
+END_VAR
+VAR
+	i : UDINT;
+	jsonIterator : SJsonIterator;
+	jsonIteratorEnd : SJsonIterator;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[jsonIterator := parser.MemberBegin(GetPropertiesObject());
+jsonIteratorEnd := parser.MemberEnd(GetPropertiesObject());
+
+FOR i := 0 TO Index DO
+	IF i = Index THEN
+		propertyParser.Update(parser,jsonIterator);
+		GetPropertyByIndex := propertyParser;
+		RETURN;
+	END_IF
+	
+	IF jsonIterator = jsonIteratorEnd THEN
+		RETURN;
+	END_IF
+	
+	jsonIterator := parser.NextMember(jsonIterator);
+END_FOR]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="HasInputs" Id="{c22b5ec9-8943-08b5-1b3a-845d2b516cad}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasInputs : BOOL]]></Declaration>
+      <Get Name="Get" Id="{bef5cbbf-9b95-0063-255b-071a27372ccb}">
+        <Declaration><![CDATA[VAR
+	jsonValue: SJsonValue;
+END_VAR
+
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[jsonValue := GetInputsArray();
+
+IF jsonValue = 0 THEN
+	RETURN;	
+END_IF
+
+IF NOT parser.IsArray(jsonValue) THEN
+	RETURN;
+END_IF
+
+HasInputs := TRUE;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="HasOutputs" Id="{ee4123ca-72d8-0129-2dd8-afcecca70580}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasOutputs : BOOL]]></Declaration>
+      <Get Name="Get" Id="{34120d6f-a63f-0b74-1a30-b6ee93eae402}">
+        <Declaration><![CDATA[VAR
+	jsonValue: SJsonValue;
+END_VAR
+
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[jsonValue := GetOutputsArray();
+
+IF jsonValue = 0 THEN
+	RETURN;	
+END_IF
+
+IF NOT parser.IsArray(jsonValue) THEN
+	RETURN;
+END_IF
+
+HasOutputs := TRUE;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="HasProperties" Id="{cd858017-eaa7-0df2-031c-7cfa870c91aa}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasProperties : BOOL]]></Declaration>
+      <Get Name="Get" Id="{fe8dcb2b-a74a-06f0-15fc-54932f426768}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasProperties := PropertiesCount > 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Id" Id="{55d0231f-d947-044a-1639-cbbbfccaa666}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Id : NodeId]]></Declaration>
+      <Get Name="Get" Id="{4b85e2e8-ecb4-0af1-216d-dc7ce532125e}">
+        <Declaration><![CDATA[VAR
+	jsonValue: SJsonValue;
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[jsonValue := parser.FindMember(baseJsonValue, 'id');
+ 
+IF jsonValue = 0 THEN
+	Id := -1;
+	RETURN;	
+END_IF
+
+Id := DINT_TO_INT(parser.GetInt(jsonValue));]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="InputCount" Id="{85ba2751-5219-007a-3281-aebfeb7f9083}">
+      <Declaration><![CDATA[PROPERTY InputCount : UDINT]]></Declaration>
+      <Get Name="Get" Id="{0204f34b-8cd0-0304-0f5e-fb1769e1714d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF NOT HasInputs THEN
+	InputCount := 0;
+END_IF
+
+InputCount := parser.GetArraySize(GetInputsArray());]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Mode" Id="{85b5b2da-04f0-0824-0f7e-ca1c20c7427e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Mode : DINT]]></Declaration>
+      <Get Name="Get" Id="{11dcbe7f-1466-0c5e-223d-75fd19ffbcb8}">
+        <Declaration><![CDATA[VAR
+	jsonValue: SJsonValue;
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[jsonValue := parser.FindMember(baseJsonValue, 'mode');
+ 
+IF jsonValue = 0 THEN
+	Mode := -1;
+	RETURN;	
+END_IF
+
+Mode := parser.GetInt(jsonValue);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="NodeType" Id="{aaff5dba-64d5-02be-28a0-f681821ea0f5}">
+      <Declaration><![CDATA[PROPERTY PUBLIC NodeType : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{d781155c-0602-05d7-25fe-b2414ea26a2b}">
+        <Declaration><![CDATA[VAR
+	jsonValue: SJsonValue;
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[jsonValue := parser.FindMember(baseJsonValue, 'type');
+ 
+IF jsonValue = 0 THEN
+	NodeType := '';
+	RETURN;	
+END_IF
+
+NodeType := parser.GetString(jsonValue);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Order" Id="{7054a034-7329-010f-3b57-a6f9c20fba3b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Order : DINT]]></Declaration>
+      <Get Name="Get" Id="{5b0633f6-f42a-0618-2265-81edfec27aaa}">
+        <Declaration><![CDATA[VAR
+	jsonValue: SJsonValue;
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[jsonValue := parser.FindMember(baseJsonValue, 'order');
+ 
+IF jsonValue = 0 THEN
+	Order := -1;
+	RETURN;	
+END_IF
+
+Order := parser.GetInt(jsonValue);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="OutputCount" Id="{c7a1cc91-4450-0174-2774-d37c461c464e}">
+      <Declaration><![CDATA[PROPERTY OutputCount : UDINT]]></Declaration>
+      <Get Name="Get" Id="{9a9ed10a-c2c2-0137-09d7-0288975d23fb}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF NOT HasOutputs THEN
+	OutputCount := 0;
+END_IF
+
+OutputCount := parser.GetArraySize(GetOutputsArray());]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="PropertiesCount" Id="{fcc32f86-e352-0ced-1481-206148ff0c57}">
+      <Declaration><![CDATA[PROPERTY PropertiesCount : UDINT]]></Declaration>
+      <Get Name="Get" Id="{c3d5f546-f516-0a0f-3944-05fb24465592}">
+        <Declaration><![CDATA[VAR
+	jsonIterator : SJsonIterator;
+	jsonIteratorEnd : SJsonIterator;
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[jsonIterator := parser.MemberBegin(GetPropertiesObject());
+jsonIteratorEnd := parser.MemberEnd(GetPropertiesObject());
+
+WHILE jsonIterator <> jsonIteratorEnd DO
+  jsonIterator := parser.NextMember(jsonIterator);
+  PropertiesCount := PropertiesCount + 1;
+END_WHILE]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Update" Id="{61bdb7ed-344f-083c-0280-18feabc53001}">
+      <Declaration><![CDATA[METHOD PUBLIC Update
+VAR_INPUT
+	Parser : REFERENCE TO FB_JsonDomParser;
+	JsonValue : SJsonValue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.parser REF= Parser;
+THIS^.baseJsonValue := JsonValue;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

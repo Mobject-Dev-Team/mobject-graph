@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MetadatumAddedEvent" Id="{4b586b61-002e-0aa6-268a-625bc491caae}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK MetadatumAddedEvent EXTENDS Disposable IMPLEMENTS I_MetadatumAddedEvent
+VAR
+	_targetMetadatum : I_Metadatum;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{52f3fed6-5729-0c1f-250e-a1b147ab79d0}" />
+    <Method Name="FB_init" Id="{dfe44f78-6614-0ed0-1b59-7012c20527cc}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	TargetMetadatum : I_Metadatum;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[This^._targetMetadatum := TargetMetadatum;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="TargetMetadatum" Id="{4e432c1c-c980-0fe7-2b2e-5da9fb5af2f2}">
+      <Declaration><![CDATA[PROPERTY PUBLIC TargetMetadatum : I_Metadatum]]></Declaration>
+      <Get Name="Get" Id="{91df58c9-bd98-02e8-2dfc-79ec1d55dcdb}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TargetMetadatum := _targetMetadatum;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

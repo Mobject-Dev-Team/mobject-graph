@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="ExtensionBase" Id="{42104a2a-bb11-0099-07c8-1566fddf2573}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ExtensionBase EXTENDS BaseElement IMPLEMENTS I_Extension
+VAR
+	_name : T_MAXSTRING;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{fef26075-0f2d-0849-2106-d8875bfcef87}" />
+    <Method Name="Accept" Id="{c7a8469c-4655-04f0-2d46-e58992b2a552}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_ExtensionVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitExtension(this^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{b8dc459b-fb89-0be1-1d4e-1dd2490364b6}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Name : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_name := Name;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Name" Id="{3ea0ca14-7e1c-0f9c-0dd4-fc640a163eef}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{89da2b88-6436-0494-1a12-900ee5d5f448}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Name := _name;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

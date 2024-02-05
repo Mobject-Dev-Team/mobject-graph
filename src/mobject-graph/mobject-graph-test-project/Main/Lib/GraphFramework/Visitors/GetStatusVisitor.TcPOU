@@ -1,0 +1,291 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="GetStatusVisitor" Id="{6c37d70e-cbeb-06a7-2f64-4b9eae3c6fdd}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK GetStatusVisitor IMPLEMENTS I_GraphVisitor, I_NodeVisitor, I_ContentVisitor, I_ErrorVisitor, I_ExtensionVisitor
+VAR
+	response : I_ResponseBuilder;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{bd9a122d-0f46-059f-0237-cce7302cb081}" />
+    <Folder Name="Private" Id="{f49235c5-cd9b-0b0b-28bc-db88fc691f53}" />
+    <Method Name="FB_init" Id="{af0d1bb6-d516-01cf-05a3-3c249cc7b98f}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	ResponseBuilder : I_ResponseBuilder;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[This^.response := ResponseBuilder;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitContent" Id="{d56d0b9c-b522-020d-29ec-9622ff5f7991}">
+      <Declaration><![CDATA[METHOD VisitContent
+VAR_INPUT
+	VisitingContent : I_Content;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Response.StartObject();
+Response.AddKeyString('name',VisitingContent.Name);
+Response.AddKeyString('type',VisitingContent.Datatype);
+
+IF VisitingContent.HasData THEN
+	Response.AddKeyData('data',VisitingContent);
+ELSE
+	Response.AddKeyNull('data');
+END_IF
+	
+Response.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitError" Id="{b0f4a6db-12dd-0dc6-1dad-19a3e30aab93}">
+      <Declaration><![CDATA[METHOD VisitError
+VAR_INPUT
+	VisitingError : I_Error;
+END_VAR
+VAR
+	message : T_MaxString;
+	reason : T_MaxString;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT VisitingError.Active THEN
+	RETURN;
+END_IF
+
+message := VisitingError.Message;
+reason := VisitingError.Reason;
+
+Response.StartObject();
+Response.AddKeyString('message', message);
+Response.AddKeyString('reason', reason);
+
+Response.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitExtension" Id="{338cbb5f-1139-0a1e-3ba7-4e3d9509a5a4}">
+      <Declaration><![CDATA[METHOD VisitExtension
+VAR_INPUT
+	VisitingExtension : I_Extension;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Response.StartObject();
+
+WriteExtensionNameToResponse(VisitingExtension);
+WriteExtensionsToResponse(VisitingExtension);
+WriteContentsToResponse(VisitingExtension);
+WriteErrorsToResponse(VisitingExtension);
+
+Response.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitGraph" Id="{f495e8fe-edda-0f8c-0ca5-87dc639ea143}">
+      <Declaration><![CDATA[METHOD VisitGraph
+VAR_INPUT
+	VisitingGraph : I_Graph;
+END_VAR
+VAR
+	iHaveExtensions : I_HaveExtensions;
+	iHaveErrors : I_HaveErrors;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[response.StartObject();
+
+WriteGraphUuidToResponse(VisitingGraph);
+WriteExtensionsToResponse(VisitingGraph);
+WriteNodesToResponse(VisitingGraph);
+WriteErrorsToResponse(VisitingGraph);
+
+response.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitNode" Id="{5390ebd0-980a-08d8-28c1-fe9dbcf0c9e2}">
+      <Declaration><![CDATA[METHOD VisitNode
+VAR_INPUT
+	VisitingNode : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Response.StartObject();
+
+WriteNodeIdToResponse(VisitingNode);
+WriteExtensionsToResponse(VisitingNode);
+WriteContentsToResponse(VisitingNode);
+WriteErrorsToResponse(VisitingNode);
+
+Response.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteContentsToResponse" Id="{835dd38e-41b0-0045-1e95-855245d8a925}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE WriteContentsToResponse
+VAR_INPUT
+	ContentOwner : I_HaveContent;
+END_VAR
+VAR
+	contents : I_ContentCollection;
+	enumerator : I_ForwardEnumerator;
+	hasContent : BOOL;
+	content : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[contents := ContentOwner.GetContents();
+enumerator := contents.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF NOT hasContent THEN
+		response.AddKey('content');
+		response.StartArray();
+		hasContent := TRUE;
+	END_IF
+	
+	IF enumerator.TryGet(content) THEN
+		content.Accept(THIS^);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();
+
+IF hascontent THEN
+	response.EndArray();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteErrorsToResponse" Id="{4ad6b841-20d4-034d-2554-a429316b1474}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE WriteErrorsToResponse
+VAR_INPUT
+	ErrorOwner : I_HaveErrors;
+END_VAR
+VAR
+	errors : I_ErrorCollection;
+	enumerator : I_ForwardEnumerator;
+	hasErrors : BOOL;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[errors := ErrorOwner.GetErrors();
+enumerator := errors.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF NOT hasErrors THEN
+		response.AddKey('error');
+		response.StartArray();
+		hasErrors := TRUE;
+	END_IF
+	
+	IF enumerator.TryGet(error) THEN
+		error.Accept(THIS^);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();
+
+IF hasErrors THEN
+	response.EndArray();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteExtensionNameToResponse" Id="{85ab739c-349b-0fb4-341c-d547511b9501}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE WriteExtensionNameToResponse
+VAR_INPUT
+	Extension : I_Extension;
+END_VAR
+VAR
+	name : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[name := Extension.Name;
+Response.AddKeyString('name',name);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteExtensionsToResponse" Id="{c60ebbce-f4e8-06d1-2547-318d7049ebe2}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE WriteExtensionsToResponse
+VAR_INPUT
+	ExtensionOwner : I_HaveExtensions;
+END_VAR
+VAR
+	extensions : I_ExtensionCollection;
+	enumerator : I_ForwardEnumerator;
+	hasExtensions : BOOL;
+	extension : I_Extension;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[extensions := ExtensionOwner.GetExtensions();
+enumerator := extensions.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF NOT hasExtensions THEN
+		response.AddKey('extension');
+		response.StartArray();
+		hasExtensions := TRUE;
+	END_IF
+	
+	IF enumerator.TryGet(extension) THEN
+		extension.Accept(THIS^);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();
+
+IF hasExtensions THEN
+	response.EndArray();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteGraphUuidToResponse" Id="{c860382e-d5b2-0e30-34ea-419d83fdbfd1}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE WriteGraphUuidToResponse
+VAR_INPUT
+	Graph : I_Graph;
+END_VAR
+VAR
+	uuid : UUID;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[uuid := Graph.GetCurrentUuid();
+Response.AddKeyString('uuid',uuid);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteNodeIdToResponse" Id="{8f0e4363-89c9-02fc-2d4a-0de24fe666f8}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE WriteNodeIdToResponse
+VAR_INPUT
+	Node : I_Node;
+END_VAR
+VAR
+	id : NodeId;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[id := Node.Id;
+Response.AddKeyNumber('id',id);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteNodesToResponse" Id="{3e828419-c7cb-006a-094d-9ddc00eb899b}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE WriteNodesToResponse
+VAR_INPUT
+	Graph : I_Graph;
+END_VAR
+VAR
+	nodes : I_NodeCollection;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodes := Graph.GetNodes();
+
+IF nodes.Count = 0 THEN
+	RETURN;
+END_IF
+
+Response.AddKey('nodes');
+Response.StartArray();
+nodes.Accept(THIS^);
+Response.EndArray();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

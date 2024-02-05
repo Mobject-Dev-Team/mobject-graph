@@ -1,0 +1,477 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="BaseElement" Id="{65854565-5a7d-02f2-2709-1993949f09a2}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK BaseElement EXTENDS Disposable IMPLEMENTS I_EventEmitter
+VAR
+	inputPorts : InputPortCollection;
+	outputPorts : OutputPortCollection;
+	properties : PropertyCollection;
+	contents : ContentCollection;
+	errors : ErrorCollection;
+	extensions : ExtensionsCollection;
+	metadata : MetadataCollection;
+	eventEmitter : EventEmitter;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Private" Id="{48a95438-1d6b-0ead-29c1-c8ed21d5c5f8}" />
+    <Method Name="AddContent" Id="{65c5bac1-a3d0-002c-2cbe-a7b37fe3b45b}">
+      <Declaration><![CDATA[METHOD AddContent
+VAR_INPUT
+	ContentToAdd : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[contents.Insert(ContentToAdd);
+EmitOnContentAddedEvent(ContentToAdd);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddError" Id="{4bbd3a02-551d-0fb6-097a-770c7ef9b02a}">
+      <Declaration><![CDATA[METHOD AddError
+VAR_INPUT
+	ErrorToAdd : I_Error;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[errors.Insert(ErrorToAdd);
+EmitOnErrorAddedEvent(ErrorToAdd);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddExtension" Id="{12d5c379-9667-00ca-1a5e-59797e6bc21d}">
+      <Declaration><![CDATA[METHOD AddExtension
+VAR_INPUT
+	ExtensionToAdd : I_Extension;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[extensions.Insert(ExtensionToAdd);
+EmitOnExtensionAddedEvent(ExtensionToAdd);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddInputPort" Id="{8aebf87c-0955-0d8e-0a5d-38af87c0ae0d}">
+      <Declaration><![CDATA[METHOD AddInputPort
+VAR_INPUT
+	InputPortToAdd : I_InputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[inputPorts.Insert(InputPortToAdd);
+EmitOnInputPortAddedEvent(InputPortToAdd);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddMetadatum" Id="{371a7ce8-9ce1-0df1-08ad-592aac14c8db}">
+      <Declaration><![CDATA[METHOD AddMetadatum
+VAR_INPUT
+	MetadatumToAdd : I_Metadatum;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[metadata.Insert(MetadatumToAdd);
+EmitOnMetadatumAddedEvent(MetadatumToAdd);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddOutputPort" Id="{8d1e0294-027c-08af-0add-f26ea3b4e6b4}">
+      <Declaration><![CDATA[METHOD AddOutputPort
+VAR_INPUT
+	OutputPortToAdd : I_OutputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[outputPorts.Insert(OutputPortToAdd);
+EmitOnOutputPortAddedEvent(OutputPortToAdd);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddProperty" Id="{22e10c77-042d-014a-1131-e8a94df32d37}">
+      <Declaration><![CDATA[METHOD AddProperty
+VAR_INPUT
+	PropertyToAdd : I_Property;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[properties.Insert(PropertyToAdd);
+EmitOnPropertyAddedEvent(PropertyToAdd);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnContentAddedEvent" Id="{982e38f9-d0ec-0d68-23b9-1014864696d7}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitOnContentAddedEvent
+VAR_INPUT
+	ContentAdded : I_Content;
+END_VAR
+VAR
+	pContentAddedEvent : POINTER TO ContentAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF ContentAdded = 0 THEN
+	RETURN;
+END_IF
+
+pContentAddedEvent := __NEW(ContentAddedEvent(TargetContent := ContentAdded));
+eventEmitter.Emit('OnContentAdded',pContentAddedEvent^);
+pContentAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnErrorAddedEvent" Id="{5f18b0c5-cc95-02f2-100c-2ef3ad7e1a71}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitOnErrorAddedEvent
+VAR_INPUT
+	ErrorAdded : I_Error;
+END_VAR
+VAR
+	pErrorAddedEvent : POINTER TO ErrorAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF ErrorAdded = 0 THEN
+	RETURN;
+END_IF
+
+pErrorAddedEvent := __NEW(ErrorAddedEvent(TargetError := ErrorAdded));
+eventEmitter.Emit('OnErrorAdded',pErrorAddedEvent^);
+pErrorAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnExtensionAddedEvent" Id="{f402631d-81f9-0a12-03bc-2a0bfe9edd1d}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitOnExtensionAddedEvent
+VAR_INPUT
+	ExtensionAdded : I_Extension;
+END_VAR
+VAR
+	pExtensionAddedEvent : POINTER TO ExtensionAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF ExtensionAdded = 0 THEN
+	RETURN;
+END_IF
+
+pExtensionAddedEvent := __NEW(ExtensionAddedEvent(TargetExtension := ExtensionAdded));
+eventEmitter.Emit('OnExtensionAdded',pExtensionAddedEvent^);
+pExtensionAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnInputPortAddedEvent" Id="{999a27ba-e180-0c81-3fd5-7f26e1dcafa9}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitOnInputPortAddedEvent
+VAR_INPUT
+	InputPortAdded : I_InputPort;
+END_VAR
+VAR
+	pInputPortAddedEvent : POINTER TO InputPortAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF InputPortAdded = 0 THEN
+	RETURN;
+END_IF
+
+pInputPortAddedEvent := __NEW(InputPortAddedEvent(TargetInputPort := InputPortAdded));
+eventEmitter.Emit('OnInputPortAdded',pInputPortAddedEvent^);
+pInputPortAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnMetadatumAddedEvent" Id="{5e041b08-cbe4-0f2d-0996-099d35827b7a}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitOnMetadatumAddedEvent
+VAR_INPUT
+	MetadatumAdded : I_Metadatum;
+END_VAR
+VAR
+	pMetadatumAddedEvent : POINTER TO MetadatumAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF MetadatumAdded = 0 THEN
+	RETURN;
+END_IF
+
+pMetadatumAddedEvent := __NEW(MetadatumAddedEvent(TargetMetadatum := MetadatumAdded));
+eventEmitter.Emit('OnMetadatumAdded',pMetadatumAddedEvent^);
+pMetadatumAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnOutputPortAddedEvent" Id="{0092de63-0b62-04d1-3582-5fcf00057f98}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitOnOutputPortAddedEvent
+VAR_INPUT
+	OutputPortAdded : I_OutputPort;
+END_VAR
+VAR
+	pOutputPortAddedEvent : POINTER TO OutputPortAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF OutputPortAdded = 0 THEN
+	RETURN;
+END_IF
+
+pOutputPortAddedEvent := __NEW(OutputPortAddedEvent(TargetOutputPort := OutputPortAdded));
+eventEmitter.Emit('OnOutputPortAdded',pOutputPortAddedEvent^);
+pOutputPortAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnPropertyAddedEvent" Id="{ef9a119a-00ba-01e3-3336-a5211fd3bf30}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitOnPropertyAddedEvent
+VAR_INPUT
+	PropertyAdded : I_Property;
+END_VAR
+VAR
+	pPropertyAddedEvent : POINTER TO PropertyAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF PropertyAdded = 0 THEN
+	RETURN;
+END_IF
+
+pPropertyAddedEvent := __NEW(PropertyAddedEvent(TargetProperty := PropertyAdded));
+eventEmitter.Emit('OnPropertyAdded',pPropertyAddedEvent^);
+pPropertyAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetContents" Id="{81f125c5-c13a-026a-3de6-aa1ebc6668c9}">
+      <Declaration><![CDATA[METHOD PUBLIC GetContents : I_ContentCollection
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetContents := contents;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetErrors" Id="{0627fae9-4882-0c55-17d9-c59657d05963}">
+      <Declaration><![CDATA[METHOD PUBLIC GetErrors : I_ErrorCollection
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetErrors := errors;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetExtensions" Id="{be4c5a1a-53d3-0499-27b1-32409495df61}">
+      <Declaration><![CDATA[METHOD PUBLIC GetExtensions : I_ExtensionCollection
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetExtensions := extensions;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetInputPorts" Id="{7de9fbdd-fa4d-0d6e-0b3b-13feae4c89d5}">
+      <Declaration><![CDATA[METHOD PUBLIC GetInputPorts : I_InputPortCollection
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetInputPorts := inputPorts;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetMetadata" Id="{dbde985b-051a-0727-258a-c2925ede1d19}">
+      <Declaration><![CDATA[METHOD PUBLIC GetMetadata : I_MetadataCollection
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetMetadata := metadata;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetOutputPorts" Id="{f627e22a-94e0-005f-10c4-a9f76f86d6e8}">
+      <Declaration><![CDATA[METHOD PUBLIC GetOutputPorts : I_OutputPortCollection
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetOutputPorts := outputPorts;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetProperties" Id="{f803076c-9d09-002d-18bd-949f984e4d58}">
+      <Declaration><![CDATA[METHOD PUBLIC GetProperties : I_PropertyCollection
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetProperties := properties;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OffEvent" Id="{3826f2c5-8817-085f-32d4-f42ca6017d84}">
+      <Declaration><![CDATA[METHOD PUBLIC OffEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OffEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnceEvent" Id="{c0653d6f-a473-06ad-0f4f-23e16a4ab170}">
+      <Declaration><![CDATA[METHOD PUBLIC OnceEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnceEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnEvent" Id="{f1641710-5271-0c90-204a-d8ba0111dbe4}">
+      <Declaration><![CDATA[METHOD PUBLIC OnEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetContentByName" Id="{5ed45c1e-e709-063a-078b-c4ffa6e05f7e}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetContentByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Content;
+END_VAR
+VAR
+	extensionName : T_MAXSTRING;
+	extension : I_Extension;
+	contentName : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Not HasExtensionNamespace(Name) THEN
+	TryGetContentByName := contents.TryGetByName(Name,Destination);
+	RETURN;
+END_IF
+
+extensionName := RemoveLastSegmentFromNamespace(Name);
+contentName := GetLastSegmentFromNamespace(Name);
+
+IF NOT TryGetExtensionByName(extensionName, extension) THEN
+	RETURN;
+END_IF
+
+TryGetContentByName := extension.TryGetContentByName(contentName, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetExtensionByName" Id="{40285acc-4e71-0188-0b28-516f73de9f1d}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetExtensionByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Extension;
+END_VAR
+VAR
+	extensionName : T_MAXSTRING;
+	remainingName : T_MAXSTRING;
+	extension : I_Extension;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Not HasExtensionNamespace(Name) THEN
+	TryGetExtensionByName := extensions.TryGetByName(Name, Destination);
+	RETURN;
+END_IF
+
+extensionName := RemoveLastSegmentFromNamespace(Name);
+remainingName := GetLastSegmentFromNamespace(Name);
+
+IF NOT this^.TryGetExtensionByName(extensionName, extension) THEN
+	RETURN;
+END_IF
+
+TryGetExtensionByName := extension.TryGetExtensionByName(remainingName, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetInputPortByName" Id="{f48a519d-be51-089e-1869-f8f4fa949214}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetInputPortByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_InputPort;
+END_VAR
+VAR
+	extensionName : T_MAXSTRING;
+	extension : I_Extension;
+	portName : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT HasExtensionNamespace(Name) THEN
+	TryGetInputPortByName := inputPorts.TryGetByName(Name,Destination);
+	RETURN;
+END_IF
+
+extensionName := RemoveLastSegmentFromNamespace(Name);
+portName := GetLastSegmentFromNamespace(Name);
+
+IF NOT TryGetExtensionByName(extensionName, extension) THEN
+	RETURN;
+END_IF
+
+TryGetInputPortByName := extension.TryGetInputPortByName(portName, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetMetadatumByName" Id="{a3a91194-7db2-0843-24e0-73a63eb18407}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetMetadatumByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Metadatum;
+END_VAR
+VAR
+	extensionName : T_MAXSTRING;
+	extension : I_Extension;
+	metadatumName : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT HasExtensionNamespace(Name) THEN
+	TryGetMetadatumByName := metadata.TryGetByName(Name,Destination);
+	RETURN;
+END_IF
+
+extensionName := RemoveLastSegmentFromNamespace(Name);
+metadatumName := GetLastSegmentFromNamespace(Name);
+
+IF NOT TryGetExtensionByName(extensionName, extension) THEN
+	RETURN;
+END_IF
+
+TryGetMetadatumByName := extension.TryGetMetadatumByName(metadatumName, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetOutputPortByName" Id="{e92ddf93-b96a-08ad-01fb-739fc2280c59}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetOutputPortByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_OutputPort;
+END_VAR
+VAR
+	extensionName : T_MAXSTRING;
+	extension : I_Extension;
+	portName : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT HasExtensionNamespace(Name) THEN
+	TryGetOutputPortByName := outputPorts.TryGetByName(Name,Destination);
+	RETURN;
+END_IF
+
+extensionName := RemoveLastSegmentFromNamespace(Name);
+portName := GetLastSegmentFromNamespace(Name);
+
+IF NOT TryGetExtensionByName(extensionName, extension) THEN
+	RETURN;
+END_IF
+
+TryGetOutputPortByName := extension.TryGetOutputPortByName(portName, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetPropertyByName" Id="{f428aa13-e6f6-0562-2045-054d9aa11372}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetPropertyByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Property;
+END_VAR
+VAR
+	extensionName : T_MAXSTRING;
+	extension : I_Extension;
+	propertyName : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Not HasExtensionNamespace(Name) THEN
+	TryGetPropertyByName := properties.TryGetByName(Name,Destination);
+	RETURN;
+END_IF
+
+extensionName := RemoveLastSegmentFromNamespace(Name);
+propertyName := GetLastSegmentFromNamespace(Name);
+
+IF NOT TryGetExtensionByName(extensionName, extension) THEN
+	RETURN;
+END_IF
+
+TryGetPropertyByName := extension.TryGetPropertyByName(propertyName, Destination);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

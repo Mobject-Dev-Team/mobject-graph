@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_NodeCollection" Id="{b3c6ceaf-e729-05e3-0d25-7dba72f18e8c}">
+    <Declaration><![CDATA[INTERFACE I_NodeCollection
+]]></Declaration>
+    <Method Name="Accept" Id="{6416c07f-9d21-07ac-09c2-e94e2357b99e}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_NodeVisitor;
+END_VAR]]></Declaration>
+    </Method>
+    <Property Name="Count" Id="{20c4e3cd-c93e-00c6-085e-148464fff949}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Count : DINT]]></Declaration>
+      <Get Name="Get" Id="{2eb952aa-241a-03cf-1874-34592f8cb09c}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="GetById" Id="{40137c31-a513-0265-3cd0-61225f7b79b7}">
+      <Declaration><![CDATA[METHOD PUBLIC GetById : I_Node
+VAR_INPUT
+	Id : NodeId;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="GetByIndex" Id="{abc22edb-160c-06b4-3513-ffd84ef8ec35}">
+      <Declaration><![CDATA[METHOD PUBLIC GetByIndex : I_Node
+VAR_INPUT
+	Id : NodeId;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="GetFirst" Id="{feddbc3f-4e18-0f11-38ed-c4eba56c857b}">
+      <Declaration><![CDATA[METHOD PUBLIC GetFirst : I_Node]]></Declaration>
+    </Method>
+    <Method Name="GetHighestExecutionOrder" Id="{edfdd55f-8e55-0283-19f7-6fc1afffb08c}">
+      <Declaration><![CDATA[METHOD PUBLIC GetHighestExecutionOrder : DINT
+VAR_INPUT
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="GetNext" Id="{1b2591ca-aae4-0122-37f3-8d91f1aa64cb}">
+      <Declaration><![CDATA[METHOD PUBLIC GetNext : I_Node
+VAR_INPUT
+	CurrentNode : I_Node;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

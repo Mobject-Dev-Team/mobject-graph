@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NodePack_PlcBasicDisplay" Id="{f8c90f2a-938e-0576-2379-b6509a0f06b0}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK NodePack_PlcBasicDisplay IMPLEMENTS I_NodePack
+VAR
+	nodeFactory_Display_BOOL : NodeFactory_Display_BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="RegisterWithGraph" Id="{41c9db0a-1f24-0d2a-0d64-b28dad2a40b1}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterWithGraph
+VAR_INPUT
+	TcGraph : I_TcGraph;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TcGraph.RegisterNodeFactoryByType('PLC Basic/Display/BOOL',nodeFactory_Display_BOOL);
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

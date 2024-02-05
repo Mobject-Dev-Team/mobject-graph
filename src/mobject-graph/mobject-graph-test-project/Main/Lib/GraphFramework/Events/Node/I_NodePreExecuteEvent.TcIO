@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_NodePreExecuteEvent" Id="{b6b8e093-7127-048b-12dd-49bd128ac6e0}">
+    <Declaration><![CDATA[INTERFACE I_NodePreExecuteEvent EXTENDS I_Event
+]]></Declaration>
+    <Method Name="Cancel" Id="{d395fd79-fbb1-048d-06d7-7aeb3668a370}">
+      <Declaration><![CDATA[METHOD PUBLIC Cancel
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="ExecuteCancelled" Id="{aca6431d-e692-076f-2716-c9cb4fdef923}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ExecuteCancelled : BOOL]]></Declaration>
+      <Get Name="Get" Id="{d7b91e9a-dcc2-0cf2-27ba-1ba8fc3b54fb}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="TargetNode" Id="{b013ad5f-67ad-0059-1db2-c79bb6edf6fc}">
+      <Declaration><![CDATA[PROPERTY PUBLIC TargetNode : I_Node]]></Declaration>
+      <Get Name="Get" Id="{a7334b49-fd59-0931-1bd1-c44f9002220f}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

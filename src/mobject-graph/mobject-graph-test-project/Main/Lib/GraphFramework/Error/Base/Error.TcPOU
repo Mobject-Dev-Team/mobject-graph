@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Error" Id="{71bd3509-3a77-0a94-2705-a3ad83e250bc}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ABSTRACT Error IMPLEMENTS I_Error
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Abstract" Id="{0131d39e-f487-0641-11b7-adb32e39c242}" />
+    <Folder Name="Constructor" Id="{5450f8b1-7227-0795-0f4e-7c2a85062d3c}" />
+    <Method Name="Accept" Id="{354a4344-cb86-0485-1c3b-41f76fac9dc7}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_ErrorVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitError(this^);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Active" Id="{32327753-2b64-051d-2eb5-0f62f66c274d}" FolderPath="Abstract\">
+      <Declaration><![CDATA[PROPERTY ABSTRACT Active : BOOL]]></Declaration>
+      <Get Name="Get" Id="{02cf22be-56f7-0b63-1d1a-bdd5cdd8f6ef}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Clear" Id="{df360e35-c463-06e7-2ad6-0a908ff031af}" FolderPath="Abstract\">
+      <Declaration><![CDATA[METHOD ABSTRACT Clear
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{172b7039-54b0-0e58-2410-0f2a4d86f948}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Parent : I_HaveErrors;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RegisterWithParent(Parent);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Message" Id="{58408768-0ecc-0b83-2e43-489069f7d2bc}" FolderPath="Abstract\">
+      <Declaration><![CDATA[PROPERTY ABSTRACT Message : T_MaxString]]></Declaration>
+      <Get Name="Get" Id="{7455a364-4a30-0c2a-2023-714d8beb13e9}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Reason" Id="{db42a7b6-e03c-0b06-1c6d-921219967bf7}" FolderPath="Abstract\">
+      <Declaration><![CDATA[PROPERTY ABSTRACT Reason : T_MaxString]]></Declaration>
+      <Get Name="Get" Id="{9161ac02-8ad7-0a1e-1267-df4942b29797}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="RegisterWithParent" Id="{50a3db7c-f4f1-0156-3933-1f93438f5c5a}">
+      <Declaration><![CDATA[METHOD RegisterWithParent
+VAR_INPUT
+	Parent : I_HaveErrors;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Parent = 0 THEN
+	RETURN;
+END_IF
+
+Parent.AddError(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

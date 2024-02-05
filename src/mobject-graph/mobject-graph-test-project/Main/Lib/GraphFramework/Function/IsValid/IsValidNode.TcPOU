@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="IsValidNode" Id="{e61148da-078b-010d-0172-eeefce041b99}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION IsValidNode : BOOL
+VAR_INPUT
+	Node : I_Node;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IsValidNode := Node <> 0;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

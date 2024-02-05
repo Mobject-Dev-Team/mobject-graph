@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NodePack_PlcBasic" Id="{b1a7208c-fa6a-0ca2-104f-e5f6ddafa07d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK NodePack_PlcBasic IMPLEMENTS I_NodePack
+VAR
+	nodePack_PlcBasicDisplay : NodePack_PlcBasicDisplay;
+	nodePack_PlcBasicLiterals : NodePack_PlcBasicLiterals;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="RegisterWithGraph" Id="{0a02d7c4-cf60-03c2-1373-451ec20f4e0e}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterWithGraph
+VAR_INPUT
+	TcGraph : I_TcGraph;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodePack_PlcBasicDisplay.RegisterWithGraph(TcGraph);
+nodePack_PlcBasicLiterals.RegisterWithGraph(TcGraph);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

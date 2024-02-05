@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="IsValidExtension" Id="{34536ead-6456-0834-1914-3239effc489b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION IsValidExtension : BOOL
+VAR_INPUT
+	Extension : I_Extension;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IsValidExtension := Extension <> 0;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

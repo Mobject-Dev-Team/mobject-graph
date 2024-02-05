@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Graph" Id="{45c251a4-de8e-0c6c-2a3e-8a87e382a116}">
+    <Declaration><![CDATA[INTERFACE I_Graph EXTENDS I_BaseElement, I_HaveNodes
+]]></Declaration>
+    <Method Name="Accept" Id="{255392e5-cd9d-0e73-21a1-ba770a89b900}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_GraphVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Clear" Id="{7d56e05b-0642-0e1a-2d09-f7343732854e}">
+      <Declaration><![CDATA[METHOD PUBLIC Clear
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Configure" Id="{a09939a6-ed78-0357-183d-971d6bed4005}">
+      <Declaration><![CDATA[METHOD PUBLIC Configure
+VAR_INPUT
+	Settings : I_GraphSettings;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="GetCurrentUuid" Id="{95f60cde-6a93-08ea-19d9-a52bd39c68e0}">
+      <Declaration><![CDATA[METHOD PUBLIC GetCurrentUuid : Uuid
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="GetNodes" Id="{e673abbf-5566-0889-0a5c-d05bfe265452}">
+      <Declaration><![CDATA[METHOD PUBLIC GetNodes : I_NodeCollection
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Run" Id="{60905f56-31e2-0c62-2fd4-d291a9b07dea}">
+      <Declaration><![CDATA[METHOD Run
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

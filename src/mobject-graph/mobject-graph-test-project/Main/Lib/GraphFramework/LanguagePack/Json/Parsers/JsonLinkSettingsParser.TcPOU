@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="JsonLinkSettingsParser" Id="{34e63be9-68fb-00e6-1a36-e868df41ef3c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK JsonLinkSettingsParser IMPLEMENTS I_LinkSettings
+VAR
+	parser : REFERENCE TO FB_JsonDomParser;
+	baseJsonValue : SJsonValue;
+	jsonLanguagePack : I_JsonLanguagePack;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{752d120f-7241-031b-390a-b086a9c42882}" />
+    <Property Name="DestinationId" Id="{06b6421d-1335-0ecd-1f75-c3899581f456}">
+      <Declaration><![CDATA[PROPERTY PUBLIC DestinationId : NodeId]]></Declaration>
+      <Get Name="Get" Id="{20562751-4ae4-091d-2ecc-16e1ce1b1e74}">
+        <Declaration><![CDATA[VAR
+	jsonValue: SJsonValue;
+END_VAR
+VAR CONSTANT
+	DESTINATION_ID_POS : UDINT := 3;
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[jsonValue := parser.GetArrayValueByIdx(baseJsonValue, DESTINATION_ID_POS);
+DestinationId := DINT_TO_INT(parser.GetInt(jsonValue));]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="DestinationPortId" Id="{ba9eb1fc-0ac2-098f-3e85-67e7b4294ee8}">
+      <Declaration><![CDATA[PROPERTY PUBLIC DestinationPortId : PortId]]></Declaration>
+      <Get Name="Get" Id="{9b2d2cf8-90d9-097e-0682-166168729700}">
+        <Declaration><![CDATA[VAR
+	jsonValue: SJsonValue;
+END_VAR
+VAR CONSTANT
+	DESTINATION_PORT_ID_POS : UDINT := 4;
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[jsonValue := parser.GetArrayValueByIdx(baseJsonValue, DESTINATION_PORT_ID_POS);
+DestinationPortId := DINT_TO_INT(parser.GetInt(jsonValue));]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_init" Id="{02aab07c-d105-00bb-3c30-57aee63d2afe}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	JsonLanguagePack : I_JsonLanguagePack;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.jsonLanguagePack := JsonLanguagePack;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Id" Id="{107931e8-48a8-089e-25df-5902f7d2b943}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Id : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{d0a394b5-3a46-0d4b-24f4-98e46377d2c3}">
+        <Declaration><![CDATA[VAR
+	jsonValue: SJsonValue;
+END_VAR
+VAR CONSTANT
+	ID_POS : UDINT := 0;
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[jsonValue := parser.GetArrayValueByIdx(baseJsonValue, ID_POS);
+Id := DINT_TO_STRING(parser.GetInt(jsonValue));]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="SourceId" Id="{4dfb2bd7-5e35-0fae-1b13-53e945558fb6}">
+      <Declaration><![CDATA[PROPERTY PUBLIC SourceId : NodeId]]></Declaration>
+      <Get Name="Get" Id="{97760a9e-c7e3-0e8f-253e-6b96f4db32d4}">
+        <Declaration><![CDATA[VAR
+	jsonValue: SJsonValue;
+END_VAR
+VAR CONSTANT
+	SOURCE_ID_POS : UDINT := 1;
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[jsonValue := parser.GetArrayValueByIdx(baseJsonValue, SOURCE_ID_POS);
+SourceId := DINT_TO_INT(parser.GetInt(jsonValue));]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="SourcePortId" Id="{e8d9aead-996f-0ff6-3d80-3abf21b78b49}">
+      <Declaration><![CDATA[PROPERTY PUBLIC SourcePortId : PortId]]></Declaration>
+      <Get Name="Get" Id="{612d3d99-4ee9-00ac-1180-b9981362633a}">
+        <Declaration><![CDATA[VAR
+	jsonValue: SJsonValue;
+END_VAR
+VAR CONSTANT
+	SOURCE_PORT_ID_POS : UDINT := 2;
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[jsonValue := parser.GetArrayValueByIdx(baseJsonValue, SOURCE_PORT_ID_POS);
+SourcePortId := DINT_TO_INT(parser.GetInt(jsonValue));]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Update" Id="{caf16119-5d16-04ed-0212-e5fe8f438e71}">
+      <Declaration><![CDATA[METHOD PUBLIC Update
+VAR_INPUT
+	Parser : REFERENCE TO FB_JsonDomParser;
+	JsonValue : SJsonValue;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.parser REF= Parser;
+THIS^.baseJsonValue := JsonValue;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

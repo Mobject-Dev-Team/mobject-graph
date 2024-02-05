@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Node_Display_BOOL" Id="{198c7521-1e12-0d04-01d4-91e52ee4f612}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK FINAL Node_Display_BOOL EXTENDS Node
+VAR
+
+	// inputs
+	nodeInput_In : NodeInput('in','BOOL',THIS^);
+	
+	// content
+	nodeContent_Display : NodeContent('display','BOOL',THIS^);
+
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="OnExecute" Id="{3eea65a5-6bf3-0e0b-2473-3b373deefdf4}">
+      <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT
+VAR
+	value : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodeInput_In.Get(value);
+nodeContent_Display.Set(value);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

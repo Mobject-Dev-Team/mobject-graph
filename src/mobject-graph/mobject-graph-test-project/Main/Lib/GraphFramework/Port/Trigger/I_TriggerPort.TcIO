@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_TriggerPort" Id="{bb9f66be-c1da-0d9a-2dcd-8055d5a33ccd}">
+    <Declaration><![CDATA[INTERFACE I_TriggerPort
+]]></Declaration>
+    <Property Name="Result" Id="{286a36f1-5b95-0eff-056d-234ef6fafb58}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Result : HRESULT]]></Declaration>
+      <Get Name="Get" Id="{737437ec-47f7-005b-2502-26bc66e9b00d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

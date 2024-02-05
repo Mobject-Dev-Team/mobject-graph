@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_TcGraph" Id="{baf0ca6a-df37-0eff-28cb-e8832601c45e}">
+    <Declaration><![CDATA[INTERFACE I_TcGraph
+]]></Declaration>
+    <Method Name="Accept" Id="{d6b0227b-c6be-0b92-292f-1c6818ca100e}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_TcGraphVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="GetNodeFactories" Id="{00b3c03b-00a4-00c1-0aea-f04a8bd64fec}">
+      <Declaration><![CDATA[METHOD PUBLIC GetNodeFactories : I_NodeFactoryCollection
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="InstallNodePack" Id="{a1b01422-7833-00b5-0b04-6d2dd72028e7}">
+      <Declaration><![CDATA[METHOD PUBLIC InstallNodePack
+VAR_INPUT
+	NodePack : I_NodePack;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="NewGraph" Id="{1854d952-a565-0180-3eca-962fe7a561ac}">
+      <Declaration><![CDATA[METHOD PUBLIC NewGraph : I_Graph
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="RegisterNodeFactoryByType" Id="{3f521954-a6e6-0df9-3dcf-fc038d75e218}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterNodeFactoryByType
+VAR_INPUT
+	NodeType : T_MAXSTRING;
+	NodeFactory : I_NodeFactory;	
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

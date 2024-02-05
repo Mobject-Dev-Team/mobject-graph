@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FrameworkAdsLogger" Id="{096de9ed-037d-0039-1409-b2e4942016ed}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FrameworkAdsLogger
+VAR
+	_level : LOG_LEVEL;
+	title : string := 'GraphFramework : ';
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{ac257385-f9ba-09d3-0406-b8f77feb2786}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Level : LOG_LEVEL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_level := Level;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Warning" Id="{e979fe3c-1baf-0c39-25b2-83caef4ace21}">
+      <Declaration><![CDATA[METHOD PUBLIC Warning
+VAR_INPUT
+	message : STRING;
+	arguments : STRING;
+END_VAR
+VAR
+	logMessage : STRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF _level >= LOG_LEVEL.WARN THEN
+	logMessage := concat(title,message);
+	ADSLOGSTR( msgCtrlMask := ADSLOG_MSGTYPE_LOG, msgFmtStr := logMessage,strArg:=arguments);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

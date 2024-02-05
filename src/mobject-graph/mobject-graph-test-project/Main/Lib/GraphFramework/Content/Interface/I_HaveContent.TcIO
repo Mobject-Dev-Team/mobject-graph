@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_HaveContent" Id="{b6826600-a2aa-01de-2bb0-f4ea403d72a8}">
+    <Declaration><![CDATA[INTERFACE I_HaveContent EXTENDS __SYSTEM.IQueryInterface
+]]></Declaration>
+    <Method Name="AddContent" Id="{cf987282-ff3f-0893-1bfe-87351ab41c96}">
+      <Declaration><![CDATA[METHOD AddContent
+VAR_INPUT
+	ContentToAdd : I_Content;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="GetContents" Id="{2f69e35a-1854-0cb7-1a38-ca098e68c0a9}">
+      <Declaration><![CDATA[METHOD PUBLIC GetContents : I_ContentCollection
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetContentByName" Id="{c3b2381b-d905-05c0-2520-a309855441a7}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetContentByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Content;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

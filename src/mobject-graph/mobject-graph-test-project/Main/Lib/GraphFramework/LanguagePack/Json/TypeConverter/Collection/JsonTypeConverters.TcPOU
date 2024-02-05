@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="JsonTypeConverters" Id="{695b6b4a-c949-0743-1d47-4a41f3736c15}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK JsonTypeConverters IMPLEMENTS I_JsonTypeConverters
+VAR
+	converters : Dictionary;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="GetByDataType" Id="{0e472e8b-43d1-041b-35b0-54c91730f712}">
+      <Declaration><![CDATA[METHOD PUBLIC GetByDataType : I_JsonTypeConverter
+VAR_INPUT
+	DataType : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[converters.TryGetValue(DataType, GetByDataType);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="HasDataType" Id="{e32e9a4b-b30f-0b9b-0b57-3cce473d9857}">
+      <Declaration><![CDATA[METHOD PUBLIC HasDataType : BOOL
+VAR_INPUT
+	DataType : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[HasDataType := converters.ContainsKey(DataType);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InsertByDataType" Id="{66c90401-a850-06d1-0c36-79dbafbbe7b4}">
+      <Declaration><![CDATA[METHOD PUBLIC InsertByDataType
+VAR_INPUT
+	DataType : T_MAXSTRING;
+	TypeConverter : I_JsonTypeConverter;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[converters.AddOrUpdate(DataType,TypeConverter);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

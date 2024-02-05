@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_NodeFactoryVisitor" Id="{1d8fa654-02cc-02ab-1175-6487c46b7d24}">
+    <Declaration><![CDATA[INTERFACE I_NodeFactoryVisitor
+]]></Declaration>
+    <Method Name="VisitNodeFactory" Id="{cf6a55c0-d0a7-0f61-0fe2-96bf6b707b33}">
+      <Declaration><![CDATA[METHOD VisitNodeFactory
+VAR_INPUT
+	VisitingNodeFactory : I_NodeFactory;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

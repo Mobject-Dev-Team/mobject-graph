@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="OutputPortCollection" Id="{9694add8-d5ac-0816-0153-5912f1890314}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK OutputPortCollection Implements I_OutputPortCollection
+VAR
+	ports : Stack;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="GetEnumerator" Id="{040b39cf-2e50-0b84-217b-6135200fce42}">
+      <Declaration><![CDATA[METHOD PUBLIC GetEnumerator : I_ForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetEnumerator := ports.GetEnumerator();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Insert" Id="{9fec9190-707f-0a99-2132-8f3742ae5ba6}">
+      <Declaration><![CDATA[METHOD PUBLIC Insert
+VAR_INPUT
+	PortToInsert : I_OutputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ports.Push(PortToInsert);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetByName" Id="{25a107fc-d85c-0e84-108a-c9a721c8bdc5}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetByName : BOOL
+VAR_INPUT
+	Name : STRING;
+	Destination : REFERENCE TO I_OutputPort;
+END_VAR
+VAR
+	portEnumerator : I_ForwardEnumerator;
+	port : I_OutputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[portEnumerator := ports.GetEnumerator();
+
+WHILE portEnumerator.MoveNext() DO 
+	IF  NOT portEnumerator.TryGet(port) THEN
+		CONTINUE;
+	END_IF
+	
+	IF port.Name = Name THEN 
+		TryGetByName := TRUE;
+		Destination := port;
+		EXIT;
+	END_IF
+
+END_WHILE
+
+portEnumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

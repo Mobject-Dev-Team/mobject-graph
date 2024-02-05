@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NodeOutput" Id="{d86645a9-83cd-06f1-0e21-c2e7e90c3953}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK NodeOutput
+VAR
+	nodeOutputPort : OutputPort_ANY('','',0);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{f3ab1974-91e4-0e73-188e-32f281be4fc4}" />
+    <Method Name="FB_init" Id="{c6f63d11-055d-0634-071b-c77c229d000a}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Name : STRING;
+	DataType : T_MAXSTRING;
+	Parent : I_Node;
+END_VAR
+VAR
+	ParentWithPorts : I_HaveOutputPorts;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF __QUERYINTERFACE(Parent, ParentWithPorts) THEN
+	nodeOutputPort.FB_init(FALSE,FALSE,Name,DataType,ParentWithPorts);
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Name" Id="{4acfb757-9289-0857-25f2-6cddfca993eb}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : STRING]]></Declaration>
+      <Get Name="Get" Id="{7eb2c49c-9462-0c6e-3167-cf4588921e8e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Name := nodeOutputPort.Name;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Set" Id="{9a0b539e-b8e6-07a1-0566-8be67d569b32}">
+      <Declaration><![CDATA[METHOD PUBLIC Set
+VAR_INPUT
+	Value : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodeOutputPort.Set(Value);
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

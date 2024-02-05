@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_ErrorCollection" Id="{5c7c8628-47ce-0a8a-082c-3cb642cfe978}">
+    <Declaration><![CDATA[INTERFACE I_ErrorCollection
+]]></Declaration>
+    <Method Name="GetEnumerator" Id="{1c4ff926-9a3e-0f62-1e6a-9429b27712c1}">
+      <Declaration><![CDATA[METHOD PUBLIC GetEnumerator : I_ForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>
