@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_ParameterSettings" Id="{6d213cd6-01a8-0869-1601-35942990aa65}">
+    <Declaration><![CDATA[INTERFACE I_ParameterSettings
+
+]]></Declaration>
+    <Property Name="Name" Id="{796c2c03-e772-0ba1-3ed7-b738138a9589}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : String]]></Declaration>
+      <Get Name="Get" Id="{ce1f5cfe-80b3-0dd5-248d-7a1a2e7e36ff}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="UpdateParameter" Id="{6c4ef56e-50f3-0efe-1e8b-dfa994ba8542}">
+      <Declaration><![CDATA[METHOD PUBLIC UpdateParameter : I_Disposer
+VAR_INPUT
+	Destination : I_ReadableData;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

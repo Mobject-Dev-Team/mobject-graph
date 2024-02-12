@@ -3,13 +3,13 @@
   <POU Name="BaseElement" Id="{65854565-5a7d-02f2-2709-1993949f09a2}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK BaseElement EXTENDS Disposable IMPLEMENTS I_EventEmitter
 VAR
-	inputPorts : InputPortCollection;
-	outputPorts : OutputPortCollection;
-	properties : PropertyCollection;
-	contents : ContentCollection;
-	errors : ErrorCollection;
-	extensions : ExtensionsCollection;
-	metadata : MetadataCollection;
+	inputPorts : InputPorts;
+	outputPorts : OutputPorts;
+	parameters : Parameters;
+	contents : Contents;
+	errors : Errors;
+	extensions : Extensions;
+	metadata : Metadata;
 	eventEmitter : EventEmitter;
 END_VAR
 ]]></Declaration>
@@ -81,15 +81,15 @@ END_VAR
 EmitOnOutputPortAddedEvent(OutputPortToAdd);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="AddProperty" Id="{22e10c77-042d-014a-1131-e8a94df32d37}">
-      <Declaration><![CDATA[METHOD AddProperty
+    <Method Name="AddParameter" Id="{22e10c77-042d-014a-1131-e8a94df32d37}">
+      <Declaration><![CDATA[METHOD AddParameter
 VAR_INPUT
-	PropertyToAdd : I_Property;
+	Parameter : I_Parameter;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[properties.Insert(PropertyToAdd);
-EmitOnPropertyAddedEvent(PropertyToAdd);]]></ST>
+        <ST><![CDATA[parameters.Insert(Parameter);
+EmitOnParameterAddedEvent(Parameter);]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitOnContentAddedEvent" Id="{982e38f9-d0ec-0d68-23b9-1014864696d7}" FolderPath="Private\">
@@ -200,10 +200,10 @@ eventEmitter.Emit('OnOutputPortAdded',pOutputPortAddedEvent^);
 pOutputPortAddedEvent^.Dispose();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="EmitOnPropertyAddedEvent" Id="{ef9a119a-00ba-01e3-3336-a5211fd3bf30}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE EmitOnPropertyAddedEvent
+    <Method Name="EmitOnParameterAddedEvent" Id="{ef9a119a-00ba-01e3-3336-a5211fd3bf30}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitOnParameterAddedEvent
 VAR_INPUT
-	PropertyAdded : I_Property;
+	PropertyAdded : I_Parameter;
 END_VAR
 VAR
 	pPropertyAddedEvent : POINTER TO PropertyAddedEvent;
@@ -219,7 +219,7 @@ pPropertyAddedEvent^.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="GetContents" Id="{81f125c5-c13a-026a-3de6-aa1ebc6668c9}">
-      <Declaration><![CDATA[METHOD PUBLIC GetContents : I_ContentCollection
+      <Declaration><![CDATA[METHOD PUBLIC GetContents : I_Contents
 VAR_INPUT
 END_VAR
 ]]></Declaration>
@@ -228,7 +228,7 @@ END_VAR
       </Implementation>
     </Method>
     <Method Name="GetErrors" Id="{0627fae9-4882-0c55-17d9-c59657d05963}">
-      <Declaration><![CDATA[METHOD PUBLIC GetErrors : I_ErrorCollection
+      <Declaration><![CDATA[METHOD PUBLIC GetErrors : I_Errors
 VAR_INPUT
 END_VAR
 ]]></Declaration>
@@ -237,7 +237,7 @@ END_VAR
       </Implementation>
     </Method>
     <Method Name="GetExtensions" Id="{be4c5a1a-53d3-0499-27b1-32409495df61}">
-      <Declaration><![CDATA[METHOD PUBLIC GetExtensions : I_ExtensionCollection
+      <Declaration><![CDATA[METHOD PUBLIC GetExtensions : I_Extensions
 VAR_INPUT
 END_VAR
 ]]></Declaration>
@@ -246,7 +246,7 @@ END_VAR
       </Implementation>
     </Method>
     <Method Name="GetInputPorts" Id="{7de9fbdd-fa4d-0d6e-0b3b-13feae4c89d5}">
-      <Declaration><![CDATA[METHOD PUBLIC GetInputPorts : I_InputPortCollection
+      <Declaration><![CDATA[METHOD PUBLIC GetInputPorts : I_InputPorts
 VAR_INPUT
 END_VAR
 ]]></Declaration>
@@ -255,7 +255,7 @@ END_VAR
       </Implementation>
     </Method>
     <Method Name="GetMetadata" Id="{dbde985b-051a-0727-258a-c2925ede1d19}">
-      <Declaration><![CDATA[METHOD PUBLIC GetMetadata : I_MetadataCollection
+      <Declaration><![CDATA[METHOD PUBLIC GetMetadata : I_Metadata
 VAR_INPUT
 END_VAR
 ]]></Declaration>
@@ -264,7 +264,7 @@ END_VAR
       </Implementation>
     </Method>
     <Method Name="GetOutputPorts" Id="{f627e22a-94e0-005f-10c4-a9f76f86d6e8}">
-      <Declaration><![CDATA[METHOD PUBLIC GetOutputPorts : I_OutputPortCollection
+      <Declaration><![CDATA[METHOD PUBLIC GetOutputPorts : I_OutputPorts
 VAR_INPUT
 END_VAR
 ]]></Declaration>
@@ -272,13 +272,13 @@ END_VAR
         <ST><![CDATA[GetOutputPorts := outputPorts;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="GetProperties" Id="{f803076c-9d09-002d-18bd-949f984e4d58}">
-      <Declaration><![CDATA[METHOD PUBLIC GetProperties : I_PropertyCollection
+    <Method Name="GetParameters" Id="{f803076c-9d09-002d-18bd-949f984e4d58}">
+      <Declaration><![CDATA[METHOD PUBLIC GetParameters : I_Parameters
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[GetProperties := properties;]]></ST>
+        <ST><![CDATA[GetParameters := parameters;]]></ST>
       </Implementation>
     </Method>
     <Method Name="OffEvent" Id="{3826f2c5-8817-085f-32d4-f42ca6017d84}">
@@ -446,31 +446,31 @@ END_IF
 TryGetOutputPortByName := extension.TryGetOutputPortByName(portName, Destination);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="TryGetPropertyByName" Id="{f428aa13-e6f6-0562-2045-054d9aa11372}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetPropertyByName : BOOL
+    <Method Name="TryGetParameterByName" Id="{f428aa13-e6f6-0562-2045-054d9aa11372}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetParameterByName : BOOL
 VAR_INPUT
 	Name : T_MAXSTRING;
-	Destination : REFERENCE TO I_Property;
+	Destination : REFERENCE TO I_Parameter;
 END_VAR
 VAR
 	extensionName : T_MAXSTRING;
 	extension : I_Extension;
-	propertyName : T_MAXSTRING;
+	parameterName : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Not HasExtensionNamespace(Name) THEN
-	TryGetPropertyByName := properties.TryGetByName(Name,Destination);
+	TryGetParameterByName := parameters.TryGetByName(Name,Destination);
 	RETURN;
 END_IF
 
 extensionName := RemoveLastSegmentFromNamespace(Name);
-propertyName := GetLastSegmentFromNamespace(Name);
+parameterName := GetLastSegmentFromNamespace(Name);
 
 IF NOT TryGetExtensionByName(extensionName, extension) THEN
 	RETURN;
 END_IF
 
-TryGetPropertyByName := extension.TryGetPropertyByName(propertyName, Destination);]]></ST>
+TryGetParameterByName := extension.TryGetParameterByName(parameterName, Destination);]]></ST>
       </Implementation>
     </Method>
   </POU>

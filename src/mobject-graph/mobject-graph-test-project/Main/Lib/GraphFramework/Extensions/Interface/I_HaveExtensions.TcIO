@@ -11,7 +11,7 @@ END_VAR
 ]]></Declaration>
     </Method>
     <Method Name="GetExtensions" Id="{ded8e208-00db-0046-2018-6597a6e965e4}">
-      <Declaration><![CDATA[METHOD PUBLIC GetExtensions : I_ExtensionCollection
+      <Declaration><![CDATA[METHOD PUBLIC GetExtensions : I_Extensions
 VAR_INPUT
 END_VAR
 ]]></Declaration>

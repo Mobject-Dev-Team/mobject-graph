@@ -6,10 +6,10 @@ FUNCTION_BLOCK FINAL Node_Literal_BOOL EXTENDS Node
 VAR
 	
 	// properties
-	nodeProperty_Value : NodeProperty('value','BOOL',THIS^);
+	nodeProperty_Value : Parameter('value','BOOL',THIS^);
 	
 	// outputs
-	nodeOutput_Out : NodeOutput('out','BOOL',THIS^);
+	nodeOutput_Out : NodeOutputPortPort('out','BOOL',THIS^);
 	
 END_VAR]]></Declaration>
     <Implementation>

@@ -4,7 +4,7 @@
     <Declaration><![CDATA[FUNCTION_BLOCK NodeProtectionExtension EXTENDS ExtensionBase IMPLEMENTS I_EventHandler
 VAR
 	parent : I_NodeWithProtection;
-	nodeProperty_Protection : Property_ANY('protection','BOOL', THIS^);
+	nodeProperty_Protection : Parameter('protection','BOOL', THIS^);
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -79,7 +79,7 @@ nodePreExecuteEvent.Cancel();]]></ST>
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[nodeProperty_Protection.Get(value);
+          <ST><![CDATA[nodeProperty_Protection.TryGet(value);
 IsProtected := value;]]></ST>
         </Implementation>
       </Get>

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Datatypes" Id="{695b6b4a-c949-0743-1d47-4a41f3736c15}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Datatypes IMPLEMENTS I_Datatypes
+VAR
+	datatypes : Dictionary;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="InsertByName" Id="{66c90401-a850-06d1-0c36-79dbafbbe7b4}">
+      <Declaration><![CDATA[METHOD PUBLIC InsertByName
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Datatype : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[datatypes.AddOrUpdate(Name,Datatype);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetByName" Id="{0e472e8b-43d1-041b-35b0-54c91730f712}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetByName := datatypes.TryGetValue(Name, Destination);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

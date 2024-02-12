@@ -5,7 +5,7 @@
 VAR
 	parent : I_Node;
 	nodeInput_Trigger : InputPort_Trigger('trigger','HRESULT',THIS^);
-	nodeOutput_Trigger : OutputPort_ANY('result','HRESULT',THIS^);
+	nodeOutput_Trigger : OutputPort('result','HRESULT',THIS^);
 END_VAR
 ]]></Declaration>
     <Implementation>

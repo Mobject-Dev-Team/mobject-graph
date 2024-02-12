@@ -4,25 +4,38 @@
     <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK FINAL Node_Display_BOOL EXTENDS Node
 VAR
-
-	// inputs
-	nodeInput_In : NodeInput('in','BOOL',THIS^);
-	
-	// content
-	nodeContent_Display : NodeContent('display','BOOL',THIS^);
-
+	in : _BOOL(FALSE);
+	display : _BOOL(FALSE);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="OnExecute" Id="{3eea65a5-6bf3-0e0b-2473-3b373deefdf4}">
-      <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT
+    <Method Name="Clone" Id="{fe15fbb0-95d8-43e8-9272-57a633d25d58}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
+VAR_INPUT
+END_VAR
 VAR
-	value : BOOL;
+	pointerToNode : POINTER TO Node_Display_BOOL;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[nodeInput_In.Get(value);
-nodeContent_Display.Set(value);]]></ST>
+        <ST><![CDATA[pointerToNode := __NEW(Node_Display_BOOL);
+Clone := pointerToNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{22d7603e-6ae9-4a16-8191-4a4540c852e9}">
+      <Declaration><![CDATA[METHOD Initialize
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Node.AddInputPort('in', in);
+Node.AddContent('display', display);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnExecute" Id="{3eea65a5-6bf3-0e0b-2473-3b373deefdf4}">
+      <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[display.Value := in.Value;]]></ST>
       </Implementation>
     </Method>
   </POU>

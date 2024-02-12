@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="DeserializerParent" Id="{56b440c7-8c49-40a5-9bf4-bcd28d963269}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK DeserializerParent
+VAR
+	children : List;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="DeregisterChild" Id="{a9622af3-00a7-433b-80e5-6cc2c1e9431c}">
+      <Declaration><![CDATA[METHOD PUBLIC DeregisterChild
+VAR_INPUT
+	Child : I_Deserializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[children.TryRemoveItem(Child);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterChild" Id="{a0da1f75-d2a3-4ca9-9272-73a1643dd9f8}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterChild
+VAR_INPUT
+	Child : I_Deserializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[children.AddItem(Child);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

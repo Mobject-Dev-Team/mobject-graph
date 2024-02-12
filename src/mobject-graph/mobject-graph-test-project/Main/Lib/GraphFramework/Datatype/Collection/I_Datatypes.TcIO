@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Datatypes" Id="{f77e546c-bf53-07d4-014d-a227dc9dfa40}">
+    <Declaration><![CDATA[INTERFACE I_Datatypes]]></Declaration>
+    <Method Name="InsertByName" Id="{361fcd9d-d264-0365-2cf9-c9886efb0859}">
+      <Declaration><![CDATA[METHOD PUBLIC InsertByName
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Datatype : I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryGetByName" Id="{ee358f18-488f-0191-2e49-1323b9f70ae1}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

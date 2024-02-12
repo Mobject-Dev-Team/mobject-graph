@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Nodes" Id="{2c2750c5-dc73-0222-3bfb-b64d4987284f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Nodes implements I_Nodes
+VAR
+	nodes : ARRAY [0..GraphFramework.MAX_NODES] OF I_Node;
+	lastNode : INT := EMPTY;
+END_VAR
+VAR CONSTANT
+	EMPTY : INT := -1;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Accept" Id="{a717681c-b528-0946-1e6e-7618985902f1}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_NodeVisitor;
+END_VAR
+VAR
+	i : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i := 0 TO Count - 1 DO
+	GetByIndex(i).Accept(Visitor);
+END_FOR]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Count" Id="{e9835c2c-d1ee-0ee0-2220-6784858c386a}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Count : DINT]]></Declaration>
+      <Get Name="Get" Id="{fbc8e8ca-fc08-02fc-26f2-93c9b81daaab}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Count := lastNode + 1;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="DisposeAll" Id="{a835f120-b18a-0c68-1080-8fadbc348f30}">
+      <Declaration><![CDATA[METHOD PUBLIC DisposeAll
+VAR
+	i: INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i := 0 TO lastNode DO
+	IF IsValidNode(nodes[i]) THEN
+		DisposeNode(nodes[i]);
+		nodes[i] := 0;
+	END_IF
+END_FOR
+
+lastNode := EMPTY;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ExecuteInOrder" Id="{78826cc5-34e4-0e24-0319-01868f6c2315}">
+      <Declaration><![CDATA[METHOD PUBLIC ExecuteInOrder
+VAR
+	nodeIndex: INT;
+	nodeOrder, highestExecutionOrder : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[highestExecutionOrder := GetHighestExecutionOrder();
+
+FOR nodeOrder := 0 TO highestExecutionOrder DO
+	FOR nodeIndex := 0 TO lastNode DO
+		IF IsValidNode(nodes[nodeIndex]) THEN
+			IF nodes[nodeIndex].Order = nodeOrder AND nodes[nodeIndex].mode = 0 THEN
+				nodes[nodeIndex].Execute();
+			END_IF
+		END_IF
+	END_FOR
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetById" Id="{a50f1dc9-43ab-0243-0c04-834a82271a2c}">
+      <Declaration><![CDATA[METHOD PUBLIC GetById : I_Node
+VAR_INPUT
+	Id : NodeId;
+END_VAR
+VAR
+	i : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i := 0 TO lastNode DO
+	IF  nodes[i].Id = Id THEN
+		GetById := nodes[i];
+		RETURN;
+	END_IF
+END_FOR]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetByIndex" Id="{edf28911-bf94-050c-308d-ce5d03e562b6}">
+      <Declaration><![CDATA[METHOD PUBLIC GetByIndex : I_Node
+VAR_INPUT
+	Id : NodeId;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetByIndex := nodes[Id];]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetFirst" Id="{7552a64b-06ba-0c4a-1c5d-046ca697be56}">
+      <Declaration><![CDATA[METHOD PUBLIC GetFirst : I_Node]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Count = 0 THEN
+	RETURN;
+END_IF
+
+GetFirst := nodes[0];]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetHighestExecutionOrder" Id="{25b59e23-8463-0f08-2926-2f4756fe9744}">
+      <Declaration><![CDATA[METHOD PUBLIC GetHighestExecutionOrder : DINT
+VAR_INPUT
+END_VAR
+VAR
+	i : INT;
+	currentOrder : DINT;
+	currentHighestOrder : DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i := 0 TO lastNode DO
+	currentOrder := nodes[i].Order;
+	IF  currentHighestOrder <= currentOrder THEN
+		currentHighestOrder := currentOrder;
+	END_IF
+END_FOR
+
+GetHighestExecutionOrder := currentHighestOrder;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetNext" Id="{39a571bf-388e-0acb-3bb9-f334f70e7bf7}">
+      <Declaration><![CDATA[METHOD PUBLIC GetNext : I_Node
+VAR_INPUT
+	CurrentNode : I_Node;
+END_VAR
+VAR
+	i : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Count = 0 THEN
+	RETURN;
+END_IF
+
+IF CurrentNode = 0 THEN
+	GetNext := GetFirst();
+	RETURN;
+END_IF
+
+IF CurrentNode = nodes[lastNode] THEN
+	GetNext := 0;
+	RETURN;
+END_IF
+
+FOR i := 0 TO lastNode DO
+	IF nodes[i] = CurrentNode THEN
+		GetNext := nodes[i+1];
+		RETURN;
+	END_IF
+END_FOR]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Insert" Id="{2a819fd0-789a-0131-38dd-4dd9a5e26e27}">
+      <Declaration><![CDATA[METHOD PUBLIC Insert : NodeId
+VAR_INPUT
+	node : I_Node;
+END_VAR
+VAR
+	i : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i := 0 TO lastNode DO
+	IF  nodes[i].Id = Node.Id THEN
+		RETURN;
+	END_IF
+END_FOR
+
+lastNode := lastNode + 1;
+nodes[lastNode] := node;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

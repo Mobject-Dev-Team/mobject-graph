@@ -11,7 +11,7 @@ END_VAR
 ]]></Declaration>
     </Method>
     <Method Name="GetInputPorts" Id="{0af24982-2755-0540-2512-dc3ab6c007c2}">
-      <Declaration><![CDATA[METHOD PUBLIC GetInputPorts : I_InputPortCollection
+      <Declaration><![CDATA[METHOD PUBLIC GetInputPorts : I_InputPorts
 VAR_INPUT
 END_VAR
 ]]></Declaration>

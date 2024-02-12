@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="PortParameter" Id="{10802ae6-8a8a-071e-2d26-05e82b94d749}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PortParameter
+VAR
+	nodeInputPort : I_InputPort;
+	nodeParameter : I_Parameter;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{4ab81438-292e-0b42-35f8-eb745116569b}" />
+    <Folder Name="Destructor" Id="{0322a1e8-368f-4e56-a900-761d722c4565}" />
+    <Folder Name="Protected" Id="{2ab001aa-17d4-4db3-a284-6d051f64979c}" />
+    <Method Name="FB_exit" Id="{486c9b48-2505-4cd6-9697-cfb1ff51d142}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+nodeInputPort.Dispose();
+nodeParameter.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{908adb2a-2122-0b07-1549-3373dcc9a3b7}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Name : T_MAXSTRING;
+	DataType : T_MAXSTRING;
+	Parent : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[MakeNewInputPort(Name, DataType, Parent);
+MakeNewParameter(Name, DataType, Parent);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MakeNewInputPort" Id="{7cd56e45-0274-44e2-8d9f-a103f26e2e11}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED MakeNewInputPort
+VAR_INPUT
+	InputPortName : T_MAXSTRING;
+	InputPortPermittedDatatypes : T_MAXSTRING;
+	InputPortParent : I_HaveInputPorts;
+END_VAR
+VAR
+	pInputPort : POINTER TO  InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pInputPort := __NEW(InputPort(Name := InputPortName, PermittedDataTypes := InputPortPermittedDatatypes, Parent := InputPortParent));
+nodeInputPort := pInputPort^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MakeNewParameter" Id="{ce89ad0b-ff48-439a-82f8-064b2459b0b9}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED MakeNewParameter
+VAR_INPUT
+	ParameterName : T_MAXSTRING;
+	ParameterDatatype : T_MAXSTRING;
+	ParameterParent : I_HaveParameters;
+END_VAR
+VAR
+	pParameter : POINTER TO Parameter;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pParameter := __NEW(Parameter(Name := ParameterName, DataType := ParameterDatatype, Parent := ParameterParent));
+nodeParameter := pParameter^;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Name" Id="{ba67be14-d9ba-0736-2696-44d60c9d40e8}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{bd35af1d-570e-02b1-2adc-459ce3da8370}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Name := nodeInputPort.Name;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="TryGet" Id="{8043ea42-3e63-01c6-14d5-e8ccc41ce922}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGet : BOOL
+VAR_INPUT
+	Value : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF nodeInputPort.Connected THEN
+	TryGet := nodeInputPort.TryGet(Value);
+	RETURN;
+END_IF
+
+TryGet := nodeParameter.TryGet(Value);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetTo" Id="{aed8ea75-3647-4f71-99d0-b6c9b8802ff4}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetTo : BOOL;
+VAR_INPUT
+	Destination : PVOID;
+	DestinationSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF nodeInputPort.Connected THEN
+	TryGetTo := nodeInputPort.TryGetTo(Destination, DestinationSize);
+	RETURN;
+END_IF
+
+TryGetTo := nodeParameter.TryGetTo(Destination, DestinationSize);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

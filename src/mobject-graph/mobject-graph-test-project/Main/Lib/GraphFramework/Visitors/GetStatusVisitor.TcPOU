@@ -3,7 +3,7 @@
   <POU Name="GetStatusVisitor" Id="{6c37d70e-cbeb-06a7-2f64-4b9eae3c6fdd}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK GetStatusVisitor IMPLEMENTS I_GraphVisitor, I_NodeVisitor, I_ContentVisitor, I_ErrorVisitor, I_ExtensionVisitor
 VAR
-	response : I_ResponseBuilder;
+	response : I_Serializer;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -16,11 +16,11 @@ END_VAR
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	ResponseBuilder : I_ResponseBuilder;
+	Serializer : I_Serializer;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[This^.response := ResponseBuilder;]]></ST>
+        <ST><![CDATA[This^.response := Serializer;]]></ST>
       </Implementation>
     </Method>
     <Method Name="VisitContent" Id="{d56d0b9c-b522-020d-29ec-9622ff5f7991}">
@@ -28,11 +28,13 @@ END_VAR
 VAR_INPUT
 	VisitingContent : I_Content;
 END_VAR
-]]></Declaration>
+VAR
+	marshaller : I_Datatype;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[Response.StartObject();
 Response.AddKeyString('name',VisitingContent.Name);
-Response.AddKeyString('type',VisitingContent.Datatype);
+Response.AddKeyString('type',VisitingContent.Data);
 
 IF VisitingContent.HasData THEN
 	Response.AddKeyData('data',VisitingContent);
@@ -125,7 +127,7 @@ VAR_INPUT
 	ContentOwner : I_HaveContent;
 END_VAR
 VAR
-	contents : I_ContentCollection;
+	contents : I_Contents;
 	enumerator : I_ForwardEnumerator;
 	hasContent : BOOL;
 	content : I_Content;
@@ -161,7 +163,7 @@ VAR_INPUT
 	ErrorOwner : I_HaveErrors;
 END_VAR
 VAR
-	errors : I_ErrorCollection;
+	errors : I_Errors;
 	enumerator : I_ForwardEnumerator;
 	hasErrors : BOOL;
 	error : I_Error;
@@ -210,7 +212,7 @@ VAR_INPUT
 	ExtensionOwner : I_HaveExtensions;
 END_VAR
 VAR
-	extensions : I_ExtensionCollection;
+	extensions : I_Extensions;
 	enumerator : I_ForwardEnumerator;
 	hasExtensions : BOOL;
 	extension : I_Extension;
@@ -272,7 +274,7 @@ VAR_INPUT
 	Graph : I_Graph;
 END_VAR
 VAR
-	nodes : I_NodeCollection;
+	nodes : I_Nodes;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[nodes := Graph.GetNodes();

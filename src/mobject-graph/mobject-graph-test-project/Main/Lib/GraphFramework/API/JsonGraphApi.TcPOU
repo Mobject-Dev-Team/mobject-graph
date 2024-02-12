@@ -7,7 +7,7 @@ VAR
 	{attribute 'hide'}
 	graph : REFERENCE TO I_Graph;
 	{attribute 'hide'}
-	languagePack : I_JsonLanguagePack;
+	languagePack : I_GraphDatatypes;
 
 	// incoming symbol
 	receivedGraphJson : HugeString;
@@ -31,9 +31,9 @@ VAR_INPUT
 END_VAR
 VAR
 	settingsParser : JsonGraphSettingsParser(languagePack);
-	response : JsonResponseBuilder(languagePack);
-	getStatusQuery : GetStatusVisitor(response);
-	getBlueprintQuery : GetBlueprintVisitor(response);
+	serializer : JsonSerializer;
+	getStatusQuery : GetStatusVisitor(serializer);
+	getBlueprintQuery : GetBlueprintVisitor(serializer);
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// check for updates and load json
@@ -47,9 +47,9 @@ END_IF
 // cyclically provide status updates
 ton(in:=NOT ton.Q,pt:= T#500MS);
 IF ton.Q THEN
-	response.ResetDocument();
+	serializer.Reset();
 	graph.Accept(getStatusQuery);
-	response.CopyJsonDocument(ADR(graphStatus),SIZEOF(graphStatus));
+	serializer.TryGetSerialziedData(ADR(graphStatus),SIZEOF(graphStatus));
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -59,7 +59,7 @@ VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	Graph : REFERENCE TO I_Graph;
-	LanguagePack : I_JsonLanguagePack;
+	LanguagePack : I_GraphDatatypes;
 END_VAR
 ]]></Declaration>
       <Implementation>

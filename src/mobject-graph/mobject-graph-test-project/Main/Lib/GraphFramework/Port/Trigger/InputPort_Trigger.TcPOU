@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="InputPort_Trigger" Id="{c02d3224-6f96-0f96-1fe9-600e6363abf5}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK InputPort_Trigger EXTENDS InputPort_ANY implements I_TriggerPort
+    <Declaration><![CDATA[FUNCTION_BLOCK InputPort_Trigger EXTENDS InputPort implements I_TriggerPort
 VAR
 END_VAR
 ]]></Declaration>
@@ -16,7 +16,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[Get(hresult);
+          <ST><![CDATA[TryGet(hresult);
 Result := hresult;]]></ST>
         </Implementation>
       </Get>

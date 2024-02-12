@@ -3,7 +3,7 @@
   <POU Name="TcGraph" Id="{3cf4dffb-2e67-0cde-05c3-0b7a44e6e216}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK TcGraph IMPLEMENTS I_TcGraph
 VAR
-	nodeFactories : NodeFactoryCollection;
+	nodeFactories : NodeFactorys;
 	linkFactory : LinkFactory;
 	graphInstances : DisposableCollection;
 END_VAR
@@ -37,7 +37,7 @@ graphInstances.DisposeAndRemoveAll();]]></ST>
       </Implementation>
     </Method>
     <Method Name="GetNodeFactories" Id="{c44bbbb1-a7c9-06c4-05cd-ffa320ca8ae8}">
-      <Declaration><![CDATA[METHOD PUBLIC GetNodeFactories : I_NodeFactoryCollection
+      <Declaration><![CDATA[METHOD PUBLIC GetNodeFactories : I_NodeFactorys
 VAR_INPUT
 END_VAR
 ]]></Declaration>

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_ReadableData" Id="{82e99dec-d205-085b-0b23-3522cd3d2d7e}">
+    <Declaration><![CDATA[INTERFACE I_ReadableData
+]]></Declaration>
+    <Property Name="Data" Id="{b846db2d-ce55-40fe-8775-fa0fddf20325}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{60c63cf6-7384-4b53-ab8e-fcb933a9e5c7}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TryGet" Id="{33239db5-298f-0f43-1757-b2fb9ec949c8}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGet : BOOL;
+VAR_INPUT
+	Value : ANY;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetTo" Id="{d98c94e4-9b11-052f-047f-329220f0064f}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetTo : BOOL;
+VAR_INPUT
+	Destination : PVOID;
+	DestinationSize : UDINT;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

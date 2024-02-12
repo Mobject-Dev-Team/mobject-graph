@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="GraphDatatypes" Id="{b22d15f2-0a2d-001f-1a19-cc7953f2d76f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK GraphDatatypes IMPLEMENTS I_GraphDatatypes
+VAR
+	datatypes : Datatypes;
+
+	// generic type convertion variables	
+	_bool : _BOOL(FALSE); 	
+	_byte : BYTE;	
+	_word : WORD;	
+	_dword : DWORD;	
+	_lword : LWORD;	
+	_sint : SINT;	
+	_usint : USINT;	
+	_int : INT; 	
+	_uint : UINT;	
+	_dint : DINT; 	
+	_udint : UDINT; 	
+	_lint : LINT;	
+	_ulint : ULINT;	
+	_real : REAL; 	
+	_lreal : LREAL;	
+	_date : DATE;	
+	_dt : DT;	
+	_date_and_time : DATE_AND_TIME;	
+	_tod : TOD;	
+	_time_of_day : TIME_OF_DAY;	
+	_time : TIME;
+	_t_maxstring : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{527cbb80-98fa-0b50-2797-fa2b5dfb6c13}" />
+    <Folder Name="Private" Id="{a277473a-4cd6-04b7-0f9d-180561b653b4}" />
+    <Method Name="FB_init" Id="{c5bb3665-237d-0ffe-1c4e-e728d03790ad}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RegisterPrimativeTypes();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Insert" Id="{112636ff-8264-048c-2057-167c14c773a7}">
+      <Declaration><![CDATA[METHOD PUBLIC Insert
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Datatype : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[datatypes.InsertByName(Name, Datatype);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Install" Id="{270c7f82-c2c0-00ba-1ff4-173f4b65a917}">
+      <Declaration><![CDATA[METHOD PUBLIC Install
+VAR_INPUT
+	DatatypePack : I_DatatypePack;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DatatypePack.Register(This^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterPrimativeTypes" Id="{0a388d4d-d43c-042f-1788-b9c9ecd1aa7b}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterPrimativeTypes
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Insert('BOOL',TypeBool);
+//AddDataTypeConversionUsingVariable('BYTE',_byte);
+//AddDataTypeConversionUsingVariable('WORD',_word);
+//AddDataTypeConversionUsingVariable('DWORD',_dword);
+//AddDataTypeConversionUsingVariable('LWORD',_lword);
+//AddDataTypeConversionUsingVariable('SINT',_sint);
+//AddDataTypeConversionUsingVariable('USINT',_usint);
+//AddDataTypeConversionUsingVariable('INT',_int);
+//AddDataTypeConversionUsingVariable('UINT',_uint);
+//AddDataTypeConversionUsingVariable('DINT' ,_dint);
+//AddDataTypeConversionUsingVariable('UDINT',_udint);
+//AddDataTypeConversionUsingVariable('LINT' ,_lint);
+//AddDataTypeConversionUsingVariable('ULINT',_ulint);
+//AddDataTypeConversionUsingVariable('REAL' ,_real);
+//AddDataTypeConversionUsingVariable('LREAL',_lreal);
+//AddDataTypeConversionUsingVariable('DATE',_date);
+//AddDataTypeConversionUsingVariable('DT',_dt);
+//AddDataTypeConversionUsingVariable('DATE_AND_TIME',_date_and_time);
+//AddDataTypeConversionUsingVariable('TOD',_tod);
+//AddDataTypeConversionUsingVariable('TIME_OF_DAY',_time_of_day);
+//AddDataTypeConversionUsingVariable('TIME',_time );
+//AddDataTypeConversionUsingVariable('STRING',_t_maxstring);
+//AddDataTypeConversionUsingVariable('T_MAXSTRING',_t_maxstring);
+
+// extras
+//AddDataTypeConversionUsingVariable('RouterMemory',routerMemory);
+//AddDataTypeConversionUsingVariable('NodeProfile',nodeProfile);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

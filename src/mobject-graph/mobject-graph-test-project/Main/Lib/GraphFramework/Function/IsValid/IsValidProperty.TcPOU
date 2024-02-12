@@ -3,7 +3,7 @@
   <POU Name="IsValidProperty" Id="{f27cfd1a-d935-0531-0f17-a6712ace4c45}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION IsValidProperty : BOOL
 VAR_INPUT
-	PropertyToCheck : I_Property;
+	PropertyToCheck : I_Parameter;
 END_VAR
 ]]></Declaration>
     <Implementation>

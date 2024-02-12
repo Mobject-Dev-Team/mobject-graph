@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_Metadatum" Id="{df609e72-1d9f-06c6-38ef-3e2c502eecb5}">
-    <Declaration><![CDATA[INTERFACE I_Metadatum EXTENDS __SYSTEM.IQueryInterface
+    <Declaration><![CDATA[INTERFACE I_Metadatum EXTENDS I_Serializable
 ]]></Declaration>
     <Method Name="Accept" Id="{2f93461b-a249-003f-1afe-030a70299e97}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
@@ -16,10 +16,10 @@ END_VAR
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
-    <Method Name="WriteToResponse" Id="{adc764b8-5070-077e-06e5-40a6a5bee5ed}">
-      <Declaration><![CDATA[METHOD PUBLIC WriteToResponse
+    <Method Name="SerializeWith" Id="{adc764b8-5070-077e-06e5-40a6a5bee5ed}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT
-	Response : I_ResponseBuilder;
+	Serializer : I_Serializer;
 END_VAR]]></Declaration>
     </Method>
   </Itf>

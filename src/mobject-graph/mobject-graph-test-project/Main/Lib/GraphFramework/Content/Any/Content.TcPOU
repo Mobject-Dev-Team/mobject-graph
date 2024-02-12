@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Content" Id="{0d9cf418-5c17-01af-15e9-b437781a1d71}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Content IMPLEMENTS I_Content
+VAR
+	_name : T_MAXSTRING;
+	_parent : I_HaveContent;
+	_data : I_Datatype;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{837d23f4-e080-04af-1c00-afd1f5791c19}" />
+    <Method Name="Accept" Id="{4deecd26-05a3-087a-0d9b-39d9f2ed6081}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_ContentVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitContent(this^);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Data" Id="{84f51fb0-45ab-000a-2b80-8ac17966921c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : I_DataType]]></Declaration>
+      <Get Name="Get" Id="{4a624fc3-292a-0b2c-3065-c19a38ab6b07}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Data := _data;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_init" Id="{2d9dcb5d-b2bf-00b6-3905-b549a314f45c}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Name : STRING;
+	Data : I_Datatype;
+	Parent : I_HaveContent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_name := Name;
+_data := Data;
+RegisterWithParent(Parent);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Name" Id="{e0fe422f-2992-0a7a-3a67-4d74882b6ea4}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{6e49c007-b4a0-041b-1088-5b57730553f3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Name := _name;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Parent" Id="{2024bed4-f17f-0a30-1b47-bca1f219aa82}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parent : I_HaveContent]]></Declaration>
+      <Get Name="Get" Id="{5956cbec-13e7-03c8-3e5e-1d37acadef69}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parent := _parent;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="RegisterWithParent" Id="{5e8e70e3-cedb-09b8-1c96-4b1b0a7fd098}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterWithParent
+VAR_INPUT
+	Parent : I_HaveContent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Parent = 0 THEN
+	RETURN;
+END_IF
+
+THIS^._parent := Parent;
+Parent.AddContent(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

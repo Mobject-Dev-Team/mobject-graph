@@ -10,6 +10,11 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Method Name="Clone" Id="{db506ce6-8254-40c6-ab5d-bb6a93f7b619}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
+VAR_INPUT
+END_VAR]]></Declaration>
+    </Method>
     <Method Name="Configure" Id="{da25a7ed-2d43-0a52-3287-cecc0f4764e8}">
       <Declaration><![CDATA[METHOD PUBLIC Configure
 VAR_INPUT

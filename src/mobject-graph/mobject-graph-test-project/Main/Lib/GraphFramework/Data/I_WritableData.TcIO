@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_WritableData" Id="{87191d5d-b323-4120-9c02-78646e324ac0}">
+    <Declaration><![CDATA[INTERFACE I_WritableData
+]]></Declaration>
+    <Property Name="Data" Id="{dbdae43e-426a-4e2b-935f-e004162b6789}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{5b9672d7-9010-4de1-a1cc-cf895596a18b}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TrySet" Id="{b17c43ca-c04d-4614-b0c8-b76a7cfcbe9b}">
+      <Declaration><![CDATA[METHOD PUBLIC TrySet : BOOL;
+VAR_INPUT
+	Value : ANY;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TrySetFrom" Id="{8ec144fc-c13e-419b-82d9-eb5b19b9b209}">
+      <Declaration><![CDATA[METHOD PUBLIC TrySetFrom : BOOL;
+VAR_INPUT
+	SourceAddress : PVOID;
+	SourceSize : UDINT;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

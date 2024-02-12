@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="OutputPort" Id="{4c7e0bce-9eb0-0f6a-044f-6a3cfc8b783d}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK OutputPort EXTENDS Disposable IMPLEMENTS I_OutputPort
+VAR
+	_name : T_MAXSTRING;
+	_dataType : T_MAXSTRING;
+	data : Data;
+	eventEmitter : EventEmitter;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{677256cd-e8af-081b-2804-5689f5f4149b}" />
+    <Folder Name="Private" Id="{6f5f4b13-ef19-01e5-075e-0ea3b801d3d7}" />
+    <Method Name="Accept" Id="{685a8b40-a5b2-0491-3a06-acbf37dad5a1}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_OutputPortVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitOutputPort(this^);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Data" Id="{eb163034-b0fd-0fe3-0fa5-fd0220399dfb}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{7534416c-ca26-06ef-2b8b-0ad13dd0d8f6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[OutputPort.Data := _dataType;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="EmitOnOutputPortChangeEvent" Id="{4cedd9f2-3d84-035e-18ce-b7ebc3af2524}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitOnOutputPortChangeEvent
+VAR_INPUT
+	PortChanged : I_OutputPort;
+END_VAR
+VAR
+	pOutputPortChangeEvent : POINTER TO OutputPortChangedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pOutputPortChangeEvent := __NEW(OutputPortChangedEvent(TargetOutputPort := PortChanged));
+eventEmitter.Emit('OnOutputPortChanged',pOutputPortChangeEvent^);
+pOutputPortChangeEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{1ba1d2d7-341d-0e8e-05ef-f5346255db4e}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Name : T_MAXSTRING;
+	DataType : T_MAXSTRING;
+	Parent : I_HaveOutputPorts;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_name := Name;
+_dataType := DataType;
+
+IF Parent = 0 THEN
+	RETURN;
+END_IF
+
+Parent.AddOutputPort(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Name" Id="{a6251d93-37b5-06d7-00eb-bc1261f23075}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{66530c4b-9811-0535-0d83-3db73e2195f3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Name := _name;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="OffEvent" Id="{5f0c98a6-efae-06ce-0d53-00d24017a360}">
+      <Declaration><![CDATA[METHOD PUBLIC OffEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OffEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnceEvent" Id="{33aa55e6-cc64-0804-1f68-fe127e9ffd59}">
+      <Declaration><![CDATA[METHOD PUBLIC OnceEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnceEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnEvent" Id="{83584882-e2df-000f-0211-5ef5ee02b990}">
+      <Declaration><![CDATA[METHOD PUBLIC OnEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGet" Id="{d7f053a1-edb3-045f-2e85-d7d160cdb265}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGet : BOOL;
+VAR_INPUT
+	Value : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGet := OutputPort.Data.TryGet(Value);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetTo" Id="{6e5c850e-5dc7-0ca4-0094-d63313848019}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetTo : BOOL;
+VAR_INPUT
+	Destination : PVOID;
+	DestinationSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetTo := OutputPort.Data.TryGetTo(Destination, DestinationSize);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TrySet" Id="{1e1c2da9-f2e1-0401-2df7-d89f92cc9a3e}">
+      <Declaration><![CDATA[METHOD PUBLIC TrySet : BOOL;
+VAR_INPUT
+	Value : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TrySet := OutputPort.Data.TrySet(Value);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TrySetFrom" Id="{76d02626-79e8-0585-25de-a6810fcf20bc}">
+      <Declaration><![CDATA[METHOD PUBLIC TrySetFrom : BOOL;
+VAR_INPUT
+	SourceAddress : PVOID;
+	SourceSize : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT OutputPort.Data.TrySetFrom(SourceAddress, SourceSize) THEN
+	RETURN;
+END_IF
+
+EmitOnOutputPortChangeEvent(THIS^);
+TrySetFrom := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

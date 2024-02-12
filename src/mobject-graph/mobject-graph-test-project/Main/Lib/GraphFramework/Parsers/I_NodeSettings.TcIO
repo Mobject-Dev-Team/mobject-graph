@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_NodeSettings" Id="{7e69d085-937c-0ef2-3008-ee4614c3c655}">
+    <Declaration><![CDATA[INTERFACE I_NodeSettings
+
+]]></Declaration>
+    <Method Name="GetInputById" Id="{b70f0ee8-a906-0d09-1330-ac471f93e57f}">
+      <Declaration><![CDATA[METHOD PUBLIC GetInputById : I_PortSettings
+VAR_INPUT
+	Id : PortId;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="GetOutputById" Id="{0754bcf1-117b-043f-0f33-5032bb7f29f6}">
+      <Declaration><![CDATA[METHOD PUBLIC GetOutputById : I_PortSettings
+VAR_INPUT
+	Id : PortId;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="GetPropertyByIndex" Id="{f75971ab-91cc-06c4-1583-1fffca84ef46}">
+      <Declaration><![CDATA[METHOD PUBLIC GetPropertyByIndex : I_ParameterSettings
+VAR_INPUT
+	Index : UDINT;
+END_VAR]]></Declaration>
+    </Method>
+    <Property Name="HasInputs" Id="{4ef43387-ea82-03a3-1ccc-9d33192aa6ac}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasInputs : BOOL]]></Declaration>
+      <Get Name="Get" Id="{7d254601-c780-0821-3b69-58c59df01ae4}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="HasOutputs" Id="{625f198a-1677-086e-325c-f92b0b23749b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasOutputs : BOOL]]></Declaration>
+      <Get Name="Get" Id="{357c9f0e-3487-0fe3-2df9-257947b88333}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="HasProperties" Id="{7d51f722-f899-0f2d-00e7-af6600b6498d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasProperties : BOOL]]></Declaration>
+      <Get Name="Get" Id="{2564ebb2-4a93-0a45-1c33-f2f59030052d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Id" Id="{039b87d9-a7dd-0420-2b0e-cac8c076327b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Id : NodeId]]></Declaration>
+      <Get Name="Get" Id="{c15e70bd-f36c-05d1-3bab-b677e2061ccf}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="InputCount" Id="{8563a1df-f46a-0fa4-3c0a-ec1d316e7cd5}">
+      <Declaration><![CDATA[PROPERTY InputCount : UDINT]]></Declaration>
+      <Get Name="Get" Id="{facc9cfa-d843-00e3-2e35-af68d7a9c426}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Mode" Id="{aae55529-5041-050e-2376-e4f7e79faaec}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Mode : DINT]]></Declaration>
+      <Get Name="Get" Id="{074cf970-a893-04e4-1e9a-17f29c4c37a3}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="NodeType" Id="{d4361041-f8b0-0272-12cc-10d3bea84ec4}">
+      <Declaration><![CDATA[PROPERTY PUBLIC NodeType : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{43d32756-5b9f-05d0-3400-60d4861eb2f7}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Order" Id="{c0e96a89-9b0f-079b-087c-a8e00b77b839}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Order : DINT]]></Declaration>
+      <Get Name="Get" Id="{4a8e7037-fdf4-0f02-1883-7ff85f482f8a}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="OutputCount" Id="{0162aa4c-b812-0cca-046f-487e39114339}">
+      <Declaration><![CDATA[PROPERTY OutputCount : UDINT]]></Declaration>
+      <Get Name="Get" Id="{3ed84425-b22e-0204-203c-70c29ce8a6e6}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="PropertiesCount" Id="{426aabb4-0637-0c95-28c5-fbb892e16315}">
+      <Declaration><![CDATA[PROPERTY PropertiesCount : UDINT]]></Declaration>
+      <Get Name="Get" Id="{a8170cc2-2320-04c2-3315-ca7e1a89a3ca}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

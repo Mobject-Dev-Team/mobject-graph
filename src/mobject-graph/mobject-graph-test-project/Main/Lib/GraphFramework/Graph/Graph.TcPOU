@@ -4,11 +4,11 @@
     <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK Graph EXTENDS BaseElement IMPLEMENTS I_Graph
 VAR
-	nodeFactories : I_NodeFactoryCollection;
+	nodeFactories : I_NodeFactorys;
 	linkFactory : I_LinkFactory;
 	currentGraphUuid : Uuid;	
-	nodes : NodeCollection;
-	links : LinkCollection;	
+	nodes : Nodes;
+	links : Links;	
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -159,7 +159,7 @@ Clear();]]></ST>
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	NodeFactories : I_NodeFactoryCollection;
+	NodeFactories : I_NodeFactorys;
 	LinkFactory : I_LinkFactory;
 END_VAR
 ]]></Declaration>
@@ -178,7 +178,7 @@ END_VAR
       </Implementation>
     </Method>
     <Method Name="GetNodes" Id="{06360e34-fba5-0320-1e31-5f26e23cab86}">
-      <Declaration><![CDATA[METHOD PUBLIC GetNodes : I_NodeCollection
+      <Declaration><![CDATA[METHOD PUBLIC GetNodes : I_Nodes
 VAR_INPUT
 END_VAR
 ]]></Declaration>

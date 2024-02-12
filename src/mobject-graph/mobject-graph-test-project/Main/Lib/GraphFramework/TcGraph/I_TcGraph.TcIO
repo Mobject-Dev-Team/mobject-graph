@@ -11,7 +11,7 @@ END_VAR
 ]]></Declaration>
     </Method>
     <Method Name="GetNodeFactories" Id="{00b3c03b-00a4-00c1-0aea-f04a8bd64fec}">
-      <Declaration><![CDATA[METHOD PUBLIC GetNodeFactories : I_NodeFactoryCollection
+      <Declaration><![CDATA[METHOD PUBLIC GetNodeFactories : I_NodeFactorys
 VAR_INPUT
 END_VAR
 ]]></Declaration>

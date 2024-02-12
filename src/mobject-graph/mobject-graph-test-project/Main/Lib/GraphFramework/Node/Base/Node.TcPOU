@@ -29,6 +29,14 @@ END_VAR
         <ST><![CDATA[Visitor.VisitNode(this^);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="Clone" Id="{026c4113-8518-4d67-89a7-84bf1813f983}">
+      <Declaration><![CDATA[METHOD PUBLIC ABSTRACT Clone : I_Node
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="Configure" Id="{0d8590ca-baee-09dd-1834-0876a5653808}">
       <Declaration><![CDATA[METHOD PUBLIC Configure
 VAR_INPUT
@@ -39,31 +47,31 @@ END_VAR]]></Declaration>
 _order := Settings.Order;
 _mode := Settings.Mode;
 
-ConfigureProperties(Settings);]]></ST>
+ConfigureParameters(Settings);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ConfigureProperties" Id="{932ba540-86b9-0fbd-3187-cd69e0f0eb92}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PROTECTED ConfigureProperties
+    <Method Name="ConfigureParameters" Id="{932ba540-86b9-0fbd-3187-cd69e0f0eb92}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PROTECTED ConfigureParameters
 VAR_INPUT
 	NodeSettings : I_NodeSettings;
 END_VAR
 VAR
 	i: UDINT;
-	propertySettings : I_PropertySettings;
-	localProperty : I_Property;
+	parameterSettings : I_ParameterSettings;
+	localParameter : I_Parameter;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF NodeSettings.HasProperties THEN
 
 	FOR i := 0 TO NodeSettings.PropertiesCount -1 DO
 		
-		propertySettings := NodeSettings.GetPropertyByIndex(i);
+		parameterSettings := NodeSettings.GetPropertyByIndex(i);
 
-		IF NOT properties.TryGetByName(propertySettings.name, localProperty) THEN
+		IF NOT parameters.TryGetByName(parameterSettings.name, localParameter) THEN
 			CONTINUE;
 		END_IF
 		
-		localProperty.Configure(propertySettings);
+		localParameter.Configure(parameterSettings);
 		
 	END_FOR
 

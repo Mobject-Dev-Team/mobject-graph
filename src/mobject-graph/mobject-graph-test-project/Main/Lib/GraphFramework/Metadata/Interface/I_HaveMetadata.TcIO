@@ -11,7 +11,7 @@ END_VAR
 ]]></Declaration>
     </Method>
     <Method Name="GetMetadata" Id="{509044e7-6ece-0a78-0078-53d3ca44d828}">
-      <Declaration><![CDATA[METHOD PUBLIC GetMetadata : I_MetadataCollection
+      <Declaration><![CDATA[METHOD PUBLIC GetMetadata : I_Metadata
 VAR_INPUT
 END_VAR
 ]]></Declaration>

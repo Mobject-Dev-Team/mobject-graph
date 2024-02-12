@@ -11,7 +11,7 @@ END_VAR
 ]]></Declaration>
     </Method>
     <Method Name="GetErrors" Id="{08c9815a-9cf4-0ac6-3683-4e6b7fc0ea52}">
-      <Declaration><![CDATA[METHOD PUBLIC GetErrors : I_ErrorCollection
+      <Declaration><![CDATA[METHOD PUBLIC GetErrors : I_Errors
 VAR_INPUT
 END_VAR
 ]]></Declaration>

@@ -30,7 +30,7 @@ END_VAR
 ]]></Declaration>
     </Method>
     <Method Name="GetNodes" Id="{e673abbf-5566-0889-0a5c-d05bfe265452}">
-      <Declaration><![CDATA[METHOD PUBLIC GetNodes : I_NodeCollection
+      <Declaration><![CDATA[METHOD PUBLIC GetNodes : I_Nodes
 VAR_INPUT
 END_VAR
 ]]></Declaration>

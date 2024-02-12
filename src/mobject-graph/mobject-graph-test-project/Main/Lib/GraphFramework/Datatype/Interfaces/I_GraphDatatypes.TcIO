@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_GraphDatatypes" Id="{d16ff96f-90eb-09d8-1b98-c2706e79cd45}">
+    <Declaration><![CDATA[INTERFACE I_GraphDatatypes
+]]></Declaration>
+    <Method Name="Insert" Id="{f361b5d7-b6f0-02ab-04e6-e6a1298f8013}">
+      <Declaration><![CDATA[METHOD PUBLIC Insert
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Datatype : I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="Install" Id="{47911e50-4ffd-0129-0736-e738ee235dff}">
+      <Declaration><![CDATA[METHOD PUBLIC Install
+VAR_INPUT
+	DatatypePack : I_DatatypePack;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

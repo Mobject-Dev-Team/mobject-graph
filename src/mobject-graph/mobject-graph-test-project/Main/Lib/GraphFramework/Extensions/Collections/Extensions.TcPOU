@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Extensions" Id="{27384f57-a8c2-0737-00e0-7bb51765e0ee}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Extensions IMPLEMENTS I_Extensions
+VAR
+	extensions : Stack;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="GetEnumerator" Id="{2921e2e3-0729-0b2c-3db6-d5131b4b9730}">
+      <Declaration><![CDATA[METHOD PUBLIC GetEnumerator : I_ForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetEnumerator := extensions.GetEnumerator();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Insert" Id="{d4009a20-cf50-0b51-2df8-6eb5fce58568}">
+      <Declaration><![CDATA[METHOD PUBLIC Insert
+VAR_INPUT
+	ExtensionToAdd : I_Extension;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[extensions.Push(ExtensionToAdd);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetByName" Id="{02ffb6dc-d7f2-07ef-266b-097a2ed92420}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetByName : BOOL
+VAR_INPUT
+	Name : STRING;
+	Destination : REFERENCE TO I_Extension;
+END_VAR
+VAR
+	extensionEnumerator : I_ForwardEnumerator;
+	currentExtension : I_Extension;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[extensionEnumerator := extensions.GetEnumerator();
+
+WHILE extensionEnumerator.MoveNext() DO 
+	IF NOT extensionEnumerator.TryGet(currentExtension) THEN
+		CONTINUE;
+	END_IF
+	
+	IF currentExtension.Name = Name THEN 
+		TryGetByName := TRUE;
+		Destination := currentExtension;
+		EXIT;
+	END_IF
+
+END_WHILE
+
+extensionEnumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

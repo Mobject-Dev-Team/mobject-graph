@@ -3,7 +3,7 @@
   <POU Name="NodePack_PlcBasicDisplay" Id="{f8c90f2a-938e-0576-2379-b6509a0f06b0}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK NodePack_PlcBasicDisplay IMPLEMENTS I_NodePack
 VAR
-	nodeFactory_Display_BOOL : NodeFactory_Display_BOOL;
+	node_Display_BOOL : Node_Display_BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -16,7 +16,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TcGraph.RegisterNodeFactoryByType('PLC Basic/Display/BOOL',nodeFactory_Display_BOOL);
+        <ST><![CDATA[TcGraph.RegisterNodeByType('PLC Basic/Display/BOOL',node_Display_BOOL);
 ]]></ST>
       </Implementation>
     </Method>

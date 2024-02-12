@@ -5,7 +5,7 @@
 FUNCTION_BLOCK NodeProfilerExtension EXTENDS ExtensionBase IMPLEMENTS I_EventHandler
 VAR
 	parent : I_Node;
-	nodeContent_NodeProfile : Content_Any('NodeProfile','NodeProfile',THIS^);
+	nodeContent_NodeProfile : Content('NodeProfile','NodeProfile',THIS^);
 	nodeProfile : NodeProfile;
 END_VAR
 ]]></Declaration>

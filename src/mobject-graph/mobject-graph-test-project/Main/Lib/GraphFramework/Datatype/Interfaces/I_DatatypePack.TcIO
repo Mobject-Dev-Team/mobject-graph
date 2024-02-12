@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_DatatypePack" Id="{c60741ea-3237-0ac6-2f76-f10f1e446198}">
+    <Declaration><![CDATA[INTERFACE I_DatatypePack
+]]></Declaration>
+    <Method Name="Register" Id="{a50b900d-258c-08bb-3c09-dc93df12a0ea}">
+      <Declaration><![CDATA[METHOD PUBLIC Register
+VAR_INPUT
+	Marshallers : I_GraphDatatypes;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>
