@@ -3,8 +3,8 @@
   <Itf Name="I_ParameterVisitor" Id="{e42b97e1-75a0-0ee6-308b-79206bd66f61}">
     <Declaration><![CDATA[INTERFACE I_ParameterVisitor
 ]]></Declaration>
-    <Method Name="VisitProperty" Id="{c56ceef6-7473-08a2-0bb7-aa4c5609f41d}">
-      <Declaration><![CDATA[METHOD VisitProperty
+    <Method Name="VisitParameter" Id="{c56ceef6-7473-08a2-0bb7-aa4c5609f41d}">
+      <Declaration><![CDATA[METHOD VisitParameter
 VAR_INPUT
 	VisitingProperty : I_Parameter;
 END_VAR

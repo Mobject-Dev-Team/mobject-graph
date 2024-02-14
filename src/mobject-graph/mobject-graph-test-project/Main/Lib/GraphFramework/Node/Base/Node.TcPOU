@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="Node" Id="{8b8910db-ad72-05a5-0556-4fd11e61a0b6}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK ABSTRACT Node extends BaseElement IMPLEMENTS I_Node
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ABSTRACT Node EXTENDS BaseElement IMPLEMENTS I_Node
 VAR
 	_id : NodeId;
 	_order : DINT;
@@ -138,7 +141,7 @@ EmitNodeExecuteEndEvent();]]></ST>
       </Implementation>
     </Method>
     <Property Name="Id" Id="{83736b4e-b1bc-0adb-2e43-a65e1cb4d5a3}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Id : NodeId]]></Declaration>
+      <Declaration><![CDATA[PROPERTY PUBLIC Id : DINT]]></Declaration>
       <Get Name="Get" Id="{e5d6cfcc-06b4-0c3a-347e-7067097be358}">
         <Declaration><![CDATA[VAR
 END_VAR
@@ -176,5 +179,34 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="TryDeserializeFrom" Id="{b10f689b-9a8b-4119-b4c9-ae83d038092d}">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Deserializer.TryGetKeyDint('id', _id) AND 
+Deserializer.TryGetKeyDint('order', _order) AND 
+Deserializer.TryGetKeyDint('mode', _mode);
+
+IF NodeSettings.HasProperties THEN
+
+	FOR i := 0 TO NodeSettings.PropertiesCount -1 DO
+		
+		parameterSettings := NodeSettings.GetPropertyByIndex(i);
+
+		IF NOT parameters.TryGetByName(parameterSettings.name, localParameter) THEN
+			CONTINUE;
+		END_IF
+		
+		localParameter.Configure(parameterSettings);
+		
+	END_FOR
+
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

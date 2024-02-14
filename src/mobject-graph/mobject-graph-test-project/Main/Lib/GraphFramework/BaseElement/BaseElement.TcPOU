@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="BaseElement" Id="{65854565-5a7d-02f2-2709-1993949f09a2}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK BaseElement EXTENDS Disposable IMPLEMENTS I_EventEmitter
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK BaseElement EXTENDS Disposable IMPLEMENTS I_EventEmitter, I_BaseElement
 VAR
 	inputPorts : InputPorts;
 	outputPorts : OutputPorts;
@@ -11,74 +14,126 @@ VAR
 	extensions : Extensions;
 	metadata : Metadata;
 	eventEmitter : EventEmitter;
+	disposables : Stack;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="Private" Id="{48a95438-1d6b-0ead-29c1-c8ed21d5c5f8}" />
+    <Folder Name="Destructor" Id="{8396773a-400b-43fa-8a6d-bbe9b1d6ecd3}" />
+    <Folder Name="Protected" Id="{48a95438-1d6b-0ead-29c1-c8ed21d5c5f8}" />
     <Method Name="AddContent" Id="{65c5bac1-a3d0-002c-2cbe-a7b37fe3b45b}">
       <Declaration><![CDATA[METHOD AddContent
 VAR_INPUT
-	ContentToAdd : I_Content;
+	Content : I_Content;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[contents.Insert(ContentToAdd);
-EmitOnContentAddedEvent(ContentToAdd);]]></ST>
+        <ST><![CDATA[RegisterContent(Content);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsContent" Id="{56e24acc-fc0e-4690-8a55-08bdbfb1feb3}">
+      <Declaration><![CDATA[METHOD AddDataAsContent
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+VAR
+	newContent : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[newContent := CreateContent(Name, Data);
+RegisterDisposableToSelf(newContent);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsInputPort" Id="{4722f8e7-5165-4f79-9bed-1e281e05abb9}">
+      <Declaration><![CDATA[METHOD AddDataAsInputPort
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+VAR
+	newInputPort : I_InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[newInputPort := CreateInputPort(Name, Data);
+RegisterDisposableToSelf(newInputPort);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsOutputPort" Id="{dca4d70a-2386-4112-8b2e-e77a6edffbe6}">
+      <Declaration><![CDATA[METHOD AddDataAsOutputPort
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+VAR
+	newOutputPort : I_OutputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[newOutputPort := CreateOutputPort(Name, Data);
+RegisterDisposableToSelf(newOutputPort);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsParameter" Id="{36004062-8b8a-4b3b-89b0-5b74d6f6bc9b}">
+      <Declaration><![CDATA[METHOD AddDataAsParameter
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+VAR
+	newParameter : I_Parameter;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[newParameter := CreateParameter(Name, Data);
+RegisterDisposableToSelf(newParameter);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddError" Id="{4bbd3a02-551d-0fb6-097a-770c7ef9b02a}">
       <Declaration><![CDATA[METHOD AddError
 VAR_INPUT
-	ErrorToAdd : I_Error;
+	Error : I_Error;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[errors.Insert(ErrorToAdd);
-EmitOnErrorAddedEvent(ErrorToAdd);]]></ST>
+        <ST><![CDATA[RegisterError(Error);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddExtension" Id="{12d5c379-9667-00ca-1a5e-59797e6bc21d}">
       <Declaration><![CDATA[METHOD AddExtension
 VAR_INPUT
-	ExtensionToAdd : I_Extension;
+	Extension : I_Extension;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[extensions.Insert(ExtensionToAdd);
-EmitOnExtensionAddedEvent(ExtensionToAdd);]]></ST>
+        <ST><![CDATA[RegisterExtension(Extension);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddInputPort" Id="{8aebf87c-0955-0d8e-0a5d-38af87c0ae0d}">
       <Declaration><![CDATA[METHOD AddInputPort
 VAR_INPUT
-	InputPortToAdd : I_InputPort;
+	InputPort : I_InputPort;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[inputPorts.Insert(InputPortToAdd);
-EmitOnInputPortAddedEvent(InputPortToAdd);]]></ST>
+        <ST><![CDATA[RegisterInputPort(InputPort);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddMetadatum" Id="{371a7ce8-9ce1-0df1-08ad-592aac14c8db}">
       <Declaration><![CDATA[METHOD AddMetadatum
 VAR_INPUT
-	MetadatumToAdd : I_Metadatum;
+	Metadatum : I_Metadatum;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[metadata.Insert(MetadatumToAdd);
-EmitOnMetadatumAddedEvent(MetadatumToAdd);]]></ST>
+        <ST><![CDATA[RegisterMetadatum(Metadatum);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddOutputPort" Id="{8d1e0294-027c-08af-0add-f26ea3b4e6b4}">
       <Declaration><![CDATA[METHOD AddOutputPort
 VAR_INPUT
-	OutputPortToAdd : I_OutputPort;
+	OutputPort : I_OutputPort;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[outputPorts.Insert(OutputPortToAdd);
-EmitOnOutputPortAddedEvent(OutputPortToAdd);]]></ST>
+        <ST><![CDATA[RegisterOutputPort(OutputPort);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddParameter" Id="{22e10c77-042d-014a-1131-e8a94df32d37}">
@@ -88,134 +143,217 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[parameters.Insert(Parameter);
-EmitOnParameterAddedEvent(Parameter);]]></ST>
+        <ST><![CDATA[RegisterParameter(Parameter);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="EmitOnContentAddedEvent" Id="{982e38f9-d0ec-0d68-23b9-1014864696d7}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE EmitOnContentAddedEvent
+    <Method Name="CreateContent" Id="{821b80ea-fa86-42dc-87c5-a687613888b2}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateContent : I_Content
 VAR_INPUT
-	ContentAdded : I_Content;
+	ContentName : T_MAXSTRING;
+	ContentData : I_Datatype;
+END_VAR
+VAR
+	pContent : POINTER TO Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pContent := __NEW(Content(Name := ContentName, Data := ContentData, Parent := THIS^));
+CreateContent := pContent^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateInputPort" Id="{e170d3ea-2856-48fe-99f4-ab4fbe2d037c}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateInputPort : I_InputPort
+VAR_INPUT
+	InputPortName : T_MAXSTRING;
+	InputPortData : I_Datatype;
+END_VAR
+VAR
+	pInputPort: POINTER TO InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pInputPort := __NEW(InputPort(Name := InputPortName, Data := InputPortData, Parent := THIS^));
+CreateInputPort := pInputPort^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateOutputPort" Id="{bf3f2d9c-860a-4f77-a8dc-28e59fb38283}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateOutputPort : I_OutputPort
+VAR_INPUT
+	OutputPortName : T_MAXSTRING;
+	OutputPortData : I_Datatype;
+END_VAR
+VAR
+	pOutputPort : POINTER TO OutputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pOutputPort := __NEW(OutputPort(Name := OutputPortName, Data := OutputPortData, Parent := THIS^));
+CreateOutputPort := pOutputPort^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateParameter" Id="{1ddc001e-24d0-48f3-b9e0-ff7f17397987}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateParameter : I_Parameter
+VAR_INPUT
+	ParameterName : T_MAXSTRING;
+	ParameterData : I_Datatype;
+END_VAR
+VAR
+	pParameter : POINTER TO Parameter;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pParameter := __NEW(Parameter(Name := ParameterName, Data := ParameterData, Parent := THIS^));
+CreateParameter := pParameter^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeAll" Id="{cb49ffb4-2cda-42c6-89fb-5c15e2905cfd}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED DisposeAll : BOOL
+VAR_INPUT
+END_VAR
+VAR
+	disposable : I_Disposable;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE disposables.TryPop(disposable) DO
+	disposable.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnContentAddedEvent" Id="{982e38f9-d0ec-0d68-23b9-1014864696d7}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnContentAddedEvent
+VAR_INPUT
+	Content : I_Content;
 END_VAR
 VAR
 	pContentAddedEvent : POINTER TO ContentAddedEvent;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF ContentAdded = 0 THEN
+        <ST><![CDATA[IF Content = 0 THEN
 	RETURN;
 END_IF
 
-pContentAddedEvent := __NEW(ContentAddedEvent(TargetContent := ContentAdded));
+pContentAddedEvent := __NEW(ContentAddedEvent(TargetContent := Content));
 eventEmitter.Emit('OnContentAdded',pContentAddedEvent^);
 pContentAddedEvent^.Dispose();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="EmitOnErrorAddedEvent" Id="{5f18b0c5-cc95-02f2-100c-2ef3ad7e1a71}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE EmitOnErrorAddedEvent
+    <Method Name="EmitOnErrorAddedEvent" Id="{5f18b0c5-cc95-02f2-100c-2ef3ad7e1a71}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnErrorAddedEvent
 VAR_INPUT
-	ErrorAdded : I_Error;
+	Error : I_Error;
 END_VAR
 VAR
 	pErrorAddedEvent : POINTER TO ErrorAddedEvent;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF ErrorAdded = 0 THEN
+        <ST><![CDATA[IF Error = 0 THEN
 	RETURN;
 END_IF
 
-pErrorAddedEvent := __NEW(ErrorAddedEvent(TargetError := ErrorAdded));
+pErrorAddedEvent := __NEW(ErrorAddedEvent(TargetError := Error));
 eventEmitter.Emit('OnErrorAdded',pErrorAddedEvent^);
 pErrorAddedEvent^.Dispose();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="EmitOnExtensionAddedEvent" Id="{f402631d-81f9-0a12-03bc-2a0bfe9edd1d}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE EmitOnExtensionAddedEvent
+    <Method Name="EmitOnExtensionAddedEvent" Id="{f402631d-81f9-0a12-03bc-2a0bfe9edd1d}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnExtensionAddedEvent
 VAR_INPUT
-	ExtensionAdded : I_Extension;
+	Extension : I_Extension;
 END_VAR
 VAR
 	pExtensionAddedEvent : POINTER TO ExtensionAddedEvent;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF ExtensionAdded = 0 THEN
+        <ST><![CDATA[IF Extension = 0 THEN
 	RETURN;
 END_IF
 
-pExtensionAddedEvent := __NEW(ExtensionAddedEvent(TargetExtension := ExtensionAdded));
+pExtensionAddedEvent := __NEW(ExtensionAddedEvent(TargetExtension := Extension));
 eventEmitter.Emit('OnExtensionAdded',pExtensionAddedEvent^);
 pExtensionAddedEvent^.Dispose();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="EmitOnInputPortAddedEvent" Id="{999a27ba-e180-0c81-3fd5-7f26e1dcafa9}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE EmitOnInputPortAddedEvent
+    <Method Name="EmitOnInputPortAddedEvent" Id="{999a27ba-e180-0c81-3fd5-7f26e1dcafa9}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnInputPortAddedEvent
 VAR_INPUT
-	InputPortAdded : I_InputPort;
+	InputPort : I_InputPort;
 END_VAR
 VAR
 	pInputPortAddedEvent : POINTER TO InputPortAddedEvent;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF InputPortAdded = 0 THEN
+        <ST><![CDATA[IF InputPort = 0 THEN
 	RETURN;
 END_IF
 
-pInputPortAddedEvent := __NEW(InputPortAddedEvent(TargetInputPort := InputPortAdded));
+pInputPortAddedEvent := __NEW(InputPortAddedEvent(TargetInputPort := InputPort));
 eventEmitter.Emit('OnInputPortAdded',pInputPortAddedEvent^);
 pInputPortAddedEvent^.Dispose();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="EmitOnMetadatumAddedEvent" Id="{5e041b08-cbe4-0f2d-0996-099d35827b7a}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE EmitOnMetadatumAddedEvent
+    <Method Name="EmitOnMetadatumAddedEvent" Id="{5e041b08-cbe4-0f2d-0996-099d35827b7a}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnMetadatumAddedEvent
 VAR_INPUT
-	MetadatumAdded : I_Metadatum;
+	Metadatum : I_Metadatum;
 END_VAR
 VAR
 	pMetadatumAddedEvent : POINTER TO MetadatumAddedEvent;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF MetadatumAdded = 0 THEN
+        <ST><![CDATA[IF Metadatum = 0 THEN
 	RETURN;
 END_IF
 
-pMetadatumAddedEvent := __NEW(MetadatumAddedEvent(TargetMetadatum := MetadatumAdded));
+pMetadatumAddedEvent := __NEW(MetadatumAddedEvent(TargetMetadatum := Metadatum));
 eventEmitter.Emit('OnMetadatumAdded',pMetadatumAddedEvent^);
 pMetadatumAddedEvent^.Dispose();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="EmitOnOutputPortAddedEvent" Id="{0092de63-0b62-04d1-3582-5fcf00057f98}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE EmitOnOutputPortAddedEvent
+    <Method Name="EmitOnOutputPortAddedEvent" Id="{0092de63-0b62-04d1-3582-5fcf00057f98}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnOutputPortAddedEvent
 VAR_INPUT
-	OutputPortAdded : I_OutputPort;
+	OutputPort : I_OutputPort;
 END_VAR
 VAR
 	pOutputPortAddedEvent : POINTER TO OutputPortAddedEvent;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF OutputPortAdded = 0 THEN
+        <ST><![CDATA[IF OutputPort = 0 THEN
 	RETURN;
 END_IF
 
-pOutputPortAddedEvent := __NEW(OutputPortAddedEvent(TargetOutputPort := OutputPortAdded));
+pOutputPortAddedEvent := __NEW(OutputPortAddedEvent(TargetOutputPort := OutputPort));
 eventEmitter.Emit('OnOutputPortAdded',pOutputPortAddedEvent^);
 pOutputPortAddedEvent^.Dispose();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="EmitOnParameterAddedEvent" Id="{ef9a119a-00ba-01e3-3336-a5211fd3bf30}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE EmitOnParameterAddedEvent
+    <Method Name="EmitOnParameterAddedEvent" Id="{ef9a119a-00ba-01e3-3336-a5211fd3bf30}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnParameterAddedEvent
 VAR_INPUT
-	PropertyAdded : I_Parameter;
+	Parameter : I_Parameter;
 END_VAR
 VAR
-	pPropertyAddedEvent : POINTER TO PropertyAddedEvent;
+	pParameterAddedEvent : POINTER TO PropertyAddedEvent;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF PropertyAdded = 0 THEN
+        <ST><![CDATA[IF Parameter = 0 THEN
 	RETURN;
 END_IF
 
-pPropertyAddedEvent := __NEW(PropertyAddedEvent(TargetProperty := PropertyAdded));
-eventEmitter.Emit('OnPropertyAdded',pPropertyAddedEvent^);
-pPropertyAddedEvent^.Dispose();]]></ST>
+pParameterAddedEvent := __NEW(PropertyAddedEvent(TargetProperty := Parameter));
+eventEmitter.Emit('OnParameterAdded',pParameterAddedEvent^);
+pParameterAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{6b932cb7-4150-4273-8597-9e500c0eaf5e}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DisposeAll();]]></ST>
       </Implementation>
     </Method>
     <Method Name="GetContents" Id="{81f125c5-c13a-026a-3de6-aa1ebc6668c9}">
@@ -309,6 +447,92 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterContent" Id="{b67f9558-618d-4bfd-b717-886a90f2936b}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterContent
+VAR_INPUT
+	Content : I_Content;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[contents.Insert(Content);
+EmitOnContentAddedEvent(Content);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterDisposableToSelf" Id="{818ccf26-b9c1-40b3-8452-6ca75c4281c5}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterDisposableToSelf
+VAR_INPUT
+	Disposable : I_Disposable;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[disposables.Push(Disposable);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterError" Id="{65cdee1a-3625-45b6-bfd7-f72ce4f3aef5}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterError
+VAR_INPUT
+	Error : I_Error;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[errors.Insert(Error);
+EmitOnErrorAddedEvent(Error);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterExtension" Id="{f527d3d7-1297-4450-90c8-dbf3475e7a3d}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterExtension
+VAR_INPUT
+	Extension : I_Extension;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[extensions.Insert(Extension);
+EmitOnExtensionAddedEvent(Extension);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterInputPort" Id="{a90f95fc-e99b-45fe-ad6f-5621929e0e45}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterInputPort
+VAR_INPUT
+	InputPort : I_InputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[inputPorts.Insert(InputPort);
+EmitOnInputPortAddedEvent(InputPort);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterMetadatum" Id="{c3fb64d8-e827-436e-9972-728da0497a0c}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterMetadatum
+VAR_INPUT
+	Metadatum : I_Metadatum;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[metadata.Insert(Metadatum);
+EmitOnMetadatumAddedEvent(Metadatum);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterOutputPort" Id="{8be6e625-9fd4-44dd-a437-f152d0338e1b}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterOutputPort
+VAR_INPUT
+	OutputPort : I_OutputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[outputPorts.Insert(OutputPort);
+EmitOnOutputPortAddedEvent(OutputPort);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterParameter" Id="{8ed8ffd2-775b-4ca8-bf44-de6ba556c507}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterParameter
+VAR_INPUT
+	Parameter : I_Parameter;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[parameters.Insert(Parameter);
+EmitOnParameterAddedEvent(Parameter);]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetContentByName" Id="{5ed45c1e-e709-063a-078b-c4ffa6e05f7e}">

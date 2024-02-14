@@ -6,7 +6,7 @@
     <Method Name="AddInputPort" Id="{135eb44b-cbc4-0e2f-0792-05757aacdb77}">
       <Declaration><![CDATA[METHOD AddInputPort
 VAR_INPUT
-	InputPortToAdd : I_InputPort;
+	InputPort : I_InputPort;
 END_VAR
 ]]></Declaration>
     </Method>

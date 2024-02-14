@@ -18,13 +18,25 @@
     <LibraryReferences>{0316d8aa-5460-44e8-a6c7-40422389f1e0}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Lib\Deseriazliser\DeserializerParent.TcPOU">
+    <Compile Include="Lib\DUT\Enums\LOG_LEVEL.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\Deseriazliser\I_Deserializable.TcIO">
+    <Compile Include="Lib\DUT\FilePath.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\Deseriazliser\I_Deserializer.TcIO">
+    <Compile Include="Lib\DUT\HugeString.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\DUT\NodeProfile.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\DUT\PortId.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\DUT\RouterMemory.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\DUT\Uuid.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\API\JsonGraphApi.TcPOU">
@@ -36,7 +48,7 @@
     <Compile Include="Lib\GraphFramework\BaseElement\I_BaseElement.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Content\Any\Content.TcPOU">
+    <Compile Include="Lib\GraphFramework\Content\Base\Content.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Content\Collection\Contents.TcPOU">
@@ -49,60 +61,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Content\Interface\I_HaveContent.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Data\Data.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Data\I_ReadableData.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Data\I_Disposer.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Data\I_WritableData.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\DataTypes\Enums\LOG_LEVEL.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\DataTypes\FilePath.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\DataTypes\HugeString.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\DataTypes\NodeId.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\DataTypes\NodeProfile.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\DataTypes\PortId.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\DataTypes\RouterMemory.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\DataTypes\Uuid.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Datatype\Collection\I_Datatypes.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Datatype\Collection\Datatypes.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Datatype\GraphDatatypes.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Datatype\Interfaces\I_DatatypePack.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Datatype\Interfaces\I_GraphDatatypes.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Disposable\Collection\DisposableCollection.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Error\Base\Error.TcPOU">
@@ -367,9 +325,6 @@
     <Compile Include="Lib\GraphFramework\Node\Interface\I_Node.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Parameters\Base\PortParameter.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Lib\GraphFramework\Parsers\I_GraphSettings.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -400,10 +355,10 @@
     <Compile Include="Lib\GraphFramework\Parsers\Parsers\JsonPropertySettingsParser.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Port\Any\InputPort.TcPOU">
+    <Compile Include="Lib\GraphFramework\Port\Base\InputPort.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Port\Any\OutputPort.TcPOU">
+    <Compile Include="Lib\GraphFramework\Port\Base\OutputPort.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Port\Collections\InputPorts.TcPOU">
@@ -526,19 +481,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Lib" />
+    <Folder Include="Lib\DUT" />
+    <Folder Include="Lib\DUT\Enums" />
     <Folder Include="Lib\GraphFramework" />
     <Folder Include="Lib\GraphFramework\API" />
     <Folder Include="Lib\GraphFramework\BaseElement" />
     <Folder Include="Lib\GraphFramework\Content" />
-    <Folder Include="Lib\GraphFramework\Content\Any" />
+    <Folder Include="Lib\GraphFramework\Content\Base" />
     <Folder Include="Lib\GraphFramework\Content\Collection" />
     <Folder Include="Lib\GraphFramework\Content\Interface" />
-    <Folder Include="Lib\GraphFramework\Data" />
-    <Folder Include="Lib\GraphFramework\DataTypes" />
-    <Folder Include="Lib\GraphFramework\DataTypes\Enums" />
-    <Folder Include="Lib\GraphFramework\Datatype\Collection" />
-    <Folder Include="Lib\GraphFramework\Disposable" />
-    <Folder Include="Lib\GraphFramework\Disposable\Collection" />
     <Folder Include="Lib\GraphFramework\Error" />
     <Folder Include="Lib\GraphFramework\Error\Base" />
     <Folder Include="Lib\GraphFramework\Error\Collection" />
@@ -564,8 +515,6 @@
     <Folder Include="Lib\GraphFramework\Function\IsValid" />
     <Folder Include="Lib\GraphFramework\Function\Namespace" />
     <Folder Include="Lib\GraphFramework\Graph" />
-    <Folder Include="Lib\GraphFramework\Datatype" />
-    <Folder Include="Lib\GraphFramework\Datatype\Interfaces" />
     <Folder Include="Lib\GraphFramework\Link" />
     <Folder Include="Lib\GraphFramework\LinkFactory" />
     <Folder Include="Lib\GraphFramework\Link\Base" />
@@ -583,7 +532,7 @@
     <Folder Include="Lib\GraphFramework\Node\Interface" />
     <Folder Include="Lib\GraphFramework\Parsers\Parsers" />
     <Folder Include="Lib\GraphFramework\Port" />
-    <Folder Include="Lib\GraphFramework\Port\Any" />
+    <Folder Include="Lib\GraphFramework\Port\Base" />
     <Folder Include="Lib\GraphFramework\Port\Collections" />
     <Folder Include="Lib\GraphFramework\Port\Interface" />
     <Folder Include="Lib\GraphFramework\Port\Trigger" />
@@ -594,7 +543,6 @@
     <Folder Include="Lib\GraphFramework\TcGraph" />
     <Folder Include="Lib\GraphFramework\Visitors" />
     <Folder Include="Lib\GraphFramework\Visitors\Interfaces" />
-    <Folder Include="Lib\Deseriazliser" />
     <Folder Include="Lib\PlcBasicNodePack" />
     <Folder Include="Lib\PlcBasicNodePack\Error" />
     <Folder Include="Lib\PlcBasicNodePack\Node" />

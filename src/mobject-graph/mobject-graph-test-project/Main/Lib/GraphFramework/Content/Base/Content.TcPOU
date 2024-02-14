@@ -1,11 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="Content" Id="{0d9cf418-5c17-01af-15e9-b437781a1d71}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK Content IMPLEMENTS I_Content
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK Content EXTENDS Disposable IMPLEMENTS I_Content
 VAR
 	_name : T_MAXSTRING;
-	_parent : I_HaveContent;
 	_data : I_Datatype;
+	_parent : I_HaveContent;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -38,7 +41,7 @@ END_VAR
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	Name : STRING;
+	Name : T_MAXSTRING;
 	Data : I_Datatype;
 	Parent : I_HaveContent;
 END_VAR]]></Declaration>
@@ -82,6 +85,20 @@ END_IF
 
 THIS^._parent := Parent;
 Parent.AddContent(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{d6dbce2b-9fc3-4a10-9518-677d2589af3a}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// make a content object.
+// content name
+// make a key called value, put _data in that
+
+_data.SerializeWith(Serializer);]]></ST>
       </Implementation>
     </Method>
   </POU>

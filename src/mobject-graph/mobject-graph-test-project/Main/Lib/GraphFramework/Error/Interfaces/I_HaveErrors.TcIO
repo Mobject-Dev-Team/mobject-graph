@@ -6,7 +6,7 @@
     <Method Name="AddError" Id="{23aee699-1229-0461-1c27-f5ff339c8835}">
       <Declaration><![CDATA[METHOD AddError
 VAR_INPUT
-	ErrorToAdd : I_Error;
+	Error : I_Error;
 END_VAR
 ]]></Declaration>
     </Method>

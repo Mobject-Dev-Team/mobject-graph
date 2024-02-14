@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="Parameter" Id="{eaa0ca54-0a21-0aaf-1dd9-4878564e4f5c}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK Parameter EXTENDS Disposable IMPLEMENTS I_Parameter
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK Parameter EXTENDS Disposable IMPLEMENTS I_Parameter
 VAR
 	_name : T_MAXSTRING;
+	_data : I_Datatype;
 	_parent : I_HaveParameters;
-	data : Data;
-	symbolDisposer : I_Disposer;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -20,20 +22,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Visitor.VisitProperty(this^);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Configure" Id="{c33d1ea8-59c8-0684-3a17-798cf0fc3705}">
-      <Declaration><![CDATA[METHOD PUBLIC Configure
-VAR_INPUT
-	Settings : I_ParameterSettings;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF Name <> Settings.Name THEN
-	RETURN;
-END_IF
-
-symbolDisposer := Settings.UpdateParameter(THIS^);]]></ST>
+        <ST><![CDATA[Visitor.VisitParameter(this^);]]></ST>
       </Implementation>
     </Method>
     <Property Name="Data" Id="{65957ab6-6ee1-024b-1dde-997589c13367}">
@@ -43,7 +32,7 @@ symbolDisposer := Settings.UpdateParameter(THIS^);]]></ST>
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[Parameter.Data := Parameter.Data.Data;]]></ST>
+          <ST><![CDATA[Data := _data;]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -53,12 +42,12 @@ VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	Name : T_MAXSTRING;
-	DataType : T_MAXSTRING;
+	Data : I_Datatype;
 	Parent : I_HaveParameters;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[_name := Name;
-Parameter.Data.Data := DataType;
+_data := Data;
 RegisterWithParent(Parent);]]></ST>
       </Implementation>
     </Method>
@@ -99,25 +88,27 @@ THIS^._parent := Parent;
 Parent.AddParameter(THIS^);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="TryGet" Id="{7d8920be-3571-0284-2f04-f629b52e0fe0}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGet : BOOL;
+    <Method Name="SerializeWith" Id="{5e3ea962-87a5-4ecc-9bc5-4626e13acdcc}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT
-	Value : ANY;
+	Serializer : I_Serializer;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TryGet := Parameter.Data.TryGet(Value);]]></ST>
+        <ST><![CDATA[_data.SerializeWith(Serializer);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="TryGetTo" Id="{38dd3473-b4ca-0cf6-33be-229503221308}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetTo : BOOL;
+    <Method Name="TryDeserializeFrom" Id="{0d32f2cc-8731-4442-b7e6-8584eb88345b}">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
 VAR_INPUT
-	Destination : PVOID;
-	DestinationSize : UDINT;
+	Deserializer : I_Deserializer;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TryGetTo := Parameter.Data.TryGetTo(Destination, DestinationSize);]]></ST>
+        <ST><![CDATA[// check name = prameter name
+
+
+TryDeserializeFrom := _data.TryDeserializeFrom(Deserializer);]]></ST>
       </Implementation>
     </Method>
   </POU>

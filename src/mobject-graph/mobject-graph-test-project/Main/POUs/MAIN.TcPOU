@@ -2,24 +2,26 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="MAIN" Id="{1c7dbdb3-3ad9-058e-2a75-807bd1bcee45}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
-VAR	
-	graphDatatypes : GraphDatatypes;	
-	graphApi : JsonGraphApi(graph,graphDatatypes);
-	
-	tcGraph : TcGraph;
+VAR		
+	graphFactory : GraphFactory;
 	graph : I_Graph;
+	graphApi : JsonGraphApi(graph);
+
 	nodePack_PlcBasic : NodePack_PlcBasic;
 	initialise: BOOL;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT initialise THEN
 	initialise := TRUE;
-	tcGraph.InstallNodePack(nodePack_PlcBasic);
-	graph := tcGraph.NewGraph();
+	graphFactory.InstallNodePack(nodePack_PlcBasic);
+	graph := graphFactory.Create();
 END_IF
 
 graph.Run();
-graphApi.CyclicCall();]]></ST>
+graphApi.CyclicCall();
+
+
+//graphFactory.GetBlueprints(serializer);]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

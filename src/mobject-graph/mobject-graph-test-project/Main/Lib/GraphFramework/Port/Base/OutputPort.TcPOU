@@ -1,19 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="OutputPort" Id="{4c7e0bce-9eb0-0f6a-044f-6a3cfc8b783d}" SpecialFunc="None">
-    <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK OutputPort EXTENDS Disposable IMPLEMENTS I_OutputPort
 VAR
 	_name : T_MAXSTRING;
-	_dataType : T_MAXSTRING;
-	data : Data;
+	_data : I_Datatype;
 	eventEmitter : EventEmitter;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{677256cd-e8af-081b-2804-5689f5f4149b}" />
-    <Folder Name="Private" Id="{6f5f4b13-ef19-01e5-075e-0ea3b801d3d7}" />
+    <Folder Name="Protected" Id="{6f5f4b13-ef19-01e5-075e-0ea3b801d3d7}" />
     <Method Name="Accept" Id="{685a8b40-a5b2-0491-3a06-acbf37dad5a1}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
@@ -24,19 +25,19 @@ END_VAR
         <ST><![CDATA[Visitor.VisitOutputPort(this^);]]></ST>
       </Implementation>
     </Method>
-    <Property Name="Data" Id="{eb163034-b0fd-0fe3-0fa5-fd0220399dfb}">
+    <Property Name="Data" Id="{f88ed905-c54b-4c6d-be97-9339266743b0}">
       <Declaration><![CDATA[PROPERTY PUBLIC Data : T_MAXSTRING]]></Declaration>
-      <Get Name="Get" Id="{7534416c-ca26-06ef-2b8b-0ad13dd0d8f6}">
+      <Get Name="Get" Id="{120b55e4-6686-441d-ae9a-fc15e5629d7f}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[OutputPort.Data := _dataType;]]></ST>
+          <ST><![CDATA[Data := _data;]]></ST>
         </Implementation>
       </Get>
     </Property>
-    <Method Name="EmitOnOutputPortChangeEvent" Id="{4cedd9f2-3d84-035e-18ce-b7ebc3af2524}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE EmitOnOutputPortChangeEvent
+    <Method Name="EmitOnOutputPortChangeEvent" Id="{4cedd9f2-3d84-035e-18ce-b7ebc3af2524}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD Protected EmitOnOutputPortChangeEvent
 VAR_INPUT
 	PortChanged : I_OutputPort;
 END_VAR
@@ -55,18 +56,13 @@ VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	Name : T_MAXSTRING;
-	DataType : T_MAXSTRING;
+	Data : I_Datatype;
 	Parent : I_HaveOutputPorts;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[_name := Name;
-_dataType := DataType;
-
-IF Parent = 0 THEN
-	RETURN;
-END_IF
-
-Parent.AddOutputPort(THIS^);]]></ST>
+_data := Data;
+RegisterWithParent(Parent);]]></ST>
       </Implementation>
     </Method>
     <Property Name="Name" Id="{a6251d93-37b5-06d7-00eb-bc1261f23075}">
@@ -110,51 +106,18 @@ END_VAR]]></Declaration>
         <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="TryGet" Id="{d7f053a1-edb3-045f-2e85-d7d160cdb265}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGet : BOOL;
+    <Method Name="RegisterWithParent" Id="{c7baf534-bf05-4f66-b2b4-ef8e09f96124}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterWithParent
 VAR_INPUT
-	Value : ANY;
-END_VAR
-]]></Declaration>
+	Parent : I_HaveOutputPorts;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TryGet := OutputPort.Data.TryGet(Value);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="TryGetTo" Id="{6e5c850e-5dc7-0ca4-0094-d63313848019}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetTo : BOOL;
-VAR_INPUT
-	Destination : PVOID;
-	DestinationSize : UDINT;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[TryGetTo := OutputPort.Data.TryGetTo(Destination, DestinationSize);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="TrySet" Id="{1e1c2da9-f2e1-0401-2df7-d89f92cc9a3e}">
-      <Declaration><![CDATA[METHOD PUBLIC TrySet : BOOL;
-VAR_INPUT
-	Value : ANY;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[TrySet := OutputPort.Data.TrySet(Value);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="TrySetFrom" Id="{76d02626-79e8-0585-25de-a6810fcf20bc}">
-      <Declaration><![CDATA[METHOD PUBLIC TrySetFrom : BOOL;
-VAR_INPUT
-	SourceAddress : PVOID;
-	SourceSize : UDINT;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF NOT OutputPort.Data.TrySetFrom(SourceAddress, SourceSize) THEN
+        <ST><![CDATA[IF Parent = 0 THEN
 	RETURN;
 END_IF
 
-EmitOnOutputPortChangeEvent(THIS^);
-TrySetFrom := TRUE;]]></ST>
+THIS^._parent := Parent;
+Parent.AddOuputPort(THIS^);]]></ST>
       </Implementation>
     </Method>
   </POU>

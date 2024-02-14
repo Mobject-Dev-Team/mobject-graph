@@ -6,7 +6,15 @@
     <Method Name="AddContent" Id="{cf987282-ff3f-0893-1bfe-87351ab41c96}">
       <Declaration><![CDATA[METHOD AddContent
 VAR_INPUT
-	ContentToAdd : I_Content;
+	Content : I_Content;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddDataAsContent" Id="{794f70b3-ebc0-4576-8112-4da844755c3b}">
+      <Declaration><![CDATA[METHOD AddDataAsContent
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
 END_VAR
 ]]></Declaration>
     </Method>

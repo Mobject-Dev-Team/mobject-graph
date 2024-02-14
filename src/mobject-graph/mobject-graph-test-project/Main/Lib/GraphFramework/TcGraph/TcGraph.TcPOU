@@ -5,13 +5,11 @@
 VAR
 	nodeFactories : NodeFactorys;
 	linkFactory : LinkFactory;
-	graphInstances : DisposableCollection;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="Destructor" Id="{cde16e7f-bc17-023a-2501-56fd2e6cb23b}" />
     <Method Name="Accept" Id="{d8350354-5d0e-015a-02f7-c388e7f54195}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
@@ -20,20 +18,6 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Visitor.VisitTcGraph(this^);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="FB_exit" Id="{aa996191-c985-0afb-27da-1483fb1295fe}" FolderPath="Destructor\">
-      <Declaration><![CDATA[METHOD FB_exit : BOOL
-VAR_INPUT
-	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF bInCopyCode THEN
-	RETURN;
-END_IF
-
-graphInstances.DisposeAndRemoveAll();]]></ST>
       </Implementation>
     </Method>
     <Method Name="GetNodeFactories" Id="{c44bbbb1-a7c9-06c4-05cd-ffa320ca8ae8}">
@@ -64,7 +48,6 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[pGraph := __NEW(Graph(NodeFactories:= THIS^.nodeFactories,LinkFactory := THIS^.linkFactory));
-graphInstances.Insert(pGraph^);
 NewGraph := pGraph^;]]></ST>
       </Implementation>
     </Method>

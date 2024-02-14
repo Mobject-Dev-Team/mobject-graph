@@ -6,7 +6,7 @@
     <Method Name="AddExtension" Id="{21dfd60d-3eac-0633-1fbc-e2a67a4a7248}">
       <Declaration><![CDATA[METHOD AddExtension
 VAR_INPUT
-	ExtensionToAdd : I_Extension;
+	Extension : I_Extension;
 END_VAR
 ]]></Declaration>
     </Method>

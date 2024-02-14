@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_Parameter" Id="{01df4a8d-eb1b-0f3a-1311-1bc4ca42d2d5}">
-    <Declaration><![CDATA[INTERFACE I_Parameter EXTENDS __SYSTEM.IQueryInterface, I_Disposable, I_ReadableData
+    <Declaration><![CDATA[INTERFACE I_Parameter EXTENDS I_Disposable, I_Serializable, I_Deserializable
 ]]></Declaration>
     <Method Name="Accept" Id="{2833095d-c1ba-073d-2fe5-a4ab2f0685a6}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
@@ -10,17 +10,30 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
-    <Method Name="Configure" Id="{a5a48b39-2a3b-0b94-0b40-72d07ea41510}">
-      <Declaration><![CDATA[METHOD PUBLIC Configure
-VAR_INPUT
-	Settings : I_ParameterSettings;
-END_VAR]]></Declaration>
-    </Method>
+    <Property Name="Data" Id="{a3225c2a-c04d-491c-9465-883440a69abc}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : I_DataType]]></Declaration>
+      <Get Name="Get" Id="{1d2b54d5-d845-4727-9ee3-c22f11bd82c9}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Property Name="Name" Id="{c64e0aa6-0931-0bc7-1c4c-2bf3f1baaa60}">
       <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
       <Get Name="Get" Id="{a5aa0fd1-8b9e-0fa9-2e9f-5d84bf9eb18e}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
+    <Property Name="Parent" Id="{d0f0c9f9-fa66-490c-9471-8a5cb43964e4}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parent : I_HaveParameters]]></Declaration>
+      <Get Name="Get" Id="{9b9f7397-b54c-4fcc-adbc-b1c9bee53657}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TryDeserializeFrom" Id="{2325fc74-b1ca-4a93-9ebc-da5ed912d130}">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
+VAR_INPUT
+	deserializer : I_Deserializer;
+END_VAR
+]]></Declaration>
+    </Method>
   </Itf>
 </TcPlcObject>

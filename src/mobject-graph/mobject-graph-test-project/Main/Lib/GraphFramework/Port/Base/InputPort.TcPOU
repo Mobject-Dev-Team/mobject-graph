@@ -1,11 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="InputPort" Id="{8a76cd64-8399-006f-0213-1bb5b2341bca}" SpecialFunc="None">
-    <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK InputPort EXTENDS Disposable IMPLEMENTS I_InputPort
 VAR
 	_name : T_MAXSTRING;
-	_permittedDataTypes : T_MAXSTRING;
+	_data : I_Datatype;
 	_connectedTo : I_OutputPort;
 	eventEmitter : EventEmitter;
 END_VAR]]></Declaration>
@@ -13,7 +15,7 @@ END_VAR]]></Declaration>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{c02273f4-e8fc-0d09-3c19-79f73fa57a1b}" />
-    <Folder Name="Private" Id="{1f1fa75f-3537-0229-2498-8638fd4c140f}" />
+    <Folder Name="Protected" Id="{1f1fa75f-3537-0229-2498-8638fd4c140f}" />
     <Method Name="Accept" Id="{1625d170-79e2-014d-2c2b-8ace06c47aa1}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
@@ -52,11 +54,7 @@ _connectedTo.OnEvent('OnOutputPortChanged', THIS^);]]></ST>
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[IF NOT Connected THEN 
-	RETURN;
-END_IF
-
-Data := _connectedTo.Data;]]></ST>
+          <ST><![CDATA[Data := _data;]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -71,7 +69,7 @@ _connectedTo.OffEvent('OnOutputPortChanged', THIS^);
 _connectedTo := 0;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="EmitOnInputPortChanged" Id="{7ac9cdfd-9dc5-4ff8-8987-c18d9fe1fa6d}" FolderPath="Private\">
+    <Method Name="EmitOnInputPortChanged" Id="{7ac9cdfd-9dc5-4ff8-8987-c18d9fe1fa6d}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED EmitOnInputPortChanged
 VAR_INPUT
 	PortChanged : I_InputPort;
@@ -91,18 +89,13 @@ VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	Name : T_MAXSTRING;
-	PermittedDataTypes : T_MAXSTRING;
+	Data : I_Datatype;
 	Parent : I_HaveInputPorts;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[_name := Name;
-_permittedDataTypes := PermittedDataTypes;
-
-IF Parent = 0 THEN
-	RETURN;
-END_IF
-
-Parent.AddInputPort(THIS^);]]></ST>
+_data := Data;
+RegisterWithParent(Parent);]]></ST>
       </Implementation>
     </Method>
     <Method Name="HandleEvent" Id="{a301251b-128e-042e-2c82-4ee90daa8459}">
@@ -119,7 +112,7 @@ END_VAR]]></Declaration>
 END_IF]]></ST>
       </Implementation>
     </Method>
-    <Method Name="HandleOutputPortChangedEvent" Id="{9bdbd293-4e3d-0e2f-0079-1e62c2ac0372}" FolderPath="Private\">
+    <Method Name="HandleOutputPortChangedEvent" Id="{9bdbd293-4e3d-0e2f-0079-1e62c2ac0372}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED HandleOutputPortChangedEvent
 VAR_INPUT
 	Source : I_OutputPort;
@@ -169,44 +162,18 @@ END_VAR]]></Declaration>
         <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
       </Implementation>
     </Method>
-    <Property Name="PermittedDataTypes" Id="{756bbe97-8ed1-003d-213d-e72af1469808}">
-      <Declaration><![CDATA[PROPERTY PUBLIC PermittedDataTypes : T_MAXSTRING]]></Declaration>
-      <Get Name="Get" Id="{cd1c0acd-4bfd-0274-050d-5fc5fc240ae1}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[PermittedDataTypes := _permittedDataTypes;]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
-    <Method Name="TryGet" Id="{f813caa3-f9f5-0763-25b7-95603e18c9c7}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGet : BOOL;
+    <Method Name="RegisterWithParent" Id="{99f5fd26-21c8-4b31-8e93-5757e5345969}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterWithParent
 VAR_INPUT
-	Value : ANY;
-END_VAR
-]]></Declaration>
+	Parent : I_HaveInputPorts;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT Connected THEN
+        <ST><![CDATA[IF Parent = 0 THEN
 	RETURN;
 END_IF
 
-TryGet := _connectedTo.TryGet(Value);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="TryGetTo" Id="{6cdee704-352c-0268-1a5b-c9cf7fee8290}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetTo : BOOL;
-VAR_INPUT
-	Destination : PVOID;
-	DestinationSize : UDINT;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF NOT Connected THEN
-	RETURN;
-END_IF
-
-TryGetTo := _connectedTo.TryGetTo(Destination, DestinationSize);]]></ST>
+THIS^._parent := Parent;
+Parent.AddInputPort(THIS^);]]></ST>
       </Implementation>
     </Method>
   </POU>

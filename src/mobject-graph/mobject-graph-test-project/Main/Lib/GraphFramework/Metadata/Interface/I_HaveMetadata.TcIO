@@ -6,7 +6,7 @@
     <Method Name="AddMetadatum" Id="{c58c1d1e-b1d1-0e7a-041f-b8740747188f}">
       <Declaration><![CDATA[METHOD AddMetadatum
 VAR_INPUT
-	MetadatumToAdd : I_Metadatum;
+	Metadatum : I_Metadatum;
 END_VAR
 ]]></Declaration>
     </Method>
