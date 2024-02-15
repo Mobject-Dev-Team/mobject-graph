@@ -5,8 +5,6 @@
 FUNCTION_BLOCK NodeProfilerExtension EXTENDS ExtensionBase IMPLEMENTS I_EventHandler
 VAR
 	parent : I_Node;
-	nodeContent_NodeProfile : Content('NodeProfile','NodeProfile',THIS^);
-	nodeProfile : NodeProfile;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -52,9 +50,7 @@ VAR
 	nodeExecuteEndEvent : I_NodeExecuteEndEvent;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[{warning 'This needs to be implemented'} 
-
-IF __QUERYINTERFACE(Event, NodeExecuteBeginEvent) THEN
+        <ST><![CDATA[IF __QUERYINTERFACE(Event, NodeExecuteBeginEvent) THEN
 	//	
 ELSIF __QUERYINTERFACE(Event, NodeExecuteEndEvent) THEN
 	//

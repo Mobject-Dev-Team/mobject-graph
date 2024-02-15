@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <DUT Name="FilePath" Id="{6f0d0381-ad01-0b0a-3858-1bba46c4ab61}">
-    <Declaration><![CDATA[TYPE FilePath : STRING(255); END_TYPE
-]]></Declaration>
-  </DUT>
-</TcPlcObject>

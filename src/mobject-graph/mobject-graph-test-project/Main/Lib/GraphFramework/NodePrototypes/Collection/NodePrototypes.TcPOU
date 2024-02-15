@@ -8,15 +8,6 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="HasType" Id="{2598df50-d563-0c6e-0aca-47ba8cbbf0c4}">
-      <Declaration><![CDATA[METHOD PUBLIC HasType : BOOL
-VAR_INPUT
-	NodeType : T_MAXSTRING;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[nodePrototypes.ContainsKey(NodeType);]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="InsertByType" Id="{4d3a5f0c-8074-09fb-2906-a4aa05ab5434}">
       <Declaration><![CDATA[METHOD PUBLIC InsertByType
 VAR_INPUT
@@ -28,14 +19,59 @@ END_VAR]]></Declaration>
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="TryGetByType" Id="{ca3ebbc1-de44-0bf3-2840-81a4910c38fe}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetByType : BOOL
+    <Method Name="SerializeWith" Id="{f25de65d-af0a-443e-a337-1981688bbf8a}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT
-	NodeType : T_MAXSTRING;
-	Destination : REFERENCE TO I_NodePrototype;
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	types : I_Collection;
+	enumerator : I_ForwardEnumerator;
+	typeName : T_MAXSTRING;
+	nodePrototype : I_NodePrototype;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TryGetByType := nodePrototypes.TryGetValue(NodeType, TryGetByType);]]></ST>
+        <ST><![CDATA[Serializer.StartArray();
+
+types := nodePrototypes.GetKeys();
+enumerator := types.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	
+	IF NOT enumerator.TryGet(typeName) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT nodePrototypes.TryGetValue(typeName, nodePrototype) THEN
+		CONTINUE;
+	END_IF
+	
+	nodePrototype.SerializeWith(Serializer);
+
+END_WHILE
+
+enumerator.Dispose();
+types.Dispose();
+
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryCreateByType" Id="{ceb4bb2e-8751-4cf7-92a9-b7b5faf2cfa2}">
+      <Declaration><![CDATA[METHOD PUBLIC TryCreateByType : BOOL
+VAR_INPUT
+	NodeType : T_MAXSTRING;
+	Destination : I_Node;
+END_VAR
+VAR
+	nodePrototype : I_NodePrototype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT nodePrototypes.TryGetValue(NodeType,nodePrototype) THEN
+	RETURN;
+END_IF
+
+Destination := nodePrototype.Clone();
+TryCreateByType := TRUE;]]></ST>
       </Implementation>
     </Method>
   </POU>

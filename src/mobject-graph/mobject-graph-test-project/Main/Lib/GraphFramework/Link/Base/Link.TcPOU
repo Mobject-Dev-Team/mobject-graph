@@ -24,16 +24,6 @@ END_VAR
         <ST><![CDATA[_destinationPort.ConnectTo(_sourcePort);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Configure" Id="{d08b638b-f3b5-0933-2181-00c6c8b9c58c}">
-      <Declaration><![CDATA[METHOD PUBLIC Configure
-VAR_INPUT
-	Settings : I_LinkSettings;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="FB_exit" Id="{bf124050-f5ae-04c1-2639-e901fd1da054}" FolderPath="Destructor\">
       <Declaration><![CDATA[METHOD FB_exit : BOOL
 VAR_INPUT

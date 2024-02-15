@@ -4,25 +4,42 @@
     <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK FINAL Node_Literal_BOOL EXTENDS Node
 VAR
-	
-	// properties
-	nodeProperty_Value : Parameter('value','BOOL',THIS^);
-	
-	// outputs
-	nodeOutput_Out : NodeOutputPortPort('out','BOOL',THIS^);
-	
+	value : _BOOL(FALSE);
+	out : _BOOL(FALSE);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Folder Name="Constructor" Id="{863f9730-2402-4cae-b18c-1b1f3254b8a7}" />
+    <Method Name="Clone" Id="{2952cb38-91f7-44e6-a935-c5279debf1b1}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
+VAR
+	pointerToNode : POINTER TO Node_Literal_BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pointerToNode := __NEW(Node_Literal_BOOL);
+Clone := pointerToNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{cf395e6e-c369-4d7d-8c1f-e971ab74b218}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddDataAsParameter('value', value);
+AddDataAsOutputPort('out', out);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="OnExecute" Id="{17896f32-d471-0aa9-3949-762ff3592dce}">
       <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT
 VAR
 	currentValue : BOOL;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[nodeProperty_Value.Get(currentValue);
-nodeOutput_Out.Set(currentValue);]]></ST>
+        <ST><![CDATA[out.Value := value.Value;]]></ST>
       </Implementation>
     </Method>
   </POU>

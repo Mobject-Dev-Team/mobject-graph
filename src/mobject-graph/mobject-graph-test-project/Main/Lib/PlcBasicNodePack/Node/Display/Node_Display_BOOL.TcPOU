@@ -10,10 +10,9 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Folder Name="Constructor" Id="{42a89b44-fab0-4b3b-9c4d-0841fa503a09}" />
     <Method Name="Clone" Id="{fe15fbb0-95d8-43e8-9272-57a633d25d58}">
       <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
-VAR_INPUT
-END_VAR
 VAR
 	pointerToNode : POINTER TO Node_Display_BOOL;
 END_VAR]]></Declaration>
@@ -22,14 +21,16 @@ END_VAR]]></Declaration>
 Clone := pointerToNode^;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Initialize" Id="{22d7603e-6ae9-4a16-8191-4a4540c852e9}">
-      <Declaration><![CDATA[METHOD Initialize
+    <Method Name="FB_init" Id="{001f625d-e110-4911-9cfd-58c5271ab8b3}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Node.AddInputPort('in', in);
-Node.AddContent('display', display);]]></ST>
+        <ST><![CDATA[AddDataAsInputPort('in', in);
+AddDataAsContent('display', display);]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnExecute" Id="{3eea65a5-6bf3-0e0b-2473-3b373deefdf4}">

@@ -74,23 +74,6 @@ END_FOR
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="GetById" Id="{a50f1dc9-43ab-0243-0c04-834a82271a2c}">
-      <Declaration><![CDATA[METHOD PUBLIC GetById : I_Node
-VAR_INPUT
-	Id : DINT;
-END_VAR
-VAR
-	i : INT;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[FOR i := 0 TO lastNode DO
-	IF  nodes[i].Id = Id THEN
-		GetById := nodes[i];
-		RETURN;
-	END_IF
-END_FOR]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="GetByIndex" Id="{edf28911-bf94-050c-308d-ce5d03e562b6}">
       <Declaration><![CDATA[METHOD PUBLIC GetByIndex : I_Node
 VAR_INPUT
@@ -163,7 +146,7 @@ END_FOR]]></ST>
       </Implementation>
     </Method>
     <Method Name="Insert" Id="{2a819fd0-789a-0131-38dd-4dd9a5e26e27}">
-      <Declaration><![CDATA[METHOD PUBLIC Insert : NodeId
+      <Declaration><![CDATA[METHOD PUBLIC Insert
 VAR_INPUT
 	node : I_Node;
 END_VAR
@@ -179,6 +162,25 @@ END_FOR
 
 lastNode := lastNode + 1;
 nodes[lastNode] := node;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetById" Id="{a50f1dc9-43ab-0243-0c04-834a82271a2c}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetById : BOOL;
+VAR_INPUT
+	Id : DINT;
+	Destination : REFERENCE TO I_Node;
+END_VAR
+VAR
+	i : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i := 0 TO lastNode DO
+	IF  nodes[i].Id = Id THEN
+		Destination := nodes[i];
+		TryGetById := TRUE;
+		RETURN;
+	END_IF
+END_FOR]]></ST>
       </Implementation>
     </Method>
   </POU>

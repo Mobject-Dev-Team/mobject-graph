@@ -6,7 +6,13 @@
     <Method Name="Accept" Id="{d6b0227b-c6be-0b92-292f-1c6818ca100e}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
-	Visitor : I_TcGraphVisitor;
+	Visitor : I_GraphFactoryVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="GetNodePrototypes" Id="{fe605af4-4f06-48e6-8672-71b3b58eab8c}">
+      <Declaration><![CDATA[METHOD PUBLIC GetNodePrototypes : I_NodePrototypes
+VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
@@ -27,7 +33,7 @@ END_VAR
       <Declaration><![CDATA[METHOD PUBLIC RegisterNodeByType
 VAR_INPUT
 	NodeType : T_MAXSTRING;
-	NodeFactory : I_NodePrototypes;	
+	NodePrototype : I_NodePrototype;	
 END_VAR
 ]]></Declaration>
     </Method>

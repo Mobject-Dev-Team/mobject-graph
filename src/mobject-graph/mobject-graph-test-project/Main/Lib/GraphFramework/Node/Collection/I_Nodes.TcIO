@@ -15,13 +15,6 @@ END_VAR]]></Declaration>
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
-    <Method Name="GetById" Id="{40137c31-a513-0265-3cd0-61225f7b79b7}">
-      <Declaration><![CDATA[METHOD PUBLIC GetById : I_Node
-VAR_INPUT
-	Id : DINT;
-END_VAR
-]]></Declaration>
-    </Method>
     <Method Name="GetByIndex" Id="{abc22edb-160c-06b4-3513-ffd84ef8ec35}">
       <Declaration><![CDATA[METHOD PUBLIC GetByIndex : I_Node
 VAR_INPUT
@@ -41,6 +34,14 @@ END_VAR]]></Declaration>
 VAR_INPUT
 	CurrentNode : I_Node;
 END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryGetById" Id="{40137c31-a513-0265-3cd0-61225f7b79b7}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetById : BOOL;
+VAR_INPUT
+	Id : DINT;
+	Destination : REFERENCE TO I_Node;
+END_VAR
+]]></Declaration>
     </Method>
   </Itf>
 </TcPlcObject>

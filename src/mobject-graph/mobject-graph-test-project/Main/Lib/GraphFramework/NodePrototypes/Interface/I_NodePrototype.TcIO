@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_NodePrototype" Id="{80358c56-c17b-4fd6-bd4f-d40c394564e4}">
-    <Declaration><![CDATA[INTERFACE I_NodePrototype
+    <Declaration><![CDATA[INTERFACE I_NodePrototype EXTENDS I_Serializable
 ]]></Declaration>
     <Method Name="Clone" Id="{f434dfaa-76a7-4368-a9ea-37c90c5fda5f}">
       <Declaration><![CDATA[METHOD Clone : I_Node

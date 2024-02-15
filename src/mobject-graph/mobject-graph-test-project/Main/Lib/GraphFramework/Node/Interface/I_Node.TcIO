@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_Node" Id="{7e28b21d-6b2a-0b88-18bc-3ad32fd1a6c2}">
-    <Declaration><![CDATA[INTERFACE I_Node EXTENDS I_BaseElement
+    <Declaration><![CDATA[INTERFACE I_Node EXTENDS I_BaseElement, I_NodePrototype
 ]]></Declaration>
     <Method Name="Accept" Id="{9a7ac280-4430-0727-2fa0-fc419b9e7a74}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
@@ -9,11 +9,6 @@ VAR_INPUT
 	Visitor : I_NodeVisitor;
 END_VAR
 ]]></Declaration>
-    </Method>
-    <Method Name="Clone" Id="{db506ce6-8254-40c6-ab5d-bb6a93f7b619}">
-      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
-VAR_INPUT
-END_VAR]]></Declaration>
     </Method>
     <Method Name="Execute" Id="{7f9f5b88-6b3e-01b0-3c44-302ecbab1d70}">
       <Declaration><![CDATA[METHOD PUBLIC Execute

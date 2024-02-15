@@ -31,7 +31,7 @@ END_VAR
         <ST><![CDATA[Visitor.VisitNode(this^);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Clone" Id="{026c4113-8518-4d67-89a7-84bf1813f983}">
+    <Method Name="Clone" Id="{026c4113-8518-4d67-89a7-84bf1813f983}" FolderPath="Abstract\">
       <Declaration><![CDATA[METHOD PUBLIC ABSTRACT Clone : I_Node
 VAR_INPUT
 END_VAR]]></Declaration>

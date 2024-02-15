@@ -50,7 +50,7 @@ state := CLEARED;]]></ST>
     <Method Name="Raise" Id="{85c61a4a-d853-09be-378f-20a8832e1ec7}">
       <Declaration><![CDATA[METHOD PUBLIC Raise
 VAR_INPUT
-	NodeType : STRING;
+	NodeType : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[THIS^.nodeType := NodeType;

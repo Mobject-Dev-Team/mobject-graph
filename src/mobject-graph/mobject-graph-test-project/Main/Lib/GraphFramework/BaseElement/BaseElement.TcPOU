@@ -542,17 +542,19 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Serializer.AddKeyObject('inputPorts',inputPorts);
+        <ST><![CDATA[Serializer.StartObject();
+Serializer.AddKeyObject('inputPorts',inputPorts);
 Serializer.AddKeyObject('outputPorts',outputPorts);
 Serializer.AddKeyObject('parameters',parameters);
 Serializer.AddKeyObject('contents',contents);
 Serializer.AddKeyObject('errors',errors);
 Serializer.AddKeyObject('extensions',extensions);
-Serializer.AddKeyObject('metadata',metadata);]]></ST>
+Serializer.AddKeyObject('metadata',metadata);
+Serializer.EndObject();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryDeserializeExtensionsFrom" Id="{ad9e3ab9-6d42-4e27-a29c-b45a0249832c}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeExtensionsFrom : BOOL
+      <Declaration><![CDATA[METHOD PROTECTED TryDeserializeExtensionsFrom : BOOL
 VAR_INPUT
 	Deserializer : I_Deserializer;
 END_VAR
@@ -576,7 +578,7 @@ END_VAR]]></Declaration>
       </Implementation>
     </Method>
     <Method Name="TryDeserializeParametersFrom" Id="{c54ae027-05a9-42d5-aace-677f13db3ada}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeParametersFrom : BOOL
+      <Declaration><![CDATA[METHOD PROTECTED TryDeserializeParametersFrom : BOOL
 VAR_INPUT
 	Deserializer : I_Deserializer;
 END_VAR
