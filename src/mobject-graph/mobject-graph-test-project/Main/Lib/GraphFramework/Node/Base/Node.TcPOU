@@ -6,7 +6,7 @@
 {attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK ABSTRACT Node EXTENDS BaseElement IMPLEMENTS I_Node
 VAR
-	_id : NodeId;
+	_id : DINT;
 	_order : DINT;
 	_mode : DINT;
 	
@@ -15,8 +15,7 @@ VAR
 	nodeTriggerExtension : NodeTriggerExtension('NodeTrigger',THIS^);
 	//nodeProtectionAbility : NodeProtectionAbility(THIS^);
 	
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
@@ -38,48 +37,6 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Configure" Id="{0d8590ca-baee-09dd-1834-0876a5653808}">
-      <Declaration><![CDATA[METHOD PUBLIC Configure
-VAR_INPUT
-	Settings : I_NodeSettings;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[_id := Settings.Id;
-_order := Settings.Order;
-_mode := Settings.Mode;
-
-ConfigureParameters(Settings);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ConfigureParameters" Id="{932ba540-86b9-0fbd-3187-cd69e0f0eb92}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PROTECTED ConfigureParameters
-VAR_INPUT
-	NodeSettings : I_NodeSettings;
-END_VAR
-VAR
-	i: UDINT;
-	parameterSettings : I_ParameterSettings;
-	localParameter : I_Parameter;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF NodeSettings.HasProperties THEN
-
-	FOR i := 0 TO NodeSettings.PropertiesCount -1 DO
-		
-		parameterSettings := NodeSettings.GetPropertyByIndex(i);
-
-		IF NOT parameters.TryGetByName(parameterSettings.name, localParameter) THEN
-			CONTINUE;
-		END_IF
-		
-		localParameter.Configure(parameterSettings);
-		
-	END_FOR
-
-END_IF
-]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitNodeExecuteBeginEvent" Id="{446e8833-be75-08b5-20ae-de0735b20b11}" FolderPath="Private\">
@@ -152,7 +109,7 @@ END_VAR
       </Get>
     </Property>
     <Property Name="Mode" Id="{7c0c904d-4b3b-026a-34c8-a61976b560fb}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Mode : NodeId]]></Declaration>
+      <Declaration><![CDATA[PROPERTY PUBLIC Mode : DINT]]></Declaration>
       <Get Name="Get" Id="{e082d771-5c44-02f0-0e53-87177d47eeff}">
         <Declaration><![CDATA[VAR
 END_VAR
@@ -183,29 +140,16 @@ END_VAR
       <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
 VAR_INPUT
 	Deserializer : I_Deserializer;
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Deserializer.TryGetKeyDint('id', _id) AND 
-Deserializer.TryGetKeyDint('order', _order) AND 
+        <ST><![CDATA[// optional
+Deserializer.TryGetKeyDint('order', _order);
 Deserializer.TryGetKeyDint('mode', _mode);
 
-IF NodeSettings.HasProperties THEN
-
-	FOR i := 0 TO NodeSettings.PropertiesCount -1 DO
-		
-		parameterSettings := NodeSettings.GetPropertyByIndex(i);
-
-		IF NOT parameters.TryGetByName(parameterSettings.name, localParameter) THEN
-			CONTINUE;
-		END_IF
-		
-		localParameter.Configure(parameterSettings);
-		
-	END_FOR
-
-END_IF
-]]></ST>
+// required
+TryDeserializeFrom := 
+	Deserializer.TryGetKeyDint('id', _id) AND
+	SUPER^.TryDeserializeFrom(Deserializer);]]></ST>
       </Implementation>
     </Method>
   </POU>

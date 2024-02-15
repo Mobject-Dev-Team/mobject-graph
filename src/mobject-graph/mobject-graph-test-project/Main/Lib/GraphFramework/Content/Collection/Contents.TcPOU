@@ -28,6 +28,31 @@ END_VAR
         <ST><![CDATA[contents.Push(ContentToAdd);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="SerializeWith" Id="{f57eb302-bc14-4cb5-8668-e95637ae63bc}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	content : I_Contents;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartArray();
+
+enumerator := contents.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(content) THEN
+		content.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TryGetByName" Id="{edbb8fd1-89ca-0968-2295-bfb960669b42}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetByName : BOOL
 VAR_INPUT

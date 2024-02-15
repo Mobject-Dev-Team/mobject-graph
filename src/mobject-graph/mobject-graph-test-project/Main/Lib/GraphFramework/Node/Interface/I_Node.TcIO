@@ -15,24 +15,18 @@ END_VAR
 VAR_INPUT
 END_VAR]]></Declaration>
     </Method>
-    <Method Name="Configure" Id="{da25a7ed-2d43-0a52-3287-cecc0f4764e8}">
-      <Declaration><![CDATA[METHOD PUBLIC Configure
-VAR_INPUT
-	Settings : I_NodeSettings;
-END_VAR]]></Declaration>
-    </Method>
     <Method Name="Execute" Id="{7f9f5b88-6b3e-01b0-3c44-302ecbab1d70}">
       <Declaration><![CDATA[METHOD PUBLIC Execute
 ]]></Declaration>
     </Method>
     <Property Name="Id" Id="{3f0a605f-e0ca-0b68-32ae-dc045045cbef}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Id : NodeId]]></Declaration>
+      <Declaration><![CDATA[PROPERTY PUBLIC Id : DINT]]></Declaration>
       <Get Name="Get" Id="{9693ab0f-432b-03b3-2695-d2bcd82c6f64}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
     <Property Name="Mode" Id="{ec3476cc-9f6e-0390-3d95-a2e1e0263e0e}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Mode : NodeId]]></Declaration>
+      <Declaration><![CDATA[PROPERTY PUBLIC Mode : DINT]]></Declaration>
       <Get Name="Get" Id="{d5d5fc57-033b-053e-0bee-8afed9f6afe1}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

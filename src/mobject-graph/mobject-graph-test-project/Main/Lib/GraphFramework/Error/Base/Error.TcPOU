@@ -86,5 +86,27 @@ END_IF
 Parent.AddError(THIS^);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="SerializeWith" Id="{a2ed8123-2f68-4e86-a79d-a0fb02c58153}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	isActive : BOOL := Active;
+	errorMessage : T_MAXSTRING := Message;
+	reasonMessage : T_MAXSTRING := Reason;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartObject();
+Serializer.AddKeyString('message',errorMessage);
+Serializer.AddKeyBool('active',isActive);
+
+IF isActive THEN
+	Serializer.AddKeyString('reason',reasonMessage);
+END_IF
+
+Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

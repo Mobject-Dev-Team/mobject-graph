@@ -18,14 +18,14 @@ END_VAR]]></Declaration>
     <Method Name="GetById" Id="{40137c31-a513-0265-3cd0-61225f7b79b7}">
       <Declaration><![CDATA[METHOD PUBLIC GetById : I_Node
 VAR_INPUT
-	Id : NodeId;
+	Id : DINT;
 END_VAR
 ]]></Declaration>
     </Method>
     <Method Name="GetByIndex" Id="{abc22edb-160c-06b4-3513-ffd84ef8ec35}">
       <Declaration><![CDATA[METHOD PUBLIC GetByIndex : I_Node
 VAR_INPUT
-	Id : NodeId;
+	Id : DINT;
 END_VAR]]></Declaration>
     </Method>
     <Method Name="GetFirst" Id="{feddbc3f-4e18-0f11-38ed-c4eba56c857b}">

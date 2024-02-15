@@ -26,5 +26,30 @@ END_VAR]]></Declaration>
         <ST><![CDATA[errors.Push(error);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="SerializeWith" Id="{e0cb92cc-0211-4540-9717-abbb6fd1de74}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartArray();
+
+enumerator := errors.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(error) THEN
+		error.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

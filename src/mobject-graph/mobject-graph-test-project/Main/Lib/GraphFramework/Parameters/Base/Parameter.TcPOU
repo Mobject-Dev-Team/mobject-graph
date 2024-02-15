@@ -26,7 +26,7 @@ END_VAR
       </Implementation>
     </Method>
     <Property Name="Data" Id="{65957ab6-6ee1-024b-1dde-997589c13367}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Data : T_MAXSTRING]]></Declaration>
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : I_Datatype]]></Declaration>
       <Get Name="Get" Id="{8cff9333-d85d-0ca7-1ef2-0b421589b885}">
         <Declaration><![CDATA[VAR
 END_VAR
@@ -95,7 +95,12 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[_data.SerializeWith(Serializer);]]></ST>
+        <ST><![CDATA[Serializer.StartObject();
+Serializer.AddKeyString('name',_name);
+Serializer.Addkey('datatype');
+_data.SerializeTypeWith(Serializer);
+Serializer.AddkeyObject('value',_data);
+Serializer.EndObject();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryDeserializeFrom" Id="{0d32f2cc-8731-4442-b7e6-8584eb88345b}">

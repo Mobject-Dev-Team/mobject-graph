@@ -535,6 +535,59 @@ END_VAR
 EmitOnParameterAddedEvent(Parameter);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="SerializeWith" Id="{41b86bad-3ef8-4c80-9f08-2299a4ef627c}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.AddKeyObject('inputPorts',inputPorts);
+Serializer.AddKeyObject('outputPorts',outputPorts);
+Serializer.AddKeyObject('parameters',parameters);
+Serializer.AddKeyObject('contents',contents);
+Serializer.AddKeyObject('errors',errors);
+Serializer.AddKeyObject('extensions',extensions);
+Serializer.AddKeyObject('metadata',metadata);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeExtensionsFrom" Id="{ad9e3ab9-6d42-4e27-a29c-b45a0249832c}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeExtensionsFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+END_VAR
+VAR
+	extensionsDeserializer : I_Deserializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[extensionsDeserializer := Deserializer.GetKey('extensions');
+extensions.TryDeserializeFrom(extensionsDeserializer);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeFrom" Id="{520fe007-9bcd-4e66-88a2-2aa342fc675e}">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryDeserializeFrom := 
+	TryDeserializeParametersFrom(Deserializer) AND 
+	TryDeserializeExtensionsFrom(Deserializer);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeParametersFrom" Id="{c54ae027-05a9-42d5-aace-677f13db3ada}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeParametersFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+END_VAR
+VAR
+	parametersDeserializer : I_Deserializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[parametersDeserializer := Deserializer.GetKey('properties');
+parameters.TryDeserializeFrom(parametersDeserializer);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TryGetContentByName" Id="{5ed45c1e-e709-063a-078b-c4ffa6e05f7e}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetContentByName : BOOL
 VAR_INPUT

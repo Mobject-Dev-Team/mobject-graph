@@ -28,6 +28,60 @@ END_VAR
         <ST><![CDATA[parameters.Push(Parameter);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="SerializeWith" Id="{ae1f03e9-c5ee-4a9f-80eb-7d641657c86b}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	parameter : I_Parameter;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartArray();
+
+enumerator := parameters.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(parameter) THEN
+		parameter.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeFrom" Id="{ffd7c67c-11e7-4eaa-a908-f30daed5d6af}">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+END_VAR
+VAR
+	parametersDeserializer : I_Deserializer;
+	parametersEnumerator : I_DeserializerForwardEnumerator;
+	parameterName : T_MAXSTRING;
+	parameter : I_Parameter;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[parametersEnumerator := Deserializer.GetObjectKeyEnumerator();
+
+WHILE parametersEnumerator.MoveNext() DO
+	
+	IF NOT parametersEnumerator.Current.TryGetName(parameterName) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT TryGetByName(parameterName, parameter)THEN
+		CONTINUE;
+	END_IF
+	
+	parameter.TryDeserializeFrom(parametersEnumerator.Current);
+
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TryGetByName" Id="{e7acd9b9-fb76-06eb-2ed3-d373073fdcfe}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetByName : BOOL
 VAR_INPUT

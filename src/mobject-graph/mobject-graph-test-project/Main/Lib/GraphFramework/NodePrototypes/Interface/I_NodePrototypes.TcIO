@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <Itf Name="I_NodeFactory" Id="{f17dfa9a-d58a-0253-28a9-a9333d414dc7}">
-    <Declaration><![CDATA[INTERFACE I_NodeFactory
+  <Itf Name="I_NodePrototypes" Id="{f17dfa9a-d58a-0253-28a9-a9333d414dc7}">
+    <Declaration><![CDATA[INTERFACE I_NodePrototypes
 ]]></Declaration>
     <Method Name="Create" Id="{7791efde-3f8b-0c4c-15fc-4d13fe1c8d5a}">
       <Declaration><![CDATA[METHOD PUBLIC Create : I_Node]]></Declaration>

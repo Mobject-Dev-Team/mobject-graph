@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_InputPorts" Id="{94227c78-86cf-000d-3859-5ce8c7e6b5ed}">
-    <Declaration><![CDATA[INTERFACE I_InputPorts
+    <Declaration><![CDATA[INTERFACE I_InputPorts EXTENDS I_Serializable
 ]]></Declaration>
     <Method Name="GetEnumerator" Id="{90c5fafc-11b0-0611-02f9-b83a25964a95}">
       <Declaration><![CDATA[METHOD PUBLIC GetEnumerator : I_ForwardEnumerator

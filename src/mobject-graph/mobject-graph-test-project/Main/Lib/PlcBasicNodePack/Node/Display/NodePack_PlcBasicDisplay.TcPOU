@@ -12,7 +12,7 @@ END_VAR
     <Method Name="RegisterWithGraph" Id="{41c9db0a-1f24-0d2a-0d64-b28dad2a40b1}">
       <Declaration><![CDATA[METHOD PUBLIC RegisterWithGraph
 VAR_INPUT
-	TcGraph : I_TcGraph;
+	TcGraph : I_GraphFactory;
 END_VAR
 ]]></Declaration>
       <Implementation>

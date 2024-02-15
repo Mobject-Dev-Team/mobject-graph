@@ -28,6 +28,31 @@ END_VAR
         <ST><![CDATA[ports.Push(PortToInsert);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="SerializeWith" Id="{55e20359-9b42-4bdf-9fbf-7523683aa11d}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	port : I_InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartArray();
+
+enumerator := ports.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(port) THEN
+		port.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TryGetByName" Id="{428b5b08-e0a6-0f29-0910-d89eb64fe796}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetByName : BOOL;
 VAR_INPUT

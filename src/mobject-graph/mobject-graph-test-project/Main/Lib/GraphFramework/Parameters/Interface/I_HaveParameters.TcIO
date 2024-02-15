@@ -8,9 +8,6 @@
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Data : I_Datatype;
-END_VAR
-VAR
-	newParameter : I_Parameter;
 END_VAR]]></Declaration>
     </Method>
     <Method Name="AddParameter" Id="{629b0de3-c6af-0abc-2e2a-6709cf7d0165}">

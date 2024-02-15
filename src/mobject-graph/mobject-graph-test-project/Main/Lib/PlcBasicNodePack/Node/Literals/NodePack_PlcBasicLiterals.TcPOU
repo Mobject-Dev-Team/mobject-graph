@@ -3,7 +3,7 @@
   <POU Name="NodePack_PlcBasicLiterals" Id="{09b91d76-6524-009b-0de9-751b027e358a}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK NodePack_PlcBasicLiterals IMPLEMENTS I_NodePack
 VAR
-	nodeFactory_Literal_BOOL : NodeFactory_Literal_BOOL;
+	node_Literal_BOOL : Node_Literal_BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -12,11 +12,11 @@ END_VAR
     <Method Name="RegisterWithGraph" Id="{3ef8db7d-47fb-090b-3597-c30640cd5056}">
       <Declaration><![CDATA[METHOD PUBLIC RegisterWithGraph
 VAR_INPUT
-	TcGraph : I_TcGraph;
+	TcGraph : I_GraphFactory;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TcGraph.RegisterNodeFactoryByType('PLC Basic/Literals/BOOL',nodeFactory_Literal_BOOL);]]></ST>
+        <ST><![CDATA[TcGraph.RegisterNodeByType('PLC Basic/Literals/BOOL',node_Literal_BOOL);]]></ST>
       </Implementation>
     </Method>
   </POU>

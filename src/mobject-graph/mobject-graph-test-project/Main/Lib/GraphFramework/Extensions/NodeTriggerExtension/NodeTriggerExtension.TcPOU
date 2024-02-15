@@ -4,8 +4,8 @@
     <Declaration><![CDATA[FUNCTION_BLOCK NodeTriggerExtension EXTENDS ExtensionBase IMPLEMENTS I_EventHandler
 VAR
 	parent : I_Node;
-	nodeInput_Trigger : InputPort_Trigger('trigger','HRESULT',THIS^);
-	nodeOutput_Trigger : OutputPort('result','HRESULT',THIS^);
+	trigger : _HRESULT(S_OK);
+	result : _HRESULT(S_OK);
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -38,7 +38,9 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[THIS^.parent := Parent;
-RegisterWithParent();]]></ST>
+RegisterWithParent();
+AddDataAsInputPort('trigger',trigger);
+AddDataAsOutputPort('result',result);]]></ST>
       </Implementation>
     </Method>
     <Method Name="HandleEvent" Id="{425c6d59-f4b3-0dfd-36e8-c98c705cef2a}">

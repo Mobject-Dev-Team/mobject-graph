@@ -28,6 +28,31 @@ END_VAR
         <ST><![CDATA[metadata.Push(MetadatumToAdd);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="SerializeWith" Id="{2fcb906a-5cee-4fcc-8f70-e7c18e22b3cc}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	metadatum : I_Metadatum;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartArray();
+
+enumerator := metadata.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(metadatum) THEN
+		metadatum.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TryGetByName" Id="{cbaf7bca-e459-0b60-310e-3808dd545bde}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetByName : BOOL
 VAR_INPUT

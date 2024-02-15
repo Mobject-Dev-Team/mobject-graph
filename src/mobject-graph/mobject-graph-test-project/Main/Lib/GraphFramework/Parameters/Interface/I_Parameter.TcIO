@@ -28,12 +28,5 @@ END_VAR
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
-    <Method Name="TryDeserializeFrom" Id="{2325fc74-b1ca-4a93-9ebc-da5ed912d130}">
-      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
-VAR_INPUT
-	deserializer : I_Deserializer;
-END_VAR
-]]></Declaration>
-    </Method>
   </Itf>
 </TcPlcObject>

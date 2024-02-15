@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_BaseElement" Id="{edccaa5e-b335-05b5-362b-cf76e03aa61c}">
-    <Declaration><![CDATA[INTERFACE I_BaseElement EXTENDS I_Disposable, I_HaveContent, I_HaveInputPorts, I_HaveOutputPorts, I_HaveErrors, I_HaveParameters, I_HaveExtensions, I_HaveMetadata, I_EventEmitter, __SYSTEM.IQueryInterface
+    <Declaration><![CDATA[INTERFACE I_BaseElement EXTENDS I_Disposable, I_HaveContent, I_HaveInputPorts, I_HaveOutputPorts, I_HaveErrors, I_HaveParameters, I_HaveExtensions, I_HaveMetadata, I_EventEmitter, I_Deserializable, I_Serializable
 ]]></Declaration>
   </Itf>
 </TcPlcObject>

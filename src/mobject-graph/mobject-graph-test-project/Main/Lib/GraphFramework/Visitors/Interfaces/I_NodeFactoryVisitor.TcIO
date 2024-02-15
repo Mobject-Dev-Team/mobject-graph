@@ -6,7 +6,7 @@
     <Method Name="VisitNodeFactory" Id="{cf6a55c0-d0a7-0f61-0fe2-96bf6b707b33}">
       <Declaration><![CDATA[METHOD VisitNodeFactory
 VAR_INPUT
-	VisitingNodeFactory : I_NodeFactory;
+	VisitingNodeFactory : I_NodePrototypes;
 END_VAR
 ]]></Declaration>
     </Method>

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_OutputPort" Id="{ee2ad4f0-687d-0acb-0188-96d2063a474f}">
-    <Declaration><![CDATA[INTERFACE I_OutputPort EXTENDS I_Disposable, I_EventEmitter
+    <Declaration><![CDATA[INTERFACE I_OutputPort EXTENDS I_Disposable, I_EventEmitter, I_Serializable
 ]]></Declaration>
     <Method Name="Accept" Id="{6b9b017c-be5d-076e-1f48-61c0c312dadd}">
       <Declaration><![CDATA[METHOD PUBLIC Accept

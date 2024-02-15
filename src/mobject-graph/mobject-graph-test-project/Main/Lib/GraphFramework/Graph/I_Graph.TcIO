@@ -16,13 +16,6 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
-    <Method Name="Configure" Id="{a09939a6-ed78-0357-183d-971d6bed4005}">
-      <Declaration><![CDATA[METHOD PUBLIC Configure
-VAR_INPUT
-	Settings : I_GraphSettings;
-END_VAR
-]]></Declaration>
-    </Method>
     <Method Name="GetCurrentUuid" Id="{95f60cde-6a93-08ea-19d9-a52bd39c68e0}">
       <Declaration><![CDATA[METHOD PUBLIC GetCurrentUuid : Uuid
 VAR_INPUT

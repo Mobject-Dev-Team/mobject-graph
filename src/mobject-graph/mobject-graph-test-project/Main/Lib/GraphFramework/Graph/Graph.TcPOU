@@ -37,36 +37,6 @@ END_VAR
 nodes.DisposeAll();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Configure" Id="{8ca2cf39-da7f-0268-2882-9e8979c54c68}">
-      <Declaration><![CDATA[METHOD PUBLIC Configure
-VAR_INPUT
-	Settings : I_GraphSettings;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF currentGraphUuid <> Settings.Uuid THEN
-
-	currentGraphUuid := Settings.Uuid;
-	
-	Clear();
-	
-	IF Settings.NodeCount > 0 THEN
-		CreateNodes(Settings);
-	END_IF
-	
-	IF Settings.LinkCount > 0 THEN
-		CreateLinks(Settings);
-	END_IF
-
-ELSE
-
-	IF Settings.NodeCount > 0 THEN
-		UpdateNodeSettings(Settings);
-	END_IF
-
-END_IF]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="CreateLinks" Id="{d76133aa-fb5b-0afd-18d9-5b60757eff4b}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE CreateLinks
 VAR_INPUT
@@ -118,7 +88,7 @@ VAR
 	nodeCount : UDINT;
 	nodeSettings : I_NodeSettings;
 	nodeIndex : UDINT;	
-	nodeFactory : I_NodeFactory;
+	nodeFactory : I_NodePrototypes;
 	node : I_Node;
 	nodeId : NodeId;
 	nodeType : T_MAXSTRING;

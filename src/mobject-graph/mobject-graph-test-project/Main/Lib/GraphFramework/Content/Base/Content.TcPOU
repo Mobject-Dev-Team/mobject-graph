@@ -87,18 +87,19 @@ THIS^._parent := Parent;
 Parent.AddContent(THIS^);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="SerializeWith" Id="{d6dbce2b-9fc3-4a10-9518-677d2589af3a}">
+    <Method Name="SerializeWith" Id="{6317c1d0-0065-4904-b102-e91ba8ffb1e5}">
       <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT
 	Serializer : I_Serializer;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// make a content object.
-// content name
-// make a key called value, put _data in that
-
-_data.SerializeWith(Serializer);]]></ST>
+        <ST><![CDATA[Serializer.StartObject();
+Serializer.AddKeyString('name',_name);
+Serializer.Addkey('datatype');
+_data.SerializeTypeWith(Serializer);
+Serializer.AddkeyObject('value',_data);
+Serializer.EndObject();]]></ST>
       </Implementation>
     </Method>
   </POU>

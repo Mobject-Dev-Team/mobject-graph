@@ -28,6 +28,59 @@ END_VAR
         <ST><![CDATA[extensions.Push(ExtensionToAdd);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="SerializeWith" Id="{3972c617-e8db-48ec-a4a5-5fae32edf247}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	extension : I_Extension;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartArray();
+
+enumerator := extensions.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(extension) THEN
+		extension.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeFrom" Id="{5fd76894-9d93-4788-ac99-38ffd676b4e9}">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+END_VAR
+VAR
+	extensionsEnumerator : I_DeserializerForwardEnumerator;
+	extensionName : T_MAXSTRING;
+	extension : I_Extension;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[extensionsEnumerator := Deserializer.GetArrayElementEnumerator();
+
+WHILE extensionsEnumerator.MoveNext() DO
+	
+	IF NOT extensionsEnumerator.Current.TryGetKeyString('name',extensionName) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT TryGetByName(extensionName, extension)THEN
+		CONTINUE;
+	END_IF
+	
+	extension.TryDeserializeFrom(extensionsEnumerator.Current);
+
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TryGetByName" Id="{02ffb6dc-d7f2-07ef-266b-097a2ed92420}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetByName : BOOL
 VAR_INPUT

@@ -8,6 +8,7 @@ FUNCTION_BLOCK OutputPort EXTENDS Disposable IMPLEMENTS I_OutputPort
 VAR
 	_name : T_MAXSTRING;
 	_data : I_Datatype;
+	parent : I_HaveOutputPorts;
 	eventEmitter : EventEmitter;
 END_VAR]]></Declaration>
     <Implementation>
@@ -26,7 +27,7 @@ END_VAR
       </Implementation>
     </Method>
     <Property Name="Data" Id="{f88ed905-c54b-4c6d-be97-9339266743b0}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Data : T_MAXSTRING]]></Declaration>
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : I_Datatype]]></Declaration>
       <Get Name="Get" Id="{120b55e4-6686-441d-ae9a-fc15e5629d7f}">
         <Declaration><![CDATA[VAR
 END_VAR
@@ -116,8 +117,22 @@ END_VAR]]></Declaration>
 	RETURN;
 END_IF
 
-THIS^._parent := Parent;
-Parent.AddOuputPort(THIS^);]]></ST>
+THIS^.parent := Parent;
+Parent.AddOutputPort(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{dde3cc20-8117-4526-a740-816620bcd3a1}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartObject();
+Serializer.AddKeyString('name',_name);
+Serializer.Addkey('datatype');
+_data.SerializeTypeWith(Serializer);
+Serializer.AddkeyObject('value',_data);
+Serializer.EndObject();]]></ST>
       </Implementation>
     </Method>
   </POU>

@@ -77,7 +77,7 @@ END_FOR
     <Method Name="GetById" Id="{a50f1dc9-43ab-0243-0c04-834a82271a2c}">
       <Declaration><![CDATA[METHOD PUBLIC GetById : I_Node
 VAR_INPUT
-	Id : NodeId;
+	Id : DINT;
 END_VAR
 VAR
 	i : INT;
@@ -94,7 +94,7 @@ END_FOR]]></ST>
     <Method Name="GetByIndex" Id="{edf28911-bf94-050c-308d-ce5d03e562b6}">
       <Declaration><![CDATA[METHOD PUBLIC GetByIndex : I_Node
 VAR_INPUT
-	Id : NodeId;
+	Id : DINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[GetByIndex := nodes[Id];]]></ST>

@@ -6,7 +6,7 @@
     <Method Name="RegisterWithGraph" Id="{08c57c3e-0a8f-06be-0ca2-d87069d7f01b}">
       <Declaration><![CDATA[METHOD PUBLIC RegisterWithGraph
 VAR_INPUT
-	TcGraph : I_TcGraph;
+	TcGraph : I_GraphFactory;
 END_VAR
 ]]></Declaration>
     </Method>
