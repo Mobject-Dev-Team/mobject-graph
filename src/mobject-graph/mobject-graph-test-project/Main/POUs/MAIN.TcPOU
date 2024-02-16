@@ -4,27 +4,25 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR		
 	graphFactory : GraphFactory;
-//	graph : I_Graph;
-//	nodePack_PlcBasic : NodePack_PlcBasic;
+	graph : I_Graph;
+	nodePack_PlcBasic : NodePack_PlcBasic;
 	initialise: BOOL;
 	serialize: BOOL;
 	done : BOOL;
 	output : STRING(2000);
 	serializer : JsonSerializer();
-	
-//	test : Node_Literal_BOOL;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[//IF NOT initialise THEN
-//	initialise := TRUE;
-//	graphFactory.InstallNodePack(nodePack_PlcBasic);
-//	graph := graphFactory.NewGraph();
-//END_IF
+      <ST><![CDATA[IF NOT initialise THEN
+	initialise := TRUE;
+	graphFactory.InstallNodePack(nodePack_PlcBasic);
+	graph := graphFactory.NewGraph();
+END_IF
 
-//graph.Run();
+graph.Run();
 
 IF serialize THEN
-//	serialize := FALSE;
+	//serialize := FALSE;
 	serializer.Reset();
 	graphFactory.SerializeWith(serializer);
 	done := serializer.TryGetSerialziedData(ADR(output),SIZEOF(output));

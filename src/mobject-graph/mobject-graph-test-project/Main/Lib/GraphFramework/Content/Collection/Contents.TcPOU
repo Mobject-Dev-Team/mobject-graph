@@ -21,11 +21,11 @@ END_VAR
     <Method Name="Insert" Id="{648c5496-cfa7-07d8-3d0d-c88b3dcf6ad3}">
       <Declaration><![CDATA[METHOD PUBLIC Insert
 VAR_INPUT
-	ContentToAdd : I_Content;
+	Content : I_Content;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[contents.Push(ContentToAdd);]]></ST>
+        <ST><![CDATA[contents.Push(Content);]]></ST>
       </Implementation>
     </Method>
     <Method Name="SerializeWith" Id="{f57eb302-bc14-4cb5-8668-e95637ae63bc}">
@@ -35,7 +35,7 @@ VAR_INPUT
 END_VAR
 VAR
 	enumerator : I_ForwardEnumerator;
-	content : I_Contents;
+	content : I_Content;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[Serializer.StartArray();

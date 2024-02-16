@@ -20,10 +20,10 @@ END_VAR
     <Method Name="Insert" Id="{7e5598c6-1f95-0eb6-0614-4bf48418e5c0}">
       <Declaration><![CDATA[METHOD PUBLIC Insert
 VAR_INPUT
-	error : I_Error;
+	Error : I_Error;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[errors.Push(error);]]></ST>
+        <ST><![CDATA[errors.Push(Error);]]></ST>
       </Implementation>
     </Method>
     <Method Name="SerializeWith" Id="{e0cb92cc-0211-4540-9717-abbb6fd1de74}">

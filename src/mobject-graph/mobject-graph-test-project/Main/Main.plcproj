@@ -159,18 +159,6 @@
     <Compile Include="Lib\GraphFramework\Extensions\Interface\I_HaveExtensions.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Extensions\NodeProfilerExtension\NodeProfilerExtension.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Extensions\NodeProtectionExtension\Interface\I_NodeWithProtection.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Extensions\NodeProtectionExtension\NodeProtectionExtension.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Extensions\NodeTriggerExtension\NodeTriggerExtension.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Lib\GraphFramework\Function\AnyToString.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -435,10 +423,6 @@
     <Folder Include="Lib\GraphFramework\Extensions\Base" />
     <Folder Include="Lib\GraphFramework\Extensions\Collections" />
     <Folder Include="Lib\GraphFramework\Extensions\Interface" />
-    <Folder Include="Lib\GraphFramework\Extensions\NodeProfilerExtension" />
-    <Folder Include="Lib\GraphFramework\Extensions\NodeProtectionExtension" />
-    <Folder Include="Lib\GraphFramework\Extensions\NodeProtectionExtension\Interface" />
-    <Folder Include="Lib\GraphFramework\Extensions\NodeTriggerExtension" />
     <Folder Include="Lib\GraphFramework\Function" />
     <Folder Include="Lib\GraphFramework\Function\IsValid" />
     <Folder Include="Lib\GraphFramework\Function\Namespace" />

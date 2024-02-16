@@ -9,12 +9,6 @@ VAR
 	_id : DINT;
 	_order : DINT;
 	_mode : DINT;
-	
-	// node extensions
-	nodeProfilerExtension : NodeProfilerExtension('NodeProfilerExtension',THIS^);
-	nodeTriggerExtension : NodeTriggerExtension('NodeTrigger',THIS^);
-	//nodeProtectionAbility : NodeProtectionAbility(THIS^);
-	
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
