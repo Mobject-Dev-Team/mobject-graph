@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="ContentHost" Id="{29147696-d640-4aaf-b7eb-e1161d0ef104}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ContentHost IMPLEMENTS I_HaveContent, I_Serializable
+VAR
+	eventTarget : I_EventTarget;
+	selfCreatedContent : Stack;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{173c4e6f-13af-4c18-80d2-e7a43982d081}" />
+    <Folder Name="Destructor" Id="{01419939-ac15-467a-bc8c-a50a05fb716c}" />
+    <Folder Name="Protected" Id="{507c695e-d5e9-4330-b128-2f74bba9e8da}" />
+    <Method Name="AddDataAsContent" Id="{7d7dbfab-f047-4025-9ccf-858bac85c0c1}">
+      <Declaration><![CDATA[METHOD AddDataAsContent
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+VAR
+	newContent : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[newContent := CreateContent(Name, Data);
+selfCreatedContent.Push(newContent);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateContent" Id="{821b80ea-fa86-42dc-87c5-a687613888b2}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateContent : I_Content
+VAR_INPUT
+	ContentName : T_MAXSTRING;
+	ContentData : I_Datatype;
+END_VAR
+VAR
+	pContent : POINTER TO Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pContent := __NEW(Content(Name := ContentName, Data := ContentData, Parent := THIS^));
+CreateContent := pContent^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSelfCreatedContent" Id="{6f51ddea-8f7c-44d4-8341-b8a39ae914ea}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED DisposeSelfCreatedContent : BOOL
+VAR
+	content : I_Content;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedContent.TryPop(content) DO
+	content.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnContentAddedEvent" Id="{982e38f9-d0ec-0d68-23b9-1014864696d7}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnContentAddedEvent
+VAR_INPUT
+	Content : I_Content;
+END_VAR
+VAR
+	pContentAddedEvent : POINTER TO ContentAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eventTarget = 0 THEN
+	RETURN;
+END_IF
+
+pContentAddedEvent := __NEW(ContentAddedEvent(TargetContent := Content));
+eventTarget.Emit('OnContentAdded',pContentAddedEvent^);
+pContentAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{844be24d-f0ab-4ae1-8338-ab44813584f6}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DisposeSelfCreatedContent();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{2a740d82-de22-4725-911f-2def6b984edf}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	parentEventTarget : I_EventTarget;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetContents" Id="{bb5474ac-7ae3-4961-880b-1f80e7bfa58f}">
+      <Declaration><![CDATA[METHOD PUBLIC GetContents : I_Contents
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetContents := contents;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterContent" Id="{b67f9558-618d-4bfd-b717-886a90f2936b}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterContent
+VAR_INPUT
+	Content : I_Content;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[contents.Insert(Content);
+EmitOnContentAddedEvent(Content);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{a25d083a-f7ed-4bb9-acc7-2c878e04a202}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF contents.IsEmpty THEN
+	RETURN;
+END_IF
+
+Serializer.AddKeyObject('contents',contents);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetContentByName" Id="{fc9065ba-fc69-457c-8ff1-de7e3c5eded2}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetContentByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetContentByName := contents.TryGetByName(Name,Destination);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

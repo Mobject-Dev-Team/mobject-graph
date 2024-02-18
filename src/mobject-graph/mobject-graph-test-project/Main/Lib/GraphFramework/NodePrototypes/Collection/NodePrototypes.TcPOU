@@ -46,8 +46,11 @@ WHILE enumerator.MoveNext() DO
 		CONTINUE;
 	END_IF
 	
+	Serializer.StartObject();
+	Serializer.addkey(typeName);
 	nodePrototype.SerializeWith(Serializer);
-
+	Serializer.EndObject();
+	
 END_WHILE
 
 enumerator.Dispose();

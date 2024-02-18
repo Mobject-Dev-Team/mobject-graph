@@ -10,6 +10,12 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Property Name="Data" Id="{5a921ba8-4b93-4913-89f7-c27e879fddbf}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : I_Datatype]]></Declaration>
+      <Get Name="Get" Id="{d8ae7575-1348-4b02-a6d2-9077401b5ca9}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Property Name="Name" Id="{67c8a939-6cc5-01f4-2443-86e8aa7bc6b0}">
       <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
       <Get Name="Get" Id="{87b1c37b-6a0e-0c82-10a0-6e90c455f4d3}">

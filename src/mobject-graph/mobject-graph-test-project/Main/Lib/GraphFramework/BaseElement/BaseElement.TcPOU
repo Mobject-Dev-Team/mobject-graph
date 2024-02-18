@@ -59,6 +59,20 @@ END_VAR]]></Declaration>
 RegisterDisposableToSelf(newInputPort);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="AddDataAsMetadatum" Id="{ed05838c-c8db-47b2-b458-cf6a0e28cf42}">
+      <Declaration><![CDATA[METHOD AddDataAsMetadatum
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+VAR
+	newMetadatum : I_Metadatum;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[newMetadatum := CreateMetadatum(Name, Data);
+RegisterDisposableToSelf(newMetadatum);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="AddDataAsOutputPort" Id="{dca4d70a-2386-4112-8b2e-e77a6edffbe6}">
       <Declaration><![CDATA[METHOD AddDataAsOutputPort
 VAR_INPUT
@@ -146,20 +160,6 @@ END_VAR
         <ST><![CDATA[RegisterParameter(Parameter);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="CreateContent" Id="{821b80ea-fa86-42dc-87c5-a687613888b2}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED CreateContent : I_Content
-VAR_INPUT
-	ContentName : T_MAXSTRING;
-	ContentData : I_Datatype;
-END_VAR
-VAR
-	pContent : POINTER TO Content;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[pContent := __NEW(Content(Name := ContentName, Data := ContentData, Parent := THIS^));
-CreateContent := pContent^;]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="CreateInputPort" Id="{e170d3ea-2856-48fe-99f4-ab4fbe2d037c}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED CreateInputPort : I_InputPort
 VAR_INPUT
@@ -172,6 +172,20 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[pInputPort := __NEW(InputPort(Name := InputPortName, Data := InputPortData, Parent := THIS^));
 CreateInputPort := pInputPort^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateMetadatum" Id="{5968e678-9de2-4729-86a6-a85bb24c388e}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateMetadatum : I_Metadatum
+VAR_INPUT
+	MetadatumName : T_MAXSTRING;
+	MetadatumData : I_Datatype;
+END_VAR
+VAR
+	pMetadatum : POINTER TO Metadatum;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pMetadatum := __NEW(Metadatum(Name := MetadatumName, Data := MetadatumData, Parent := THIS^));
+CreateMetadatum := pMetadatum^;]]></ST>
       </Implementation>
     </Method>
     <Method Name="CreateOutputPort" Id="{bf3f2d9c-860a-4f77-a8dc-28e59fb38283}" FolderPath="Protected\">
@@ -214,24 +228,6 @@ END_VAR
         <ST><![CDATA[WHILE disposables.TryPop(disposable) DO
 	disposable.Dispose();
 END_WHILE]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="EmitOnContentAddedEvent" Id="{982e38f9-d0ec-0d68-23b9-1014864696d7}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED EmitOnContentAddedEvent
-VAR_INPUT
-	Content : I_Content;
-END_VAR
-VAR
-	pContentAddedEvent : POINTER TO ContentAddedEvent;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF Content = 0 THEN
-	RETURN;
-END_IF
-
-pContentAddedEvent := __NEW(ContentAddedEvent(TargetContent := Content));
-eventEmitter.Emit('OnContentAdded',pContentAddedEvent^);
-pContentAddedEvent^.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitOnErrorAddedEvent" Id="{5f18b0c5-cc95-02f2-100c-2ef3ad7e1a71}" FolderPath="Protected\">
@@ -447,17 +443,6 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="RegisterContent" Id="{b67f9558-618d-4bfd-b717-886a90f2936b}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED RegisterContent
-VAR_INPUT
-	Content : I_Content;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[contents.Insert(Content);
-EmitOnContentAddedEvent(Content);]]></ST>
       </Implementation>
     </Method>
     <Method Name="RegisterDisposableToSelf" Id="{818ccf26-b9c1-40b3-8452-6ca75c4281c5}" FolderPath="Protected\">

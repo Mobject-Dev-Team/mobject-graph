@@ -16,12 +16,12 @@ END_VAR
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
-    <Method Name="ConnectTo" Id="{1fbb9957-a7a2-0727-1cc1-31c666418ee0}">
-      <Declaration><![CDATA[METHOD PUBLIC ConnectTo
-VAR_INPUT
-	OutputPort : I_OutputPort;
-END_VAR]]></Declaration>
-    </Method>
+    <Property Name="Data" Id="{b55d5762-c176-4884-bb3a-7b30355000fa}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : I_Datatype]]></Declaration>
+      <Get Name="Get" Id="{0ed95262-bbc6-48c8-a744-40d990b519bd}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Method Name="Disconnect" Id="{94185341-941f-0d4c-1980-d9502ff11efe}">
       <Declaration><![CDATA[METHOD PUBLIC Disconnect]]></Declaration>
     </Method>
@@ -31,5 +31,11 @@ END_VAR]]></Declaration>
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
+    <Method Name="TryConnectTo" Id="{1fbb9957-a7a2-0727-1cc1-31c666418ee0}">
+      <Declaration><![CDATA[METHOD PUBLIC TryConnectTo : BOOL
+VAR_INPUT
+	OutputPort : I_OutputPort;
+END_VAR]]></Declaration>
+    </Method>
   </Itf>
 </TcPlcObject>

@@ -3,7 +3,7 @@
   <POU Name="Contents" Id="{1def75d3-5565-0fe4-3612-d21a56184e52}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK Contents IMPLEMENTS I_Contents
 VAR
-	contents : Stack;
+	contents : Dictionary;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -25,9 +25,20 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[contents.Push(Content);]]></ST>
+        <ST><![CDATA[contents.AddOrUpdate(Content.Name, Content);]]></ST>
       </Implementation>
     </Method>
+    <Property Name="IsEmpty" Id="{46e622f4-b20a-477b-b53d-b884b3d9ea91}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsEmpty : BOOL]]></Declaration>
+      <Get Name="Get" Id="{1b0b45be-4eb9-4419-aa46-1f4fe191ed63}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsEmpty := dictionary.Count = 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="SerializeWith" Id="{f57eb302-bc14-4cb5-8668-e95637ae63bc}">
       <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT
@@ -58,28 +69,9 @@ Serializer.EndArray();]]></ST>
 VAR_INPUT
 	Name : STRING;
 	Destination : REFERENCE TO I_Content;
-END_VAR
-VAR
-	contentEnumerator : I_ForwardEnumerator;
-	currentContent : I_Content;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[contentEnumerator := contents.GetEnumerator();
-
-WHILE contentEnumerator.MoveNext() DO 
-	IF NOT contentEnumerator.TryGet(currentContent) THEN
-		CONTINUE;
-	END_IF
-	
-	IF currentContent.Name = Name THEN 
-		TryGetByName := TRUE;
-		Destination := currentContent;
-		EXIT;
-	END_IF
-
-END_WHILE
-
-contentEnumerator.Dispose();]]></ST>
+        <ST><![CDATA[TryGetByName := contents.TryGetValue(Name, Destination);]]></ST>
       </Implementation>
     </Method>
   </POU>

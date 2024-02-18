@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Metadatum" Id="{9dc23d5a-5391-4b54-acb0-fc72c092c0a6}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK Metadatum EXTENDS Disposable IMPLEMENTS I_Metadatum
+VAR
+	_name : T_MAXSTRING;
+	_data : I_Datatype;
+	_parent : I_HaveMetadata;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{380d0cdc-a825-471a-a80e-305800f6a14f}" />
+    <Method Name="Accept" Id="{6f8de155-8f74-4187-a5f1-89b964883e7b}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_MetadatumVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitMetadatum(this^);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Data" Id="{1f08384a-ad17-4656-9266-d295bc49ca6b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : I_DataType]]></Declaration>
+      <Get Name="Get" Id="{6bd044f2-1ed6-4886-8de9-b72fc93799a6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Data := _data;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_init" Id="{f12b60c1-5b6b-4a60-aa74-ed6887a26adb}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+	Parent : I_HaveMetadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_name := Name;
+_data := Data;
+RegisterWithParent(Parent);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Name" Id="{7d510d0e-b0bd-4c58-9d6c-8ec215894a8d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{b00e5956-f01d-42d8-afaa-fdf3c20764df}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Name := _name;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Parent" Id="{b20d18ff-a3bb-4f17-aa08-cd54de68e847}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parent : I_HaveMetadata]]></Declaration>
+      <Get Name="Get" Id="{1a5b9b18-45d3-4475-80fc-ca556dfe6dd1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parent := _parent;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="RegisterWithParent" Id="{6b54993d-10bf-4725-a083-59647f58b79c}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterWithParent
+VAR_INPUT
+	Parent : I_HaveMetadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Parent = 0 THEN
+	RETURN;
+END_IF
+
+THIS^._parent := Parent;
+Parent.AddMetadatum(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{3a929e06-fbb8-41a6-bc16-617fa49ea7fb}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartObject();
+Serializer.AddKeyString('name',_name);
+Serializer.Addkey('datatype');
+_data.SerializeTypeWith(Serializer);
+Serializer.AddkeyObject('value',_data);
+Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

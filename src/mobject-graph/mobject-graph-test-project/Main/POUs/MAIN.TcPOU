@@ -7,26 +7,24 @@ VAR
 	graph : I_Graph;
 	nodePack_PlcBasic : NodePack_PlcBasic;
 	initialise: BOOL;
-	serialize: BOOL;
+
+	// debug
 	done : BOOL;
 	output : STRING(2000);
-	serializer : JsonSerializer();
+	serializer : JsonSerializer();	
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT initialise THEN
 	initialise := TRUE;
 	graphFactory.InstallNodePack(nodePack_PlcBasic);
-	graph := graphFactory.NewGraph();
+	graph := graphFactory.Create();
 END_IF
 
 graph.Run();
 
-IF serialize THEN
-	//serialize := FALSE;
-	serializer.Reset();
-	graphFactory.SerializeWith(serializer);
-	done := serializer.TryGetSerialziedData(ADR(output),SIZEOF(output));
-END_IF]]></ST>
+serializer.Reset();
+graphFactory.SerializeWith(serializer);
+done := serializer.TryGetSerialziedData(ADR(output),SIZEOF(output));]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

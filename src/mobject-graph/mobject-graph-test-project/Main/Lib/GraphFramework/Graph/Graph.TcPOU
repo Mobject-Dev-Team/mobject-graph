@@ -5,10 +5,8 @@
 FUNCTION_BLOCK Graph EXTENDS BaseElement IMPLEMENTS I_Graph
 VAR
 	nodePrototypes : I_NodePrototypes;
-	linkFactory : I_LinkFactory;
 	_uuid : T_MAXSTRING;	
-	nodes : Nodes;
-	links : Links;	
+	nodes : Nodes;	
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -45,12 +43,10 @@ VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	NodePrototypes : I_NodePrototypes;
-	LinkFactory : I_LinkFactory;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.nodePrototypes := NodePrototypes;
-THIS^.linkFactory := LinkFactory;]]></ST>
+        <ST><![CDATA[THIS^.nodePrototypes := NodePrototypes;]]></ST>
       </Implementation>
     </Method>
     <Method Name="GetNodes" Id="{06360e34-fba5-0320-1e31-5f26e23cab86}">
@@ -68,9 +64,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[links.DisposeAndRemoveAll();
-nodes.DisposeAll();
-
+        <ST><![CDATA[nodes.DisposeAll();
 _uuid := '';]]></ST>
       </Implementation>
     </Method>

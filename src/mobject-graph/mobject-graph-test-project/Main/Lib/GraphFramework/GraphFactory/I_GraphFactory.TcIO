@@ -10,6 +10,12 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Method Name="Create" Id="{1854d952-a565-0180-3eca-962fe7a561ac}">
+      <Declaration><![CDATA[METHOD PUBLIC Create : I_Graph
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
     <Method Name="GetNodePrototypes" Id="{fe605af4-4f06-48e6-8672-71b3b58eab8c}">
       <Declaration><![CDATA[METHOD PUBLIC GetNodePrototypes : I_NodePrototypes
 VAR_INPUT
@@ -20,12 +26,6 @@ END_VAR
       <Declaration><![CDATA[METHOD PUBLIC InstallNodePack
 VAR_INPUT
 	NodePack : I_NodePack;
-END_VAR
-]]></Declaration>
-    </Method>
-    <Method Name="NewGraph" Id="{1854d952-a565-0180-3eca-962fe7a561ac}">
-      <Declaration><![CDATA[METHOD PUBLIC NewGraph : I_Graph
-VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>

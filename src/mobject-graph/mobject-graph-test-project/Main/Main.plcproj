@@ -30,10 +30,13 @@
     <Compile Include="Lib\GraphFramework\Content\Collection\Contents.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Content\Collection\I_Contents.TcIO">
+    <Compile Include="Lib\GraphFramework\Content\Host\ContentHost.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Content\Interface\I_Content.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Content\Interface\I_Contents.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Content\Interface\I_HaveContent.TcIO">
@@ -229,28 +232,16 @@
     <Compile Include="Lib\GraphFramework\Graph\I_Graph.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\LinkFactory\I_LinkFactory.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\LinkFactory\LinkFactory.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Link\Base\I_Link.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Link\Base\Link.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Link\Collection\Links.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Metadata\Collections\I_Metadata.TcIO">
+    <Compile Include="Lib\GraphFramework\Metadata\Base\Metadatum.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Metadata\Collections\Metadata.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Metadata\Interface\I_HaveMetadata.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Metadata\Interface\I_Metadata.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Metadata\Interface\I_Metadatum.TcIO">
@@ -406,6 +397,7 @@
     <Folder Include="Lib\GraphFramework\Content\Base" />
     <Folder Include="Lib\GraphFramework\Content\Collection" />
     <Folder Include="Lib\GraphFramework\Content\Interface" />
+    <Folder Include="Lib\GraphFramework\Content\Host" />
     <Folder Include="Lib\GraphFramework\Error" />
     <Folder Include="Lib\GraphFramework\Error\Base" />
     <Folder Include="Lib\GraphFramework\Error\Collection" />
@@ -427,13 +419,10 @@
     <Folder Include="Lib\GraphFramework\Function\IsValid" />
     <Folder Include="Lib\GraphFramework\Function\Namespace" />
     <Folder Include="Lib\GraphFramework\Graph" />
-    <Folder Include="Lib\GraphFramework\Link" />
-    <Folder Include="Lib\GraphFramework\LinkFactory" />
-    <Folder Include="Lib\GraphFramework\Link\Base" />
-    <Folder Include="Lib\GraphFramework\Link\Collection" />
     <Folder Include="Lib\GraphFramework\Metadata" />
     <Folder Include="Lib\GraphFramework\Metadata\Collections" />
     <Folder Include="Lib\GraphFramework\Metadata\Interface" />
+    <Folder Include="Lib\GraphFramework\Metadata\Base" />
     <Folder Include="Lib\GraphFramework\NodePrototypes\Interface" />
     <Folder Include="Lib\GraphFramework\Node" />
     <Folder Include="Lib\GraphFramework\NodePrototypes" />

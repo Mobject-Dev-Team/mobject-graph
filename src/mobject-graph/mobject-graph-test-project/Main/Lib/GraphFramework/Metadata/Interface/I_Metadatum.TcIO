@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_Metadatum" Id="{df609e72-1d9f-06c6-38ef-3e2c502eecb5}">
-    <Declaration><![CDATA[INTERFACE I_Metadatum EXTENDS I_Serializable
+    <Declaration><![CDATA[INTERFACE I_Metadatum EXTENDS I_Disposable, I_Serializable
 ]]></Declaration>
     <Method Name="Accept" Id="{2f93461b-a249-003f-1afe-030a70299e97}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
@@ -11,7 +11,7 @@ END_VAR
 ]]></Declaration>
     </Method>
     <Property Name="Name" Id="{bd30d1f5-cb2c-0a39-20d1-88b5a595317a}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Name : STRING]]></Declaration>
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
       <Get Name="Get" Id="{36ec1b28-5847-01dc-029f-8f90b43dbb11}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

@@ -38,16 +38,6 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="ConnectTo" Id="{cf2a22c3-c119-0919-3767-3381d146e55b}">
-      <Declaration><![CDATA[METHOD PUBLIC ConnectTo
-VAR_INPUT
-	OutputPort : I_OutputPort;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[_connectedTo := OutputPort;
-_connectedTo.OnEvent('OnOutputPortChanged', THIS^);]]></ST>
-      </Implementation>
-    </Method>
     <Property Name="Data" Id="{f697d0c9-35bd-003b-2eed-d1db3a1aaa7d}">
       <Declaration><![CDATA[PROPERTY PUBLIC Data : I_Datatype]]></Declaration>
       <Get Name="Get" Id="{9027c130-d714-0b66-2e0c-fed40c3b84cf}">
@@ -67,7 +57,8 @@ END_VAR
 END_IF
 
 _connectedTo.OffEvent('OnOutputPortChanged', THIS^);
-_connectedTo := 0;]]></ST>
+_connectedTo := 0;
+_data.ClearReference();]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitOnInputPortChanged" Id="{7ac9cdfd-9dc5-4ff8-8987-c18d9fe1fa6d}" FolderPath="Protected\">
@@ -193,6 +184,21 @@ Serializer.Addkey('datatype');
 _data.SerializeTypeWith(Serializer);
 Serializer.AddkeyObject('value',_data);
 Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryConnectTo" Id="{cf2a22c3-c119-0919-3767-3381d146e55b}">
+      <Declaration><![CDATA[METHOD PUBLIC TryConnectTo : BOOL
+VAR_INPUT
+	OutputPort : I_OutputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT _data.TryMakeReferenceOf(OutputPort.Data) THEN
+	RETURN;
+END_IF
+
+_connectedTo := OutputPort;
+_connectedTo.OnEvent('OnOutputPortChanged', THIS^);
+TryConnectTo := TRUE;]]></ST>
       </Implementation>
     </Method>
   </POU>
