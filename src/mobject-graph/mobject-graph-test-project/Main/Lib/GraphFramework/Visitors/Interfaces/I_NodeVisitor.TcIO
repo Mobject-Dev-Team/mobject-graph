@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_NodeVisitor" Id="{1d67d982-c89b-0cea-2742-6d34a1ca6ed0}">
-    <Declaration><![CDATA[INTERFACE I_NodeVisitor
-]]></Declaration>
+    <Declaration><![CDATA[INTERFACE I_NodeVisitor EXTENDS I_ContentVisitor, I_ParameterVisitor, I_ExtensionVisitor, I_MetadataVisitor, I_ErrorVisitor, I_InputPortVisitor, I_OutputPortVisitor]]></Declaration>
     <Method Name="VisitNode" Id="{6580424a-37ae-0ba7-1410-7c86db6447b0}">
       <Declaration><![CDATA[METHOD VisitNode
 VAR_INPUT

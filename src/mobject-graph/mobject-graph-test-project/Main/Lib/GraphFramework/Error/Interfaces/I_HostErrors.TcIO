@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_HostErrors" Id="{6c14ee43-6ab7-0c30-3bf7-4a331785d2fc}">
+    <Declaration><![CDATA[INTERFACE I_HostErrors EXTENDS __SYSTEM.IQueryInterface
+]]></Declaration>
+    <Method Name="AddError" Id="{23aee699-1229-0461-1c27-f5ff339c8835}">
+      <Declaration><![CDATA[METHOD AddError
+VAR_INPUT
+	Error : I_Error;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

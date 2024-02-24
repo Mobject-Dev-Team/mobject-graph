@@ -8,7 +8,7 @@ FUNCTION_BLOCK Content EXTENDS Disposable IMPLEMENTS I_Content
 VAR
 	_name : T_MAXSTRING;
 	_data : I_Datatype;
-	_parent : I_HaveContent;
+	_parent : I_HostContent;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -43,7 +43,7 @@ VAR_INPUT
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	Name : T_MAXSTRING;
 	Data : I_Datatype;
-	Parent : I_HaveContent;
+	Parent : I_HostContent;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[_name := Name;
@@ -63,7 +63,7 @@ END_VAR
       </Get>
     </Property>
     <Property Name="Parent" Id="{2024bed4-f17f-0a30-1b47-bca1f219aa82}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Parent : I_HaveContent]]></Declaration>
+      <Declaration><![CDATA[PROPERTY PUBLIC Parent : I_HostContent]]></Declaration>
       <Get Name="Get" Id="{5956cbec-13e7-03c8-3e5e-1d37acadef69}">
         <Declaration><![CDATA[VAR
 END_VAR
@@ -76,7 +76,7 @@ END_VAR
     <Method Name="RegisterWithParent" Id="{5e8e70e3-cedb-09b8-1c96-4b1b0a7fd098}">
       <Declaration><![CDATA[METHOD PUBLIC RegisterWithParent
 VAR_INPUT
-	Parent : I_HaveContent;
+	Parent : I_HostContent;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Parent = 0 THEN

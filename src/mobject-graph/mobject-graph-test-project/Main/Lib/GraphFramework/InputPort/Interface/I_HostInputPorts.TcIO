@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_HostInputPorts" Id="{20821798-bf3c-013b-3f9d-c61656a9dfcd}">
+    <Declaration><![CDATA[INTERFACE I_HostInputPorts EXTENDS __SYSTEM.IQueryInterface
+]]></Declaration>
+    <Method Name="AddDataAsInputPort" Id="{49bd3040-65b6-412b-be6d-edc4c464abae}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsInputPort : I_InputPort
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddInputPort" Id="{135eb44b-cbc4-0e2f-0792-05757aacdb77}">
+      <Declaration><![CDATA[METHOD AddInputPort
+VAR_INPUT
+	InputPort : I_InputPort;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetInputPortByName" Id="{a21ad5ef-ba3e-0598-3880-d9f06b97f2a5}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetInputPortByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_InputPort;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

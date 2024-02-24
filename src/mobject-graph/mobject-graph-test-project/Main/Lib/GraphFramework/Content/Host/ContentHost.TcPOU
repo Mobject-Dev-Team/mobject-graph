@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="ContentHost" Id="{29147696-d640-4aaf-b7eb-e1161d0ef104}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK ContentHost IMPLEMENTS I_HaveContent, I_Serializable
+    <Declaration><![CDATA[FUNCTION_BLOCK ContentHost IMPLEMENTS I_HostContent, I_Serializable
 VAR
 	eventTarget : I_EventTarget;
+	contents : Dictionary;
 	selfCreatedContent : Stack;
 END_VAR
 ]]></Declaration>
@@ -13,18 +14,51 @@ END_VAR
     <Folder Name="Constructor" Id="{173c4e6f-13af-4c18-80d2-e7a43982d081}" />
     <Folder Name="Destructor" Id="{01419939-ac15-467a-bc8c-a50a05fb716c}" />
     <Folder Name="Protected" Id="{507c695e-d5e9-4330-b128-2f74bba9e8da}" />
+    <Method Name="Accept" Id="{bb5474ac-7ae3-4961-880b-1f80e7bfa58f}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	visitor : I_ContentVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	content : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := contents.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF enumerator.TryGet(content) THEN
+		content.Accept(Visitor);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddContent" Id="{df4c12eb-d470-40f8-95fb-2344d9345235}">
+      <Declaration><![CDATA[METHOD PUBLIC AddContent
+VAR_INPUT
+	Content : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RegisterContent(Content);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="AddDataAsContent" Id="{7d7dbfab-f047-4025-9ccf-858bac85c0c1}">
-      <Declaration><![CDATA[METHOD AddDataAsContent
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsContent : I_Content
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Data : I_Datatype;
 END_VAR
 VAR
-	newContent : I_Content;
+	content : I_Content;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[newContent := CreateContent(Name, Data);
-selfCreatedContent.Push(newContent);]]></ST>
+        <ST><![CDATA[content := CreateContent(Name, Data);
+selfCreatedContent.Push(content);
+AddDataAsContent := content;]]></ST>
       </Implementation>
     </Method>
     <Method Name="CreateContent" Id="{821b80ea-fa86-42dc-87c5-a687613888b2}" FolderPath="Protected\">
@@ -97,15 +131,6 @@ END_VAR
         <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="GetContents" Id="{bb5474ac-7ae3-4961-880b-1f80e7bfa58f}">
-      <Declaration><![CDATA[METHOD PUBLIC GetContents : I_Contents
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[GetContents := contents;]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="RegisterContent" Id="{b67f9558-618d-4bfd-b717-886a90f2936b}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED RegisterContent
 VAR_INPUT
@@ -113,7 +138,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[contents.Insert(Content);
+        <ST><![CDATA[contents.AddOrUpdate(Content.Name, Content);
 EmitOnContentAddedEvent(Content);]]></ST>
       </Implementation>
     </Method>
@@ -122,14 +147,29 @@ EmitOnContentAddedEvent(Content);]]></ST>
 VAR_INPUT
 	Serializer : I_Serializer;
 END_VAR
-]]></Declaration>
+VAR
+	enumerator : I_ForwardEnumerator;
+	content : I_Content;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF contents.IsEmpty THEN
+        <ST><![CDATA[IF contents.Count = 0 THEN
 	RETURN;
 END_IF
 
-Serializer.AddKeyObject('contents',contents);
-]]></ST>
+Serializer.AddKey('contents');
+Serializer.StartArray();
+
+enumerator := contents.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(content) THEN
+		content.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+
+Serializer.EndArray();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetContentByName" Id="{fc9065ba-fc69-457c-8ff1-de7e3c5eded2}">
@@ -137,9 +177,17 @@ Serializer.AddKeyObject('contents',contents);
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Destination : REFERENCE TO I_Content;
+END_VAR
+VAR
+	content : I_Content;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TryGetContentByName := contents.TryGetByName(Name,Destination);]]></ST>
+        <ST><![CDATA[IF NOT contents.TryGetValue(Name, content) THEN
+	RETURN;
+END_IF
+
+Destination := content;
+TryGetContentByName := TRUE;]]></ST>
       </Implementation>
     </Method>
   </POU>

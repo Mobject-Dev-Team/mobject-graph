@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_ContentVisitor" Id="{b904131c-36ac-0649-2fcc-4ca6fb3dfddf}">
-    <Declaration><![CDATA[INTERFACE I_ContentVisitor
-]]></Declaration>
+    <Declaration><![CDATA[INTERFACE I_ContentVisitor EXTENDS I_MetadataVisitor]]></Declaration>
     <Method Name="VisitContent" Id="{0eb13e90-f986-076c-04fb-a2abc7786a6c}">
       <Declaration><![CDATA[METHOD VisitContent
 VAR_INPUT

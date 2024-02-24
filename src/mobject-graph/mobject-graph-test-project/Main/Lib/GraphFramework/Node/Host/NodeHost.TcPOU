@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NodeHost" Id="{18596ec7-decd-4431-8b7f-df58d73ea2e5}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK NodeHost IMPLEMENTS I_HostNodes, I_Serializable
+VAR
+	eventTarget : I_EventTarget;
+	nodes : Dictionary;
+	selfCreatedNodes : Stack;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{e8077057-591e-4384-bc82-c7eb426be654}" />
+    <Folder Name="Protected" Id="{39fb5e5e-8e62-4ccc-ae4f-cdf8d5eb5ce9}" />
+    <Method Name="Accept" Id="{83533056-ccb0-4a85-98a5-dcc145ca6bfb}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_NodeVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := nodes.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF enumerator.TryGet(node) THEN
+		node.Accept(Visitor);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddNode" Id="{d1bded04-f1d8-4c15-92f8-cbb9151688eb}">
+      <Declaration><![CDATA[METHOD PUBLIC AddNode
+VAR_INPUT
+	Node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RegisterNode(Node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnNodeAddedEvent" Id="{c4e0373f-d6e4-47dd-b7dc-a31680c50096}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnNodeAddedEvent
+VAR_INPUT
+	Node : I_Node;
+END_VAR
+VAR
+	pNodeAddedEvent : POINTER TO NodeAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eventTarget = 0 THEN
+	RETURN;
+END_IF
+
+pNodeAddedEvent := __NEW(NodeAddedEvent(TargetNode := Node));
+eventTarget.Emit('OnNodeAdded',pNodeAddedEvent^);
+pNodeAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Execute" Id="{6155e012-e79f-4030-a0e1-1cca3862d2d9}">
+      <Declaration><![CDATA[METHOD PUBLIC Execute
+VAR_INPUT
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF regenExecutionOrder THEN
+	//
+	todo
+END_IF
+
+enumerator := nodesInExecutionOrder.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(node) THEN
+		node.Execute();
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{d79da06d-3fe9-4db4-8e19-0fc3b7d6f9b4}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	parentEventTarget : I_EventTarget;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterNode" Id="{645a916c-101f-48aa-9eb6-3cc30fb8dc9e}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterNode
+VAR_INPUT
+	Node : I_Node;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodes.Insert(Node);
+EmitOnNodeAddedEvent(Node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{35e41fb7-926c-4bdb-ba3b-2b9824a08186}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF nodes.IsEmpty THEN
+	RETURN;
+END_IF
+
+Serializer.AddKey('nodes');
+Serializer.StartArray();
+
+enumerator := nodes.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(node) THEN
+		node.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeFrom" Id="{6fea03a2-3df5-4097-914c-6303dd7019fe}">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+END_VAR
+VAR
+	nodeDeserializer : I_Deserializer;
+	nodesEnumerator : I_DeserializerForwardEnumerator;
+	nodeId : T_MAXSTRING;
+	node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodeDeserializer := Deserializer.GetKey('nodes');
+
+todo // here first check each of the nodes to see if they exist.  If not then these will need to be made
+
+nodesEnumerator := Deserializer.GetObjectKeyEnumerator();
+
+WHILE nodesEnumerator.MoveNext() DO
+	
+	IF NOT nodesEnumerator.Current.TryGetName(nodeId) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT TryGetById(nodeId, node)THEN
+		CONTINUE;
+	END_IF
+	
+	node.TryDeserializeFrom(nodesEnumerator.Current);
+
+END_WHILE
+
+//------------
+
+
+nodeArrayEnumerator := Deserializer.GetKeyArray('nodes').GetArrayElementEnumerator();
+
+WHILE nodeArrayEnumerator.MoveNext() do
+	
+	IF NOT nodeArrayEnumerator.Current.TryGetKeyUdint('id',nodeId) THEN
+		// raise error that a node was received without an id
+		CONTINUE;
+	END_IF
+	
+	IF NOT nodes.TryGetById(nodeId, node) THEN // no node available so make it...
+		
+		IF NOT nodeArrayEnumerator.Current.TryGetKeyString('type',nodeType) THEN
+			// raise error that a node prototype was needed, but not available
+			CONTINUE;
+		END_IF
+	
+		IF NOT nodePrototypes.TryCreateByType(nodeType,node) THEN		
+			// raise error that node prototypes didn't make the node
+			CONTINUE;
+		END_IF
+		
+	END_IF
+
+	node.TryDeserializeFrom(nodeArrayEnumerator.Current);
+
+END_WHILE
+
+//linkCount:= GraphSettings.LinkCount;
+
+//FOR linkIndex := 0 TO linkCount - 1  DO
+	
+//	linkSettings := GraphSettings.GetLinkByIndex(linkIndex);
+	
+//	nodeSettings := GraphSettings.GetNodeById(linkSettings.SourceId);
+//	sourcePortName := nodeSettings.GetOutputById(linkSettings.SourcePortId).Name;
+	
+//	nodeSettings := GraphSettings.GetNodeById(linkSettings.DestinationId);
+//	destinationPortName := nodeSettings.GetInputById(linkSettings.DestinationPortId).Name;
+	 
+//	link := linkFactory.Create(
+//		linkId := linkSettings.Id,
+//		linkSourceNode := nodes.TryGetById(linkSettings.SourceId),
+//		linkSourcePortName := sourcePortName,
+//		LinkDestinationNode := nodes.TryGetById(linkSettings.DestinationId),
+//		LinkDestinationPortName := destinationPortName
+//	);
+
+//	link.Configure(linkSettings);
+//	links.Insert(link);
+
+//END_FOR
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetNodeById" Id="{2bff4c58-9fd9-43b5-b3a2-ffaf950a6356}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetNodeById : BOOL
+VAR_INPUT
+	Id : UDINT;
+	Destination : REFERENCE TO I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT nodes.TryGetValue(Id, node) THEN
+	RETURN;
+END_IF
+
+Destination := node;
+TryGetNodeById := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

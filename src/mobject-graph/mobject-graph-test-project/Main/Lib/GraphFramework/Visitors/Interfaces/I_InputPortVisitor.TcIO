@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_InputPortVisitor" Id="{cab25b1c-615b-0bc6-1a16-55ee17c0ec1b}">
-    <Declaration><![CDATA[INTERFACE I_InputPortVisitor
-]]></Declaration>
+    <Declaration><![CDATA[INTERFACE I_InputPortVisitor EXTENDS I_MetadataVisitor]]></Declaration>
     <Method Name="VisitInputPort" Id="{6241dbc0-5363-06eb-0faf-c8faa922a437}">
       <Declaration><![CDATA[METHOD VisitInputPort
 VAR_INPUT

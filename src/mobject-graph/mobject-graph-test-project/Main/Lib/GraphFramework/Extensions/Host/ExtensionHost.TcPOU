@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="ExtensionHost" Id="{775d73d2-fe77-4755-861b-5bcb6de863b4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ExtensionHost IMPLEMENTS I_HostExtensions, I_Serializable, I_Deserializable
+VAR
+	eventTarget : I_EventTarget;
+	extensions : Dictionary;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{9605668d-7f67-47ad-97c2-d2cf07bac07d}" />
+    <Folder Name="Protected" Id="{32b6134e-561d-45bf-90fb-fd2d3aface62}" />
+    <Method Name="Accept" Id="{59b3f6fc-beb0-4e34-9164-b71710b97d44}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_ExtensionVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	extension : I_Extension;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := extensions.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF enumerator.TryGet(extension) THEN
+		extension.Accept(Visitor);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddExtension" Id="{60327a96-fec4-4bed-a530-502632d20c7a}">
+      <Declaration><![CDATA[METHOD PUBLIC AddExtension
+VAR_INPUT
+	Extension : I_Extension;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RegisterExtension(Extension);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnExtensionAddedEvent" Id="{806d1efe-3d58-4811-a177-09d74a82cc34}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnExtensionAddedEvent
+VAR_INPUT
+	Extension : I_Extension;
+END_VAR
+VAR
+	pExtensionAddedEvent : POINTER TO ExtensionAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eventTarget = 0 THEN
+	RETURN;
+END_IF
+
+pExtensionAddedEvent := __NEW(ExtensionAddedEvent(TargetExtension := Extension));
+eventTarget.Emit('OnExtensionAdded',pExtensionAddedEvent^);
+pExtensionAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{71c050b9-d11b-4bc6-abd7-ad18c839ad2f}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	parentEventTarget : I_EventTarget;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterExtension" Id="{253bb89e-166b-4fe7-89a9-2669832b9ef7}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterExtension
+VAR_INPUT
+	Extension : I_Extension;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[extensions.AddOrUpdate(Extension.Name,Extension);
+EmitOnExtensionAddedEvent(Extension);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{fd942c3a-b086-4e07-90ff-21907125212e}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	extension : I_Extension;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF extensions.IsEmpty THEN
+	RETURN;
+END_IF
+
+Serializer.AddKey('extensions');
+Serializer.StartArray();
+
+enumerator := extensions.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(extension) THEN
+		extension.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeFrom" Id="{ad9e3ab9-6d42-4e27-a29c-b45a0249832c}">
+      <Declaration><![CDATA[METHOD public TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+END_VAR
+VAR
+	extensionsDeserializer : I_Deserializer;
+	extensionsEnumerator : I_DeserializerForwardEnumerator;
+	extensionName : T_MAXSTRING;
+	extension : I_Extension;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[extensionsDeserializer := Deserializer.GetKey('extensions');
+extensionsEnumerator := extensionsDeserializer.GetArrayElementEnumerator();
+
+WHILE extensionsEnumerator.MoveNext() DO
+	
+	IF NOT extensionsEnumerator.Current.TryGetKeyString('name',extensionName) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT TryGetExtensionByName(extensionName, extension)THEN
+		CONTINUE;
+	END_IF
+	
+	extension.TryDeserializeFrom(extensionsEnumerator.Current);
+
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetExtensionByName" Id="{40c3877d-feb8-4195-a944-7e526cdf6f87}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetExtensionByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Extension;
+END_VAR
+VAR
+	extension : I_Extension;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT extensions.TryGetValue(Name, extension) THEN
+	RETURN;
+END_IF
+
+Destination := extension;
+TryGetExtensionByName := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

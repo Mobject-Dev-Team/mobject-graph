@@ -8,7 +8,7 @@ FUNCTION_BLOCK Parameter EXTENDS Disposable IMPLEMENTS I_Parameter
 VAR
 	_name : T_MAXSTRING;
 	_data : I_Datatype;
-	_parent : I_HaveParameters;
+	_parent : I_HostParameters;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -43,7 +43,7 @@ VAR_INPUT
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	Name : T_MAXSTRING;
 	Data : I_Datatype;
-	Parent : I_HaveParameters;
+	Parent : I_HostParameters;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[_name := Name;
@@ -63,7 +63,7 @@ END_VAR
       </Get>
     </Property>
     <Property Name="Parent" Id="{6b0a082d-80dd-00ef-195c-b9646bd55928}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Parent : I_HaveParameters]]></Declaration>
+      <Declaration><![CDATA[PROPERTY PUBLIC Parent : I_HostParameters]]></Declaration>
       <Get Name="Get" Id="{3499ec4d-2af4-0aeb-2b55-87ff5f69f0a4}">
         <Declaration><![CDATA[VAR
 END_VAR
@@ -76,7 +76,7 @@ END_VAR
     <Method Name="RegisterWithParent" Id="{e6a0eede-b688-0c24-2f67-e84feed89ceb}">
       <Declaration><![CDATA[METHOD PUBLIC RegisterWithParent
 VAR_INPUT
-	Parent : I_HaveParameters;
+	Parent : I_HostParameters;
 END_VAR
 ]]></Declaration>
       <Implementation>

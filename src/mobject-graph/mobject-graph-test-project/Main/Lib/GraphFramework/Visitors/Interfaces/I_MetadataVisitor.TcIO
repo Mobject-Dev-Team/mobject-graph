@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_MetadataVisitor" Id="{7671c5ec-d31c-0497-2f3e-d1fe1fbf32a2}">
+    <Declaration><![CDATA[INTERFACE I_MetadataVisitor
+]]></Declaration>
+    <Method Name="VisitMetadatum" Id="{74de62b9-0479-0783-29d3-341237058f5d}">
+      <Declaration><![CDATA[METHOD VisitMetadatum
+VAR_INPUT
+	VisitingMetadatum : I_Metadata;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

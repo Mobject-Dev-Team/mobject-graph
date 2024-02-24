@@ -1,14 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="ExtensionBase" Id="{42104a2a-bb11-0099-07c8-1566fddf2573}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK ExtensionBase EXTENDS BaseElement IMPLEMENTS I_Extension
+    <Declaration><![CDATA[FUNCTION_BLOCK ExtensionBase EXTENDS Disposable IMPLEMENTS I_Extension
 VAR
 	_name : T_MAXSTRING;
+	eventEmitter : EventEmitter;
+	inputPortHost : InputPortHost(eventEmitter);
+	outputPortHost : OutputPortHost(eventEmitter);
+	parameterHost : ParameterHost(eventEmitter);
+	contentHost : ContentHost(eventEmitter);
+	errorHost : ErrorHost(eventEmitter);
+	metadataHost : MetadataHost(eventEmitter);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{fef26075-0f2d-0849-2106-d8875bfcef87}" />
+    <Folder Name="Protected" Id="{8929ae02-54e4-48f4-9cde-455bb332213a}" />
     <Method Name="Accept" Id="{c7a8469c-4655-04f0-2d46-e58992b2a552}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
@@ -19,6 +27,114 @@ END_VAR
         <ST><![CDATA[Visitor.VisitExtension(this^);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="AddContent" Id="{6ea2b1d8-d6b2-4d47-b550-47d68cad2d2c}">
+      <Declaration><![CDATA[METHOD AddContent
+VAR_INPUT
+	Content : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[contentHost.AddContent(Content);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsContent" Id="{e881ed24-909b-4499-854b-919db48b9f56}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsContent : I_Content;
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddDataAsContent := contentHost.AddDataAsContent(Name, Data);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsInputPort" Id="{a0b99e5f-97a0-4cb4-85b1-be3501128a16}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsInputPort : I_InputPort;
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddDataAsInputPort := inputPortrHost.AddDataAsInputPort(Name, Data);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsMetadata" Id="{d53f29f1-b79b-4bd5-bcc5-e393812fb6bd}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsMetadata : I_Metadata;
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddDataAsMetadata := metadataHost.AddDataAsMetadata(Name, Data);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsOutputPort" Id="{0a62794b-674a-488d-bb99-70710b5485e8}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsOutputPort : I_OutputPort;
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddDataAsOutputPort := outputPortrHost.AddDataAsOutputPort(Name, Data);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsParameter" Id="{208dca8c-4c22-45b1-a6b5-b665342594b4}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsParameter : I_Parameter;
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddDataAsParameter := parameterHost.AddDataAsParameter(Name, Data);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddError" Id="{25dc5072-bec6-4adc-b2cf-46ff0174bb16}">
+      <Declaration><![CDATA[METHOD AddError
+VAR_INPUT
+	Error : I_Error;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[errorHost.AddError(Error);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddInputPort" Id="{9e63d406-abf0-4693-b057-e8bdf718d997}">
+      <Declaration><![CDATA[METHOD AddInputPort
+VAR_INPUT
+	InputPort : I_InputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[inputPortHost.AddInputPort(InputPort);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddMetadata" Id="{47801752-9488-4924-95cc-3210bc37bfa4}">
+      <Declaration><![CDATA[METHOD AddMetadata
+VAR_INPUT
+	Metadata : I_Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[metadataHost.AddMetadata(Metadata);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddOutputPort" Id="{53427e17-c470-45c4-8203-d9e21c021e85}">
+      <Declaration><![CDATA[METHOD AddOutputPort
+VAR_INPUT
+	OutputPort : I_OutputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[outputPortHost.AddOutputPort(OutputPort);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddParameter" Id="{23dd46d8-4d23-4b8e-a814-7bae28ecf1e9}">
+      <Declaration><![CDATA[METHOD AddParameter
+VAR_INPUT
+	Parameter : I_Parameter;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[parameterHost.AddParameter(Parameter);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_init" Id="{b8dc459b-fb89-0be1-1d4e-1dd2490364b6}" FolderPath="Constructor\">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
@@ -27,7 +143,18 @@ VAR_INPUT
 	Name : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[_name := Name;]]></ST>
+        <ST><![CDATA[_name := Name;
+InitializeExtension(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InitializeExtension" Id="{c523b599-657c-48d8-9a15-a024d5cd3cac}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED InitializeExtension
+VAR_INPUT
+	Self : I_Extension;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
     <Property Name="Name" Id="{3ea0ca14-7e1c-0f9c-0dd4-fc640a163eef}">
@@ -41,5 +168,112 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="OffEvent" Id="{7c991add-898b-4ce2-b48c-156ceb4e3445}">
+      <Declaration><![CDATA[METHOD PUBLIC OffEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OffEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnceEvent" Id="{057d5c02-4afe-46f3-b0ee-2a2800b6229d}">
+      <Declaration><![CDATA[METHOD PUBLIC OnceEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnceEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnEvent" Id="{84177a9d-8640-40f8-aff3-a509bb613f25}">
+      <Declaration><![CDATA[METHOD PUBLIC OnEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{f0a208e7-7dd4-4f99-8c68-aad6715feaed}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartObject();
+inputPortHost.SerializeWith(Serializer);
+outputPortHost.SerializeWith(Serializer);
+parameterHost.SerializeWith(Serializer);
+contentHost.SerializeWith(Serializer);
+errorHost.SerializeWith(Serializer);
+metadataHost.SerializeWith(Serializer);
+Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeFrom" Id="{6d59da26-ba4e-4a2b-89b3-fd3987fd40bc}">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryDeserializeFrom := parameterHost.TryDeserializeFrom(Deserializer);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetContentByName" Id="{6ca9fed6-43c8-42ca-90d1-dc23b9a9178a}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetContentByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetContentByName := contentHost.TryGetContentByName(Name,Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetInputPortByName" Id="{989b9f1f-f3dc-4265-a126-3564404c6f91}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetInputPortByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetInputPortByName := inputPortHost.TryGetInputPortByName(Name,Destination);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetMetadataByName" Id="{79a0c769-c359-4c92-9cee-f8085d22fa56}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetMetadataByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetMetadataByName := metadataHost.TryGetMetadataByName(Name,Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetOutputPortByName" Id="{d210715a-df61-446a-bbe4-68c40d5deede}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetOutputPortByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_OutputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetOutputPortByName := outputPortHost.TryGetOutputPortByName(Name,Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetParameterByName" Id="{df6993d6-fa50-494d-8b42-4f0d28a492f0}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetParameterByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Parameter;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetParameterByName := parameterHost.TryGetParameterByName(Name,Destination);]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

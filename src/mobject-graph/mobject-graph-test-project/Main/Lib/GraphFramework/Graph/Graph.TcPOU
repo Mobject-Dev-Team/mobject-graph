@@ -2,11 +2,19 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="Graph" Id="{bc650401-8298-0fc9-2fc1-27c637239109}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK Graph EXTENDS BaseElement IMPLEMENTS I_Graph
+FUNCTION_BLOCK Graph EXTENDS Disposable IMPLEMENTS I_Graph
 VAR
 	nodePrototypes : I_NodePrototypes;
 	_uuid : T_MAXSTRING;	
-	nodes : Nodes;	
+	eventEmitter : EventEmitter;
+	nodeHost : NodeHost(eventEmitter);
+	inputPortHost : InputPortHost(eventEmitter);
+	outputPortHost : OutputPortHost(eventEmitter);
+	parameterHost : ParameterHost(eventEmitter);
+	contentHost : ContentHost(eventEmitter);
+	errorHost : ErrorHost(eventEmitter);
+	extensionHost : ExtensionHost(eventEmitter);
+	metadataHost : MetadataHost(eventEmitter);
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -14,6 +22,7 @@ END_VAR
     </Implementation>
     <Folder Name="Constructor" Id="{a293f140-7386-0971-1795-6d18ede4b434}" />
     <Folder Name="Destructor" Id="{b9a66c15-86af-0a69-1a53-9c709ccc1fa3}" />
+    <Folder Name="Protected" Id="{07ee2556-5865-4658-87ad-680d08d5c620}" />
     <Method Name="Accept" Id="{9759288d-5f0e-0b2c-0d87-315eec92f3c5}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
@@ -22,6 +31,124 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Visitor.VisitGraph(this^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddContent" Id="{43c3e1b2-e85c-4b92-bb9b-a529db7d4feb}">
+      <Declaration><![CDATA[METHOD AddContent
+VAR_INPUT
+	Content : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[contentHost.AddContent(Content);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsContent" Id="{8026de1c-66aa-41c9-a240-f2331e1ade9c}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsContent : I_Content;
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddDataAsContent := contentHost.AddDataAsContent(Name, Data);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsInputPort" Id="{7810e8b8-fc19-485e-97c6-e4c6d18d0fd9}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsInputPort : I_InputPort;
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddDataAsInputPort := inputPortHost.AddDataAsInputPort(Name, Data);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsMetadata" Id="{4e59caf1-cf9c-4549-9ebc-83dd1c3a2e08}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsMetadata : I_Metadata;
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddDataAsMetadata := metadataHost.AddDataAsMetadata(Name, Data);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsOutputPort" Id="{dc49fa7b-54ef-4d4c-8aa9-9def452cfd62}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsOutputPort : I_OutputPort;
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddDataAsOutputPort := outputPortHost.AddDataAsOutputPort(Name, Data);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsParameter" Id="{08e6f363-546c-4527-b137-a7de89c91218}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsParameter : I_Parameter;
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddDataAsParameter := parameterHost.AddDataAsParameter(Name, Data);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddError" Id="{e5ded1e0-602c-46b5-a84f-241532379ef9}">
+      <Declaration><![CDATA[METHOD AddError
+VAR_INPUT
+	Error : I_Error;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[errorHost.AddError(Error);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddExtension" Id="{6a3d7798-3e04-4866-83e1-d2e5c9f524c0}">
+      <Declaration><![CDATA[METHOD AddExtension
+VAR_INPUT
+	Extension : I_Extension;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[extensionHost.AddExtension(Extension);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddInputPort" Id="{a51478dc-4bbb-497b-b8fd-ca07b0929901}">
+      <Declaration><![CDATA[METHOD AddInputPort
+VAR_INPUT
+	InputPort : I_InputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[inputPortHost.AddInputPort(InputPort);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddMetadata" Id="{474999fa-4111-436c-88cf-a07beacebbf7}">
+      <Declaration><![CDATA[METHOD AddMetadata
+VAR_INPUT
+	Metadata : I_Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[metadataHost.AddMetadata(Metadata);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddOutputPort" Id="{3c9e050e-4b34-4df0-be37-1a6fe21c02f3}">
+      <Declaration><![CDATA[METHOD AddOutputPort
+VAR_INPUT
+	OutputPort : I_OutputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[outputPortHost.AddOutputPort(OutputPort);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddParameter" Id="{c3533279-ddeb-48f8-a0c8-06910a344c53}">
+      <Declaration><![CDATA[METHOD AddParameter
+VAR_INPUT
+	Parameter : I_Parameter;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[parameterHost.AddParameter(Parameter);]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_exit" Id="{9dcfff24-3381-0760-25fd-bc1afba0c65f}" FolderPath="Destructor\">
@@ -46,16 +173,48 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.nodePrototypes := NodePrototypes;]]></ST>
+        <ST><![CDATA[THIS^.nodePrototypes := NodePrototypes;
+InitializeGraph(THIS^);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="GetNodes" Id="{06360e34-fba5-0320-1e31-5f26e23cab86}">
-      <Declaration><![CDATA[METHOD PUBLIC GetNodes : I_Nodes
+    <Method Name="InitializeGraph" Id="{6e21f07c-76bf-40e2-81a6-1a7ecbdd42c1}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED InitializeGraph
 VAR_INPUT
+	Self : I_Graph;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[GetNodes := nodes;]]></ST>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OffEvent" Id="{af644928-9aa7-4f95-81f4-05559087b67b}">
+      <Declaration><![CDATA[METHOD PUBLIC OffEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OffEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnceEvent" Id="{372fc9bd-7568-4004-aa2d-fa749851feef}">
+      <Declaration><![CDATA[METHOD PUBLIC OnceEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnceEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnEvent" Id="{1b2d1a3b-915e-478a-b717-699f2b620ff4}">
+      <Declaration><![CDATA[METHOD PUBLIC OnEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
       </Implementation>
     </Method>
     <Method Name="Reset" Id="{fa166676-0f3d-0fcb-3385-10008bb949c7}">
@@ -64,7 +223,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[nodes.DisposeAll();
+        <ST><![CDATA[nodeHost.DisposeAll();
 _uuid := '';]]></ST>
       </Implementation>
     </Method>
@@ -74,8 +233,27 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[nodes.ExecuteInOrder();
+        <ST><![CDATA[nodeHost.ExecuteInOrder();
 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{d25f0f12-a7ca-4c04-8799-67d28e859083}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartObject();
+inputPortHost.SerializeWith(Serializer);
+outputPortHost.SerializeWith(Serializer);
+parameterHost.SerializeWith(Serializer);
+contentHost.SerializeWith(Serializer);
+errorHost.SerializeWith(Serializer);
+extensionHost.SerializeWith(Serializer);
+metadataHost.SerializeWith(Serializer);
+nodeHost.SerializeWith(Serializer);
+Serializer.EndObject();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryDeserializeFrom" Id="{99b56a2a-8cdf-4ba7-9ff3-3103bd8e6be2}">
@@ -85,13 +263,12 @@ VAR_INPUT
 END_VAR
 VAR
 	receivedUuid : T_MAXSTRING;
-	nodeArrayEnumerator : I_DeserializerForwardEnumerator;
-	nodeId : UDINT;
-	nodeType : T_MAXSTRING;
-	node : I_Node;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Deserializer.TryGetKeyString('uuid', receivedUuid) THEN
+        <ST><![CDATA[parameterHost.TryDeserializeFrom(Deserializer);
+extensionHost.TryDeserializeFrom(Deserializer);
+
+IF Deserializer.TryGetKeyString('uuid', receivedUuid) THEN
 
 	IF Uuid <> uuid THEN
 		Reset();
@@ -99,59 +276,152 @@ END_VAR]]></Declaration>
 
 END_IF
 
-nodeArrayEnumerator := Deserializer.GetKeyArray('nodes').GetArrayElementEnumerator();
+nodeHost.TryDeserializeFrom(Deserializer);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetContentByName" Id="{e912c915-77b1-4a71-a6fd-89bbc8852568}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetContentByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Content;
+END_VAR
+VAR
+	extensionName : T_MAXSTRING;
+	extension : I_Extension;
+	contentName : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Not HasExtensionNamespace(Name) THEN
+	TryGetContentByName := contentHost.TryGetContentByName(Name,Destination);
+	RETURN;
+END_IF
 
-WHILE nodeArrayEnumerator.MoveNext() do
-	
-	IF NOT nodeArrayEnumerator.Current.TryGetKeyUdint('id',nodeId) THEN
-		// raise error that a node was received without an id
-		CONTINUE;
-	END_IF
-	
-	IF NOT nodes.TryGetById(nodeId, node) THEN // no node available so make it...
-		
-		IF NOT nodeArrayEnumerator.Current.TryGetKeyString('type',nodeType) THEN
-			// raise error that a node prototype was needed, but not available
-			CONTINUE;
-		END_IF
-	
-		IF NOT nodePrototypes.TryCreateByType(nodeType,node) THEN		
-			// raise error that node prototypes didn't make the node
-			CONTINUE;
-		END_IF
-		
-	END_IF
+extensionName := RemoveLastSegmentFromNamespace(Name);
+contentName := GetLastSegmentFromNamespace(Name);
 
-	node.TryDeserializeFrom(nodeArrayEnumerator.Current);
+IF NOT TryGetExtensionByName(extensionName, extension) THEN
+	RETURN;
+END_IF
 
-END_WHILE
+TryGetContentByName := extension.TryGetContentByName(contentName, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetExtensionByName" Id="{29a3bbec-25a6-474f-b6ff-8df26ff54838}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetExtensionByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Extension;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetExtensionByName := extensionHost.TryGetExtensionByName(Name, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetInputPortByName" Id="{a2b0c48f-12f3-40e0-a4f9-13c01490bfe1}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetInputPortByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_InputPort;
+END_VAR
+VAR
+	extensionName : T_MAXSTRING;
+	extension : I_Extension;
+	portName : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT HasExtensionNamespace(Name) THEN
+	TryGetInputPortByName := inputPortHost.TryGetInputPortByName(Name,Destination);
+	RETURN;
+END_IF
 
-//linkCount:= GraphSettings.LinkCount;
+extensionName := RemoveLastSegmentFromNamespace(Name);
+portName := GetLastSegmentFromNamespace(Name);
 
-//FOR linkIndex := 0 TO linkCount - 1  DO
-	
-//	linkSettings := GraphSettings.GetLinkByIndex(linkIndex);
-	
-//	nodeSettings := GraphSettings.GetNodeById(linkSettings.SourceId);
-//	sourcePortName := nodeSettings.GetOutputById(linkSettings.SourcePortId).Name;
-	
-//	nodeSettings := GraphSettings.GetNodeById(linkSettings.DestinationId);
-//	destinationPortName := nodeSettings.GetInputById(linkSettings.DestinationPortId).Name;
-	 
-//	link := linkFactory.Create(
-//		linkId := linkSettings.Id,
-//		linkSourceNode := nodes.TryGetById(linkSettings.SourceId),
-//		linkSourcePortName := sourcePortName,
-//		LinkDestinationNode := nodes.TryGetById(linkSettings.DestinationId),
-//		LinkDestinationPortName := destinationPortName
-//	);
+IF NOT TryGetExtensionByName(extensionName, extension) THEN
+	RETURN;
+END_IF
 
-//	link.Configure(linkSettings);
-//	links.Insert(link);
+TryGetInputPortByName := extension.TryGetInputPortByName(portName, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetMetadataByName" Id="{7218a518-7562-4161-a031-fe6dfb5ae1ad}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetMetadataByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Metadata;
+END_VAR
+VAR
+	extensionName : T_MAXSTRING;
+	extension : I_Extension;
+	metadatumName : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT HasExtensionNamespace(Name) THEN
+	TryGetMetadataByName := metadataHost.TryGetMetadataByName(Name,Destination);
+	RETURN;
+END_IF
 
-//END_FOR
+extensionName := RemoveLastSegmentFromNamespace(Name);
+metadatumName := GetLastSegmentFromNamespace(Name);
 
-]]></ST>
+IF NOT TryGetExtensionByName(extensionName, extension) THEN
+	RETURN;
+END_IF
+
+TryGetMetadataByName := extension.TryGetMetadataByName(metadatumName, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetOutputPortByName" Id="{d96f141e-32e3-4d1a-9edb-007e4130314d}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetOutputPortByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_OutputPort;
+END_VAR
+VAR
+	extensionName : T_MAXSTRING;
+	extension : I_Extension;
+	portName : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT HasExtensionNamespace(Name) THEN
+	TryGetOutputPortByName := outputPortHost.TryGetOutputPortByName(Name,Destination);
+	RETURN;
+END_IF
+
+extensionName := RemoveLastSegmentFromNamespace(Name);
+portName := GetLastSegmentFromNamespace(Name);
+
+IF NOT TryGetExtensionByName(extensionName, extension) THEN
+	RETURN;
+END_IF
+
+TryGetOutputPortByName := extension.TryGetOutputPortByName(portName, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetParameterByName" Id="{a812c28a-2c76-43b1-a6f1-2e48f4d3e7ae}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetParameterByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Parameter;
+END_VAR
+VAR
+	extensionName : T_MAXSTRING;
+	extension : I_Extension;
+	parameterName : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Not HasExtensionNamespace(Name) THEN
+	TryGetParameterByName := parameterHost.TryGetParameterByName(Name,Destination);
+	RETURN;
+END_IF
+
+extensionName := RemoveLastSegmentFromNamespace(Name);
+parameterName := GetLastSegmentFromNamespace(Name);
+
+IF NOT TryGetExtensionByName(extensionName, extension) THEN
+	RETURN;
+END_IF
+
+TryGetParameterByName := extension.TryGetParameterByName(parameterName, Destination);]]></ST>
       </Implementation>
     </Method>
     <Property Name="Uuid" Id="{cbe3c956-8695-4d9e-97b9-f984946d2dd4}">

@@ -23,7 +23,7 @@ END_VAR
       </Get>
     </Property>
     <Property Name="Parent" Id="{e6a952cd-7999-427a-a7d4-64af5ec39c7e}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Parent : I_HaveContent]]></Declaration>
+      <Declaration><![CDATA[PROPERTY PUBLIC Parent : I_HostContent]]></Declaration>
       <Get Name="Get" Id="{917874f0-28b1-4eea-8a50-de7950a339a2}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

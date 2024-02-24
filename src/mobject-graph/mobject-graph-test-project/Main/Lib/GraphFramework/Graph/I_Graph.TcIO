@@ -1,18 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_Graph" Id="{45c251a4-de8e-0c6c-2a3e-8a87e382a116}">
-    <Declaration><![CDATA[INTERFACE I_Graph EXTENDS I_BaseElement, I_HaveNodes
+    <Declaration><![CDATA[INTERFACE I_Graph EXTENDS I_Disposable, I_HostNodes, I_HostContent, I_HostInputPorts, I_HostOutputPorts, I_HostErrors, I_HostParameters, I_HostExtensions, I_HostMetadata, I_EventEmitter, I_Deserializable, I_Serializable
 ]]></Declaration>
     <Method Name="Accept" Id="{255392e5-cd9d-0e73-21a1-ba770a89b900}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
 	Visitor : I_GraphVisitor;
-END_VAR
-]]></Declaration>
-    </Method>
-    <Method Name="GetNodes" Id="{e673abbf-5566-0889-0a5c-d05bfe265452}">
-      <Declaration><![CDATA[METHOD PUBLIC GetNodes : I_Nodes
-VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>

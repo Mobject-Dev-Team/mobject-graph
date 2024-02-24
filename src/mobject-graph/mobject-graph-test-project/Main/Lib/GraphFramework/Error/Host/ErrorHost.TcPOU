@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="ErrorHost" Id="{50541dba-cdf2-4bcb-9556-2627a6035f55}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ErrorHost IMPLEMENTS I_HostErrors, I_Serializable
+VAR
+	eventTarget : I_EventTarget;
+	errors : Stack;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{671229fd-7f17-4a0e-adb2-f45de0155677}" />
+    <Folder Name="Protected" Id="{59ff69d6-248f-41d0-a53d-636acfd4aa56}" />
+    <Method Name="Accept" Id="{337d8628-3c2e-45e4-9de1-44fe62acf628}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_ErrorVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := errors.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF enumerator.TryGet(error) THEN
+		error.Accept(Visitor);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddError" Id="{4732f287-e1c3-43fd-a5fa-5146e0069c2d}">
+      <Declaration><![CDATA[METHOD PUBLIC AddError
+VAR_INPUT
+	Error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RegisterError(Error);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnErrorAddedEvent" Id="{4aac7d20-3cc4-46ba-916e-e7385b93bf4f}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnErrorAddedEvent
+VAR_INPUT
+	Error : I_Error;
+END_VAR
+VAR
+	pErrorAddedEvent : POINTER TO ErrorAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eventTarget = 0 THEN
+	RETURN;
+END_IF
+
+pErrorAddedEvent := __NEW(ErrorAddedEvent(TargetError := Error));
+eventTarget.Emit('OnErrorAdded',pErrorAddedEvent^);
+pErrorAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{68af8c17-b6a6-49cc-8bf1-772d6361db00}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	parentEventTarget : I_EventTarget;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterError" Id="{b61292ff-336c-4ef0-b520-763356a81a69}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterError
+VAR_INPUT
+	Error : I_Error;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[errors.Push(Error);
+EmitOnErrorAddedEvent(Error);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{18386344-9d4a-4d83-b974-3737c89d52ea}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	error : I_Error;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF errors.Count = 0 THEN
+	RETURN;
+END_IF
+
+Serializer.AddKey('errors');
+Serializer.StartArray();
+
+enumerator := errors.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(error) THEN
+		error.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

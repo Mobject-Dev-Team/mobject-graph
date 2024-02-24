@@ -43,7 +43,7 @@ END_VAR
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	Parent : I_HaveErrors;
+	Parent : I_HostErrors;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -75,7 +75,7 @@ END_VAR
     <Method Name="RegisterWithParent" Id="{50a3db7c-f4f1-0156-3933-1f93438f5c5a}">
       <Declaration><![CDATA[METHOD RegisterWithParent
 VAR_INPUT
-	Parent : I_HaveErrors;
+	Parent : I_HostErrors;
 END_VAR
 ]]></Declaration>
       <Implementation>
