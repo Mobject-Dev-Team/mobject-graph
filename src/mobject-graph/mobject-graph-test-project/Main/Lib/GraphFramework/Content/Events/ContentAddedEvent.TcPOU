@@ -6,7 +6,7 @@
 {attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK ContentAddedEvent EXTENDS Disposable IMPLEMENTS I_ContentAddedEvent
 VAR
-	_targetContent : I_Content;
+	_target : I_Content;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -18,21 +18,21 @@ END_VAR
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	TargetContent : I_Content;
+	Target : I_Content;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[This^._targetContent := TargetContent;]]></ST>
+        <ST><![CDATA[This^._target := Target;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="TargetContent" Id="{3a25a44e-a50b-0719-38fb-df36651953ab}">
-      <Declaration><![CDATA[PROPERTY PUBLIC TargetContent : I_Content]]></Declaration>
+    <Property Name="Target" Id="{3a25a44e-a50b-0719-38fb-df36651953ab}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Content]]></Declaration>
       <Get Name="Get" Id="{f522199a-d6de-0e4c-21c2-6dd6f80d69f7}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[TargetContent := _targetContent;]]></ST>
+          <ST><![CDATA[Target := _target;]]></ST>
         </Implementation>
       </Get>
     </Property>

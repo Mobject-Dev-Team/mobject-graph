@@ -72,7 +72,7 @@
     <Compile Include="Lib\GraphFramework\Error\StandardMessageError.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Extensions\Base\ExtensionBase.TcPOU">
+    <Compile Include="Lib\GraphFramework\Extensions\Base\Extension.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Extensions\Events\ExtensionAddedEvent.TcPOU">
@@ -91,12 +91,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Function\AnyToString.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\DisposeError.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\DisposeNode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidError.TcPOU">
@@ -144,7 +138,7 @@
     <Compile Include="Lib\GraphFramework\Function\Namespace\RemoveLeadingSegmentFromNamespace.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\GraphFramework.TcGVL">
+    <Compile Include="Lib\GraphFramework\TestJson.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
@@ -286,12 +280,6 @@
     <Compile Include="Lib\GraphFramework\Parameters\Interface\I_HostParameters.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\GraphFactory\I_GraphFactory.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\GraphFactory\GraphFactory.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_ContentVisitor.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -310,9 +298,6 @@
     <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_MetadataVisitor.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_NodeFactoryVisitor.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_NodeVisitor.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -322,7 +307,7 @@
     <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_ParameterVisitor.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_GraphFactoryVisitor.TcIO">
+    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_NodePrototypeVisitor.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\PlcBasicNodePack\Error\CannotCompareTypeError.TcPOU">
@@ -347,6 +332,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tests\Graph_TestSuite.TcPOU">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -401,7 +389,6 @@
     <Folder Include="Lib\GraphFramework\Parameters" />
     <Folder Include="Lib\GraphFramework\Parameters\Base" />
     <Folder Include="Lib\GraphFramework\Parameters\Interface" />
-    <Folder Include="Lib\GraphFramework\GraphFactory" />
     <Folder Include="Lib\GraphFramework\Visitors" />
     <Folder Include="Lib\GraphFramework\Visitors\Interfaces" />
     <Folder Include="Lib\PlcBasicNodePack" />

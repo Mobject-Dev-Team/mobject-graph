@@ -12,7 +12,7 @@ var PlcApi = (function (symbol, graph) {
             console.log('Configuration Change');
             console.log(JSON.parse(graphJson));
 
-            TcHmi.Server.writeSymbol(symbol + '.receivedGraphJson', graphJson);
+            //TcHmi.Server.writeSymbol(symbol + '.receivedGraphJson', graphJson);
 
         },
 
@@ -22,6 +22,8 @@ var PlcApi = (function (symbol, graph) {
 
             console.log('Property Change');
             console.log(JSON.parse(graphJson));
+
+            return;
 
             TcHmi.Server.writeSymbol(symbol + '.receivedGraphJson', graphJson, function(data){
     if(data.error !== TcHmi.Errors.NONE){
@@ -84,7 +86,7 @@ var PlcApi = (function (symbol, graph) {
         }
     }
 
-    api.setupIncomingRoutes();
+    //api.setupIncomingRoutes();
 
     graph.onConfigurationHasChanged = function () {
         api.loadGraph();

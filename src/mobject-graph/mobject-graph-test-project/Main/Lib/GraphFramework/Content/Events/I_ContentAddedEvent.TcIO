@@ -2,8 +2,8 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_ContentAddedEvent" Id="{90739cbb-767e-049e-1d6c-6f8bb5e021b5}">
     <Declaration><![CDATA[INTERFACE I_ContentAddedEvent EXTENDS I_Event]]></Declaration>
-    <Property Name="TargetContent" Id="{1be8ae1a-e31a-00e0-3123-40f0b64730c9}">
-      <Declaration><![CDATA[PROPERTY PUBLIC TargetContent : I_Content]]></Declaration>
+    <Property Name="Target" Id="{1be8ae1a-e31a-00e0-3123-40f0b64730c9}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Content]]></Declaration>
       <Get Name="Get" Id="{c7273ec6-7e0e-00c7-1683-9b4fba0d89c0}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

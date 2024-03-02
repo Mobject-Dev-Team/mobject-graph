@@ -41,7 +41,8 @@ VAR_INPUT
 	Error : I_Error;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[RegisterError(Error);]]></ST>
+        <ST><![CDATA[errors.Push(Error);
+EmitOnErrorAddedEvent(Error);]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitOnErrorAddedEvent" Id="{4aac7d20-3cc4-46ba-916e-e7385b93bf4f}" FolderPath="Protected\">
@@ -57,7 +58,7 @@ END_VAR]]></Declaration>
 	RETURN;
 END_IF
 
-pErrorAddedEvent := __NEW(ErrorAddedEvent(TargetError := Error));
+pErrorAddedEvent := __NEW(ErrorAddedEvent(Target := Error));
 eventTarget.Emit('OnErrorAdded',pErrorAddedEvent^);
 pErrorAddedEvent^.Dispose();]]></ST>
       </Implementation>
@@ -72,17 +73,6 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="RegisterError" Id="{b61292ff-336c-4ef0-b520-763356a81a69}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED RegisterError
-VAR_INPUT
-	Error : I_Error;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[errors.Push(Error);
-EmitOnErrorAddedEvent(Error);]]></ST>
       </Implementation>
     </Method>
     <Method Name="SerializeWith" Id="{18386344-9d4a-4d83-b974-3737c89d52ea}">
@@ -111,7 +101,6 @@ WHILE enumerator.MoveNext() DO
 END_WHILE
 
 enumerator.Dispose();
-
 Serializer.EndArray();]]></ST>
       </Implementation>
     </Method>

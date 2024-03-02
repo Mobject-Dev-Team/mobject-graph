@@ -6,7 +6,7 @@
 {attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK NodeExecuteEndEvent EXTENDS Disposable IMPLEMENTS I_NodeExecuteEndEvent
 VAR
-	_targetNode : I_Node;
+	_target : I_Node;
 	_cpuCounterLowBytes : UDINT;
 	_cpuCounterHighBytes : UDINT;
 END_VAR]]></Declaration>
@@ -41,24 +41,24 @@ END_VAR
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	TargetNode : I_Node;
+	Target : I_Node;
 END_VAR
 VAR
 	getCount : GETCPUCOUNTER;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^._targetNode := TargetNode;
+        <ST><![CDATA[_target := Target;
 getCount(cpuCntLoDW => _cpuCounterLowBytes, cpuCntHiDW => _cpuCounterHighBytes);]]></ST>
       </Implementation>
     </Method>
-    <Property Name="TargetNode" Id="{2362905b-7379-0064-3337-c4072d097c2a}">
-      <Declaration><![CDATA[PROPERTY PUBLIC TargetNode : I_Node]]></Declaration>
+    <Property Name="Target" Id="{2362905b-7379-0064-3337-c4072d097c2a}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Node]]></Declaration>
       <Get Name="Get" Id="{3389788f-5972-0f95-19e8-d07a700ede10}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[TargetNode := _targetNode;]]></ST>
+          <ST><![CDATA[Target := _target;]]></ST>
         </Implementation>
       </Get>
     </Property>

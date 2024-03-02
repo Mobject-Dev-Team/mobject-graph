@@ -5,14 +5,12 @@
 VAR
 	eventTarget : I_EventTarget;
 	meta : Dictionary;
-	selfCreatedMetadata : Stack;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{2cd2172d-d496-4e75-88f8-bbb91076b761}" />
-    <Folder Name="Destructor" Id="{d88c350f-6866-4894-93e6-77ba5382cef2}" />
     <Folder Name="Protected" Id="{f937d56f-843a-4125-9538-e699c052c10b}" />
     <Method Name="Accept" Id="{4f136a20-ea55-4a48-8ac4-da6446315411}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
@@ -37,54 +35,14 @@ END_WHILE
 enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="AddDataAsMetadata" Id="{57229b7a-e586-430a-94c1-40273f0ab89a}">
-      <Declaration><![CDATA[METHOD PUBLIC AddDataAsMetadata : I_Metadata
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Data : I_Datatype;
-END_VAR
-VAR
-	metadata : I_Metadata;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[metadata := CreateMetadata(Name, Data);
-selfCreatedMetadata.Push(metadata);
-AddDataAsMetadata := metadata;]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="AddMetadata" Id="{0d90bab2-dd82-458c-bba7-6e63399f607e}">
       <Declaration><![CDATA[METHOD PUBLIC AddMetadata
 VAR_INPUT
 	Metadata : I_Metadata;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[RegisterMetadata(Metadata);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="CreateMetadata" Id="{79447d1a-bb3d-4f7e-8bae-4d14eeeef024}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED CreateMetadata : I_Metadata
-VAR_INPUT
-	MetadataName : T_MAXSTRING;
-	MetadataData : I_Datatype;
-END_VAR
-VAR
-	pMetadata : POINTER TO Metadata;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[pMetadata := __NEW(Metadata(Name := MetadataName, Data := MetadataData, Parent := THIS^));
-CreateMetadata := pMetadata^;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="DisposeSelfCreatedMetadata" Id="{b2e5abdd-7830-4f5a-b3c3-160b835a1025}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED DisposeSelfCreatedMetadata : BOOL
-VAR
-	metadata : I_Metadata;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[WHILE selfCreatedMetadata.TryPop(metadata) DO
-	metadata.Dispose();
-END_WHILE]]></ST>
+        <ST><![CDATA[meta.AddOrUpdate(Metadata.Name, Metadata);
+EmitOnMetadataAddedEvent(Metadata);]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitOnMetadataAddedEvent" Id="{0059e076-f3b1-427a-af15-5f96539d90af}" FolderPath="Protected\">
@@ -100,23 +58,9 @@ END_VAR]]></Declaration>
 	RETURN;
 END_IF
 
-pMetadataAddedEvent := __NEW(MetadataAddedEvent(TargetMetadata := Metadata));
+pMetadataAddedEvent := __NEW(MetadataAddedEvent(Target := Metadata));
 eventTarget.Emit('OnMetadataAdded',pMetadataAddedEvent^);
 pMetadataAddedEvent^.Dispose();]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="FB_exit" Id="{66eb5229-7e34-482e-b8c3-60a4bd85e72a}" FolderPath="Destructor\">
-      <Declaration><![CDATA[METHOD FB_exit : BOOL
-VAR_INPUT
-	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF bInCopyCode THEN
-	RETURN;
-END_IF
-
-DisposeSelfCreatedMetadata();]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{6cf9fc56-e79b-4e9c-bef0-b5526016bdf4}" FolderPath="Constructor\">
@@ -129,17 +73,6 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="RegisterMetadata" Id="{91aec9cc-0e7e-4f05-a695-3a584b458675}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED RegisterMetadata
-VAR_INPUT
-	Metadata : I_Metadata;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[meta.AddOrUpdate(Metadata.Name, Metadata);
-EmitOnMetadataAddedEvent(Metadata);]]></ST>
       </Implementation>
     </Method>
     <Method Name="SerializeWith" Id="{3e51fd69-6bbd-4974-9a98-9fe16a6880bb}">
@@ -177,6 +110,9 @@ Serializer.EndArray();]]></ST>
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Destination : REFERENCE TO I_Metadata;
+END_VAR
+VAR
+	metadata : I_Metadata;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF NOT meta.TryGetValue(Name, metadata) THEN

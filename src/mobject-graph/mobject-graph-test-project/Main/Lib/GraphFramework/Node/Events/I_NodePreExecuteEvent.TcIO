@@ -15,8 +15,8 @@ END_VAR
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
-    <Property Name="TargetNode" Id="{b013ad5f-67ad-0059-1db2-c79bb6edf6fc}">
-      <Declaration><![CDATA[PROPERTY PUBLIC TargetNode : I_Node]]></Declaration>
+    <Property Name="Target" Id="{b013ad5f-67ad-0059-1db2-c79bb6edf6fc}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Node]]></Declaration>
       <Get Name="Get" Id="{a7334b49-fd59-0931-1bd1-c44f9002220f}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

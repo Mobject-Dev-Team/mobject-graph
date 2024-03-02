@@ -3,8 +3,8 @@
   <Itf Name="I_NodeExecuteEndEvent" Id="{dc59c47f-79c1-06cd-1d36-bf0bace27a27}">
     <Declaration><![CDATA[INTERFACE I_NodeExecuteEndEvent EXTENDS I_Event
 ]]></Declaration>
-    <Property Name="TargetNode" Id="{5f04d79d-9843-046b-0dad-dfb25789b913}">
-      <Declaration><![CDATA[PROPERTY PUBLIC TargetNode : I_Node]]></Declaration>
+    <Property Name="Target" Id="{5f04d79d-9843-046b-0dad-dfb25789b913}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Node]]></Declaration>
       <Get Name="Get" Id="{c5344353-93be-0b9f-3ec5-017e603210b7}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

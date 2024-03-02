@@ -15,7 +15,7 @@ END_VAR
 ]]></Declaration>
     </Method>
     <Property Name="Id" Id="{3f0a605f-e0ca-0b68-32ae-dc045045cbef}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Id : DINT]]></Declaration>
+      <Declaration><![CDATA[PROPERTY PUBLIC Id : T_MAXSTRING]]></Declaration>
       <Get Name="Get" Id="{9693ab0f-432b-03b3-2695-d2bcd82c6f64}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

@@ -3,10 +3,10 @@
   <Itf Name="I_NodePack" Id="{30b9a38a-1df6-0049-1a2e-20ebc2a31c34}">
     <Declaration><![CDATA[INTERFACE I_NodePack
 ]]></Declaration>
-    <Method Name="RegisterWithGraph" Id="{08c57c3e-0a8f-06be-0ca2-d87069d7f01b}">
-      <Declaration><![CDATA[METHOD PUBLIC RegisterWithGraph
+    <Method Name="RegisterWithNodePrototypes" Id="{08c57c3e-0a8f-06be-0ca2-d87069d7f01b}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterWithNodePrototypes
 VAR_INPUT
-	TcGraph : I_GraphFactory;
+	NodePrototypes : I_NodePrototypes;
 END_VAR
 ]]></Declaration>
     </Method>

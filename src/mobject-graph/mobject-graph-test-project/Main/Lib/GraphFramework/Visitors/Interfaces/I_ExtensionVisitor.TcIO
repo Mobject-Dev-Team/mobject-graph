@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_ExtensionVisitor" Id="{8721962a-1337-07f3-0925-db9e62f9d4cc}">
-    <Declaration><![CDATA[INTERFACE I_ExtensionVisitor EXTENDS I_ContentVisitor, I_ParameterVisitor, I_MetadataVisitor, I_ErrorVisitor, I_InputPortVisitor, I_OutputPortVisitor
-]]></Declaration>
+    <Declaration><![CDATA[INTERFACE I_ExtensionVisitor]]></Declaration>
     <Method Name="VisitExtension" Id="{04c103fa-d034-0249-09c2-8a238d2f5ab6}">
       <Declaration><![CDATA[METHOD VisitExtension
 VAR_INPUT

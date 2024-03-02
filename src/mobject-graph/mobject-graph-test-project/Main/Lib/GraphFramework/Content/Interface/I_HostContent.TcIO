@@ -10,14 +10,6 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
-    <Method Name="AddDataAsContent" Id="{794f70b3-ebc0-4576-8112-4da844755c3b}">
-      <Declaration><![CDATA[METHOD AddDataAsContent : I_Content;
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Data : I_Datatype;
-END_VAR
-]]></Declaration>
-    </Method>
     <Method Name="TryGetContentByName" Id="{c3b2381b-d905-05c0-2520-a309855441a7}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetContentByName : BOOL
 VAR_INPUT

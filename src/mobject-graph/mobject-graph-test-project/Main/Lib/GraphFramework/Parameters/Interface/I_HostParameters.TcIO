@@ -3,13 +3,6 @@
   <Itf Name="I_HostParameters" Id="{c5806033-3adc-0f99-304c-e569fa5b2b9f}">
     <Declaration><![CDATA[INTERFACE I_HostParameters EXTENDS __SYSTEM.IQueryInterface
 ]]></Declaration>
-    <Method Name="AddDataAsParameter" Id="{f6ff44a2-87ca-47cc-a380-2e4d25944377}">
-      <Declaration><![CDATA[METHOD AddDataAsParameter : I_Parameter
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Data : I_Datatype;
-END_VAR]]></Declaration>
-    </Method>
     <Method Name="AddParameter" Id="{629b0de3-c6af-0abc-2e2a-6709cf7d0165}">
       <Declaration><![CDATA[METHOD AddParameter
 VAR_INPUT

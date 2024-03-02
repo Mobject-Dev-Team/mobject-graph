@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Graph_TestSuite" Id="{9df7fd9c-1b17-45ef-bc71-b2204df2de81}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Graph_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestDeserializeExecuteSerialize();
+TestDeserializeSerialize();]]></ST>
+    </Implementation>
+    <Method Name="TestDeserializeExecuteSerialize" Id="{2119cc28-70e0-4b53-99e2-519c940091a4}">
+      <Declaration><![CDATA[METHOD PRIVATE TestDeserializeExecuteSerialize
+VAR
+	nodePack_PlcBasic : NodePack_PlcBasic;
+	nodePrototypes : NodePrototypes;
+	graph : Graph(nodePrototypes);
+	jsonDeserializer : JsonDeserializer;
+	jsonSerializer : JsonSerializer;
+	equal : BOOL;
+	expected : STRING(2000) := '{"uuid":"8506b771-8bd4-4160-984e-e0e4aa529fec","nodes":[{"id":"1","order":0,"mode":0,"outputPorts":[{"name":"out","datatype":{"type":"BOOL"},"value":true}],"parameters":[{"name":"value","datatype":{"type":"BOOL"},"value":true}]},{"id":"2","order":1,"mode":0,"inputPorts":[{"name":"in","connected":true,"datatype":{"type":"BOOL"},"value":true}],"contents":[{"name":"display","datatype":{"type":"BOOL"},"value":true}]}]}';
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestDeserializeExecuteSerialize');
+
+nodePrototypes.InstallNodePack(nodePack_PlcBasic);
+jsonDeserializer.TryLoad(TestJson.literalBoolLinkedToDisplayBool);
+graph.TryDeserializeFrom(jsonDeserializer);
+graph.Run();
+graph.SerializeWith(jsonSerializer);
+jsonSerializer.TryGetSerialziedData(ADR(TestJson.outJson),SIZEOF(TestJson.outJson));
+
+equal := TestJson.outJson = expected;
+
+AssertTrue(
+	Condition := equal,
+	Message := 'Did not produce the expected result'
+);
+	
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestDeserializeSerialize" Id="{a51b123e-7ec2-45b7-b1c1-e9c92859ccb5}">
+      <Declaration><![CDATA[METHOD PRIVATE TestDeserializeSerialize
+VAR
+	nodePack_PlcBasic : NodePack_PlcBasic;
+	nodePrototypes : NodePrototypes;
+	graph : Graph(nodePrototypes);
+	jsonDeserializer : JsonDeserializer;
+	jsonSerializer : JsonSerializer;
+	equal : BOOL;
+	expected : STRING(2000) := '{"uuid":"8506b771-8bd4-4160-984e-e0e4aa529fec","nodes":[{"id":"1","order":0,"mode":0,"outputPorts":[{"name":"out","datatype":{"type":"BOOL"},"value":false}],"parameters":[{"name":"value","datatype":{"type":"BOOL"},"value":true}]},{"id":"2","order":1,"mode":0,"inputPorts":[{"name":"in","connected":true,"datatype":{"type":"BOOL"},"value":false}],"contents":[{"name":"display","datatype":{"type":"BOOL"},"value":false}]}]}';
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestDeserializeSerialize');
+
+nodePrototypes.InstallNodePack(nodePack_PlcBasic);
+jsonDeserializer.TryLoad(TestJson.literalBoolLinkedToDisplayBool);
+graph.TryDeserializeFrom(jsonDeserializer);
+graph.SerializeWith(jsonSerializer);
+jsonSerializer.TryGetSerialziedData(ADR(TestJson.outJson),SIZEOF(TestJson.outJson));
+
+equal := TestJson.outJson = expected;
+
+AssertTrue(
+	Condition := equal,
+	Message := 'Did not produce the expected result'
+);
+	
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

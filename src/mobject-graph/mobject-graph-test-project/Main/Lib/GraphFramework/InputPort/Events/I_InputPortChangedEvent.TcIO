@@ -3,8 +3,8 @@
   <Itf Name="I_InputPortChangedEvent" Id="{fc6b9397-1eec-009e-0f99-fecc75499e00}">
     <Declaration><![CDATA[INTERFACE I_InputPortChangedEvent EXTENDS I_Event
 ]]></Declaration>
-    <Property Name="TargetInputPort" Id="{76feecca-368f-00fb-3447-79a217ca040e}">
-      <Declaration><![CDATA[PROPERTY PUBLIC TargetInputPort : I_InputPort]]></Declaration>
+    <Property Name="Target" Id="{76feecca-368f-00fb-3447-79a217ca040e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_InputPort]]></Declaration>
       <Get Name="Get" Id="{f7e5be38-a1d8-0821-3c19-bdcf3b0a69a4}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

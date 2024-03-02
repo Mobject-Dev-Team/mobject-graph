@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_GraphVisitor" Id="{3beaad77-f9b4-0e1e-36c4-b261c862bbf6}">
-    <Declaration><![CDATA[INTERFACE I_GraphVisitor Extends I_NodeVisitor, I_ContentVisitor, I_ParameterVisitor, I_ExtensionVisitor, I_MetadataVisitor, I_ErrorVisitor, I_InputPortVisitor, I_OutputPortVisitor]]></Declaration>
+    <Declaration><![CDATA[INTERFACE I_GraphVisitor]]></Declaration>
     <Method Name="VisitGraph" Id="{57ece38e-dc27-051d-27f8-98538b3ae4ff}">
       <Declaration><![CDATA[METHOD VisitGraph
 VAR_INPUT

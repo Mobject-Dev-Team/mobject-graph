@@ -10,15 +10,15 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="RegisterWithGraph" Id="{0a02d7c4-cf60-03c2-1373-451ec20f4e0e}">
-      <Declaration><![CDATA[METHOD PUBLIC RegisterWithGraph
+    <Method Name="RegisterWithNodePrototypes" Id="{0a02d7c4-cf60-03c2-1373-451ec20f4e0e}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterWithNodePrototypes
 VAR_INPUT
-	TcGraph : I_GraphFactory;
+	NodePrototypes : I_NodePrototypes;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[nodePack_PlcBasicDisplay.RegisterWithGraph(TcGraph);
-nodePack_PlcBasicLiterals.RegisterWithGraph(TcGraph);]]></ST>
+        <ST><![CDATA[nodePack_PlcBasicDisplay.RegisterWithNodePrototypes(NodePrototypes);
+nodePack_PlcBasicLiterals.RegisterWithNodePrototypes(NodePrototypes);]]></ST>
       </Implementation>
     </Method>
   </POU>

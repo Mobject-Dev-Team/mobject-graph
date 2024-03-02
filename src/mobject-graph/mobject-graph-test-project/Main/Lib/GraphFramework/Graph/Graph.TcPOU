@@ -15,6 +15,13 @@ VAR
 	errorHost : ErrorHost(eventEmitter);
 	extensionHost : ExtensionHost(eventEmitter);
 	metadataHost : MetadataHost(eventEmitter);
+	
+	selfCreatedContent : Stack;
+	selfCreatedInputPorts : Stack;
+	selfCreatedOutputPorts : Stack;
+	selfCreatedParameters : Stack;
+	selfCreatedMetadata : Stack;
+	selfCreatedNodes : Stack;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -22,6 +29,7 @@ END_VAR
     </Implementation>
     <Folder Name="Constructor" Id="{a293f140-7386-0971-1795-6d18ede4b434}" />
     <Folder Name="Destructor" Id="{b9a66c15-86af-0a69-1a53-9c709ccc1fa3}" />
+    <Folder Name="Private" Id="{947f7633-9d50-4f4f-b18a-9f70f3a5a300}" />
     <Folder Name="Protected" Id="{07ee2556-5865-4658-87ad-680d08d5c620}" />
     <Method Name="Accept" Id="{9759288d-5f0e-0b2c-0d87-315eec92f3c5}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
@@ -42,54 +50,79 @@ END_VAR]]></Declaration>
         <ST><![CDATA[contentHost.AddContent(Content);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="AddDataAsContent" Id="{8026de1c-66aa-41c9-a240-f2331e1ade9c}">
-      <Declaration><![CDATA[METHOD PUBLIC AddDataAsContent : I_Content;
+    <Method Name="AddDataAsContent" Id="{051e2756-d6ce-4078-a8fe-95749c3e86be}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddDataAsContent : I_Content
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Data : I_Datatype;
+END_VAR
+VAR
+	content : I_Content;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[AddDataAsContent := contentHost.AddDataAsContent(Name, Data);]]></ST>
+        <ST><![CDATA[content := CreateContent(Name, Data);
+selfCreatedContent.Push(content);
+AddDataAsContent := content;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="AddDataAsInputPort" Id="{7810e8b8-fc19-485e-97c6-e4c6d18d0fd9}">
-      <Declaration><![CDATA[METHOD PUBLIC AddDataAsInputPort : I_InputPort;
+    <Method Name="AddDataAsInputPort" Id="{7e114abb-9a47-4ab0-9787-ead21c0c896e}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddDataAsInputPort : I_InputPort
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Data : I_Datatype;
+END_VAR
+VAR
+	port : I_InputPort;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[AddDataAsInputPort := inputPortHost.AddDataAsInputPort(Name, Data);]]></ST>
+        <ST><![CDATA[port := CreateInputPort(Name, Data);
+selfCreatedInputPorts.Push(port);
+AddDataAsInputPort := port;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="AddDataAsMetadata" Id="{4e59caf1-cf9c-4549-9ebc-83dd1c3a2e08}">
-      <Declaration><![CDATA[METHOD PUBLIC AddDataAsMetadata : I_Metadata;
+    <Method Name="AddDataAsMetadata" Id="{57229b7a-e586-430a-94c1-40273f0ab89a}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddDataAsMetadata : I_Metadata
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Data : I_Datatype;
+END_VAR
+VAR
+	metadata : I_Metadata;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[AddDataAsMetadata := metadataHost.AddDataAsMetadata(Name, Data);]]></ST>
+        <ST><![CDATA[metadata := CreateMetadata(Name, Data);
+selfCreatedMetadata.Push(metadata);
+AddDataAsMetadata := metadata;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="AddDataAsOutputPort" Id="{dc49fa7b-54ef-4d4c-8aa9-9def452cfd62}">
-      <Declaration><![CDATA[METHOD PUBLIC AddDataAsOutputPort : I_OutputPort;
+    <Method Name="AddDataAsOutputPort" Id="{cf963aaa-510d-4408-b780-7001e9e01f83}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddDataAsOutputPort : I_OutputPort
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Data : I_Datatype;
+END_VAR
+VAR
+	port : I_OutputPort;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[AddDataAsOutputPort := outputPortHost.AddDataAsOutputPort(Name, Data);]]></ST>
+        <ST><![CDATA[port := CreateOutputPort(Name, Data);
+selfCreatedOutputPorts.Push(port);
+AddDataAsOutputPort := port;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="AddDataAsParameter" Id="{08e6f363-546c-4527-b137-a7de89c91218}">
-      <Declaration><![CDATA[METHOD PUBLIC AddDataAsParameter : I_Parameter;
+    <Method Name="AddDataAsParameter" Id="{678ef530-2b50-4f8e-b46b-0450c8502a84}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddDataAsParameter : I_Parameter
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Data : I_Datatype;
+END_VAR
+VAR
+	parameter : I_Parameter;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[AddDataAsParameter := parameterHost.AddDataAsParameter(Name, Data);]]></ST>
+        <ST><![CDATA[parameter := CreateParameter(Name, Data);
+selfCreatedParameters.Push(parameter);
+AddDataAsParameter := parameter;]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddError" Id="{e5ded1e0-602c-46b5-a84f-241532379ef9}">
@@ -131,6 +164,15 @@ END_VAR]]></Declaration>
         <ST><![CDATA[metadataHost.AddMetadata(Metadata);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="AddNode" Id="{7fea7ccf-3d16-412a-aa88-d50922d33d41}">
+      <Declaration><![CDATA[METHOD AddNode
+VAR_INPUT
+	Node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodeHost.AddNode(Node);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="AddOutputPort" Id="{3c9e050e-4b34-4df0-be37-1a6fe21c02f3}">
       <Declaration><![CDATA[METHOD AddOutputPort
 VAR_INPUT
@@ -151,6 +193,251 @@ END_VAR
         <ST><![CDATA[parameterHost.AddParameter(Parameter);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="CreateContent" Id="{821b80ea-fa86-42dc-87c5-a687613888b2}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateContent : I_Content
+VAR_INPUT
+	ContentName : T_MAXSTRING;
+	ContentData : I_Datatype;
+END_VAR
+VAR
+	pContent : POINTER TO Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pContent := __NEW(Content(Name := ContentName, Data := ContentData, Parent := THIS^));
+CreateContent := pContent^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateInputPort" Id="{4774ef93-51d1-4b01-ae45-ddeffc19be4d}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateInputPort : I_InputPort
+VAR_INPUT
+	PortName : T_MAXSTRING;
+	PortData : I_Datatype;
+END_VAR
+VAR
+	pPort : POINTER TO InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pPort := __NEW(InputPort(Name := PortName, Data := PortData, Parent := THIS^));
+CreateInputPort := pPort^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateLinks" Id="{4d909e30-29af-469e-b412-8b76819d5508}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PUBLIC CreateLinks
+VAR_INPUT
+	Deserializer : I_Deserializer;
+END_VAR
+VAR
+	linksDeserializer : I_Deserializer;
+	linksEnumerator : I_DeserializerArrayForwardEnumerator;
+	linkDeserializer : I_Deserializer;
+	sourceNodeId : T_MAXSTRING;
+	sourcePortName : T_MAXSTRING;
+	destinationNodeId : T_MAXSTRING;
+	destinationPortName : T_MAXSTRING;
+	sourceNode : I_Node;
+	sourcePort : I_OutputPort;
+	destinationNode : I_Node;
+	destinationPort : I_InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[linksDeserializer := Deserializer.GetKeyArray('links');
+linksEnumerator := linksDeserializer.GetArrayEnumerator();
+
+WHILE linksEnumerator.MoveNext() DO
+	
+	linkDeserializer := linksEnumerator.Current.GetArray();
+	
+	IF NOT linkDeserializer.GetElementByIndex(1).TryGetString(sourceNodeId) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT linkDeserializer.GetElementByIndex(2).TryGetString(sourcePortName) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT linkDeserializer.GetElementByIndex(3).TryGetString(destinationNodeId) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT linkDeserializer.GetElementByIndex(4).TryGetString(destinationPortName) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT nodeHost.TryGetNodeById(sourceNodeId, sourceNode) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT nodeHost.TryGetNodeById(destinationNodeId, destinationNode) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT sourceNode.TryGetOutputPortByName(sourcePortName, sourcePort) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT destinationNode.TryGetInputPortByName(destinationPortName, destinationPort) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT destinationPort.TryConnectTo(sourcePort) THEN
+		CONTINUE;
+	END_IF
+	
+END_WHILE
+
+linksEnumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateMetadata" Id="{79447d1a-bb3d-4f7e-8bae-4d14eeeef024}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateMetadata : I_Metadata
+VAR_INPUT
+	MetadataName : T_MAXSTRING;
+	MetadataData : I_Datatype;
+END_VAR
+VAR
+	pMetadata : POINTER TO Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pMetadata := __NEW(Metadata(Name := MetadataName, Data := MetadataData, Parent := THIS^));
+CreateMetadata := pMetadata^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateNodes" Id="{9d17f6c4-8462-4003-b53a-550acec0614e}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PUBLIC CreateNodes
+VAR_INPUT
+	Deserializer : I_Deserializer;
+END_VAR
+VAR
+	nodeDeserializer : I_Deserializer;
+	nodesEnumerator : I_DeserializerArrayForwardEnumerator;
+	nodeType : T_MAXSTRING;
+	node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodeDeserializer := Deserializer.GetKeyArray('nodes');
+nodesEnumerator := nodeDeserializer.GetArrayEnumerator();
+
+WHILE nodesEnumerator.MoveNext() DO
+	
+	IF NOT nodesEnumerator.Current.TryGetKeyString('type',nodeType) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT nodePrototypes.TryCreateNodeByType(nodeType, node) THEN
+		CONTINUE;
+	END_IF
+	
+	selfCreatedNodes.Push(node);
+	
+	node.TryDeserializeFrom(nodesEnumerator.Current);
+	
+	AddNode(node);
+
+END_WHILE
+
+nodesEnumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateOutputPort" Id="{80878659-95c1-4307-8fad-d9ab6125a200}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateOutputPort : I_OutputPort
+VAR_INPUT
+	PortName : T_MAXSTRING;
+	PortData : I_Datatype;
+END_VAR
+VAR
+	pPort : POINTER TO OutputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pPort := __NEW(OutputPort(Name := PortName, Data := PortData, Parent := THIS^));
+CreateOutputPort := pPort^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateParameter" Id="{0846f752-8583-4580-8a63-bf73f928e7dc}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateParameter : I_Parameter
+VAR_INPUT
+	ParameterName : T_MAXSTRING;
+	ParameterData : I_Datatype;
+END_VAR
+VAR
+	pParameter : POINTER TO Parameter;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pParameter := __NEW(Parameter(Name := ParameterName, Data := ParameterData, Parent := THIS^));
+CreateParameter := pParameter^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSelfCreatedContent" Id="{6f51ddea-8f7c-44d4-8341-b8a39ae914ea}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedContent : BOOL
+VAR
+	content : I_Content;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedContent.TryPop(content) DO
+	content.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSelfCreatedInputPorts" Id="{fc440d05-d34c-46d0-a08a-6ed111c8b809}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedInputPorts : BOOL
+VAR
+	port : I_InputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedInputPorts.TryPop(port) DO
+	port.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSelfCreatedMetadata" Id="{b2e5abdd-7830-4f5a-b3c3-160b835a1025}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PROTECTED DisposeSelfCreatedMetadata : BOOL
+VAR
+	metadata : I_Metadata;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedMetadata.TryPop(metadata) DO
+	metadata.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSelfCreatedNodes" Id="{32ea0069-1284-46f0-a026-931ea17c32c9}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedNodes : BOOL
+VAR
+	node : I_Node;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedNodes.TryPop(node) DO
+	node.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSelfCreatedOutputPorts" Id="{8c4485f9-7854-4941-b988-0b4e78342d48}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedOutputPorts : BOOL
+VAR
+	port : I_OutputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedOutputPorts.TryPop(port) DO
+	port.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSelfCreatedParameters" Id="{b371df07-0c6a-4d59-8cdd-d8922d84e439}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedParameters : BOOL
+VAR
+	parameter : I_Parameter;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedParameters.TryPop(parameter) DO
+	parameter.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_exit" Id="{9dcfff24-3381-0760-25fd-bc1afba0c65f}" FolderPath="Destructor\">
       <Declaration><![CDATA[METHOD FB_exit : BOOL
 VAR_INPUT
@@ -161,7 +448,12 @@ END_VAR]]></Declaration>
 	RETURN;
 END_IF
 
-Reset();]]></ST>
+DisposeSelfCreatedContent();
+DisposeSelfCreatedInputPorts();
+DisposeSelfCreatedOutputPorts();
+DisposeSelfCreatedParameters();
+DisposeSelfCreatedMetadata();
+DisposeSelfCreatedNodes();]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{dedf069a-1e51-0fed-0932-2607f7394698}" FolderPath="Constructor\">
@@ -174,13 +466,12 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[THIS^.nodePrototypes := NodePrototypes;
-InitializeGraph(THIS^);]]></ST>
+Initialize();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="InitializeGraph" Id="{6e21f07c-76bf-40e2-81a6-1a7ecbdd42c1}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED InitializeGraph
+    <Method Name="Initialize" Id="{6e21f07c-76bf-40e2-81a6-1a7ecbdd42c1}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Initialize
 VAR_INPUT
-	Self : I_Graph;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -223,8 +514,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[nodeHost.DisposeAll();
-_uuid := '';]]></ST>
+        <ST><![CDATA[_uuid := '';
+DisposeSelfCreatedNodes();]]></ST>
       </Implementation>
     </Method>
     <Method Name="Run" Id="{1dc36582-e7a3-03d2-2e77-7abd714e98fa}">
@@ -233,7 +524,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[nodeHost.ExecuteInOrder();
+        <ST><![CDATA[nodeHost.Execute();
 ]]></ST>
       </Implementation>
     </Method>
@@ -245,6 +536,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Serializer.StartObject();
+Serializer.AddKeyString('uuid',_uuid);
 inputPortHost.SerializeWith(Serializer);
 outputPortHost.SerializeWith(Serializer);
 parameterHost.SerializeWith(Serializer);
@@ -268,15 +560,19 @@ END_VAR]]></Declaration>
         <ST><![CDATA[parameterHost.TryDeserializeFrom(Deserializer);
 extensionHost.TryDeserializeFrom(Deserializer);
 
-IF Deserializer.TryGetKeyString('uuid', receivedUuid) THEN
-
-	IF Uuid <> uuid THEN
-		Reset();
-	END_IF
-
+IF NOT Deserializer.TryGetKeyString('uuid', receivedUuid) THEN
+	RETURN;
 END_IF
 
-nodeHost.TryDeserializeFrom(Deserializer);]]></ST>
+IF Uuid = receivedUuid THEN
+	nodeHost.TryDeserializeFrom(Deserializer);
+	RETURN;
+END_IF
+
+Reset();
+CreateNodes(Deserializer);
+CreateLinks(Deserializer);
+_uuid := receivedUuid;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetContentByName" Id="{e912c915-77b1-4a71-a6fd-89bbc8852568}">
@@ -368,6 +664,16 @@ IF NOT TryGetExtensionByName(extensionName, extension) THEN
 END_IF
 
 TryGetMetadataByName := extension.TryGetMetadataByName(metadatumName, Destination);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetNodeById" Id="{900685c5-5d69-4e70-9a97-aa769ca12b83}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetNodeById : BOOL
+VAR_INPUT
+	Id : T_MAXSTRING;
+	Destination : REFERENCE TO I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetNodeById := nodeHost.TryGetNodeById(Id, Destination);]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetOutputPortByName" Id="{d96f141e-32e3-4d1a-9edb-007e4130314d}">

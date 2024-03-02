@@ -5,14 +5,12 @@
 VAR
 	eventTarget : I_EventTarget;
 	parameters : Dictionary;
-	selfCreatedParameters : Stack;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{d962da93-42f3-408c-9e94-0c5674d47b60}" />
-    <Folder Name="Destructor" Id="{fd328a3d-adb5-4998-8759-f30b229cad98}" />
     <Folder Name="Protected" Id="{fa8eb0b0-8e53-404f-9aa4-b19cb7b4447d}" />
     <Method Name="Accept" Id="{67a986cb-c3c8-4714-95da-82654735a15b}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
@@ -37,54 +35,14 @@ END_WHILE
 enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="AddDataAsParameter" Id="{678ef530-2b50-4f8e-b46b-0450c8502a84}">
-      <Declaration><![CDATA[METHOD PUBLIC AddDataAsParameter : I_Parameter
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Data : I_Datatype;
-END_VAR
-VAR
-	parameter : I_Parameter;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[parameter := CreateParameter(Name, Data);
-selfCreatedParameters.Push(parameter);
-AddDataAsParameter := parameter;]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="AddParameter" Id="{62100911-1991-410b-b3b5-a2e6486a3099}">
       <Declaration><![CDATA[METHOD PUBLIC AddParameter
 VAR_INPUT
 	Parameter : I_Parameter;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[RegisterParameter(Parameter);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="CreateParameter" Id="{0846f752-8583-4580-8a63-bf73f928e7dc}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED CreateParameter : I_Parameter
-VAR_INPUT
-	ParameterName : T_MAXSTRING;
-	ParameterData : I_Datatype;
-END_VAR
-VAR
-	pParameter : POINTER TO Parameter;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[pParameter := __NEW(Parameter(Name := ParameterName, Data := ParameterData, Parent := THIS^));
-CreateParameter := pParameter^;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="DisposeSelfCreatedParameters" Id="{b371df07-0c6a-4d59-8cdd-d8922d84e439}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED DisposeSelfCreatedParameters : BOOL
-VAR
-	parameter : I_Parameter;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[WHILE selfCreatedParameters.TryPop(parameter) DO
-	parameter.Dispose();
-END_WHILE]]></ST>
+        <ST><![CDATA[parameters.AddOrUpdate(Parameter.Name, Parameter);
+EmitOnParameterAddedEvent(Parameter);]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitOnParameterAddedEvent" Id="{2bfcadd9-8f8c-414b-8ace-7e1444c758d9}" FolderPath="Protected\">
@@ -105,20 +63,6 @@ eventTarget.Emit('OnParameterAdded',pParameterAddedEvent^);
 pParameterAddedEvent^.Dispose();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="FB_exit" Id="{8e9f3060-f9e9-48d3-9a88-3637f6dbb09a}" FolderPath="Destructor\">
-      <Declaration><![CDATA[METHOD FB_exit : BOOL
-VAR_INPUT
-	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF bInCopyCode THEN
-	RETURN;
-END_IF
-
-DisposeSelfCreatedParameters();]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="FB_init" Id="{163161dd-2b78-474f-b1ea-d4408046e436}" FolderPath="Constructor\">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
@@ -131,17 +75,6 @@ END_VAR
         <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="RegisterParameter" Id="{f774e136-a6e0-401d-83f5-1b6c4f6179ec}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED RegisterParameter
-VAR_INPUT
-	Parameter : I_Parameter;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[parameters.AddOrUpdate(Parameter.Name, Parameter);
-EmitOnParameterAddedEvent(Parameter);]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="SerializeWith" Id="{3efcd39e-7699-4bc3-a13e-91d6be2edb8c}">
       <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT
@@ -152,7 +85,7 @@ VAR
 	parameter : I_Parameter;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF parameters.IsEmpty THEN
+        <ST><![CDATA[IF parameters.Count = 0 THEN
 	RETURN;
 END_IF
 
@@ -179,27 +112,25 @@ VAR_INPUT
 END_VAR
 VAR
 	parametersDeserializer : I_Deserializer;
-	parametersEnumerator : I_DeserializerForwardEnumerator;
+	parametersEnumerator : I_DeserializerObjectForwardEnumerator;
 	parameterName : T_MAXSTRING;
 	parameter : I_Parameter;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[parametersDeserializer := Deserializer.GetKey('properties');
-parametersEnumerator := parametersDeserializer.GetObjectKeyEnumerator();
+        <ST><![CDATA[parametersDeserializer := Deserializer.GetKeyObject('properties');
+parametersEnumerator := parametersDeserializer.GetObjectEnumerator();
 
 WHILE parametersEnumerator.MoveNext() DO
 	
-	IF NOT parametersEnumerator.Current.TryGetName(parameterName) THEN
-		CONTINUE;
-	END_IF
-	
-	IF NOT TryGetParameterByName(parameterName, parameter)THEN
+	IF NOT TryGetParameterByName(parametersEnumerator.Key, parameter)THEN
 		CONTINUE;
 	END_IF
 	
 	parameter.TryDeserializeFrom(parametersEnumerator.Current);
 
-END_WHILE]]></ST>
+END_WHILE
+
+parametersEnumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetParameterByName" Id="{ab07ca82-19c6-40f6-a546-6746aad8fa7f}">

@@ -2,8 +2,8 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_ExtensionAddedEvent" Id="{15d72682-e9fd-0e9e-24b9-f648d0a1d5c4}">
     <Declaration><![CDATA[INTERFACE I_ExtensionAddedEvent EXTENDS I_Event]]></Declaration>
-    <Property Name="TargetExtension" Id="{cd72f87b-7f5f-025b-1dd9-dcc46f2e10aa}">
-      <Declaration><![CDATA[PROPERTY PUBLIC TargetExtension : I_Extension]]></Declaration>
+    <Property Name="Target" Id="{cd72f87b-7f5f-025b-1dd9-dcc46f2e10aa}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Extension]]></Declaration>
       <Get Name="Get" Id="{003fb858-4973-0645-35d1-0c6a8b1b6236}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

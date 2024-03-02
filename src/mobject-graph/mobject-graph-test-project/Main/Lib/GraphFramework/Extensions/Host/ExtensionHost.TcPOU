@@ -41,7 +41,8 @@ VAR_INPUT
 	Extension : I_Extension;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[RegisterExtension(Extension);]]></ST>
+        <ST><![CDATA[extensions.AddOrUpdate(Extension.Name,Extension);
+EmitOnExtensionAddedEvent(Extension);]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitOnExtensionAddedEvent" Id="{806d1efe-3d58-4811-a177-09d74a82cc34}" FolderPath="Protected\">
@@ -57,7 +58,7 @@ END_VAR]]></Declaration>
 	RETURN;
 END_IF
 
-pExtensionAddedEvent := __NEW(ExtensionAddedEvent(TargetExtension := Extension));
+pExtensionAddedEvent := __NEW(ExtensionAddedEvent(Target := Extension));
 eventTarget.Emit('OnExtensionAdded',pExtensionAddedEvent^);
 pExtensionAddedEvent^.Dispose();]]></ST>
       </Implementation>
@@ -74,17 +75,6 @@ END_VAR
         <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="RegisterExtension" Id="{253bb89e-166b-4fe7-89a9-2669832b9ef7}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED RegisterExtension
-VAR_INPUT
-	Extension : I_Extension;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[extensions.AddOrUpdate(Extension.Name,Extension);
-EmitOnExtensionAddedEvent(Extension);]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="SerializeWith" Id="{fd942c3a-b086-4e07-90ff-21907125212e}">
       <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT
@@ -95,7 +85,7 @@ VAR
 	extension : I_Extension;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF extensions.IsEmpty THEN
+        <ST><![CDATA[IF extensions.Count = 0 THEN
 	RETURN;
 END_IF
 
@@ -111,7 +101,6 @@ WHILE enumerator.MoveNext() DO
 END_WHILE
 
 enumerator.Dispose();
-
 Serializer.EndArray();]]></ST>
       </Implementation>
     </Method>
@@ -122,13 +111,13 @@ VAR_INPUT
 END_VAR
 VAR
 	extensionsDeserializer : I_Deserializer;
-	extensionsEnumerator : I_DeserializerForwardEnumerator;
+	extensionsEnumerator : I_DeserializerArrayForwardEnumerator;
 	extensionName : T_MAXSTRING;
 	extension : I_Extension;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[extensionsDeserializer := Deserializer.GetKey('extensions');
-extensionsEnumerator := extensionsDeserializer.GetArrayElementEnumerator();
+        <ST><![CDATA[extensionsDeserializer := Deserializer.GetKeyArray('extensions');
+extensionsEnumerator := extensionsDeserializer.GetArrayEnumerator();
 
 WHILE extensionsEnumerator.MoveNext() DO
 	
@@ -142,7 +131,9 @@ WHILE extensionsEnumerator.MoveNext() DO
 	
 	extension.TryDeserializeFrom(extensionsEnumerator.Current);
 
-END_WHILE]]></ST>
+END_WHILE
+
+extensionsEnumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetExtensionByName" Id="{40c3877d-feb8-4195-a944-7e526cdf6f87}">

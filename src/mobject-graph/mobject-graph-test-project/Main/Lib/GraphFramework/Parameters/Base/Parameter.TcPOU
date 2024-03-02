@@ -108,12 +108,11 @@ Serializer.EndObject();]]></ST>
 VAR_INPUT
 	Deserializer : I_Deserializer;
 END_VAR
-]]></Declaration>
+VAR
+	parameterDeserializer : I_Deserializer;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// check name = prameter name
-
-
-TryDeserializeFrom := _data.TryDeserializeFrom(Deserializer);]]></ST>
+        <ST><![CDATA[TryDeserializeFrom := _data.TryDeserializeFrom(Deserializer);]]></ST>
       </Implementation>
     </Method>
   </POU>

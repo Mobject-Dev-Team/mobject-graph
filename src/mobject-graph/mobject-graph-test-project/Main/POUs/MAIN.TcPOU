@@ -3,8 +3,11 @@
   <POU Name="MAIN" Id="{1c7dbdb3-3ad9-058e-2a75-807bd1bcee45}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR		
-	graphFactory : GraphFactory;
-	graph : I_Graph;
+	graph_TestSuite : Graph_TestSuite;
+	
+	// playground
+	nodePrototypes : NodePrototypes;
+	graph : Graph(nodePrototypes);
 	nodePack_PlcBasic : NodePack_PlcBasic;
 	initialise: BOOL;
 
@@ -12,19 +15,36 @@ VAR
 	done : BOOL;
 	output : STRING(2000);
 	serializer : JsonSerializer();	
+	deserializier : JsonDeserializer();
+	tryLoadBasic : BOOL := true;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF NOT initialise THEN
-	initialise := TRUE;
-	graphFactory.InstallNodePack(nodePack_PlcBasic);
-	graph := graphFactory.Create();
-END_IF
+      <ST><![CDATA[
+// todo
+// modify json to suit ideal
+// - node id is now unique string
+// - link is now [id_dint, sourceId_String, sourcePortName_String, destinationId_String, destinationPortName_String].
+TcUnit.RUN();
 
-graph.Run();
+//IF NOT initialise THEN
+//	initialise := TRUE;
+//	nodePrototypes.InstallNodePack(nodePack_PlcBasic);
+//END_IF
 
-serializer.Reset();
-graphFactory.SerializeWith(serializer);
-done := serializer.TryGetSerialziedData(ADR(output),SIZEOF(output));]]></ST>
+
+
+//graph.Run();
+
+//serializer.Reset();
+//nodePrototypes.SerializeWith(serializer);
+//done := serializer.TryGetSerialziedData(ADR(output),SIZEOF(output));
+
+//IF loadSingleLiteralBool THEN
+//	graph.Reset();
+//	deserializier.TryLoad(TestJson.singleLiteralBool);
+//	graph.TryDeserializeFrom(deserializier);
+//	tryLoadBasic := FALSE;
+//END_IF]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

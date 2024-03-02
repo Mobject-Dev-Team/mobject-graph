@@ -6,7 +6,7 @@
 {attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK ErrorAddedEvent EXTENDS Disposable IMPLEMENTS I_ErrorAddedEvent
 VAR
-	_targetError : I_Error;
+	_target : I_Error;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -18,21 +18,21 @@ END_VAR
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	TargetError : I_Error;
+	Target : I_Error;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[This^._targetError := TargetError;]]></ST>
+        <ST><![CDATA[This^._target := Target;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="TargetError" Id="{76c0f6be-146d-011d-2992-c8ae2e9400cf}">
-      <Declaration><![CDATA[PROPERTY PUBLIC TargetError : I_Error]]></Declaration>
+    <Property Name="Target" Id="{76c0f6be-146d-011d-2992-c8ae2e9400cf}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Error]]></Declaration>
       <Get Name="Get" Id="{145585c8-2f5a-01db-04bb-0cb34ba4def4}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[TargetError := _targetError;]]></ST>
+          <ST><![CDATA[Target := _target;]]></ST>
         </Implementation>
       </Get>
     </Property>

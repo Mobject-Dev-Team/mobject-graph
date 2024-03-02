@@ -20,15 +20,14 @@ END_VAR]]></Declaration>
 Clone := pointerToNode^;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="InitializeNode" Id="{d73c1425-3be4-40ad-8b90-9c6639db96d3}">
-      <Declaration><![CDATA[METHOD PROTECTED InitializeNode
+    <Method Name="Initialize" Id="{d73c1425-3be4-40ad-8b90-9c6639db96d3}">
+      <Declaration><![CDATA[METHOD PROTECTED Initialize
 VAR_INPUT
-	Self : I_Node;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Self.AddDataAsParameter('value', value);
-Self.AddDataAsOutputPort('out', out);]]></ST>
+        <ST><![CDATA[THIS^.AddDataAsParameter('value', value);
+THIS^.AddDataAsOutputPort('out', out);]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnExecute" Id="{17896f32-d471-0aa9-3949-762ff3592dce}">

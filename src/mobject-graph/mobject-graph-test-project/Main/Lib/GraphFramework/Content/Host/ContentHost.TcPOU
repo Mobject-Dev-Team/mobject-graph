@@ -5,14 +5,12 @@
 VAR
 	eventTarget : I_EventTarget;
 	contents : Dictionary;
-	selfCreatedContent : Stack;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{173c4e6f-13af-4c18-80d2-e7a43982d081}" />
-    <Folder Name="Destructor" Id="{01419939-ac15-467a-bc8c-a50a05fb716c}" />
     <Folder Name="Protected" Id="{507c695e-d5e9-4330-b128-2f74bba9e8da}" />
     <Method Name="Accept" Id="{bb5474ac-7ae3-4961-880b-1f80e7bfa58f}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
@@ -43,48 +41,8 @@ VAR_INPUT
 	Content : I_Content;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[RegisterContent(Content);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddDataAsContent" Id="{7d7dbfab-f047-4025-9ccf-858bac85c0c1}">
-      <Declaration><![CDATA[METHOD PUBLIC AddDataAsContent : I_Content
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Data : I_Datatype;
-END_VAR
-VAR
-	content : I_Content;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[content := CreateContent(Name, Data);
-selfCreatedContent.Push(content);
-AddDataAsContent := content;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="CreateContent" Id="{821b80ea-fa86-42dc-87c5-a687613888b2}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED CreateContent : I_Content
-VAR_INPUT
-	ContentName : T_MAXSTRING;
-	ContentData : I_Datatype;
-END_VAR
-VAR
-	pContent : POINTER TO Content;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[pContent := __NEW(Content(Name := ContentName, Data := ContentData, Parent := THIS^));
-CreateContent := pContent^;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="DisposeSelfCreatedContent" Id="{6f51ddea-8f7c-44d4-8341-b8a39ae914ea}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED DisposeSelfCreatedContent : BOOL
-VAR
-	content : I_Content;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[WHILE selfCreatedContent.TryPop(content) DO
-	content.Dispose();
-END_WHILE]]></ST>
+        <ST><![CDATA[contents.AddOrUpdate(Content.Name, Content);
+EmitOnContentAddedEvent(Content);]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitOnContentAddedEvent" Id="{982e38f9-d0ec-0d68-23b9-1014864696d7}" FolderPath="Protected\">
@@ -100,23 +58,9 @@ END_VAR]]></Declaration>
 	RETURN;
 END_IF
 
-pContentAddedEvent := __NEW(ContentAddedEvent(TargetContent := Content));
+pContentAddedEvent := __NEW(ContentAddedEvent(Target := Content));
 eventTarget.Emit('OnContentAdded',pContentAddedEvent^);
 pContentAddedEvent^.Dispose();]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="FB_exit" Id="{844be24d-f0ab-4ae1-8338-ab44813584f6}" FolderPath="Destructor\">
-      <Declaration><![CDATA[METHOD FB_exit : BOOL
-VAR_INPUT
-	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF bInCopyCode THEN
-	RETURN;
-END_IF
-
-DisposeSelfCreatedContent();]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{2a740d82-de22-4725-911f-2def6b984edf}" FolderPath="Constructor\">
@@ -129,17 +73,6 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="RegisterContent" Id="{b67f9558-618d-4bfd-b717-886a90f2936b}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED RegisterContent
-VAR_INPUT
-	Content : I_Content;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[contents.AddOrUpdate(Content.Name, Content);
-EmitOnContentAddedEvent(Content);]]></ST>
       </Implementation>
     </Method>
     <Method Name="SerializeWith" Id="{a25d083a-f7ed-4bb9-acc7-2c878e04a202}">
@@ -168,7 +101,6 @@ WHILE enumerator.MoveNext() DO
 END_WHILE
 
 enumerator.Dispose();
-
 Serializer.EndArray();]]></ST>
       </Implementation>
     </Method>

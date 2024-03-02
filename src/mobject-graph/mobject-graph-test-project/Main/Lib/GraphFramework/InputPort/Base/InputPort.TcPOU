@@ -70,7 +70,7 @@ VAR
 	pInputPortChangeEvent : POINTER TO InputPortChangedEvent;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pInputPortChangeEvent := __NEW(InputPortChangedEvent(TargetInputPort := PortChanged));
+        <ST><![CDATA[pInputPortChangeEvent := __NEW(InputPortChangedEvent(Target := PortChanged));
 eventEmitter.Emit('OnInputPortChanged',pInputPortChangeEvent^);
 pInputPortChangeEvent^.Dispose();]]></ST>
       </Implementation>
@@ -100,7 +100,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF __QUERYINTERFACE(Event, outputPortChangedEvent) THEN
-	HandleOutputPortChangedEvent(outputPortChangedEvent.TargetOutputPort);
+	HandleOutputPortChangedEvent(outputPortChangedEvent.Target);
 END_IF]]></ST>
       </Implementation>
     </Method>

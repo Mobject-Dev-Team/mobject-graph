@@ -6,7 +6,7 @@
 {attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK NodePreExecuteEvent EXTENDS Disposable IMPLEMENTS I_NodePreExecuteEvent
 VAR
-	_targetNode : I_Node;
+	_target : I_Node;
 	_cancelExecute : BOOL;
 END_VAR]]></Declaration>
     <Implementation>
@@ -38,21 +38,21 @@ END_VAR
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	TargetNode : I_Node;
+	Target : I_Node;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[This^._targetNode := TargetNode;]]></ST>
+        <ST><![CDATA[_target := Target;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="TargetNode" Id="{fb55ddea-3927-004b-322d-079fb1bf38bf}">
-      <Declaration><![CDATA[PROPERTY PUBLIC TargetNode : I_Node]]></Declaration>
+    <Property Name="Target" Id="{fb55ddea-3927-004b-322d-079fb1bf38bf}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Node]]></Declaration>
       <Get Name="Get" Id="{c9e3ed25-ff10-08d8-2f90-23f32ba015fb}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[TargetNode := _targetNode;]]></ST>
+          <ST><![CDATA[Target := _target;]]></ST>
         </Implementation>
       </Get>
     </Property>

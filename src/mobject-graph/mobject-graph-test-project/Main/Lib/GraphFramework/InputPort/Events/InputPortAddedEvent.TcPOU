@@ -6,7 +6,7 @@
 {attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK InputPortAddedEvent EXTENDS Disposable IMPLEMENTS I_InputPortAddedEvent
 VAR
-	_targetInputPort : I_InputPort;
+	_target : I_InputPort;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -18,21 +18,21 @@ END_VAR
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	TargetInputPort : I_InputPort;
+	Target : I_InputPort;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[This^._targetInputPort := TargetInputPort;]]></ST>
+        <ST><![CDATA[This^._target := Target;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="TargetInputPort" Id="{5190413e-9637-0cff-1a5e-9b71d3ecc836}">
-      <Declaration><![CDATA[PROPERTY PUBLIC TargetInputPort : I_InputPort]]></Declaration>
+    <Property Name="Target" Id="{5190413e-9637-0cff-1a5e-9b71d3ecc836}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_InputPort]]></Declaration>
       <Get Name="Get" Id="{047a7663-b306-07a4-07d9-ef1edc5c8780}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[TargetInputPort := _targetInputPort;]]></ST>
+          <ST><![CDATA[Target := _target;]]></ST>
         </Implementation>
       </Get>
     </Property>

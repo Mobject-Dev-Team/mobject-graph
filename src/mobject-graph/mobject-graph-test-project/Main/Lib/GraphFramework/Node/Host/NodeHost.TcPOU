@@ -5,7 +5,7 @@
 VAR
 	eventTarget : I_EventTarget;
 	nodes : Dictionary;
-	selfCreatedNodes : Stack;
+	nodesInOrder : LinkedList;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -42,7 +42,9 @@ VAR_INPUT
 	Node : I_Node;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[RegisterNode(Node);]]></ST>
+        <ST><![CDATA[nodes.AddOrUpdate(Node.id, Node);
+UpdateExecutionOrder(Node);
+EmitOnNodeAddedEvent(Node);]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitOnNodeAddedEvent" Id="{c4e0373f-d6e4-47dd-b7dc-a31680c50096}" FolderPath="Protected\">
@@ -58,7 +60,7 @@ END_VAR]]></Declaration>
 	RETURN;
 END_IF
 
-pNodeAddedEvent := __NEW(NodeAddedEvent(TargetNode := Node));
+pNodeAddedEvent := __NEW(NodeAddedEvent(Target := Node));
 eventTarget.Emit('OnNodeAdded',pNodeAddedEvent^);
 pNodeAddedEvent^.Dispose();]]></ST>
       </Implementation>
@@ -72,12 +74,7 @@ VAR
 	node : I_Node;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF regenExecutionOrder THEN
-	//
-	todo
-END_IF
-
-enumerator := nodesInExecutionOrder.GetEnumerator();
+        <ST><![CDATA[enumerator := nodesInOrder.GetEnumerator();
 
 WHILE enumerator.MoveNext() DO
 	IF enumerator.TryGet(node) THEN
@@ -100,17 +97,6 @@ END_VAR
         <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="RegisterNode" Id="{645a916c-101f-48aa-9eb6-3cc30fb8dc9e}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED RegisterNode
-VAR_INPUT
-	Node : I_Node;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[nodes.Insert(Node);
-EmitOnNodeAddedEvent(Node);]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="SerializeWith" Id="{35e41fb7-926c-4bdb-ba3b-2b9824a08186}">
       <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT
@@ -121,7 +107,7 @@ VAR
 	node : I_Node;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF nodes.IsEmpty THEN
+        <ST><![CDATA[IF nodes.Count = 0 THEN
 	RETURN;
 END_IF
 
@@ -148,24 +134,21 @@ VAR_INPUT
 END_VAR
 VAR
 	nodeDeserializer : I_Deserializer;
-	nodesEnumerator : I_DeserializerForwardEnumerator;
+	nodesEnumerator : I_DeserializerArrayForwardEnumerator;
 	nodeId : T_MAXSTRING;
 	node : I_Node;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[nodeDeserializer := Deserializer.GetKey('nodes');
-
-todo // here first check each of the nodes to see if they exist.  If not then these will need to be made
-
-nodesEnumerator := Deserializer.GetObjectKeyEnumerator();
+        <ST><![CDATA[nodeDeserializer := Deserializer.GetKeyArray('nodes');
+nodesEnumerator := nodeDeserializer.GetArrayEnumerator();
 
 WHILE nodesEnumerator.MoveNext() DO
 	
-	IF NOT nodesEnumerator.Current.TryGetName(nodeId) THEN
+	IF NOT nodesEnumerator.Current.TryGetKeyString('id',nodeId) THEN
 		CONTINUE;
 	END_IF
 	
-	IF NOT TryGetById(nodeId, node)THEN
+	IF NOT TryGetNodeById(nodeId, node)THEN
 		CONTINUE;
 	END_IF
 	
@@ -173,69 +156,17 @@ WHILE nodesEnumerator.MoveNext() DO
 
 END_WHILE
 
-//------------
-
-
-nodeArrayEnumerator := Deserializer.GetKeyArray('nodes').GetArrayElementEnumerator();
-
-WHILE nodeArrayEnumerator.MoveNext() do
-	
-	IF NOT nodeArrayEnumerator.Current.TryGetKeyUdint('id',nodeId) THEN
-		// raise error that a node was received without an id
-		CONTINUE;
-	END_IF
-	
-	IF NOT nodes.TryGetById(nodeId, node) THEN // no node available so make it...
-		
-		IF NOT nodeArrayEnumerator.Current.TryGetKeyString('type',nodeType) THEN
-			// raise error that a node prototype was needed, but not available
-			CONTINUE;
-		END_IF
-	
-		IF NOT nodePrototypes.TryCreateByType(nodeType,node) THEN		
-			// raise error that node prototypes didn't make the node
-			CONTINUE;
-		END_IF
-		
-	END_IF
-
-	node.TryDeserializeFrom(nodeArrayEnumerator.Current);
-
-END_WHILE
-
-//linkCount:= GraphSettings.LinkCount;
-
-//FOR linkIndex := 0 TO linkCount - 1  DO
-	
-//	linkSettings := GraphSettings.GetLinkByIndex(linkIndex);
-	
-//	nodeSettings := GraphSettings.GetNodeById(linkSettings.SourceId);
-//	sourcePortName := nodeSettings.GetOutputById(linkSettings.SourcePortId).Name;
-	
-//	nodeSettings := GraphSettings.GetNodeById(linkSettings.DestinationId);
-//	destinationPortName := nodeSettings.GetInputById(linkSettings.DestinationPortId).Name;
-	 
-//	link := linkFactory.Create(
-//		linkId := linkSettings.Id,
-//		linkSourceNode := nodes.TryGetById(linkSettings.SourceId),
-//		linkSourcePortName := sourcePortName,
-//		LinkDestinationNode := nodes.TryGetById(linkSettings.DestinationId),
-//		LinkDestinationPortName := destinationPortName
-//	);
-
-//	link.Configure(linkSettings);
-//	links.Insert(link);
-
-//END_FOR
-
-]]></ST>
+nodesEnumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetNodeById" Id="{2bff4c58-9fd9-43b5-b3a2-ffaf950a6356}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetNodeById : BOOL
 VAR_INPUT
-	Id : UDINT;
+	Id : T_MAXSTRING;
 	Destination : REFERENCE TO I_Node;
+END_VAR
+VAR
+	node : I_Node;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF NOT nodes.TryGetValue(Id, node) THEN
@@ -244,6 +175,39 @@ END_IF
 
 Destination := node;
 TryGetNodeById := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="UpdateExecutionOrder" Id="{2e22e5f6-6d8c-472d-a3eb-bdc3f467ece6}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED UpdateExecutionOrder
+VAR_INPUT
+	Node : I_Node;
+END_VAR
+VAR
+	currentPosition : I_LinkedListNode;
+	currentNode : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF nodesInOrder.First = 0 THEN
+	nodesInOrder.AddFirst(Node);
+	RETURN;
+END_IF
+
+NodesInOrder.First.TryGet(currentNode); 
+IF currentNode.Order > Node.Order THEN
+	nodesInOrder.AddFirst(Node);
+	RETURN;
+END_IF
+
+currentPosition := nodesInOrder.Last;
+WHILE (TRUE) DO
+	
+	currentPosition.TryGet(currentNode); 
+	IF currentNode.Order <= Node.Order THEN
+		nodesInOrder.AddAfter(currentPosition, Node);
+		RETURN;
+	END_IF
+
+END_WHILE]]></ST>
       </Implementation>
     </Method>
   </POU>

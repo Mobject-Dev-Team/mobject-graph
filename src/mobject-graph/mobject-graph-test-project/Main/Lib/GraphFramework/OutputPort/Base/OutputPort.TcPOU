@@ -46,7 +46,7 @@ VAR
 	pOutputPortChangeEvent : POINTER TO OutputPortChangedEvent;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pOutputPortChangeEvent := __NEW(OutputPortChangedEvent(TargetOutputPort := PortChanged));
+        <ST><![CDATA[pOutputPortChangeEvent := __NEW(OutputPortChangedEvent(Target := PortChanged));
 eventEmitter.Emit('OnOutputPortChanged',pOutputPortChangeEvent^);
 pOutputPortChangeEvent^.Dispose();]]></ST>
       </Implementation>

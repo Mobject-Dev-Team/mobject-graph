@@ -6,7 +6,7 @@
 {attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK MetadataAddedEvent EXTENDS Disposable IMPLEMENTS I_MetadataAddedEvent
 VAR
-	_targetMetadata : I_Metadata;
+	_target : I_Metadata;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -18,21 +18,21 @@ END_VAR
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	TargetMetadata : I_Metadata;
+	Target : I_Metadata;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[This^._targetMetadata := TargetMetadata;]]></ST>
+        <ST><![CDATA[This^._target := Target;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="TargetMetadata" Id="{4e432c1c-c980-0fe7-2b2e-5da9fb5af2f2}">
-      <Declaration><![CDATA[PROPERTY PUBLIC TargetMetadata : I_Metadata]]></Declaration>
+    <Property Name="Target" Id="{4e432c1c-c980-0fe7-2b2e-5da9fb5af2f2}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Metadata]]></Declaration>
       <Get Name="Get" Id="{91df58c9-bd98-02e8-2dfc-79ec1d55dcdb}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[TargetMetadata := _targetMetadata;]]></ST>
+          <ST><![CDATA[Target := _target;]]></ST>
         </Implementation>
       </Get>
     </Property>

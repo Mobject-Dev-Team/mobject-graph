@@ -5,14 +5,12 @@
 VAR
 	eventTarget : I_EventTarget;
 	ports : Dictionary;
-	selfCreatedPorts : Stack;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{8dde942f-4323-4fa1-9804-9541e8cea698}" />
-    <Folder Name="Destructor" Id="{5273120a-58a1-4e39-a125-430ad8092ca9}" />
     <Folder Name="Protected" Id="{badb4534-ffc4-49f0-987a-5da4faf0a42a}" />
     <Method Name="Accept" Id="{8201a6ae-d036-490b-a3e6-8c2ed40d0f50}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
@@ -37,54 +35,14 @@ END_WHILE
 enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="AddDataAsInputPort" Id="{7e114abb-9a47-4ab0-9787-ead21c0c896e}">
-      <Declaration><![CDATA[METHOD PUBLIC AddDataAsInputPort : I_InputPort
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Data : I_Datatype;
-END_VAR
-VAR
-	port : I_InputPort;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[port := CreatePort(Name, Data);
-selfCreatedPorts.Push(port);
-AddDataAsInputPort := port;]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="AddInputPort" Id="{b8a2721d-900a-4327-819d-af7c38fc2f18}">
       <Declaration><![CDATA[METHOD PUBLIC AddInputPort
 VAR_INPUT
 	InputPort : I_InputPort;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[RegisterPort(InputPort);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="CreatePort" Id="{4774ef93-51d1-4b01-ae45-ddeffc19be4d}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED CreatePort : I_InputPort
-VAR_INPUT
-	PortName : T_MAXSTRING;
-	PortData : I_Datatype;
-END_VAR
-VAR
-	pPort : POINTER TO InputPort;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[pPort := __NEW(InputPort(Name := PortName, Data := PortData, Parent := THIS^));
-CreatePort := pPort^;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="DisposeSelfCreatedPorts" Id="{fc440d05-d34c-46d0-a08a-6ed111c8b809}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED DisposeSelfCreatedPorts : BOOL
-VAR
-	port : I_InputPort;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[WHILE selfCreatedPorts.TryPop(port) DO
-	port.Dispose();
-END_WHILE]]></ST>
+        <ST><![CDATA[ports.AddOrUpdate(InputPort.Name, InputPort);
+EmitOnPortAddedEvent(InputPort);]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitOnPortAddedEvent" Id="{7ddbe6ad-349c-48e3-b30f-79ef4ac8af9b}" FolderPath="Protected\">
@@ -100,23 +58,9 @@ END_VAR]]></Declaration>
 	RETURN;
 END_IF
 
-pInputPortAddedEvent := __NEW(InputPortAddedEvent(TargetInputPort := Port));
+pInputPortAddedEvent := __NEW(InputPortAddedEvent(Target := Port));
 eventTarget.Emit('OnInputPortAdded',pInputPortAddedEvent^);
 pInputPortAddedEvent^.Dispose();]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="FB_exit" Id="{09488d85-0e83-4f02-bb5a-acc1e79e25e4}" FolderPath="Destructor\">
-      <Declaration><![CDATA[METHOD FB_exit : BOOL
-VAR_INPUT
-	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF bInCopyCode THEN
-	RETURN;
-END_IF
-
-DisposeSelfCreatedPorts();]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{e19fa22d-a160-44ca-b450-8dcb5d5aefa4}" FolderPath="Constructor\">
@@ -129,17 +73,6 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="RegisterPort" Id="{8f6a6d86-d7e5-4b0c-9e7a-7b9273e74d8f}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED RegisterPort
-VAR_INPUT
-	Port : I_InputPort;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[ports.AddOrUpdate(Port.Name, Port);
-EmitOnPortAddedEvent(Port);]]></ST>
       </Implementation>
     </Method>
     <Method Name="SerializeWith" Id="{3c42266c-de93-43bf-8c86-b3b026493e0d}">
