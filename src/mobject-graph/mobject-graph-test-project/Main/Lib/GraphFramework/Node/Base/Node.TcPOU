@@ -22,6 +22,7 @@ VAR
 	selfCreatedOutputPorts : Stack;
 	selfCreatedParameters : Stack;
 	selfCreatedMetadata : Stack;
+	deserializationFailedError : DeserializationFailedError(THIS^);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -87,8 +88,8 @@ selfCreatedInputPorts.Push(port);
 AddDataAsInputPort := port;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="AddDataAsMetadata" Id="{7f79a396-9377-4fa0-b2f1-236e8876e245}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED AddDataAsMetadata : I_Metadata
+    <Method Name="AddDataAsMetadata" Id="{7f79a396-9377-4fa0-b2f1-236e8876e245}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsMetadata : I_Metadata
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Data : I_Datatype;
@@ -530,39 +531,49 @@ VAR_INPUT
 	Deserializer : I_Deserializer;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TryDeserializeFrom := 
-	Deserializer.TryGetKeyString('id', _id) AND
-	Deserializer.TryGetKeyDint('order', _order) AND
-	Deserializer.TryGetKeyDint('mode', _mode) AND
-	parameterHost.TryDeserializeFrom(Deserializer) AND 
-	extensionHost.TryDeserializeFrom(Deserializer);]]></ST>
+        <ST><![CDATA[IF NOT Deserializer.TryGetKeyString('id', _id) THEN
+	deserializationFailedError.Raise('Missing node id');	
+	RETURN;
+END_IF
+
+Deserializer.TryGetKeyDint('order', _order);
+Deserializer.TryGetKeyDint('mode', _mode);
+
+IF NOT parameterHost.TryDeserializeFrom(Deserializer) THEN
+	deserializationFailedError.Raise('Failed to deserialize parameters');	
+	RETURN;
+END_IF
+
+IF NOT extensionHost.TryDeserializeFrom(Deserializer) THEN
+	deserializationFailedError.Raise('Failed to deserialize extensions');	
+	RETURN;
+END_IF
+
+deserializationFailedError.Clear();
+TryDeserializeFrom := TRUE;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="TryGetContentByName" Id="{a442af03-1b8f-4c53-817a-0af473a480df}">
+    <Method Name="TryGetContentByName" Id="{e9949623-efee-4292-8ef1-a0dfa9763f58}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetContentByName : BOOL
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Destination : REFERENCE TO I_Content;
 END_VAR
 VAR
-	extensionName : T_MAXSTRING;
+	extensionNamespace : ExtensionNamespace(Name);
 	extension : I_Extension;
-	contentName : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Not HasExtensionNamespace(Name) THEN
+        <ST><![CDATA[IF NOT extensionNamespace.IsExtensionPath THEN
 	TryGetContentByName := contentHost.TryGetContentByName(Name,Destination);
 	RETURN;
 END_IF
 
-extensionName := RemoveLastSegmentFromNamespace(Name);
-contentName := GetLastSegmentFromNamespace(Name);
-
-IF NOT TryGetExtensionByName(extensionName, extension) THEN
+IF NOT TryGetExtensionByName(extensionNamespace.ExtensionName, extension) THEN
 	RETURN;
 END_IF
 
-TryGetContentByName := extension.TryGetContentByName(contentName, Destination);]]></ST>
+TryGetContentByName := extension.TryGetContentByName(extensionNamespace.TargetName, Destination);]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetExtensionByName" Id="{f31010b5-cd16-4ab4-8e30-e0b827c31eb1}">
@@ -576,112 +587,83 @@ END_VAR]]></Declaration>
 	]]></ST>
       </Implementation>
     </Method>
-    <Method Name="TryGetInputPortByName" Id="{97da5ea4-1784-4901-aa96-8e03ff2613bf}">
+    <Method Name="TryGetInputPortByName" Id="{9be4fe99-f9c6-4bfc-9668-d13bf0ca1cfb}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetInputPortByName : BOOL
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Destination : REFERENCE TO I_InputPort;
 END_VAR
 VAR
-	extensionName : T_MAXSTRING;
+	extensionNamespace : ExtensionNamespace(Name);
 	extension : I_Extension;
-	portName : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT HasExtensionNamespace(Name) THEN
+        <ST><![CDATA[IF NOT extensionNamespace.IsExtensionPath THEN
 	TryGetInputPortByName := inputPortHost.TryGetInputPortByName(Name,Destination);
 	RETURN;
 END_IF
 
-extensionName := RemoveLastSegmentFromNamespace(Name);
-portName := GetLastSegmentFromNamespace(Name);
-
-IF NOT TryGetExtensionByName(extensionName, extension) THEN
+IF NOT TryGetExtensionByName(extensionNamespace.ExtensionName, extension) THEN
 	RETURN;
 END_IF
 
-TryGetInputPortByName := extension.TryGetInputPortByName(portName, Destination);]]></ST>
+TryGetInputPortByName := extension.TryGetInputPortByName(extensionNamespace.TargetName, Destination);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="TryGetMetadataByName" Id="{37dc25b0-8e02-4776-a290-bac7c8fa7609}">
+    <Method Name="TryGetMetadataByName" Id="{da24e785-ecaf-4933-9754-5f67eea3d131}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetMetadataByName : BOOL
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Destination : REFERENCE TO I_Metadata;
-END_VAR
-VAR
-	extensionName : T_MAXSTRING;
-	extension : I_Extension;
-	metadatumName : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT HasExtensionNamespace(Name) THEN
-	TryGetMetadataByName := metadataHost.TryGetMetadataByName(Name,Destination);
-	RETURN;
-END_IF
-
-extensionName := RemoveLastSegmentFromNamespace(Name);
-metadatumName := GetLastSegmentFromNamespace(Name);
-
-IF NOT TryGetExtensionByName(extensionName, extension) THEN
-	RETURN;
-END_IF
-
-TryGetMetadataByName := extension.TryGetMetadataByName(metadatumName, Destination);]]></ST>
+        <ST><![CDATA[TryGetMetadataByName := metadatahost.TryGetMetadataByName(Name, Destination);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="TryGetOutputPortByName" Id="{5e09a92c-9cf0-4b12-abd1-c4e11e5fff8d}">
+    <Method Name="TryGetOutputPortByName" Id="{bed6d2f7-3426-4499-b0ba-77d127469544}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetOutputPortByName : BOOL
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Destination : REFERENCE TO I_OutputPort;
 END_VAR
 VAR
-	extensionName : T_MAXSTRING;
+	extensionNamespace : ExtensionNamespace(Name);
 	extension : I_Extension;
-	portName : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT HasExtensionNamespace(Name) THEN
+        <ST><![CDATA[IF NOT extensionNamespace.IsExtensionPath THEN
 	TryGetOutputPortByName := outputPortHost.TryGetOutputPortByName(Name,Destination);
 	RETURN;
 END_IF
 
-extensionName := RemoveLastSegmentFromNamespace(Name);
-portName := GetLastSegmentFromNamespace(Name);
-
-IF NOT TryGetExtensionByName(extensionName, extension) THEN
+IF NOT TryGetExtensionByName(extensionNamespace.ExtensionName, extension) THEN
 	RETURN;
 END_IF
 
-TryGetOutputPortByName := extension.TryGetOutputPortByName(portName, Destination);]]></ST>
+TryGetOutputPortByName := extension.TryGetOutputPortByName(extensionNamespace.TargetName, Destination);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="TryGetParameterByName" Id="{168c4d2c-f9f8-420d-bb40-e4bd5929ea86}">
+    <Method Name="TryGetParameterByName" Id="{afe41fda-5526-4e29-bcae-5944d27de2f9}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetParameterByName : BOOL
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Destination : REFERENCE TO I_Parameter;
 END_VAR
 VAR
-	extensionName : T_MAXSTRING;
+	extensionNamespace : ExtensionNamespace(Name);
 	extension : I_Extension;
-	parameterName : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Not HasExtensionNamespace(Name) THEN
+        <ST><![CDATA[IF NOT extensionNamespace.IsExtensionPath THEN
 	TryGetParameterByName := parameterHost.TryGetParameterByName(Name,Destination);
 	RETURN;
 END_IF
 
-extensionName := RemoveLastSegmentFromNamespace(Name);
-parameterName := GetLastSegmentFromNamespace(Name);
-
-IF NOT TryGetExtensionByName(extensionName, extension) THEN
+IF NOT TryGetExtensionByName(extensionNamespace.ExtensionName, extension) THEN
 	RETURN;
 END_IF
 
-TryGetParameterByName := extension.TryGetParameterByName(parameterName, Destination);]]></ST>
+TryGetParameterByName := extension.TryGetParameterByName(extensionNamespace.TargetName, Destination);]]></ST>
       </Implementation>
     </Method>
   </POU>

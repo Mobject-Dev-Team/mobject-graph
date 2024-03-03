@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="Extension" Id="{42104a2a-bb11-0099-07c8-1566fddf2573}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK Extension EXTENDS Disposable IMPLEMENTS I_Extension
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK Extension EXTENDS Disposable IMPLEMENTS I_Extension
 VAR
 	_name : T_MAXSTRING;
 	eventEmitter : EventEmitter;
@@ -16,6 +19,7 @@ VAR
 	selfCreatedOutputPorts : Stack;
 	selfCreatedParameters : Stack;
 	selfCreatedMetadata : Stack;
+	deserializationFailedError : DeserializationFailedError(THIS^);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -79,8 +83,8 @@ selfCreatedInputPorts.Push(port);
 AddDataAsInputPort := port;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="AddDataAsMetadata" Id="{90c23096-4de3-4d00-b7c6-1f93737200e0}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED AddDataAsMetadata : I_Metadata
+    <Method Name="AddDataAsMetadata" Id="{90c23096-4de3-4d00-b7c6-1f93737200e0}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsMetadata : I_Metadata
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Data : I_Datatype;
@@ -329,7 +333,7 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[_name := Name;
-Initialize(THIS^);]]></ST>
+Initialize();]]></ST>
       </Implementation>
     </Method>
     <Property Name="HasRaisedError" Id="{ee5f41d7-87a5-49be-bf72-f24c29827daa}">
@@ -416,7 +420,13 @@ VAR_INPUT
 	Deserializer : I_Deserializer;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TryDeserializeFrom := parameterHost.TryDeserializeFrom(Deserializer);]]></ST>
+        <ST><![CDATA[IF NOT parameterHost.TryDeserializeFrom(Deserializer) THEN
+	deserializationFailedError.Raise('Failed to deserialize parameters');
+	RETURN;
+END_IF
+deserializationFailedError.Clear();
+
+TryDeserializeFrom := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetContentByName" Id="{6ca9fed6-43c8-42ca-90d1-dc23b9a9178a}">
@@ -447,7 +457,7 @@ VAR_INPUT
 	Destination : REFERENCE TO I_Metadata;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TryGetMetadataByName := metadataHost.TryGetMetadataByName(Name,Destination);]]></ST>
+        <ST><![CDATA[TryGetMetadataByName := metadataHost.TryGetMetadataByName(Name, Destination);]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetOutputPortByName" Id="{d210715a-df61-446a-bbe4-68c40d5deede}">

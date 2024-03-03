@@ -101,7 +101,7 @@ END_VAR]]></Declaration>
 Serializer.AddKeyString('message',errorMessage);
 Serializer.AddKeyBool('active',isActive);
 
-IF isActive THEN
+IF reasonMessage <> '' THEN
 	Serializer.AddKeyString('reason',reasonMessage);
 END_IF
 

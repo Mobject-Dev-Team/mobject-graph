@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="ParameterHost" Id="{6bfffedc-4830-48d6-a087-df5e0f37d1bd}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK ParameterHost IMPLEMENTS I_HostParameters, I_Serializable
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ParameterHost IMPLEMENTS I_HostParameters, I_Serializable
 VAR
 	eventTarget : I_EventTarget;
 	parameters : Dictionary;
@@ -122,15 +125,18 @@ parametersEnumerator := parametersDeserializer.GetObjectEnumerator();
 
 WHILE parametersEnumerator.MoveNext() DO
 	
-	IF NOT TryGetParameterByName(parametersEnumerator.Key, parameter)THEN
+	IF NOT TryGetParameterByName(parametersEnumerator.Key, parameter) THEN
 		CONTINUE;
 	END_IF
 	
-	parameter.TryDeserializeFrom(parametersEnumerator.Current);
+	IF NOT parameter.TryDeserializeFrom(parametersEnumerator.Current) THEN
+		RETURN;
+	END_IF
 
 END_WHILE
 
-parametersEnumerator.Dispose();]]></ST>
+parametersEnumerator.Dispose();
+TryDeserializeFrom := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetParameterByName" Id="{ab07ca82-19c6-40f6-a546-6746aad8fa7f}">

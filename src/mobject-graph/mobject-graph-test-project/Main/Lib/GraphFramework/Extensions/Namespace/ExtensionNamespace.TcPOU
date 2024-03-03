@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="ExtensionNamespace" Id="{ed4aae3c-7495-4679-8934-1466ba2ab1c7}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ExtensionNamespace
+VAR
+	_extensionName : T_MAXSTRING;
+	_targetName : T_MAXSTRING;
+	_isExtensionPath : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{5eef8c5d-80c8-40c0-9c0c-d4ad66569f9a}" />
+    <Property Name="ExtensionName" Id="{9f5ed637-60f9-42e9-ad47-de9cd7481aab}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ExtensionName : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{f36d66f3-10ee-4e76-8529-34c05d0020a0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF NOT _isExtensionPath THEN
+	RETURN;
+END_IF
+
+ExtensionName := _extensionNAme;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_init" Id="{0337164b-a885-4f80-917b-2851e8263f11}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Path : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Initialize(Path);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{8d7800c7-f133-4008-95a7-07dd06305f6d}">
+      <Declaration><![CDATA[METHOD PUBLIC Initialize
+VAR_INPUT
+	Path : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_isExtensionPath := FindAndSplitChar(
+	sSeparatorChar := '.',  
+	pSrcString := ADR(Path),                                  
+	pLeftString := ADR(_extensionName),   
+	nLeftSize := SIZEOF(_extensionName),                                  
+	pRightString := ADR(_targetName), 
+	nRightSize := SIZEOF(_targetName),                                
+	bSearchFromRight := TRUE 
+);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="IsExtensionPath" Id="{26d8e557-61a9-4a5f-ac34-e418cf55a027}">
+      <Declaration><![CDATA[PROPERTY PUBLIC IsExtensionPath : BOOL]]></Declaration>
+      <Get Name="Get" Id="{812e6fa4-71ea-4a28-9faa-883dd00114bb}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsExtensionPath := _isExtensionPath;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="TargetName" Id="{72ae13e0-6d0c-43ee-8896-d99c4453cb3f}">
+      <Declaration><![CDATA[PROPERTY PUBLIC TargetName : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{74478e35-193a-4dc5-8f64-c0523278947e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF NOT _isExtensionPath THEN
+	RETURN;
+END_IF
+
+TargetName := _targetName;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

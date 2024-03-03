@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="NodeNotSupportedError" Id="{9623ea07-68e6-068a-1ae8-7c1b189690f8}" SpecialFunc="None">
+  <POU Name="DeserializationFailedError" Id="{20f48b43-fa78-4e08-b0ec-3b0d23aa70b0}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK PUBLIC NodeNotSupportedError EXTENDS Error
+FUNCTION_BLOCK PUBLIC DeserializationFailedError EXTENDS Error
 VAR
 	state : (CLEARED, RAISED);
 	_reason : T_MAXSTRING;
@@ -13,9 +13,9 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Property Name="Active" Id="{662c13d9-0379-0ff6-0cc0-325aad0e11ed}">
+    <Property Name="Active" Id="{4057235a-9967-4e0b-b186-49a5b52f6495}">
       <Declaration><![CDATA[PROPERTY Active : BOOL]]></Declaration>
-      <Get Name="Get" Id="{16e3e2a6-2852-0e19-1d26-92eb36f05ea1}">
+      <Get Name="Get" Id="{5851e7d2-e662-4203-aa71-3ebaeba245e0}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -24,7 +24,7 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="Clear" Id="{63f4bc84-c70c-0daa-2e5a-8f3ae0175326}">
+    <Method Name="Clear" Id="{26c4d86f-9f31-45ac-86e4-d0cdf5e647ea}">
       <Declaration><![CDATA[METHOD PUBLIC Clear
 ]]></Declaration>
       <Implementation>
@@ -32,28 +32,28 @@ END_VAR
 state := CLEARED;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="Message" Id="{a8f7f573-e6f1-0ec2-0054-980ab27da1ae}">
+    <Property Name="Message" Id="{0b3535dc-d696-4104-8384-6442be461f59}">
       <Declaration><![CDATA[PROPERTY PUBLIC Message : T_MaxString]]></Declaration>
-      <Get Name="Get" Id="{b61a98d1-a834-06e5-18b6-698db9d9e9ba}">
+      <Get Name="Get" Id="{5368e9f4-f8a5-4bcb-a944-c8f6ed399cf1}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
-          <ST><![CDATA[Message := 'Node type is not installed';]]></ST>
+          <ST><![CDATA[Message := 'Deserialization failed';]]></ST>
         </Implementation>
       </Get>
     </Property>
-    <Method Name="Raise" Id="{85c61a4a-d853-09be-378f-20a8832e1ec7}">
+    <Method Name="Raise" Id="{2493d769-8cd7-4765-85e9-6994872bd53d}">
       <Declaration><![CDATA[METHOD PUBLIC Raise
 VAR_INPUT
-	NodeType : T_MAXSTRING;
+	Reason : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[_reason := NodeType;
+        <ST><![CDATA[_reason := Reason;
 state := RAISED;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="Reason" Id="{44b8d335-4271-063a-2ae7-6ff7902b06a9}">
+    <Property Name="Reason" Id="{22470f33-ee70-4af3-ac4a-5e2470536b2e}">
       <Declaration><![CDATA[PROPERTY Reason : T_MaxString]]></Declaration>
-      <Get Name="Get" Id="{85e5fb5f-cdb9-058f-3ca8-1f45cd93f658}">
+      <Get Name="Get" Id="{1475eaa4-8066-4961-9a1f-f7525d2eb006}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[Reason := _reason;]]></ST>

@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FunctionFailedError" Id="{6afe3d82-8c95-018d-0c48-74d2b362619a}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC FunctionFailedError EXTENDS Error
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK PUBLIC FunctionFailedError EXTENDS Error
 VAR
 	state : (CLEARED, RAISED);
 	functionName : STRING;
@@ -31,17 +34,6 @@ hresult := 0;
 state := CLEARED;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="ErrorCode" Id="{649ac17a-75a9-0570-126d-e61180f973e1}">
-      <Declaration><![CDATA[PROPERTY PUBLIC ErrorCode : HRESULT]]></Declaration>
-      <Get Name="Get" Id="{1bb6ecd5-679f-0962-2892-34ec8db2eac6}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[ErrorCode := hresult;]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
     <Property Name="Message" Id="{acadb727-d244-0000-101c-935ef9226490}">
       <Declaration><![CDATA[PROPERTY Message : T_MaxString]]></Declaration>
       <Get Name="Get" Id="{6ccb8b6b-b710-0bba-2899-b515b67d132d}">

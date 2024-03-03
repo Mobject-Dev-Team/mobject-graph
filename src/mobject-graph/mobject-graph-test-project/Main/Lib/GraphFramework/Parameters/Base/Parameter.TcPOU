@@ -11,12 +11,15 @@ VAR
 	_parent : I_HostParameters;
 	eventEmitter : EventEmitter;
 	metadataHost : MetadataHost(eventEmitter);
+	selfCreatedMetadata : Stack;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{487ef031-4058-0af2-31e5-5368e5c22e10}" />
+    <Folder Name="Destructor" Id="{3738ba85-f78b-4784-bc7e-ba717d45d1fd}" />
+    <Folder Name="Private" Id="{579ccdeb-bdd6-417d-b99a-5960c5bca8fa}" />
     <Method Name="Accept" Id="{e53d7527-03af-0f69-17de-4a094df11b20}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
@@ -28,6 +31,21 @@ END_VAR
 metadataHost.Accept(Visitor);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="AddDataAsMetadata" Id="{92ea9ec3-8d4b-4e2b-9e4d-cb00af11309b}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsMetadata : I_Metadata
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+VAR
+	metadata : I_Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[metadata := CreateMetadata(Name, Data);
+selfCreatedMetadata.Push(metadata);
+AddDataAsMetadata := metadata;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="AddMetadata" Id="{57cb865d-a256-4b4d-87d7-f6ba98849f63}">
       <Declaration><![CDATA[METHOD AddMetadata
 VAR_INPUT
@@ -35,6 +53,20 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[metadataHost.AddMetadata(Metadata);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateMetadata" Id="{4b69b2ba-ca6d-4455-96f7-ddbb4838ebd5}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateMetadata : I_Metadata
+VAR_INPUT
+	MetadataName : T_MAXSTRING;
+	MetadataData : I_Datatype;
+END_VAR
+VAR
+	pMetadata : POINTER TO Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pMetadata := __NEW(Metadata(Name := MetadataName, Data := MetadataData, Parent := THIS^));
+CreateMetadata := pMetadata^;]]></ST>
       </Implementation>
     </Method>
     <Property Name="Data" Id="{65957ab6-6ee1-024b-1dde-997589c13367}">
@@ -48,6 +80,31 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="DisposeSelfCreatedMetadata" Id="{eb552d58-78de-4fbb-9188-2e1564ec965d}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PROTECTED DisposeSelfCreatedMetadata : BOOL
+VAR
+	metadata : I_Metadata;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedMetadata.TryPop(metadata) DO
+	metadata.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{13029f4e-91b6-4faa-833b-698cd56b2c4d}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DisposeSelfCreatedMetadata();]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_init" Id="{3643b8c3-bcdc-0605-199f-bf59b2780fc1}" FolderPath="Constructor\">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT

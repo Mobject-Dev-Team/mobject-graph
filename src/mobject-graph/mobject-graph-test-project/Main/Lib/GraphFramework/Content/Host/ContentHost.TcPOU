@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="ContentHost" Id="{29147696-d640-4aaf-b7eb-e1161d0ef104}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK ContentHost IMPLEMENTS I_HostContent, I_Serializable
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ContentHost IMPLEMENTS I_Serializable
 VAR
 	eventTarget : I_EventTarget;
 	contents : Dictionary;

@@ -45,16 +45,10 @@
     <Compile Include="Lib\GraphFramework\Error\Events\I_ErrorAddedEvent.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Error\FileExtensionNotSupportedError.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Lib\GraphFramework\Error\FunctionFailedError.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Error\Host\ErrorHost.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Error\InputPortNotConnectedError.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Error\Interfaces\I_Error.TcIO">
@@ -66,10 +60,7 @@
     <Compile Include="Lib\GraphFramework\Error\NodeNotSupportedError.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Error\OutOfRangeError.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Error\StandardMessageError.TcPOU">
+    <Compile Include="Lib\GraphFramework\Error\DeserializationFailedError.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Extensions\Base\Extension.TcPOU">
@@ -90,52 +81,7 @@
     <Compile Include="Lib\GraphFramework\Extensions\Interface\I_HostExtensions.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Function\AnyToString.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidError.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidExtension.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidInputPort.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidLink.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidMetadatum.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidNode.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidOutputPort.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidProperty.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValidStatus.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\IsValid\IsValueEven.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\Namespace\GetLastSegmentFromNamespace.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\Namespace\GetLeadingSegmentFromNamespace.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\Namespace\HasExtensionNamespace.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\Namespace\RemoveLastSegmentFromNamespace.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Function\Namespace\RemoveLeadingSegmentFromNamespace.TcPOU">
+    <Compile Include="Lib\GraphFramework\Extensions\Namespace\ExtensionNamespace.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Metadata\Events\I_MetadataAddedEvent.TcIO">
@@ -190,7 +136,7 @@
     <Compile Include="Lib\GraphFramework\Metadata\Interface\I_Metadata.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\NodePrototypes\Collection\NodePrototypes.TcPOU">
+    <Compile Include="Lib\GraphFramework\NodePrototypes\Base\NodePrototypes.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\NodePrototypes\Interface\I_NodePrototypes.TcIO">
@@ -356,9 +302,7 @@
     <Folder Include="Lib\GraphFramework\Extensions\Events" />
     <Folder Include="Lib\GraphFramework\Extensions\Host" />
     <Folder Include="Lib\GraphFramework\Extensions\Interface" />
-    <Folder Include="Lib\GraphFramework\Function" />
-    <Folder Include="Lib\GraphFramework\Function\IsValid" />
-    <Folder Include="Lib\GraphFramework\Function\Namespace" />
+    <Folder Include="Lib\GraphFramework\Extensions\Namespace" />
     <Folder Include="Lib\GraphFramework\Graph" />
     <Folder Include="Lib\GraphFramework\InputPort\Base" />
     <Folder Include="Lib\GraphFramework\InputPort\Host" />
@@ -376,7 +320,7 @@
     <Folder Include="Lib\GraphFramework\NodePrototypes\Interface" />
     <Folder Include="Lib\GraphFramework\Node" />
     <Folder Include="Lib\GraphFramework\NodePrototypes" />
-    <Folder Include="Lib\GraphFramework\NodePrototypes\Collection" />
+    <Folder Include="Lib\GraphFramework\NodePrototypes\Base" />
     <Folder Include="Lib\GraphFramework\NodePack" />
     <Folder Include="Lib\GraphFramework\Node\Base" />
     <Folder Include="Lib\GraphFramework\Node\Interface" />

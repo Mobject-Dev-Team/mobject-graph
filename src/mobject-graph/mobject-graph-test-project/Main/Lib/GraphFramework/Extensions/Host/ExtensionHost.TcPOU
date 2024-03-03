@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="ExtensionHost" Id="{775d73d2-fe77-4755-861b-5bcb6de863b4}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK ExtensionHost IMPLEMENTS I_HostExtensions, I_Serializable, I_Deserializable
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ExtensionHost IMPLEMENTS I_HostExtensions, I_Serializable, I_Deserializable
 VAR
 	eventTarget : I_EventTarget;
 	extensions : Dictionary;
@@ -125,15 +128,18 @@ WHILE extensionsEnumerator.MoveNext() DO
 		CONTINUE;
 	END_IF
 	
-	IF NOT TryGetExtensionByName(extensionName, extension)THEN
+	IF NOT TryGetExtensionByName(extensionName, extension) THEN
 		CONTINUE;
 	END_IF
 	
-	extension.TryDeserializeFrom(extensionsEnumerator.Current);
+	IF NOT extension.TryDeserializeFrom(extensionsEnumerator.Current) THEN
+		RETURN;
+	END_IF
 
 END_WHILE
 
-extensionsEnumerator.Dispose();]]></ST>
+extensionsEnumerator.Dispose();
+TryDeserializeFrom := true;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetExtensionByName" Id="{40c3877d-feb8-4195-a944-7e526cdf6f87}">

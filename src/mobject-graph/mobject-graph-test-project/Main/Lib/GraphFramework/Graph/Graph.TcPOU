@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="Graph" Id="{bc650401-8298-0fc9-2fc1-27c637239109}" SpecialFunc="None">
-    <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK Graph EXTENDS Disposable IMPLEMENTS I_Graph
 VAR
 	nodePrototypes : I_NodePrototypes;
@@ -22,6 +24,9 @@ VAR
 	selfCreatedParameters : Stack;
 	selfCreatedMetadata : Stack;
 	selfCreatedNodes : Stack;
+	
+	deserializationFailedError : DeserializationFailedError(THIS^);
+	nodeNotSupportedError : NodeNotSupportedError(THIS^);
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -88,8 +93,8 @@ selfCreatedInputPorts.Push(port);
 AddDataAsInputPort := port;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="AddDataAsMetadata" Id="{57229b7a-e586-430a-94c1-40273f0ab89a}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED AddDataAsMetadata : I_Metadata
+    <Method Name="AddDataAsMetadata" Id="{57229b7a-e586-430a-94c1-40273f0ab89a}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsMetadata : I_Metadata
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Data : I_Datatype;
@@ -229,73 +234,6 @@ END_VAR]]></Declaration>
 CreateInputPort := pPort^;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="CreateLinks" Id="{4d909e30-29af-469e-b412-8b76819d5508}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PUBLIC CreateLinks
-VAR_INPUT
-	Deserializer : I_Deserializer;
-END_VAR
-VAR
-	linksDeserializer : I_Deserializer;
-	linksEnumerator : I_DeserializerArrayForwardEnumerator;
-	linkDeserializer : I_Deserializer;
-	sourceNodeId : T_MAXSTRING;
-	sourcePortName : T_MAXSTRING;
-	destinationNodeId : T_MAXSTRING;
-	destinationPortName : T_MAXSTRING;
-	sourceNode : I_Node;
-	sourcePort : I_OutputPort;
-	destinationNode : I_Node;
-	destinationPort : I_InputPort;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[linksDeserializer := Deserializer.GetKeyArray('links');
-linksEnumerator := linksDeserializer.GetArrayEnumerator();
-
-WHILE linksEnumerator.MoveNext() DO
-	
-	linkDeserializer := linksEnumerator.Current.GetArray();
-	
-	IF NOT linkDeserializer.GetElementByIndex(1).TryGetString(sourceNodeId) THEN
-		CONTINUE;
-	END_IF
-	
-	IF NOT linkDeserializer.GetElementByIndex(2).TryGetString(sourcePortName) THEN
-		CONTINUE;
-	END_IF
-	
-	IF NOT linkDeserializer.GetElementByIndex(3).TryGetString(destinationNodeId) THEN
-		CONTINUE;
-	END_IF
-	
-	IF NOT linkDeserializer.GetElementByIndex(4).TryGetString(destinationPortName) THEN
-		CONTINUE;
-	END_IF
-	
-	IF NOT nodeHost.TryGetNodeById(sourceNodeId, sourceNode) THEN
-		CONTINUE;
-	END_IF
-	
-	IF NOT nodeHost.TryGetNodeById(destinationNodeId, destinationNode) THEN
-		CONTINUE;
-	END_IF
-	
-	IF NOT sourceNode.TryGetOutputPortByName(sourcePortName, sourcePort) THEN
-		CONTINUE;
-	END_IF
-	
-	IF NOT destinationNode.TryGetInputPortByName(destinationPortName, destinationPort) THEN
-		CONTINUE;
-	END_IF
-	
-	IF NOT destinationPort.TryConnectTo(sourcePort) THEN
-		CONTINUE;
-	END_IF
-	
-END_WHILE
-
-linksEnumerator.Dispose();]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="CreateMetadata" Id="{79447d1a-bb3d-4f7e-8bae-4d14eeeef024}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE CreateMetadata : I_Metadata
 VAR_INPUT
@@ -308,42 +246,6 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[pMetadata := __NEW(Metadata(Name := MetadataName, Data := MetadataData, Parent := THIS^));
 CreateMetadata := pMetadata^;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="CreateNodes" Id="{9d17f6c4-8462-4003-b53a-550acec0614e}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PUBLIC CreateNodes
-VAR_INPUT
-	Deserializer : I_Deserializer;
-END_VAR
-VAR
-	nodeDeserializer : I_Deserializer;
-	nodesEnumerator : I_DeserializerArrayForwardEnumerator;
-	nodeType : T_MAXSTRING;
-	node : I_Node;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[nodeDeserializer := Deserializer.GetKeyArray('nodes');
-nodesEnumerator := nodeDeserializer.GetArrayEnumerator();
-
-WHILE nodesEnumerator.MoveNext() DO
-	
-	IF NOT nodesEnumerator.Current.TryGetKeyString('type',nodeType) THEN
-		CONTINUE;
-	END_IF
-	
-	IF NOT nodePrototypes.TryCreateNodeByType(nodeType, node) THEN
-		CONTINUE;
-	END_IF
-	
-	selfCreatedNodes.Push(node);
-	
-	node.TryDeserializeFrom(nodesEnumerator.Current);
-	
-	AddNode(node);
-
-END_WHILE
-
-nodesEnumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="CreateOutputPort" Id="{80878659-95c1-4307-8fad-d9ab6125a200}" FolderPath="Private\">
@@ -533,7 +435,9 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[_uuid := '';
-DisposeSelfCreatedNodes();]]></ST>
+DisposeSelfCreatedNodes();
+
+nodeNotSupportedError.Clear();]]></ST>
       </Implementation>
     </Method>
     <Method Name="Run" Id="{1dc36582-e7a3-03d2-2e77-7abd714e98fa}">
@@ -566,6 +470,125 @@ nodeHost.SerializeWith(Serializer);
 Serializer.EndObject();]]></ST>
       </Implementation>
     </Method>
+    <Method Name="TryCreateLinks" Id="{4d909e30-29af-469e-b412-8b76819d5508}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PUBLIC TryCreateLinks : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+END_VAR
+VAR
+	linksDeserializer : I_Deserializer;
+	linksEnumerator : I_DeserializerArrayForwardEnumerator;
+	linkDeserializer : I_Deserializer;
+	sourceNodeId : T_MAXSTRING;
+	sourcePortName : T_MAXSTRING;
+	destinationNodeId : T_MAXSTRING;
+	destinationPortName : T_MAXSTRING;
+	sourceNode : I_Node;
+	sourcePort : I_OutputPort;
+	destinationNode : I_Node;
+	destinationPort : I_InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[linksDeserializer := Deserializer.GetKeyArray('links');
+linksEnumerator := linksDeserializer.GetArrayEnumerator();
+
+WHILE linksEnumerator.MoveNext() DO
+	
+	linkDeserializer := linksEnumerator.Current.GetArray();
+	
+	IF NOT linkDeserializer.GetElementByIndex(1).TryGetString(sourceNodeId) THEN
+		deserializationFailedError.Raise('Missing source node id from link');
+		RETURN;
+	END_IF
+	
+	IF NOT linkDeserializer.GetElementByIndex(2).TryGetString(sourcePortName) THEN
+		deserializationFailedError.Raise('Missing source port name from link');
+		RETURN;
+	END_IF
+	
+	IF NOT linkDeserializer.GetElementByIndex(3).TryGetString(destinationNodeId) THEN
+		deserializationFailedError.Raise('Missing destination node id from link');
+		RETURN;
+	END_IF
+	
+	IF NOT linkDeserializer.GetElementByIndex(4).TryGetString(destinationPortName) THEN
+		deserializationFailedError.Raise('Missing destination port name from link');
+		RETURN;
+	END_IF
+	
+	IF NOT nodeHost.TryGetNodeById(sourceNodeId, sourceNode) THEN
+		deserializationFailedError.Raise('Unable to get source node when creating link');
+		RETURN;
+	END_IF
+	
+	IF NOT nodeHost.TryGetNodeById(destinationNodeId, destinationNode) THEN
+		deserializationFailedError.Raise('Unable to get destination node when creating link');
+		RETURN;
+	END_IF
+	
+	IF NOT sourceNode.TryGetOutputPortByName(sourcePortName, sourcePort) THEN
+		deserializationFailedError.Raise('Unable to get source port when creating link');
+		RETURN;
+	END_IF
+	
+	IF NOT destinationNode.TryGetInputPortByName(destinationPortName, destinationPort) THEN
+		deserializationFailedError.Raise('Unable to get destination port when creating link');
+		RETURN;
+	END_IF
+	
+	IF NOT destinationPort.TryConnectTo(sourcePort) THEN
+		deserializationFailedError.Raise('Unable to connect source to destination when creating link');
+		RETURN;
+	END_IF
+	
+END_WHILE
+
+linksEnumerator.Dispose();
+TryCreateLinks := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryCreateNodes" Id="{9d17f6c4-8462-4003-b53a-550acec0614e}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PUBLIC TryCreateNodes : BOOL;
+VAR_INPUT
+	Deserializer : I_Deserializer;
+END_VAR
+VAR
+	nodeDeserializer : I_Deserializer;
+	nodesEnumerator : I_DeserializerArrayForwardEnumerator;
+	nodeType : T_MAXSTRING;
+	node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodeDeserializer := Deserializer.GetKeyArray('nodes');
+nodesEnumerator := nodeDeserializer.GetArrayEnumerator();
+
+WHILE nodesEnumerator.MoveNext() DO
+	
+	IF NOT nodesEnumerator.Current.TryGetKeyString('type',nodeType) THEN
+		deserializationFailedError.Raise('Missing node type');
+		RETURN;
+	END_IF
+	
+	IF NOT nodePrototypes.TryCreateNodeByType(nodeType, node) THEN
+		nodeNotSupportedError.Raise(nodeType);
+		RETURN;
+	END_IF
+	
+	selfCreatedNodes.Push(node);
+	
+	IF NOT node.TryDeserializeFrom(nodesEnumerator.Current) THEN
+		deserializationFailedError.Raise('Node failed to deserialize');
+		RETURN;
+	END_IF
+	
+	AddNode(node);
+
+END_WHILE
+
+nodesEnumerator.Dispose();
+TryCreateNodes := TRUE;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TryDeserializeFrom" Id="{99b56a2a-8cdf-4ba7-9ff3-3103bd8e6be2}">
       <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
 VAR_INPUT
@@ -575,22 +598,41 @@ VAR
 	receivedUuid : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[parameterHost.TryDeserializeFrom(Deserializer);
-extensionHost.TryDeserializeFrom(Deserializer);
+        <ST><![CDATA[IF NOT parameterHost.TryDeserializeFrom(Deserializer) THEN
+	deserializationFailedError.Raise('Failed to deserialize parameters');	
+	RETURN;
+END_IF
+
+IF NOT extensionHost.TryDeserializeFrom(Deserializer) THEN
+	deserializationFailedError.Raise('Failed to deserialize extensions');	
+	RETURN;
+END_IF
 
 IF NOT Deserializer.TryGetKeyString('uuid', receivedUuid) THEN
+	deserializationFailedError.Raise('Missing uuid');
 	RETURN;
 END_IF
 
 IF Uuid = receivedUuid THEN
-	nodeHost.TryDeserializeFrom(Deserializer);
+	// if the uuid is the same then this means the nodes and link layout is the same, only the other parts may have changed
+	deserializationFailedError.Clear();
+	TryDeserializeFrom := nodeHost.TryDeserializeFrom(Deserializer);
 	RETURN;
 END_IF
 
 Reset();
-CreateNodes(Deserializer);
-CreateLinks(Deserializer);
-_uuid := receivedUuid;]]></ST>
+
+IF NOT TryCreateNodes(Deserializer) THEN 
+	RETURN;
+END_IF
+
+IF NOT TryCreateLinks(Deserializer) THEN
+	RETURN;
+END_IF
+
+_uuid := receivedUuid;
+deserializationFailedError.Clear();
+TryDeserializeFrom := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetContentByName" Id="{e912c915-77b1-4a71-a6fd-89bbc8852568}">
@@ -600,24 +642,20 @@ VAR_INPUT
 	Destination : REFERENCE TO I_Content;
 END_VAR
 VAR
-	extensionName : T_MAXSTRING;
+	extensionNamespace : ExtensionNamespace(Name);
 	extension : I_Extension;
-	contentName : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Not HasExtensionNamespace(Name) THEN
+        <ST><![CDATA[IF NOT extensionNamespace.IsExtensionPath THEN
 	TryGetContentByName := contentHost.TryGetContentByName(Name,Destination);
 	RETURN;
 END_IF
 
-extensionName := RemoveLastSegmentFromNamespace(Name);
-contentName := GetLastSegmentFromNamespace(Name);
-
-IF NOT TryGetExtensionByName(extensionName, extension) THEN
+IF NOT TryGetExtensionByName(extensionNamespace.ExtensionName, extension) THEN
 	RETURN;
 END_IF
 
-TryGetContentByName := extension.TryGetContentByName(contentName, Destination);]]></ST>
+TryGetContentByName := extension.TryGetContentByName(extensionNamespace.TargetName, Destination);]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetExtensionByName" Id="{29a3bbec-25a6-474f-b6ff-8df26ff54838}">
@@ -637,24 +675,20 @@ VAR_INPUT
 	Destination : REFERENCE TO I_InputPort;
 END_VAR
 VAR
-	extensionName : T_MAXSTRING;
+	extensionNamespace : ExtensionNamespace(Name);
 	extension : I_Extension;
-	portName : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT HasExtensionNamespace(Name) THEN
+        <ST><![CDATA[IF NOT extensionNamespace.IsExtensionPath THEN
 	TryGetInputPortByName := inputPortHost.TryGetInputPortByName(Name,Destination);
 	RETURN;
 END_IF
 
-extensionName := RemoveLastSegmentFromNamespace(Name);
-portName := GetLastSegmentFromNamespace(Name);
-
-IF NOT TryGetExtensionByName(extensionName, extension) THEN
+IF NOT TryGetExtensionByName(extensionNamespace.ExtensionName, extension) THEN
 	RETURN;
 END_IF
 
-TryGetInputPortByName := extension.TryGetInputPortByName(portName, Destination);]]></ST>
+TryGetInputPortByName := extension.TryGetInputPortByName(extensionNamespace.TargetName, Destination);]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetMetadataByName" Id="{7218a518-7562-4161-a031-fe6dfb5ae1ad}">
@@ -662,26 +696,9 @@ TryGetInputPortByName := extension.TryGetInputPortByName(portName, Destination);
 VAR_INPUT
 	Name : T_MAXSTRING;
 	Destination : REFERENCE TO I_Metadata;
-END_VAR
-VAR
-	extensionName : T_MAXSTRING;
-	extension : I_Extension;
-	metadatumName : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT HasExtensionNamespace(Name) THEN
-	TryGetMetadataByName := metadataHost.TryGetMetadataByName(Name,Destination);
-	RETURN;
-END_IF
-
-extensionName := RemoveLastSegmentFromNamespace(Name);
-metadatumName := GetLastSegmentFromNamespace(Name);
-
-IF NOT TryGetExtensionByName(extensionName, extension) THEN
-	RETURN;
-END_IF
-
-TryGetMetadataByName := extension.TryGetMetadataByName(metadatumName, Destination);]]></ST>
+        <ST><![CDATA[TryGetMetadataByName := metadatahost.TryGetMetadataByName(Name, Destination);]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetNodeById" Id="{900685c5-5d69-4e70-9a97-aa769ca12b83}">
@@ -701,24 +718,20 @@ VAR_INPUT
 	Destination : REFERENCE TO I_OutputPort;
 END_VAR
 VAR
-	extensionName : T_MAXSTRING;
+	extensionNamespace : ExtensionNamespace(Name);
 	extension : I_Extension;
-	portName : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT HasExtensionNamespace(Name) THEN
+        <ST><![CDATA[IF NOT extensionNamespace.IsExtensionPath THEN
 	TryGetOutputPortByName := outputPortHost.TryGetOutputPortByName(Name,Destination);
 	RETURN;
 END_IF
 
-extensionName := RemoveLastSegmentFromNamespace(Name);
-portName := GetLastSegmentFromNamespace(Name);
-
-IF NOT TryGetExtensionByName(extensionName, extension) THEN
+IF NOT TryGetExtensionByName(extensionNamespace.ExtensionName, extension) THEN
 	RETURN;
 END_IF
 
-TryGetOutputPortByName := extension.TryGetOutputPortByName(portName, Destination);]]></ST>
+TryGetOutputPortByName := extension.TryGetOutputPortByName(extensionNamespace.TargetName, Destination);]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetParameterByName" Id="{a812c28a-2c76-43b1-a6f1-2e48f4d3e7ae}">
@@ -728,24 +741,20 @@ VAR_INPUT
 	Destination : REFERENCE TO I_Parameter;
 END_VAR
 VAR
-	extensionName : T_MAXSTRING;
+	extensionNamespace : ExtensionNamespace(Name);
 	extension : I_Extension;
-	parameterName : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Not HasExtensionNamespace(Name) THEN
+        <ST><![CDATA[IF NOT extensionNamespace.IsExtensionPath THEN
 	TryGetParameterByName := parameterHost.TryGetParameterByName(Name,Destination);
 	RETURN;
 END_IF
 
-extensionName := RemoveLastSegmentFromNamespace(Name);
-parameterName := GetLastSegmentFromNamespace(Name);
-
-IF NOT TryGetExtensionByName(extensionName, extension) THEN
+IF NOT TryGetExtensionByName(extensionNamespace.ExtensionName, extension) THEN
 	RETURN;
 END_IF
 
-TryGetParameterByName := extension.TryGetParameterByName(parameterName, Destination);]]></ST>
+TryGetParameterByName := extension.TryGetParameterByName(extensionNamespace.TargetName, Destination);]]></ST>
       </Implementation>
     </Method>
     <Property Name="Uuid" Id="{cbe3c956-8695-4d9e-97b9-f984946d2dd4}">
