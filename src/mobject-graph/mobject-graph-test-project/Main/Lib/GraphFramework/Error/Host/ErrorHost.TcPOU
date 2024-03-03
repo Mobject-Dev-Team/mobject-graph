@@ -75,6 +75,33 @@ END_VAR
         <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="HasRaisedError" Id="{0e9d7d0f-b9ab-45ac-9f39-de7d687d3cfb}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedError : BOOL]]></Declaration>
+      <Get Name="Get" Id="{2d00a89d-9c3c-4b37-bcce-c4d952fb7fe7}">
+        <Declaration><![CDATA[VAR
+	enumerator : I_ForwardEnumerator;
+	error : I_Error;
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[enumerator := errors.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF NOT enumerator.TryGet(error) THEN
+		CONTINUE;
+	END_IF
+	
+	IF error.Active THEN
+		HasRaisedError := TRUE;
+		EXIT;
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="SerializeWith" Id="{18386344-9d4a-4d83-b974-3737c89d52ea}">
       <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT

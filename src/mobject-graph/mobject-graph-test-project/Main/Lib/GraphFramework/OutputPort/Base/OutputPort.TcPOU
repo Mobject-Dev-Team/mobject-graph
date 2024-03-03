@@ -10,6 +10,7 @@ VAR
 	_data : I_Datatype;
 	parent : I_HostOutputPorts;
 	eventEmitter : EventEmitter;
+	metadataHost : MetadataHost(eventEmitter);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -23,7 +24,17 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Visitor.VisitOutputPort(this^);]]></ST>
+        <ST><![CDATA[Visitor.VisitOutputPort(THIS^);
+metadataHost.Accept(Visitor);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddMetadata" Id="{f8837cdc-cce7-40d5-8402-4d18e3a02a09}">
+      <Declaration><![CDATA[METHOD AddMetadata
+VAR_INPUT
+	Metadata : I_Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[metadataHost.AddMetadata(Metadata);]]></ST>
       </Implementation>
     </Method>
     <Property Name="Data" Id="{f88ed905-c54b-4c6d-be97-9339266743b0}">
@@ -132,7 +143,18 @@ Serializer.AddKeyString('name',_name);
 Serializer.Addkey('datatype');
 _data.SerializeTypeWith(Serializer);
 Serializer.AddkeyObject('value',_data);
+metadataHost.SerializeWith(Serializer);
 Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetMetadataByName" Id="{197c47d1-0292-4355-8272-e66bb7e7e582}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetMetadataByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetMetadataByName := metadataHost.TryGetMetadataByName(Name,Destination);]]></ST>
       </Implementation>
     </Method>
   </POU>

@@ -38,7 +38,15 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Visitor.VisitGraph(this^);]]></ST>
+        <ST><![CDATA[Visitor.VisitGraph(THIS^);
+inputPortHost.Accept(Visitor);
+outputPortHost.Accept(Visitor);
+parameterHost.Accept(Visitor);
+contentHost.Accept(Visitor);
+errorHost.Accept(Visitor);
+metadataHost.Accept(Visitor);
+extensionHost.Accept(Visitor);
+nodeHost.Accept(Visitor);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddContent" Id="{43c3e1b2-e85c-4b92-bb9b-a529db7d4feb}">
@@ -469,6 +477,16 @@ END_VAR
 Initialize();]]></ST>
       </Implementation>
     </Method>
+    <Property Name="HasRaisedError" Id="{40a721cd-51fb-40f7-96ac-f59bf9e895b5}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedError : BOOL]]></Declaration>
+      <Get Name="Get" Id="{e8a97c69-cc1f-4f49-91b2-4fc9b7e80985}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasRaisedError := errorHost.HasRaisedError;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="Initialize" Id="{6e21f07c-76bf-40e2-81a6-1a7ecbdd42c1}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED Initialize
 VAR_INPUT

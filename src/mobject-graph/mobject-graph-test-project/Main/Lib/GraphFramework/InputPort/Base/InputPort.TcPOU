@@ -11,6 +11,7 @@ VAR
 	_connectedTo : I_OutputPort;
 	parent : I_HostInputPorts;
 	eventEmitter : EventEmitter;
+	metadataHost : MetadataHost(eventEmitter);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -24,7 +25,17 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Visitor.VisitInputPort(this^);]]></ST>
+        <ST><![CDATA[Visitor.VisitInputPort(THIS^);
+metadataHost.Accept(Visitor);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddMetadata" Id="{285689fb-673d-4cd1-837b-d081f2ca0e5f}">
+      <Declaration><![CDATA[METHOD AddMetadata
+VAR_INPUT
+	Metadata : I_Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[metadataHost.AddMetadata(Metadata);]]></ST>
       </Implementation>
     </Method>
     <Property Name="Connected" Id="{0eeca197-140f-0917-0914-20aa772b83ae}">
@@ -183,6 +194,7 @@ Serializer.AddKeyBool('connected',isConnected);
 Serializer.Addkey('datatype');
 _data.SerializeTypeWith(Serializer);
 Serializer.AddkeyObject('value',_data);
+metadataHost.SerializeWith(Serializer);
 Serializer.EndObject();]]></ST>
       </Implementation>
     </Method>
@@ -199,6 +211,16 @@ END_IF
 _connectedTo := OutputPort;
 _connectedTo.OnEvent('OnOutputPortChanged', THIS^);
 TryConnectTo := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetMetadataByName" Id="{9fa16fc6-6579-49be-8cea-0f81ee7da550}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetMetadataByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TryGetMetadataByName := metadataHost.TryGetMetadataByName(Name,Destination);]]></ST>
       </Implementation>
     </Method>
   </POU>

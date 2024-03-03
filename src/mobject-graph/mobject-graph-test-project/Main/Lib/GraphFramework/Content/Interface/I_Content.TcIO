@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_Content" Id="{ac79f126-02b1-0527-0474-e319241b4fff}">
-    <Declaration><![CDATA[INTERFACE I_Content EXTENDS I_Disposable, I_Serializable
+    <Declaration><![CDATA[INTERFACE I_Content EXTENDS I_Disposable, I_Serializable, I_HostMetadata, I_EventEmitter
 ]]></Declaration>
     <Method Name="Accept" Id="{956c3d1b-f47e-088a-2b6a-cda119d21818}">
       <Declaration><![CDATA[METHOD PUBLIC Accept

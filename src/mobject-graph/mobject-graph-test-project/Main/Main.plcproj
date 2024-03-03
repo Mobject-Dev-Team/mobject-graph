@@ -138,6 +138,12 @@
     <Compile Include="Lib\GraphFramework\Function\Namespace\RemoveLeadingSegmentFromNamespace.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Lib\GraphFramework\Metadata\Events\I_MetadataAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Metadata\Events\MetadataAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Lib\GraphFramework\TestJson.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -182,12 +188,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Metadata\Interface\I_Metadata.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Metadata\Events\I_MetadataAddedEvent.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\Metadata\Events\MetadataAddedEvent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\NodePrototypes\Collection\NodePrototypes.TcPOU">
@@ -368,8 +368,8 @@
     <Folder Include="Lib\GraphFramework\Metadata\Host" />
     <Folder Include="Lib\GraphFramework\Metadata\Interface" />
     <Folder Include="Lib\GraphFramework\Metadata\Base" />
-    <Folder Include="Lib\GraphFramework\Metadata\Events" />
     <Folder Include="Lib\GraphFramework\InputPort" />
+    <Folder Include="Lib\GraphFramework\Metadata\Events" />
     <Folder Include="Lib\GraphFramework\Node\Events" />
     <Folder Include="Lib\GraphFramework\Node\Host" />
     <Folder Include="Lib\GraphFramework\OutputPort" />

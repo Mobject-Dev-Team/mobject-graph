@@ -38,7 +38,14 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Visitor.VisitNode(this^);]]></ST>
+        <ST><![CDATA[Visitor.VisitNode(THIS^);
+inputPortHost.Accept(Visitor);
+outputPortHost.Accept(Visitor);
+parameterHost.Accept(Visitor);
+contentHost.Accept(Visitor);
+errorHost.Accept(Visitor);
+metadataHost.Accept(Visitor);
+extensionHost.Accept(Visitor);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddContent" Id="{c0b648e0-1253-452b-90ed-e8143a2d89de}">
@@ -408,6 +415,16 @@ END_VAR
         <ST><![CDATA[Initialize();]]></ST>
       </Implementation>
     </Method>
+    <Property Name="HasRaisedError" Id="{22345341-7d3f-4d62-a518-a9ca2b5c1250}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedError : BOOL]]></Declaration>
+      <Get Name="Get" Id="{5e835deb-b0f9-4cd7-8952-c0ace36b7516}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasRaisedError := errorHost.HasRaisedError;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="Id" Id="{83736b4e-b1bc-0adb-2e43-a65e1cb4d5a3}">
       <Declaration><![CDATA[PROPERTY PUBLIC Id : T_MAXSTRING]]></Declaration>
       <Get Name="Get" Id="{e5d6cfcc-06b4-0c3a-347e-7067097be358}">

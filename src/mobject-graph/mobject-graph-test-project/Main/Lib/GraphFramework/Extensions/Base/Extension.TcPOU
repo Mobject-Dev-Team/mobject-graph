@@ -31,7 +31,13 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Visitor.VisitExtension(this^);]]></ST>
+        <ST><![CDATA[Visitor.VisitExtension(THIS^);
+inputPortHost.Accept(Visitor);
+outputPortHost.Accept(Visitor);
+parameterHost.Accept(Visitor);
+contentHost.Accept(Visitor);
+errorHost.Accept(Visitor);
+metadataHost.Accept(Visitor);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddContent" Id="{6ea2b1d8-d6b2-4d47-b550-47d68cad2d2c}">
@@ -326,6 +332,16 @@ END_VAR]]></Declaration>
 Initialize(THIS^);]]></ST>
       </Implementation>
     </Method>
+    <Property Name="HasRaisedError" Id="{ee5f41d7-87a5-49be-bf72-f24c29827daa}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedError : BOOL]]></Declaration>
+      <Get Name="Get" Id="{6320bccd-9e0f-4da2-b00f-578639dbdeac}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasRaisedError := errorHost.HasRaisedError;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="Initialize" Id="{c523b599-657c-48d8-9a15-a024d5cd3cac}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED Initialize
 VAR_INPUT

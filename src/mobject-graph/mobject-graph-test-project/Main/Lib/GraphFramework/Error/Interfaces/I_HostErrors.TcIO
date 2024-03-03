@@ -10,5 +10,11 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Property Name="HasRaisedError" Id="{89f3b71d-f74d-4e4e-b2e3-984400e16d37}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedError : BOOL]]></Declaration>
+      <Get Name="Get" Id="{d76a8ec5-a42a-4c96-8539-f71507e247fc}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
   </Itf>
 </TcPlcObject>
