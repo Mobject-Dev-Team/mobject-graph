@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Node_Literal_Generic" Id="{693e78a4-fc28-4994-a2ff-3e9a5cf1df5b}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK FINAL Node_Literal_Generic EXTENDS Node
+VAR
+	value : I_Datatype;
+	out : I_Datatype;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Clone" Id="{0f740e25-6053-4b99-8d9b-fa967d06c198}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
+VAR
+	pointerToNode : POINTER TO Node_Literal_BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pointerToNode := __NEW(Node_Literal_BOOL);
+Clone := pointerToNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ConfigureDatatype" Id="{77fbf8b0-331d-4185-8a53-db5bff7ebe75}">
+      <Declaration><![CDATA[METHOD ConfigureDatatype
+VAR_INPUT
+	Datatype : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[value := Datatype.clone();
+out := Datatype.clone();
+
+
+IF NOT Datatype.TryResolveStructure(myStructure) THEN
+	RETURN;
+END_IF
+
+myStructure.]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnExecute" Id="{c9463d74-43af-44d9-83d8-f8b33f77ad74}">
+      <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[out.TryCopyFrom(value);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

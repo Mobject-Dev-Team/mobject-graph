@@ -14,7 +14,7 @@ VAR
 	outputPortHost : OutputPortHost(eventEmitter);
 	parameterHost : ParameterHost(eventEmitter);
 	contentHost : ContentHost(eventEmitter);
-	errorHost : ErrorHost(eventEmitter);
+	alarmHost : AlarmHost(eventEmitter);
 	extensionHost : ExtensionHost(eventEmitter);
 	metadataHost : MetadataHost(eventEmitter);
 	selfCreatedContent : Stack;
@@ -22,13 +22,12 @@ VAR
 	selfCreatedOutputPorts : Stack;
 	selfCreatedParameters : Stack;
 	selfCreatedMetadata : Stack;
-	deserializationFailedError : DeserializationFailedError(THIS^);
+	deserializationFailedAlarm : DeserializationFailedAlarm(THIS^);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Abstract" Id="{dbd4d2fd-33d8-0c09-0e75-48a8aa9fa6b2}" />
-    <Folder Name="Constructor" Id="{a1653d54-8e94-41a9-8c14-cce7fd0b4618}" />
     <Folder Name="Destructor" Id="{2c9ac784-74b9-4332-8413-33f9ea278167}" />
     <Folder Name="Private" Id="{8ec16d65-8c65-4a95-b86c-ce0d7b115d7e}" />
     <Folder Name="Protected" Id="{f0af3386-ca84-0b52-03e7-a20a015d9afb}" />
@@ -44,9 +43,19 @@ inputPortHost.Accept(Visitor);
 outputPortHost.Accept(Visitor);
 parameterHost.Accept(Visitor);
 contentHost.Accept(Visitor);
-errorHost.Accept(Visitor);
+alarmHost.Accept(Visitor);
 metadataHost.Accept(Visitor);
 extensionHost.Accept(Visitor);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddAlarm" Id="{68a33ee7-a8d2-4500-8be9-00fe1a233658}">
+      <Declaration><![CDATA[METHOD AddAlarm
+VAR_INPUT
+	Alarm : I_Alarm;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[alarmHost.AddAlarm(Alarm);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddContent" Id="{c0b648e0-1253-452b-90ed-e8143a2d89de}">
@@ -131,16 +140,6 @@ END_VAR]]></Declaration>
         <ST><![CDATA[parameter := CreateParameter(Name, Data);
 selfCreatedParameters.Push(parameter);
 AddDataAsParameter := parameter;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddError" Id="{68a33ee7-a8d2-4500-8be9-00fe1a233658}">
-      <Declaration><![CDATA[METHOD AddError
-VAR_INPUT
-	Error : I_Error;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[errorHost.AddError(Error);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddExtension" Id="{3c2efc0a-31a2-4144-a0f8-6a9d285ba29e}">
@@ -405,24 +404,13 @@ DisposeSelfCreatedParameters();
 DisposeSelfCreatedMetadata();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="FB_init" Id="{f4087af8-03a6-4168-ab7f-e8de08c6cd17}" FolderPath="Constructor\">
-      <Declaration><![CDATA[METHOD FB_init : BOOL
-VAR_INPUT
-	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
-	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[Initialize();]]></ST>
-      </Implementation>
-    </Method>
-    <Property Name="HasRaisedError" Id="{22345341-7d3f-4d62-a518-a9ca2b5c1250}">
-      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedError : BOOL]]></Declaration>
+    <Property Name="HasRaisedAlarm" Id="{22345341-7d3f-4d62-a518-a9ca2b5c1250}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedAlarm : BOOL]]></Declaration>
       <Get Name="Get" Id="{5e835deb-b0f9-4cd7-8952-c0ace36b7516}">
         <Declaration><![CDATA[VAR
 END_VAR]]></Declaration>
         <Implementation>
-          <ST><![CDATA[HasRaisedError := errorHost.HasRaisedError;]]></ST>
+          <ST><![CDATA[HasRaisedAlarm := alarmHost.HasRaisedAlarm;]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -437,15 +425,6 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="Initialize" Id="{01545b32-13d6-40b0-b942-2e82aaf63024}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED Initialize
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
     <Property Name="Mode" Id="{7c0c904d-4b3b-026a-34c8-a61976b560fb}">
       <Declaration><![CDATA[PROPERTY PUBLIC Mode : DINT]]></Declaration>
       <Get Name="Get" Id="{e082d771-5c44-02f0-0e53-87177d47eeff}">
@@ -519,7 +498,7 @@ inputPortHost.SerializeWith(Serializer);
 outputPortHost.SerializeWith(Serializer);
 parameterHost.SerializeWith(Serializer);
 contentHost.SerializeWith(Serializer);
-errorHost.SerializeWith(Serializer);
+alarmHost.SerializeWith(Serializer);
 extensionHost.SerializeWith(Serializer);
 metadataHost.SerializeWith(Serializer);
 Serializer.EndObject();]]></ST>
@@ -529,27 +508,36 @@ Serializer.EndObject();]]></ST>
       <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
 VAR_INPUT
 	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT Deserializer.TryGetKeyString('id', _id) THEN
-	deserializationFailedError.Raise('Missing node id');	
+        <ST><![CDATA[DeserializationFailedAlarm.Clear();
+
+IF NOT Deserializer.TryGetKeyString('id', _id, Feedback) THEN
+	DeserializationFailedAlarm.Raise('Missing node id');	
 	RETURN;
 END_IF
 
-Deserializer.TryGetKeyDint('order', _order);
-Deserializer.TryGetKeyDint('mode', _mode);
-
-IF NOT parameterHost.TryDeserializeFrom(Deserializer) THEN
-	deserializationFailedError.Raise('Failed to deserialize parameters');	
+IF NOT Deserializer.TryGetKeyDint('order', _order, Feedback) THEN
+	DeserializationFailedAlarm.Raise('Missing node order');	
 	RETURN;
 END_IF
 
-IF NOT extensionHost.TryDeserializeFrom(Deserializer) THEN
-	deserializationFailedError.Raise('Failed to deserialize extensions');	
+IF NOT Deserializer.TryGetKeyDint('mode', _mode, Feedback) THEN
+	DeserializationFailedAlarm.Raise('Missing node mode');	
 	RETURN;
 END_IF
 
-deserializationFailedError.Clear();
+IF NOT parameterHost.TryDeserializeFrom(Deserializer, Feedback) THEN
+	DeserializationFailedAlarm.Raise('Failed to deserialize parameters');	
+	RETURN;
+END_IF
+
+IF NOT extensionHost.TryDeserializeFrom(Deserializer, Feedback) THEN
+	DeserializationFailedAlarm.Raise('Failed to deserialize extensions');	
+	RETURN;
+END_IF
+
 TryDeserializeFrom := TRUE;]]></ST>
       </Implementation>
     </Method>

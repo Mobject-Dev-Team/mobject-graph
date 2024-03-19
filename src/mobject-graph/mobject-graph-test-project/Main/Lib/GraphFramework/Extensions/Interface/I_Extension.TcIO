@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_Extension" Id="{3d8dc94f-e048-0570-13e2-c0ce07561e77}">
-    <Declaration><![CDATA[INTERFACE I_Extension EXTENDS I_Disposable, I_HostContent, I_HostInputPorts, I_HostOutputPorts, I_HostErrors, I_HostParameters, I_HostMetadata, I_EventEmitter, I_Deserializable, I_Serializable
+    <Declaration><![CDATA[INTERFACE I_Extension EXTENDS I_Disposable, I_HostContent, I_HostInputPorts, I_HostOutputPorts, I_HostAlarms, I_HostParameters, I_HostMetadata, I_EventEmitter, I_Deserializable, I_Serializable
 ]]></Declaration>
     <Method Name="Accept" Id="{280b39aa-7f93-0202-1dd6-de277e202a9e}">
       <Declaration><![CDATA[METHOD PUBLIC Accept

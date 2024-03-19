@@ -207,12 +207,13 @@ Serializer.EndObject();]]></ST>
       <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
 VAR_INPUT
 	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
 END_VAR
 VAR
 	parameterDeserializer : I_Deserializer;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TryDeserializeFrom := _data.TryDeserializeFrom(Deserializer);]]></ST>
+        <ST><![CDATA[TryDeserializeFrom := _data.TryDeserializeFrom(Deserializer, Feedback);]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetMetadataByName" Id="{7f8f3dfa-fa89-4bc0-8875-a6fb063d5b20}">

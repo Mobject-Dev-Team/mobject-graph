@@ -235,6 +235,11 @@
       "name": "Imports/litegraph/litegraph.css",
       "description": "",
       "type": "Stylesheet"
+    },
+    {
+      "name": "Lib/mobject-client/TchmiMobjectClient.bundle.js",
+      "description": "",
+      "type": "JavaScript"
     }
   ],
   "userControls": [],

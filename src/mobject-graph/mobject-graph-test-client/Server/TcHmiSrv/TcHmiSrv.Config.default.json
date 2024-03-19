@@ -79,6 +79,45 @@
             },
             "type": "object"
         },
+        "PLC1.METHOD-RETURNING-mobject_server.ResponseData-PARAMETERS-SerializedHeader-STRING-1024--SerializedPayload-STRING-8000": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/PLC1.mobject_server.ResponseData"
+                },
+                {
+                    "function": true,
+                    "writeValue": {
+                        "properties": {
+                            "SerializedHeader": {
+                                "allOf": [
+                                    {
+                                        "maxLength": 1024
+                                    },
+                                    {
+                                        "$ref": "tchmi:general#/definitions/String"
+                                    }
+                                ]
+                            },
+                            "SerializedPayload": {
+                                "allOf": [
+                                    {
+                                        "maxLength": 8000
+                                    },
+                                    {
+                                        "$ref": "tchmi:general#/definitions/String"
+                                    }
+                                ]
+                            }
+                        },
+                        "required": [
+                            "SerializedHeader",
+                            "SerializedPayload"
+                        ],
+                        "type": "object"
+                    }
+                }
+            ]
+        },
         "PLC1.Tc2_Standard.TON": {
             "properties": {
                 "ET": {
@@ -147,6 +186,831 @@
                 }
             },
             "type": "object"
+        },
+        "PLC1.mobject_events.EventEmitter": {
+            "attributes": {
+                "TcImplements": "mobject_disposable.I_Disposable;mobject_events.I_EventEmitter;mobject_events.I_EventTarget",
+                "enable_dynamic_creation": "",
+                "linkalways": "",
+                "no_explicit_call": "This FB is a CLASS and must be accessed using methods or properties"
+            },
+            "properties": {
+                "firstEventHandlerItem": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_events.I_EventHandlerItem"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_events.I_EventHandlerItem": {
+            "type": "object"
+        },
+        "PLC1.mobject_json.mobject_serialization.mobject_collections.Dictionary": {
+            "attributes": {
+                "TcImplements": "mobject_disposable.I_Disposable;mobject_json.mobject_serialization.mobject_collections.I_Dictionary",
+                "enable_dynamic_creation": "",
+                "linkalways": "",
+                "no_explicit_call": "This FB is a CLASS and must be accessed using methods or properties"
+            },
+            "properties": {
+                "eventEmitter": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_events.EventEmitter"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "rootNode": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_json.mobject_serialization.mobject_collections.I_DictionaryTreeNode"
+                        },
+                        {
+                            "propertyOrder": 2
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_json.mobject_serialization.mobject_collections.I_DictionaryTreeNode": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.AsyncResponseManager": {
+            "attributes": {
+                "TcImplements": "mobject_server.I_AsyncResponseManager",
+                "enable_dynamic_creation": "",
+                "linkalways": "",
+                "no_explicit_call": "This FB is a CLASS and must be accessed using methods or properties"
+            },
+            "properties": {
+                "headerAccessor": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_AsyncResponseHeaderAccessor"
+                        },
+                        {
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "responseIdGenerator": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_ResponseIdGenerator"
+                        },
+                        {
+                            "propertyOrder": 2
+                        }
+                    ]
+                },
+                "sessionStorage": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_SessionStorage"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.AsyncResponseMiddleware": {
+            "attributes": {
+                "TcImplements": "mobject_server.I_Middleware"
+            },
+            "properties": {
+                "_next": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_Middleware"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "asyncResponseManager": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_AsyncResponseManager"
+                        },
+                        {
+                            "propertyOrder": 2
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.ChunkedRequestsManager": {
+            "attributes": {
+                "TcImplements": "mobject_server.I_ChunkedRequestsManager",
+                "enable_dynamic_creation": "",
+                "linkalways": "",
+                "no_explicit_call": "This FB is a CLASS and must be accessed using methods or properties"
+            },
+            "properties": {
+                "headerAccessor": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_ChunkedRequestsHeaderAccessor"
+                        },
+                        {
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "maximumChunkSizeInBytes": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "sessionStorage": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_SessionStorage"
+                        },
+                        {
+                            "propertyOrder": 2
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.ChunkedRequestsMiddleware": {
+            "attributes": {
+                "TcImplements": "mobject_server.I_Middleware",
+                "enable_dynamic_creation": "",
+                "linkalways": "",
+                "no_explicit_call": "This FB is a CLASS and must be accessed using methods or properties"
+            },
+            "properties": {
+                "_next": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_Middleware"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "chunkedRequestsManager": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_ChunkedRequestsManager"
+                        },
+                        {
+                            "propertyOrder": 2
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.ChunkedResponseManager": {
+            "attributes": {
+                "TcImplements": "mobject_server.I_ChunkedResponseManager",
+                "enable_dynamic_creation": "",
+                "linkalways": "",
+                "no_explicit_call": "This FB is a CLASS and must be accessed using methods or properties"
+            },
+            "properties": {
+                "headerAccessor": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_ChunkedResponseHeaderAccessor"
+                        },
+                        {
+                            "propertyOrder": 4
+                        }
+                    ]
+                },
+                "maximumChunkSizeInBytes": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "responseIdGenerator": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_ResponseIdGenerator"
+                        },
+                        {
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "sessionStorage": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_SessionStorage"
+                        },
+                        {
+                            "propertyOrder": 2
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.ChunkedResponsesMiddleware": {
+            "attributes": {
+                "TcImplements": "mobject_server.I_Middleware",
+                "enable_dynamic_creation": "",
+                "linkalways": "",
+                "no_explicit_call": "This FB is a CLASS and must be accessed using methods or properties"
+            },
+            "properties": {
+                "_next": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_Middleware"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "chunkedResponseManager": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_ChunkedResponseManager"
+                        },
+                        {
+                            "propertyOrder": 2
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.HeaderAccessor": {
+            "attributes": {
+                "TcImplements": "mobject_server.I_SessionHeaderAccessor;mobject_server.I_ServerResponseHeaderAccessor;mobject_server.I_AsyncResponseHeaderAccessor;mobject_server.I_ChunkedResponseHeaderAccessor;mobject_server.I_ChunkedRequestsHeaderAccessor;..."
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.I_AsyncResponseHeaderAccessor": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.I_AsyncResponseManager": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.I_ChunkedRequestsHeaderAccessor": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.I_ChunkedRequestsManager": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.I_ChunkedResponseHeaderAccessor": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.I_ChunkedResponseManager": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.I_Middleware": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.I_ResponseIdGenerator": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.I_RpcHandlers": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.I_RpcHeaderAccessor": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.I_RpcManager": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.I_SessionHeaderAccessor": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.I_SessionIdGenerator": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.I_SessionManager": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.I_SessionStorage": {
+            "type": "object"
+        },
+        "PLC1.mobject_server.MiddlewareStack": {
+            "attributes": {
+                "enable_dynamic_creation": "",
+                "linkalways": "",
+                "no_explicit_call": "This FB is a CLASS and must be accessed using methods or properties"
+            },
+            "properties": {
+                "InitialHandler": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_Middleware"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.ResponseData": {
+            "properties": {
+                "Header": {
+                    "allOf": [
+                        {
+                            "maxLength": 1024,
+                            "propertyOrder": 1
+                        },
+                        {
+                            "$ref": "tchmi:general#/definitions/String"
+                        }
+                    ]
+                },
+                "Payload": {
+                    "allOf": [
+                        {
+                            "maxLength": 8000,
+                            "propertyOrder": 2
+                        },
+                        {
+                            "$ref": "tchmi:general#/definitions/String"
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.RpcHandlers": {
+            "attributes": {
+                "TcImplements": "mobject_server.I_RpcHandlers",
+                "enable_dynamic_creation": "",
+                "linkalways": "",
+                "no_explicit_call": "This FB is a CLASS and must be accessed using methods or properties"
+            },
+            "properties": {
+                "handlers": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_json.mobject_serialization.mobject_collections.Dictionary"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.RpcManager": {
+            "attributes": {
+                "TcImplements": "mobject_server.I_RpcManager"
+            },
+            "properties": {
+                "asyncResponseManager": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_AsyncResponseManager"
+                        },
+                        {
+                            "propertyOrder": 2
+                        }
+                    ]
+                },
+                "headerAccessor": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_RpcHeaderAccessor"
+                        },
+                        {
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "rpcHandlers": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_RpcHandlers"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.RpcMiddleware": {
+            "attributes": {
+                "TcImplements": "mobject_server.I_Middleware",
+                "enable_dynamic_creation": "",
+                "linkalways": "",
+                "no_explicit_call": "This FB is a CLASS and must be accessed using methods or properties"
+            },
+            "properties": {
+                "_next": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_Middleware"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "rpcManager": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_RpcManager"
+                        },
+                        {
+                            "propertyOrder": 2
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.RpcServer": {
+            "attributes": {
+                "enable_dynamic_creation": "",
+                "linkalways": "",
+                "no_explicit_call": "This FB is a CLASS and must be accessed using methods or properties"
+            },
+            "properties": {
+                "HandleRequest": {
+                    "$ref": "#/definitions/PLC1.METHOD-RETURNING-mobject_server.ResponseData-PARAMETERS-SerializedHeader-STRING-1024--SerializedPayload-STRING-8000"
+                },
+                "INACTIVE_SESSION_MAX_AGE": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/TIME"
+                        },
+                        {
+                            "propertyOrder": 17
+                        }
+                    ]
+                },
+                "asyncResponseManager": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.AsyncResponseManager"
+                        },
+                        {
+                            "attributes": {
+                                "old_input_assignments": ""
+                            },
+                            "comment": "ability to support pending responses",
+                            "propertyOrder": 12
+                        }
+                    ]
+                },
+                "asyncResponseMiddleware": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.AsyncResponseMiddleware"
+                        },
+                        {
+                            "attributes": {
+                                "old_input_assignments": ""
+                            },
+                            "propertyOrder": 13
+                        }
+                    ]
+                },
+                "chunkedRequestsManager": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.ChunkedRequestsManager"
+                        },
+                        {
+                            "attributes": {
+                                "old_input_assignments": ""
+                            },
+                            "comment": "ability to suppoort chunked requests",
+                            "propertyOrder": 8
+                        }
+                    ]
+                },
+                "chunkedRequestsMiddleware": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.ChunkedRequestsMiddleware"
+                        },
+                        {
+                            "attributes": {
+                                "old_input_assignments": ""
+                            },
+                            "propertyOrder": 9
+                        }
+                    ]
+                },
+                "chunkedResponseManager": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.ChunkedResponseManager"
+                        },
+                        {
+                            "attributes": {
+                                "old_input_assignments": ""
+                            },
+                            "comment": "ability to support chunked responses",
+                            "propertyOrder": 10
+                        }
+                    ]
+                },
+                "chunkedResponsesMiddleware": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.ChunkedResponsesMiddleware"
+                        },
+                        {
+                            "attributes": {
+                                "old_input_assignments": ""
+                            },
+                            "propertyOrder": 11
+                        }
+                    ]
+                },
+                "headerAccessor": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.HeaderAccessor"
+                        },
+                        {
+                            "comment": "default header accessor.",
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "middlewareStack": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.MiddlewareStack"
+                        },
+                        {
+                            "comment": "the middleware stack allows us to construct our server in any way needed.\r\n by default we will support sessions, async polling and chunked requests/",
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "payloadStringSizeIncludingNull": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "comment": "Payload size may be changed using the constants",
+                            "propertyOrder": 2
+                        }
+                    ]
+                },
+                "rpcHandlers": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.RpcHandlers"
+                        },
+                        {
+                            "comment": "ability to support rpc",
+                            "propertyOrder": 14
+                        }
+                    ]
+                },
+                "rpcManager": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.RpcManager"
+                        },
+                        {
+                            "attributes": {
+                                "old_input_assignments": ""
+                            },
+                            "propertyOrder": 15
+                        }
+                    ]
+                },
+                "rpcMiddleware": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.RpcMiddleware"
+                        },
+                        {
+                            "attributes": {
+                                "old_input_assignments": ""
+                            },
+                            "propertyOrder": 16
+                        }
+                    ]
+                },
+                "sequentialResponseIdGenerator": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.SequentialResponseIdGenerator"
+                        },
+                        {
+                            "comment": "responseId generation required for pending or chunked data",
+                            "propertyOrder": 4
+                        }
+                    ]
+                },
+                "sessionIdGenerator": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.SequentialSessionIdGenerator"
+                        },
+                        {
+                            "comment": "ability to support sessions...",
+                            "propertyOrder": 5
+                        }
+                    ]
+                },
+                "sessionManager": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.SessionManager"
+                        },
+                        {
+                            "attributes": {
+                                "old_input_assignments": ""
+                            },
+                            "propertyOrder": 6
+                        }
+                    ]
+                },
+                "sessionsMiddleware": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.SessionsMiddleware"
+                        },
+                        {
+                            "attributes": {
+                                "old_input_assignments": ""
+                            },
+                            "propertyOrder": 7
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.SequentialResponseIdGenerator": {
+            "attributes": {
+                "TcImplements": "mobject_server.I_ResponseIdGenerator",
+                "enable_dynamic_creation": "",
+                "linkalways": "",
+                "no_explicit_call": "This FB is a CLASS and must be accessed using methods or properties"
+            },
+            "properties": {
+                "currentCount": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.SequentialSessionIdGenerator": {
+            "attributes": {
+                "TcImplements": "mobject_server.I_SessionIdGenerator",
+                "enable_dynamic_creation": "",
+                "linkalways": "",
+                "no_explicit_call": "This FB is a CLASS and must be accessed using methods or properties"
+            },
+            "properties": {
+                "currentCount": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.SessionManager": {
+            "attributes": {
+                "TcImplements": "mobject_server.I_SessionManager;mobject_server.I_SessionStorage",
+                "enable_dynamic_creation": "",
+                "linkalways": "",
+                "no_explicit_call": "This FB is a CLASS and must be accessed using methods or properties"
+            },
+            "properties": {
+                "activeSessions": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_json.mobject_serialization.mobject_collections.Dictionary"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "currentStorageId": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "sessionIdGenerator": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_SessionIdGenerator"
+                        },
+                        {
+                            "propertyOrder": 2
+                        }
+                    ]
+                },
+                "sessionMaxLife": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/TIME"
+                        },
+                        {
+                            "propertyOrder": 4
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.mobject_server.SessionsMiddleware": {
+            "attributes": {
+                "TcImplements": "mobject_server.I_Middleware",
+                "enable_dynamic_creation": "",
+                "linkalways": "",
+                "no_explicit_call": "This FB is a CLASS and must be accessed using methods or properties"
+            },
+            "properties": {
+                "_next": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_Middleware"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "headerAccessor": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_SessionHeaderAccessor"
+                        },
+                        {
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "sessionManager": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.mobject_server.I_SessionManager"
+                        },
+                        {
+                            "propertyOrder": 2
+                        }
+                    ]
+                }
+            },
+            "type": "object"
         }
     },
     "DEFLATECOMPRESSIONLEVEL": 5,
@@ -155,8 +1019,8 @@
     "DISCOVERY": 2,
     "ENABLE_SERVER_UPDATE": true,
     "ENDPOINTS": [
-        "http://127.0.0.1:13000",
-        "http://127.0.0.1:3000"
+        "http://127.0.0.1:13001",
+        "http://127.0.0.1:3001"
     ],
     "ETAGENABLED": true,
     "EXTENSIONS": {
@@ -2677,6 +3541,26 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.MAIN.server": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::MAIN::server",
+            "SCHEMA": {
+                "$ref": "tchmi:server#/definitions/PLC1.mobject_server.RpcServer"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.MAIN.server.HandleRequest": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::MAIN::server::HandleRequest",
+            "SCHEMA": {
+                "$ref": "tchmi:server#/definitions/PLC1.METHOD-RETURNING-mobject_server.ResponseData-PARAMETERS-SerializedHeader-STRING-1024--SerializedPayload-STRING-8000"
+            },
+            "USEMAPPING": true
+        },
         "RefreshDefinitions": {
             "ACCESS": 3,
             "DOMAIN": "TcHmiSrv",
@@ -3599,6 +4483,8 @@
                 "PLC1.MAIN.graphApi": 3,
                 "PLC1.MAIN.graphApi.graphStatus": 3,
                 "PLC1.MAIN.graphApi.receivedGraphJson": 3,
+                "PLC1.MAIN.server": 3,
+                "PLC1.MAIN.server.HandleRequest": 3,
                 "SetLocale": 3,
                 "SubscribeEvents": 3,
                 "TcHmiSqliteLogger.Diagnostics": 1,

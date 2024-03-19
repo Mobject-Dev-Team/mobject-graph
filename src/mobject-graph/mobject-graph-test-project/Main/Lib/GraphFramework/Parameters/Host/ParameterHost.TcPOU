@@ -112,11 +112,11 @@ Serializer.EndArray();]]></ST>
       <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
 VAR_INPUT
 	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
 END_VAR
 VAR
 	parametersDeserializer : I_Deserializer;
 	parametersEnumerator : I_DeserializerObjectForwardEnumerator;
-	parameterName : T_MAXSTRING;
 	parameter : I_Parameter;
 END_VAR]]></Declaration>
       <Implementation>
@@ -129,7 +129,7 @@ WHILE parametersEnumerator.MoveNext() DO
 		CONTINUE;
 	END_IF
 	
-	IF NOT parameter.TryDeserializeFrom(parametersEnumerator.Current) THEN
+	IF NOT parameter.TryDeserializeFrom(parametersEnumerator.Current, Feedback) THEN
 		RETURN;
 	END_IF
 

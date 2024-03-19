@@ -17,6 +17,7 @@ VAR
 	nodePrototypes : NodePrototypes;
 	graph : Graph(nodePrototypes);
 	jsonDeserializer : JsonDeserializer;
+	feedback : DeserializerFeedback;
 	jsonSerializer : JsonSerializer;
 	equal : BOOL;
 	expected : STRING(2000) := '{"uuid":"8506b771-8bd4-4160-984e-e0e4aa529fec","errors":[{"message":"Node type is not installed","active":false},{"message":"Deserialization failed","active":false}],"nodes":[{"id":"1","order":0,"mode":0,"outputPorts":[{"name":"out","datatype":{"type":"BOOL"},"value":true}],"parameters":[{"name":"value","datatype":{"type":"BOOL"},"value":true}],"errors":[{"message":"Deserialization failed","active":false}]},{"id":"2","order":1,"mode":0,"inputPorts":[{"name":"in","connected":true,"datatype":{"type":"BOOL"},"value":true}],"contents":[{"name":"display","datatype":{"type":"BOOL"},"value":true}],"errors":[{"message":"Deserialization failed","active":false}]}]}';
@@ -27,10 +28,10 @@ END_VAR
 
 nodePrototypes.InstallNodePack(nodePack_PlcBasic);
 jsonDeserializer.TryLoad(TestJson.literalBoolLinkedToDisplayBool);
-graph.TryDeserializeFrom(jsonDeserializer);
+graph.TryDeserializeFrom(jsonDeserializer, feedback);
 graph.Run();
 graph.SerializeWith(jsonSerializer);
-jsonSerializer.TryGetSerialziedData(ADR(TestJson.outJson),SIZEOF(TestJson.outJson));
+jsonSerializer.TryGetSerializedData(ADR(TestJson.outJson),SIZEOF(TestJson.outJson));
 
 equal := TestJson.outJson = expected;
 
@@ -49,6 +50,7 @@ VAR
 	nodePrototypes : NodePrototypes;
 	graph : Graph(nodePrototypes);
 	jsonDeserializer : JsonDeserializer;
+	feedback : DeserializerFeedback;
 	jsonSerializer : JsonSerializer;
 	equal : BOOL;
 	expected : STRING(2000) := '{"uuid":"8506b771-8bd4-4160-984e-e0e4aa529fec","errors":[{"message":"Node type is not installed","active":false},{"message":"Deserialization failed","active":false}],"nodes":[{"id":"1","order":0,"mode":0,"outputPorts":[{"name":"out","datatype":{"type":"BOOL"},"value":false}],"parameters":[{"name":"value","datatype":{"type":"BOOL"},"value":true}],"errors":[{"message":"Deserialization failed","active":false}]},{"id":"2","order":1,"mode":0,"inputPorts":[{"name":"in","connected":true,"datatype":{"type":"BOOL"},"value":false}],"contents":[{"name":"display","datatype":{"type":"BOOL"},"value":false}],"errors":[{"message":"Deserialization failed","active":false}]}]}';
@@ -59,9 +61,9 @@ END_VAR
 
 nodePrototypes.InstallNodePack(nodePack_PlcBasic);
 jsonDeserializer.TryLoad(TestJson.literalBoolLinkedToDisplayBool);
-graph.TryDeserializeFrom(jsonDeserializer);
+graph.TryDeserializeFrom(jsonDeserializer, feedback);
 graph.SerializeWith(jsonSerializer);
-jsonSerializer.TryGetSerialziedData(ADR(TestJson.outJson),SIZEOF(TestJson.outJson));
+jsonSerializer.TryGetSerializedData(ADR(TestJson.outJson),SIZEOF(TestJson.outJson));
 
 equal := TestJson.outJson = expected;
 

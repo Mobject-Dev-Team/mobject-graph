@@ -12,14 +12,14 @@ VAR
 	outputPortHost : OutputPortHost(eventEmitter);
 	parameterHost : ParameterHost(eventEmitter);
 	contentHost : ContentHost(eventEmitter);
-	errorHost : ErrorHost(eventEmitter);
+	alarmHost : AlarmHost(eventEmitter);
 	metadataHost : MetadataHost(eventEmitter);
 	selfCreatedContent : Stack;
 	selfCreatedInputPorts : Stack;
 	selfCreatedOutputPorts : Stack;
 	selfCreatedParameters : Stack;
 	selfCreatedMetadata : Stack;
-	deserializationFailedError : DeserializationFailedError(THIS^);
+	deserializationFailedAlarm : DeserializationFailedAlarm(THIS^);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -40,8 +40,18 @@ inputPortHost.Accept(Visitor);
 outputPortHost.Accept(Visitor);
 parameterHost.Accept(Visitor);
 contentHost.Accept(Visitor);
-errorHost.Accept(Visitor);
+alarmHost.Accept(Visitor);
 metadataHost.Accept(Visitor);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddAlarm" Id="{25dc5072-bec6-4adc-b2cf-46ff0174bb16}">
+      <Declaration><![CDATA[METHOD AddAlarm
+VAR_INPUT
+	Alarm : I_Alarm;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[alarmHost.AddAlarm(Alarm);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddContent" Id="{6ea2b1d8-d6b2-4d47-b550-47d68cad2d2c}">
@@ -126,16 +136,6 @@ END_VAR]]></Declaration>
         <ST><![CDATA[parameter := CreateParameter(Name, Data);
 selfCreatedParameters.Push(parameter);
 AddDataAsParameter := parameter;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddError" Id="{25dc5072-bec6-4adc-b2cf-46ff0174bb16}">
-      <Declaration><![CDATA[METHOD AddError
-VAR_INPUT
-	Error : I_Error;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[errorHost.AddError(Error);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddInputPort" Id="{9e63d406-abf0-4693-b057-e8bdf718d997}">
@@ -332,29 +332,19 @@ VAR_INPUT
 	Name : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[_name := Name;
-Initialize();]]></ST>
+        <ST><![CDATA[_name := Name;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="HasRaisedError" Id="{ee5f41d7-87a5-49be-bf72-f24c29827daa}">
-      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedError : BOOL]]></Declaration>
+    <Property Name="HasRaisedAlarm" Id="{ee5f41d7-87a5-49be-bf72-f24c29827daa}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedAlarm : BOOL]]></Declaration>
       <Get Name="Get" Id="{6320bccd-9e0f-4da2-b00f-578639dbdeac}">
         <Declaration><![CDATA[VAR
 END_VAR]]></Declaration>
         <Implementation>
-          <ST><![CDATA[HasRaisedError := errorHost.HasRaisedError;]]></ST>
+          <ST><![CDATA[HasRaisedAlarm := alarmHost.HasRaisedAlarm;]]></ST>
         </Implementation>
       </Get>
     </Property>
-    <Method Name="Initialize" Id="{c523b599-657c-48d8-9a15-a024d5cd3cac}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED Initialize
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
     <Property Name="Name" Id="{3ea0ca14-7e1c-0f9c-0dd4-fc640a163eef}">
       <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
       <Get Name="Get" Id="{89da2b88-6436-0494-1a12-900ee5d5f448}">
@@ -409,7 +399,7 @@ inputPortHost.SerializeWith(Serializer);
 outputPortHost.SerializeWith(Serializer);
 parameterHost.SerializeWith(Serializer);
 contentHost.SerializeWith(Serializer);
-errorHost.SerializeWith(Serializer);
+alarmHost.SerializeWith(Serializer);
 metadataHost.SerializeWith(Serializer);
 Serializer.EndObject();]]></ST>
       </Implementation>
@@ -418,13 +408,15 @@ Serializer.EndObject();]]></ST>
       <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
 VAR_INPUT
 	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT parameterHost.TryDeserializeFrom(Deserializer) THEN
-	deserializationFailedError.Raise('Failed to deserialize parameters');
+        <ST><![CDATA[DeserializationFailedAlarm.Clear();
+
+IF NOT parameterHost.TryDeserializeFrom(Deserializer, Feedback) THEN
+	DeserializationFailedAlarm.Raise('Failed to deserialize parameters');
 	RETURN;
 END_IF
-deserializationFailedError.Clear();
 
 TryDeserializeFrom := TRUE;]]></ST>
       </Implementation>

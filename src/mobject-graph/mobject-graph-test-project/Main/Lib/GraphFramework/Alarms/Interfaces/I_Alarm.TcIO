@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <Itf Name="I_Error" Id="{ac6f2e39-df03-0ea5-3235-056999a71a99}">
-    <Declaration><![CDATA[INTERFACE I_Error EXTENDS I_Serializable]]></Declaration>
+  <Itf Name="I_Alarm" Id="{ac6f2e39-df03-0ea5-3235-056999a71a99}">
+    <Declaration><![CDATA[INTERFACE I_Alarm EXTENDS I_Serializable]]></Declaration>
     <Method Name="Accept" Id="{b5a5ac7f-f823-064d-32bb-6a2242bbb63d}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
-	Visitor : I_ErrorVisitor;
+	Visitor : I_AlarmVisitor;
 END_VAR
 ]]></Declaration>
     </Method>

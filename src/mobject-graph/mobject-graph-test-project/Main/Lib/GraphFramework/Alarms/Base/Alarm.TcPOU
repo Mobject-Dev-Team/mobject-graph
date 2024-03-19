@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="Error" Id="{71bd3509-3a77-0a94-2705-a3ad83e250bc}" SpecialFunc="None">
+  <POU Name="Alarm" Id="{71bd3509-3a77-0a94-2705-a3ad83e250bc}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK ABSTRACT Error IMPLEMENTS I_Error]]></Declaration>
+FUNCTION_BLOCK ABSTRACT Alarm IMPLEMENTS I_Alarm]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
@@ -13,7 +13,7 @@ FUNCTION_BLOCK ABSTRACT Error IMPLEMENTS I_Error]]></Declaration>
     <Method Name="Accept" Id="{354a4344-cb86-0485-1c3b-41f76fac9dc7}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
-	Visitor : I_ErrorVisitor;
+	Visitor : I_AlarmVisitor;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -43,7 +43,7 @@ END_VAR
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	Parent : I_HostErrors;
+	Parent : I_HostAlarms;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -75,7 +75,7 @@ END_VAR
     <Method Name="RegisterWithParent" Id="{50a3db7c-f4f1-0156-3933-1f93438f5c5a}">
       <Declaration><![CDATA[METHOD RegisterWithParent
 VAR_INPUT
-	Parent : I_HostErrors;
+	Parent : I_HostAlarms;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -83,7 +83,7 @@ END_VAR
 	RETURN;
 END_IF
 
-Parent.AddError(THIS^);]]></ST>
+Parent.AddAlarm(THIS^);]]></ST>
       </Implementation>
     </Method>
     <Method Name="SerializeWith" Id="{a2ed8123-2f68-4e86-a79d-a0fb02c58153}">

@@ -111,6 +111,7 @@ Serializer.EndArray();]]></ST>
       <Declaration><![CDATA[METHOD public TryDeserializeFrom : BOOL
 VAR_INPUT
 	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
 END_VAR
 VAR
 	extensionsDeserializer : I_Deserializer;
@@ -124,7 +125,7 @@ extensionsEnumerator := extensionsDeserializer.GetArrayEnumerator();
 
 WHILE extensionsEnumerator.MoveNext() DO
 	
-	IF NOT extensionsEnumerator.Current.TryGetKeyString('name',extensionName) THEN
+	IF NOT extensionsEnumerator.Current.TryGetKeyString('name', extensionName, Feedback) THEN
 		CONTINUE;
 	END_IF
 	
@@ -132,7 +133,7 @@ WHILE extensionsEnumerator.MoveNext() DO
 		CONTINUE;
 	END_IF
 	
-	IF NOT extension.TryDeserializeFrom(extensionsEnumerator.Current) THEN
+	IF NOT extension.TryDeserializeFrom(extensionsEnumerator.Current, Feedback) THEN
 		RETURN;
 	END_IF
 

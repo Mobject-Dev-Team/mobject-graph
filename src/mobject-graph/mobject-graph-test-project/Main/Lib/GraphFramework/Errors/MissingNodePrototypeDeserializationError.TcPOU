@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MissingNodePrototypeDeserializationError" Id="{3c97932d-0312-4719-9024-3d6e6859f592}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK MissingNodePrototypeDeserializationError EXTENDS Error
+VAR
+	nodeType : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{9a6ecff5-b807-4505-b997-e5486b1e04f0}" />
+    <Property Name="ErrorType" Id="{64f7e5c8-04aa-4911-b08c-8065a204dacf}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ErrorType : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{33b7c5ee-7b5d-44d4-9895-6e788ada1aba}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ErrorType := 'MISSING_NODE_PROTOTYPE_DESERIALIZATION_ERROR';]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_init" Id="{00fdec9d-0922-46c3-a790-471354ed631e}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	MissingType : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ nodeType := MissingType;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Message" Id="{eb05180d-8f15-4349-9789-a9d690e6ed9d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Message : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{81abb13d-8b5f-428f-aed9-84fb87053b4a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Message := CONCAT('Deserialization Failed, Missing Node Prototype : ',nodeType);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

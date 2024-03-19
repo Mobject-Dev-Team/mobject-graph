@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="ErrorHost" Id="{50541dba-cdf2-4bcb-9556-2627a6035f55}" SpecialFunc="None">
+  <POU Name="AlarmHost" Id="{50541dba-cdf2-4bcb-9556-2627a6035f55}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK ErrorHost IMPLEMENTS I_HostErrors, I_Serializable
+FUNCTION_BLOCK AlarmHost IMPLEMENTS I_HostAlarms, I_Serializable
 VAR
 	eventTarget : I_EventTarget;
-	errors : Stack;
+	alarms : Stack;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -18,19 +18,19 @@ END_VAR
     <Method Name="Accept" Id="{337d8628-3c2e-45e4-9de1-44fe62acf628}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
-	Visitor : I_ErrorVisitor;
+	Visitor : I_AlarmVisitor;
 END_VAR
 VAR
 	enumerator : I_ForwardEnumerator;
-	error : I_Error;
+	alarm : I_Alarm;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[enumerator := errors.GetEnumerator();
+        <ST><![CDATA[enumerator := alarms.GetEnumerator();
 
 WHILE (enumerator.MoveNext()) DO
 	
-	IF enumerator.TryGet(error) THEN
-		error.Accept(Visitor);
+	IF enumerator.TryGet(alarm) THEN
+		alarm.Accept(Visitor);
 	END_IF
 
 END_WHILE
@@ -38,32 +38,32 @@ END_WHILE
 enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="AddError" Id="{4732f287-e1c3-43fd-a5fa-5146e0069c2d}">
-      <Declaration><![CDATA[METHOD PUBLIC AddError
+    <Method Name="AddAlarm" Id="{4732f287-e1c3-43fd-a5fa-5146e0069c2d}">
+      <Declaration><![CDATA[METHOD PUBLIC AddAlarm
 VAR_INPUT
-	Error : I_Error;
+	Alarm : I_Alarm;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[errors.Push(Error);
-EmitOnErrorAddedEvent(Error);]]></ST>
+        <ST><![CDATA[alarms.Push(Alarm);
+EmitOnAlarmAddedEvent(Alarm);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="EmitOnErrorAddedEvent" Id="{4aac7d20-3cc4-46ba-916e-e7385b93bf4f}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED EmitOnErrorAddedEvent
+    <Method Name="EmitOnAlarmAddedEvent" Id="{4aac7d20-3cc4-46ba-916e-e7385b93bf4f}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnAlarmAddedEvent
 VAR_INPUT
-	Error : I_Error;
+	Alarm : I_Alarm;
 END_VAR
 VAR
-	pErrorAddedEvent : POINTER TO ErrorAddedEvent;
+	pAlarmAddedEvent : POINTER TO AlarmAddedEvent;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF eventTarget = 0 THEN
 	RETURN;
 END_IF
 
-pErrorAddedEvent := __NEW(ErrorAddedEvent(Target := Error));
-eventTarget.Emit('OnErrorAdded',pErrorAddedEvent^);
-pErrorAddedEvent^.Dispose();]]></ST>
+pAlarmAddedEvent := __NEW(AlarmAddedEvent(Target := Alarm));
+eventTarget.Emit('OnAlarmAdded',pAlarmAddedEvent^);
+pAlarmAddedEvent^.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{68af8c17-b6a6-49cc-8bf1-772d6361db00}" FolderPath="Constructor\">
@@ -78,24 +78,24 @@ END_VAR
         <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="HasRaisedError" Id="{0e9d7d0f-b9ab-45ac-9f39-de7d687d3cfb}">
-      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedError : BOOL]]></Declaration>
+    <Property Name="HasRaisedAlarm" Id="{0e9d7d0f-b9ab-45ac-9f39-de7d687d3cfb}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedAlarm : BOOL]]></Declaration>
       <Get Name="Get" Id="{2d00a89d-9c3c-4b37-bcce-c4d952fb7fe7}">
         <Declaration><![CDATA[VAR
 	enumerator : I_ForwardEnumerator;
-	error : I_Error;
+	alarm : I_Alarm;
 END_VAR]]></Declaration>
         <Implementation>
-          <ST><![CDATA[enumerator := errors.GetEnumerator();
+          <ST><![CDATA[enumerator := alarms.GetEnumerator();
 
 WHILE (enumerator.MoveNext()) DO
 	
-	IF NOT enumerator.TryGet(error) THEN
+	IF NOT enumerator.TryGet(alarm) THEN
 		CONTINUE;
 	END_IF
 	
-	IF error.Active THEN
-		HasRaisedError := TRUE;
+	IF alarm.Active THEN
+		HasRaisedAlarm := TRUE;
 		EXIT;
 	END_IF
 
@@ -112,21 +112,21 @@ VAR_INPUT
 END_VAR
 VAR
 	enumerator : I_ForwardEnumerator;
-	error : I_Error;
+	alarm : I_Alarm;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF errors.Count = 0 THEN
+        <ST><![CDATA[IF alarms.Count = 0 THEN
 	RETURN;
 END_IF
 
-Serializer.AddKey('errors');
+Serializer.AddKey('alarms');
 Serializer.StartArray();
 
-enumerator := errors.GetEnumerator();
+enumerator := alarms.GetEnumerator();
 
 WHILE enumerator.MoveNext() DO
-	IF enumerator.TryGet(error) THEN
-		error.SerializeWith(Serializer);
+	IF enumerator.TryGet(alarm) THEN
+		alarm.SerializeWith(Serializer);
 	END_IF
 END_WHILE
 

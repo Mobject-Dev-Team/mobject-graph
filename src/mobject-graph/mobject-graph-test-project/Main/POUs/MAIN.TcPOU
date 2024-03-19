@@ -11,39 +11,38 @@ VAR
 	nodePack_PlcBasic : NodePack_PlcBasic;
 	initialise: BOOL;
 
-	// debug
-	done : BOOL;
-	output : STRING(2000);
-	serializer : JsonSerializer();	
-	deserializier : JsonDeserializer();
-	tryLoadBasic : BOOL := true;
+	server : RpcServer;
+	loadGraphRpcHandler : LoadGraphRpcHandler(graph);	
+
+	jsonDeserializer : JsonDeserializer;
+	loadFirst, loadSecond : BOOL;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-// todo
+      <ST><![CDATA[// todo
 // modify json to suit ideal
 // - node id is now unique string
 // - link is now [id_dint, sourceId_String, sourcePortName_String, destinationId_String, destinationPortName_String].
-TcUnit.RUN();
 
-//IF NOT initialise THEN
-//	initialise := TRUE;
-//	nodePrototypes.InstallNodePack(nodePack_PlcBasic);
+//TcUnit.RUN();
+
+IF NOT initialise THEN
+	nodePrototypes.InstallNodePack(nodePack_PlcBasic);
+	server.RegisterRpcHandler('LoadGraph',loadGraphRpcHandler);
+	initialise := TRUE;
+END_IF
+
+graph.Run();
+
+//IF loadFirst THEN
+//	loadFirst := FALSE;
+//	jsonDeserializer.TryLoad(TestJson.literalBoolLinkedToDisplayBool);
+//	graph.TryDeserializeFrom(jsonDeserializer);
 //END_IF
 
-
-
-//graph.Run();
-
-//serializer.Reset();
-//nodePrototypes.SerializeWith(serializer);
-//done := serializer.TryGetSerialziedData(ADR(output),SIZEOF(output));
-
-//IF loadSingleLiteralBool THEN
-//	graph.Reset();
-//	deserializier.TryLoad(TestJson.singleLiteralBool);
-//	graph.TryDeserializeFrom(deserializier);
-//	tryLoadBasic := FALSE;
+//IF loadSecond THEN
+//	loadSecond := FALSE;
+//	jsonDeserializer.TryLoad(TestJson.literalBoolLinkedToDisplayBool2);
+//	graph.TryDeserializeFrom(jsonDeserializer);
 //END_IF]]></ST>
     </Implementation>
   </POU>

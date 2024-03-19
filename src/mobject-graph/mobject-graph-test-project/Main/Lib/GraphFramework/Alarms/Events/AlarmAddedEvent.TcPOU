@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="ErrorAddedEvent" Id="{8019204d-c3b6-02ab-1b82-98a7f9ec0627}" SpecialFunc="None">
+  <POU Name="AlarmAddedEvent" Id="{8019204d-c3b6-02ab-1b82-98a7f9ec0627}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK ErrorAddedEvent EXTENDS Disposable IMPLEMENTS I_ErrorAddedEvent
+FUNCTION_BLOCK AlarmAddedEvent EXTENDS Disposable IMPLEMENTS I_AlarmAddedEvent
 VAR
-	_target : I_Error;
+	_target : I_Alarm;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -18,7 +18,7 @@ END_VAR
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	Target : I_Error;
+	Target : I_Alarm;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -26,7 +26,7 @@ END_VAR
       </Implementation>
     </Method>
     <Property Name="Target" Id="{76c0f6be-146d-011d-2992-c8ae2e9400cf}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Error]]></Declaration>
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Alarm]]></Declaration>
       <Get Name="Get" Id="{145585c8-2f5a-01db-04bb-0cb34ba4def4}">
         <Declaration><![CDATA[VAR
 END_VAR

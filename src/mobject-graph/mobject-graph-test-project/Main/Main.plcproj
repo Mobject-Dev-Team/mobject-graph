@@ -18,6 +18,9 @@
     <LibraryReferences>{0316d8aa-5460-44e8-a6c7-40422389f1e0}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Lib\GraphApi\LoadGraphRpcHandler.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Lib\GraphFramework\Content\Base\Content.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -36,31 +39,34 @@
     <Compile Include="Lib\GraphFramework\Content\Interface\I_HostContent.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Error\Base\Error.TcPOU">
+    <Compile Include="Lib\GraphFramework\Errors\MissingNodePrototypeDeserializationError.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Error\Events\ErrorAddedEvent.TcPOU">
+    <Compile Include="Lib\GraphFramework\Alarms\Base\Alarm.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Error\Events\I_ErrorAddedEvent.TcIO">
+    <Compile Include="Lib\GraphFramework\Alarms\Events\AlarmAddedEvent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Error\FunctionFailedError.TcPOU">
+    <Compile Include="Lib\GraphFramework\Alarms\Events\I_AlarmAddedEvent.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Error\Host\ErrorHost.TcPOU">
+    <Compile Include="Lib\GraphFramework\Alarms\FunctionFailedAlarm.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Error\Interfaces\I_Error.TcIO">
+    <Compile Include="Lib\GraphFramework\Alarms\Host\AlarmHost.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Error\Interfaces\I_HostErrors.TcIO">
+    <Compile Include="Lib\GraphFramework\Alarms\Interfaces\I_Alarm.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Error\NodeNotSupportedError.TcPOU">
+    <Compile Include="Lib\GraphFramework\Alarms\Interfaces\I_HostAlarms.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Error\DeserializationFailedError.TcPOU">
+    <Compile Include="Lib\GraphFramework\Alarms\DeserializationFailedNodeNotSupportedAlarm.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Alarms\DeserializationFailedAlarm.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Extensions\Base\Extension.TcPOU">
@@ -229,7 +235,7 @@
     <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_ContentVisitor.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_ErrorVisitor.TcIO">
+    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_AlarmVisitor.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_ExtensionVisitor.TcIO">
@@ -256,9 +262,6 @@
     <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_NodePrototypeVisitor.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\Error\CannotCompareTypeError.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Lib\PlcBasicNodePack\NodePack_PlcBasic.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -272,6 +275,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\PlcBasicNodePack\Node\Literals\Node_Literal_BOOL.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\PlcBasicNodePack\Node\Literals\Node_Literal_Generic.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\PlcBasicNodePack\Node\Literals\Node_Display_Generic.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PlcTask.TcTTO">
@@ -292,11 +301,11 @@
     <Folder Include="Lib\GraphFramework\Content\Events" />
     <Folder Include="Lib\GraphFramework\Content\Interface" />
     <Folder Include="Lib\GraphFramework\Content\Host" />
-    <Folder Include="Lib\GraphFramework\Error" />
-    <Folder Include="Lib\GraphFramework\Error\Base" />
-    <Folder Include="Lib\GraphFramework\Error\Events" />
-    <Folder Include="Lib\GraphFramework\Error\Host" />
-    <Folder Include="Lib\GraphFramework\Error\Interfaces" />
+    <Folder Include="Lib\GraphFramework\Alarms" />
+    <Folder Include="Lib\GraphFramework\Alarms\Base" />
+    <Folder Include="Lib\GraphFramework\Alarms\Events" />
+    <Folder Include="Lib\GraphFramework\Alarms\Host" />
+    <Folder Include="Lib\GraphFramework\Alarms\Interfaces" />
     <Folder Include="Lib\GraphFramework\Extensions" />
     <Folder Include="Lib\GraphFramework\Extensions\Base" />
     <Folder Include="Lib\GraphFramework\Extensions\Events" />
@@ -314,6 +323,7 @@
     <Folder Include="Lib\GraphFramework\Metadata\Base" />
     <Folder Include="Lib\GraphFramework\InputPort" />
     <Folder Include="Lib\GraphFramework\Metadata\Events" />
+    <Folder Include="Lib\GraphFramework\Errors" />
     <Folder Include="Lib\GraphFramework\Node\Events" />
     <Folder Include="Lib\GraphFramework\Node\Host" />
     <Folder Include="Lib\GraphFramework\OutputPort" />
@@ -335,8 +345,8 @@
     <Folder Include="Lib\GraphFramework\Parameters\Interface" />
     <Folder Include="Lib\GraphFramework\Visitors" />
     <Folder Include="Lib\GraphFramework\Visitors\Interfaces" />
+    <Folder Include="Lib\GraphApi" />
     <Folder Include="Lib\PlcBasicNodePack" />
-    <Folder Include="Lib\PlcBasicNodePack\Error" />
     <Folder Include="Lib\PlcBasicNodePack\Node" />
     <Folder Include="Lib\PlcBasicNodePack\Node\Display" />
     <Folder Include="Lib\PlcBasicNodePack\Node\Literals" />
@@ -377,11 +387,17 @@
     <LibraryReference Include="mobject-collections,1.1.0,mobject">
       <Namespace>mobject_collections</Namespace>
     </LibraryReference>
+    <LibraryReference Include="mobject-deserialization,0.1.0,mobject">
+      <Namespace>mobject_deserialization</Namespace>
+    </LibraryReference>
     <LibraryReference Include="mobject-disposable,1.0.0,mobject">
       <Namespace>mobject_disposable</Namespace>
     </LibraryReference>
     <LibraryReference Include="mobject-enumerable,1.1.0,mobject">
       <Namespace>mobject_enumerable</Namespace>
+    </LibraryReference>
+    <LibraryReference Include="mobject-errors,0.2.0,mobject">
+      <Namespace>mobject_errors</Namespace>
     </LibraryReference>
     <LibraryReference Include="mobject-events,1.0.0,mobject">
       <Namespace>mobject_events</Namespace>

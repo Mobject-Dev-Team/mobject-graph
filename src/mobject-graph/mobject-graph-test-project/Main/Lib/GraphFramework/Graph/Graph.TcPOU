@@ -14,7 +14,7 @@ VAR
 	outputPortHost : OutputPortHost(eventEmitter);
 	parameterHost : ParameterHost(eventEmitter);
 	contentHost : ContentHost(eventEmitter);
-	errorHost : ErrorHost(eventEmitter);
+	alarmHost : AlarmHost(eventEmitter);
 	extensionHost : ExtensionHost(eventEmitter);
 	metadataHost : MetadataHost(eventEmitter);
 	
@@ -25,8 +25,8 @@ VAR
 	selfCreatedMetadata : Stack;
 	selfCreatedNodes : Stack;
 	
-	deserializationFailedError : DeserializationFailedError(THIS^);
-	nodeNotSupportedError : NodeNotSupportedError(THIS^);
+	deserializationFailedAlarm : DeserializationFailedAlarm(THIS^);
+	deserializationFailedNodeNotSupportedAlarm : DeserializationFailedNodeNotSupportedAlarm(THIS^);
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -48,10 +48,20 @@ inputPortHost.Accept(Visitor);
 outputPortHost.Accept(Visitor);
 parameterHost.Accept(Visitor);
 contentHost.Accept(Visitor);
-errorHost.Accept(Visitor);
+alarmHost.Accept(Visitor);
 metadataHost.Accept(Visitor);
 extensionHost.Accept(Visitor);
 nodeHost.Accept(Visitor);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddAlarm" Id="{e5ded1e0-602c-46b5-a84f-241532379ef9}">
+      <Declaration><![CDATA[METHOD AddAlarm
+VAR_INPUT
+	Alarm : I_Alarm;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[alarmHost.AddAlarm(Alarm);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddContent" Id="{43c3e1b2-e85c-4b92-bb9b-a529db7d4feb}">
@@ -136,16 +146,6 @@ END_VAR]]></Declaration>
         <ST><![CDATA[parameter := CreateParameter(Name, Data);
 selfCreatedParameters.Push(parameter);
 AddDataAsParameter := parameter;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddError" Id="{e5ded1e0-602c-46b5-a84f-241532379ef9}">
-      <Declaration><![CDATA[METHOD AddError
-VAR_INPUT
-	Error : I_Error;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[errorHost.AddError(Error);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddExtension" Id="{6a3d7798-3e04-4866-83e1-d2e5c9f524c0}">
@@ -320,6 +320,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[WHILE selfCreatedNodes.TryPop(node) DO
+	nodeHost.RemoveNode(node);
 	node.Dispose();
 END_WHILE]]></ST>
       </Implementation>
@@ -375,29 +376,19 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.nodePrototypes := NodePrototypes;
-Initialize();]]></ST>
+        <ST><![CDATA[THIS^.nodePrototypes := NodePrototypes;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="HasRaisedError" Id="{40a721cd-51fb-40f7-96ac-f59bf9e895b5}">
-      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedError : BOOL]]></Declaration>
+    <Property Name="HasRaisedAlarm" Id="{40a721cd-51fb-40f7-96ac-f59bf9e895b5}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedAlarm : BOOL]]></Declaration>
       <Get Name="Get" Id="{e8a97c69-cc1f-4f49-91b2-4fc9b7e80985}">
         <Declaration><![CDATA[VAR
 END_VAR]]></Declaration>
         <Implementation>
-          <ST><![CDATA[HasRaisedError := errorHost.HasRaisedError;]]></ST>
+          <ST><![CDATA[HasRaisedAlarm := alarmHost.HasRaisedAlarm;]]></ST>
         </Implementation>
       </Get>
     </Property>
-    <Method Name="Initialize" Id="{6e21f07c-76bf-40e2-81a6-1a7ecbdd42c1}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED Initialize
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="OffEvent" Id="{af644928-9aa7-4f95-81f4-05559087b67b}">
       <Declaration><![CDATA[METHOD PUBLIC OffEvent
 VAR_INPUT
@@ -435,9 +426,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[_uuid := '';
-DisposeSelfCreatedNodes();
-
-nodeNotSupportedError.Clear();]]></ST>
+DisposeSelfCreatedNodes();]]></ST>
       </Implementation>
     </Method>
     <Method Name="Run" Id="{1dc36582-e7a3-03d2-2e77-7abd714e98fa}">
@@ -463,17 +452,57 @@ inputPortHost.SerializeWith(Serializer);
 outputPortHost.SerializeWith(Serializer);
 parameterHost.SerializeWith(Serializer);
 contentHost.SerializeWith(Serializer);
-errorHost.SerializeWith(Serializer);
+alarmHost.SerializeWith(Serializer);
 extensionHost.SerializeWith(Serializer);
 metadataHost.SerializeWith(Serializer);
 nodeHost.SerializeWith(Serializer);
 Serializer.EndObject();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="TryCreateLinks" Id="{4d909e30-29af-469e-b412-8b76819d5508}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PUBLIC TryCreateLinks : BOOL
+    <Method Name="TryDeserializeFrom" Id="{99b56a2a-8cdf-4ba7-9ff3-3103bd8e6be2}">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
 VAR_INPUT
 	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	receivedUuid : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DeserializationFailedNodeNotSupportedAlarm.Clear();
+DeserializationFailedAlarm.Clear();
+
+IF NOT parameterHost.TryDeserializeFrom(Deserializer, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT extensionHost.TryDeserializeFrom(Deserializer, Feedback) THEN
+	RETURN;
+END_IF
+
+IF NOT Deserializer.TryGetKeyString('uuid', receivedUuid, Feedback) THEN
+	RETURN;
+END_IF
+
+Reset();
+
+IF NOT TryDeserializeNodes(Deserializer, Feedback) THEN 
+	RETURN;
+END_IF
+
+IF NOT TryDeserializeLinks(Deserializer, Feedback) THEN
+	RETURN;
+END_IF
+
+_uuid := receivedUuid;
+TryDeserializeFrom := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeLinks" Id="{4d909e30-29af-469e-b412-8b76819d5508}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeLinks : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
 END_VAR
 VAR
 	linksDeserializer : I_Deserializer;
@@ -496,66 +525,68 @@ WHILE linksEnumerator.MoveNext() DO
 	
 	linkDeserializer := linksEnumerator.Current.GetArray();
 	
-	IF NOT linkDeserializer.GetElementByIndex(1).TryGetString(sourceNodeId) THEN
-		deserializationFailedError.Raise('Missing source node id from link');
+	IF NOT linkDeserializer.GetElementByIndex(1).TryGetString(sourceNodeId, Feedback) THEN
+		DeserializationFailedAlarm.Raise('Missing source node id from link');
 		RETURN;
 	END_IF
 	
-	IF NOT linkDeserializer.GetElementByIndex(2).TryGetString(sourcePortName) THEN
-		deserializationFailedError.Raise('Missing source port name from link');
+	IF NOT linkDeserializer.GetElementByIndex(2).TryGetString(sourcePortName, Feedback) THEN
+		DeserializationFailedAlarm.Raise('Missing source port name from link');
 		RETURN;
 	END_IF
 	
-	IF NOT linkDeserializer.GetElementByIndex(3).TryGetString(destinationNodeId) THEN
-		deserializationFailedError.Raise('Missing destination node id from link');
+	IF NOT linkDeserializer.GetElementByIndex(3).TryGetString(destinationNodeId, Feedback) THEN
+		DeserializationFailedAlarm.Raise('Missing destination node id from link');
 		RETURN;
 	END_IF
 	
-	IF NOT linkDeserializer.GetElementByIndex(4).TryGetString(destinationPortName) THEN
-		deserializationFailedError.Raise('Missing destination port name from link');
+	IF NOT linkDeserializer.GetElementByIndex(4).TryGetString(destinationPortName, Feedback) THEN
+		DeserializationFailedAlarm.Raise('Missing destination port name from link');
 		RETURN;
 	END_IF
 	
 	IF NOT nodeHost.TryGetNodeById(sourceNodeId, sourceNode) THEN
-		deserializationFailedError.Raise('Unable to get source node when creating link');
+		DeserializationFailedAlarm.Raise('Unable to get source node when creating link');
 		RETURN;
 	END_IF
 	
 	IF NOT nodeHost.TryGetNodeById(destinationNodeId, destinationNode) THEN
-		deserializationFailedError.Raise('Unable to get destination node when creating link');
+		DeserializationFailedAlarm.Raise('Unable to get destination node when creating link');
 		RETURN;
 	END_IF
 	
 	IF NOT sourceNode.TryGetOutputPortByName(sourcePortName, sourcePort) THEN
-		deserializationFailedError.Raise('Unable to get source port when creating link');
+		DeserializationFailedAlarm.Raise('Unable to get source port when creating link');
 		RETURN;
 	END_IF
 	
 	IF NOT destinationNode.TryGetInputPortByName(destinationPortName, destinationPort) THEN
-		deserializationFailedError.Raise('Unable to get destination port when creating link');
+		DeserializationFailedAlarm.Raise('Unable to get destination port when creating link');
 		RETURN;
 	END_IF
 	
 	IF NOT destinationPort.TryConnectTo(sourcePort) THEN
-		deserializationFailedError.Raise('Unable to connect source to destination when creating link');
+		DeserializationFailedAlarm.Raise('Unable to connect source to destination when creating link');
 		RETURN;
 	END_IF
 	
 END_WHILE
 
 linksEnumerator.Dispose();
-TryCreateLinks := TRUE;]]></ST>
+TryDeserializeLinks := TRUE;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="TryCreateNodes" Id="{9d17f6c4-8462-4003-b53a-550acec0614e}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PUBLIC TryCreateNodes : BOOL;
+    <Method Name="TryDeserializeNodes" Id="{9d17f6c4-8462-4003-b53a-550acec0614e}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeNodes : BOOL;
 VAR_INPUT
 	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
 END_VAR
 VAR
 	nodeDeserializer : I_Deserializer;
 	nodesEnumerator : I_DeserializerArrayForwardEnumerator;
 	nodeType : T_MAXSTRING;
+	pError : POINTER TO MissingNodePrototypeDeserializationError;
 	node : I_Node;
 END_VAR]]></Declaration>
       <Implementation>
@@ -564,20 +595,21 @@ nodesEnumerator := nodeDeserializer.GetArrayEnumerator();
 
 WHILE nodesEnumerator.MoveNext() DO
 	
-	IF NOT nodesEnumerator.Current.TryGetKeyString('type',nodeType) THEN
-		deserializationFailedError.Raise('Missing node type');
+	IF NOT nodesEnumerator.Current.TryGetKeyString('type',nodeType, Feedback) THEN
 		RETURN;
 	END_IF
 	
 	IF NOT nodePrototypes.TryCreateNodeByType(nodeType, node) THEN
-		nodeNotSupportedError.Raise(nodeType);
+		pError := __NEW(MissingNodePrototypeDeserializationError(MissingType := nodeType));
+		Feedback.LogError(pError^);
+		DeserializationFailedNodeNotSupportedAlarm.Raise(nodeType);
 		RETURN;
 	END_IF
 	
 	selfCreatedNodes.Push(node);
 	
-	IF NOT node.TryDeserializeFrom(nodesEnumerator.Current) THEN
-		deserializationFailedError.Raise('Node failed to deserialize');
+	IF NOT node.TryDeserializeFrom(nodesEnumerator.Current, Feedback) THEN
+		DeserializationFailedAlarm.Raise('Node failed to deserialize');
 		RETURN;
 	END_IF
 	
@@ -586,53 +618,7 @@ WHILE nodesEnumerator.MoveNext() DO
 END_WHILE
 
 nodesEnumerator.Dispose();
-TryCreateNodes := TRUE;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="TryDeserializeFrom" Id="{99b56a2a-8cdf-4ba7-9ff3-3103bd8e6be2}">
-      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
-VAR_INPUT
-	Deserializer : I_Deserializer;
-END_VAR
-VAR
-	receivedUuid : T_MAXSTRING;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF NOT parameterHost.TryDeserializeFrom(Deserializer) THEN
-	deserializationFailedError.Raise('Failed to deserialize parameters');	
-	RETURN;
-END_IF
-
-IF NOT extensionHost.TryDeserializeFrom(Deserializer) THEN
-	deserializationFailedError.Raise('Failed to deserialize extensions');	
-	RETURN;
-END_IF
-
-IF NOT Deserializer.TryGetKeyString('uuid', receivedUuid) THEN
-	deserializationFailedError.Raise('Missing uuid');
-	RETURN;
-END_IF
-
-IF Uuid = receivedUuid THEN
-	// if the uuid is the same then this means the nodes and link layout is the same, only the other parts may have changed
-	deserializationFailedError.Clear();
-	TryDeserializeFrom := nodeHost.TryDeserializeFrom(Deserializer);
-	RETURN;
-END_IF
-
-Reset();
-
-IF NOT TryCreateNodes(Deserializer) THEN 
-	RETURN;
-END_IF
-
-IF NOT TryCreateLinks(Deserializer) THEN
-	RETURN;
-END_IF
-
-_uuid := receivedUuid;
-deserializationFailedError.Clear();
-TryDeserializeFrom := TRUE;]]></ST>
+TryDeserializeNodes := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetContentByName" Id="{e912c915-77b1-4a71-a6fd-89bbc8852568}">

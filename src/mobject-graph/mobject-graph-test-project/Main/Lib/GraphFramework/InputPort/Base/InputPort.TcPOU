@@ -261,7 +261,7 @@ VAR_INPUT
 	OutputPort : I_OutputPort;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT _data.TryMakeReferenceOf(OutputPort.Data) THEN
+        <ST><![CDATA[IF NOT _data.TryMakeReferenceTo(OutputPort.Data) THEN
 	RETURN;
 END_IF
 
