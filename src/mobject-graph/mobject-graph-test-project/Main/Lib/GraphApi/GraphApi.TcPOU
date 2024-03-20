@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="GraphApi" Id="{2c0ea926-bac0-4e3d-aff9-a56ab39ef9c2}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK GraphApi IMPLEMENTS I_RpcApi
+VAR
+	loadGraphRpcHandler : LoadGraphRpcHandler(0);
+	getBlueprintsRpcHandler : GetBlueprintsRpcHandler(0);
+	getDatatypesRpcHandler : GetDatatypesRpcHandler(0);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{a5a3a9e0-4cb7-4fba-88b9-60a3e6636f4c}" />
+    <Method Name="FB_init" Id="{2373ca6b-d93b-4acb-a3d9-5123e1018cb3}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Graph : I_Graph;
+	NodePrototypes : I_NodePrototypes;
+	Datatypes : I_Datatypes;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[loadGraphRpcHandler.Initialize(Graph);
+getBlueprintsRpcHandler.Initialize(NodePrototypes);
+getDatatypesRpcHandler.Initialize(Datatypes);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterWith" Id="{8110307c-5ce7-4eb2-aa8c-6ce5497795c1}">
+      <Declaration><![CDATA[METHOD RegisterWith
+VAR_INPUT
+	Server : I_RpcServer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Server.RegisterRpcHandler('LoadGraph',loadGraphRpcHandler);
+Server.RegisterRpcHandler('GetBlueprints',getBlueprintsRpcHandler);
+Server.RegisterRpcHandler('GetDatatypes',getDatatypesRpcHandler);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

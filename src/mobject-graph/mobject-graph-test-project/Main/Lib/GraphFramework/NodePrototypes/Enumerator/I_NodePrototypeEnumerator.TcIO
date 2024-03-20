@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_NodePrototypeEnumerator" Id="{322daa39-a442-405f-98d3-0ec5cbf9d6c9}">
+    <Declaration><![CDATA[INTERFACE I_NodePrototypeEnumerator
+]]></Declaration>
+  </Itf>
+</TcPlcObject>

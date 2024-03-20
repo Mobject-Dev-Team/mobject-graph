@@ -483,6 +483,17 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Property Name="Self" Id="{434846d0-1e82-42de-ac2a-2f8bdb60d287}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Self : I_Node]]></Declaration>
+      <Get Name="Get" Id="{38d16083-214b-4210-9499-7b3b433c5206}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Self := This^;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="SerializeWith" Id="{34e53c74-e83e-4449-a443-ad491ecc1661}">
       <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT

@@ -9,5 +9,11 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Property Name="Self" Id="{dd160b45-b6c9-4d22-b389-03cd3e07c49d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Self : I_Node]]></Declaration>
+      <Get Name="Get" Id="{f5c8f5f5-c06f-45ad-a6dd-50129a762e49}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
   </Itf>
 </TcPlcObject>

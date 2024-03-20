@@ -18,7 +18,16 @@
     <LibraryReferences>{0316d8aa-5460-44e8-a6c7-40422389f1e0}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Lib\GraphApi\GetDatatypesRpcHandler.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphApi\GraphApi.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Lib\GraphApi\LoadGraphRpcHandler.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphApi\GetBlueprintsRpcHandler.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Content\Base\Content.TcPOU">
@@ -94,6 +103,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Metadata\Events\MetadataAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\NodePrototypes\Enumerator\I_NodePrototypeEnumerator.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\NodePrototypes\Enumerator\NodePrototypeEnumerator.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\TestJson.TcGVL">
@@ -232,6 +247,9 @@
     <Compile Include="Lib\GraphFramework\Parameters\Interface\I_HostParameters.TcIO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Lib\GraphFramework\Visitors\GetBlueprintVisitor\GetBlueprintVisitor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_ContentVisitor.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -324,6 +342,7 @@
     <Folder Include="Lib\GraphFramework\InputPort" />
     <Folder Include="Lib\GraphFramework\Metadata\Events" />
     <Folder Include="Lib\GraphFramework\Errors" />
+    <Folder Include="Lib\GraphFramework\NodePrototypes\Enumerator" />
     <Folder Include="Lib\GraphFramework\Node\Events" />
     <Folder Include="Lib\GraphFramework\Node\Host" />
     <Folder Include="Lib\GraphFramework\OutputPort" />
@@ -346,6 +365,7 @@
     <Folder Include="Lib\GraphFramework\Visitors" />
     <Folder Include="Lib\GraphFramework\Visitors\Interfaces" />
     <Folder Include="Lib\GraphApi" />
+    <Folder Include="Lib\GraphFramework\Visitors\GetBlueprintVisitor" />
     <Folder Include="Lib\PlcBasicNodePack" />
     <Folder Include="Lib\PlcBasicNodePack\Node" />
     <Folder Include="Lib\PlcBasicNodePack\Node\Display" />

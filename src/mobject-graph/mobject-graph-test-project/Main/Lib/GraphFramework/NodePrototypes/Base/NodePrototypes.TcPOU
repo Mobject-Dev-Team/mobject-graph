@@ -21,6 +21,21 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
+    <Method Name="GetNodePrototypeEnumerator" Id="{1d4ac568-ec5c-4a21-9cac-263e5e847698}">
+      <Declaration><![CDATA[METHOD PUBLIC GetNodePrototypeEnumerator : I_NodePrototypeEnumerator
+VAR_INPUT
+END_VAR
+VAR
+	keyValueEnumerator : I_KeyValueForwardEnumerator;
+	pNodePrototypeEnumerator : POINTER TO NodePrototypeEnumerator;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[keyValueEnumerator := nodePrototypes.GetKeyValueEnumerator();
+
+pNodePrototypeEnumerator := __NEW(NodePrototypeEnumerator(Enumerator := keyValueEnumerator));
+GetNodePrototypeEnumerator := pNodePrototypeEnumerator^;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="InstallNodePack" Id="{0ec00c43-b35f-0669-2893-bc57927b1baa}">
       <Declaration><![CDATA[METHOD PUBLIC InstallNodePack
 VAR_INPUT

@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="GetBlueprintVisitor" Id="{9f9a0116-9d81-4a08-a879-7a2851d51385}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK GetBlueprintVisitor EXTENDS Disposable IMPLEMENTS I_NodePrototypeVisitor
+VAR
+	serializer : JsonSerializer;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="VisitContent" Id="{5d6b8e87-493f-4bc0-a416-bdda199c430d}">
+      <Declaration><![CDATA[METHOD VisitContent
+VAR_INPUT
+	VisitingContent : I_Content;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitError" Id="{08d6423b-3444-4d02-ae95-4e4c7fed218c}">
+      <Declaration><![CDATA[METHOD VisitError
+VAR_INPUT
+	VisitingError : I_Alarm;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitExtension" Id="{4b74c9d7-8e37-404e-add7-587af0696243}">
+      <Declaration><![CDATA[METHOD VisitExtension
+VAR_INPUT
+	VisitingExtension : I_Extension;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitInputPort" Id="{0763b377-826e-4b34-9135-9701e00da90a}">
+      <Declaration><![CDATA[METHOD VisitInputPort
+VAR_INPUT
+	VisitingInputPort : I_InputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitMetadatum" Id="{69ef5793-7e33-4a4a-bd31-0b8a852dd40c}">
+      <Declaration><![CDATA[METHOD VisitMetadatum
+VAR_INPUT
+	VisitingMetadatum : I_Metadata;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitNode" Id="{0c574603-4091-4b53-bc43-a99c409aff80}">
+      <Declaration><![CDATA[METHOD VisitNode
+VAR_INPUT
+	VisitingNode : I_Node;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[serializer.StartObject();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitOutputPort" Id="{08afcd2c-2b3e-40a2-8371-470084bdd009}">
+      <Declaration><![CDATA[METHOD VisitOutputPort
+VAR_INPUT
+	VisitingOutputPort : I_OutputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitParameter" Id="{cb761164-ab6e-4c1f-a1c9-ed9d5f9c0450}">
+      <Declaration><![CDATA[METHOD VisitParameter
+VAR_INPUT
+	VisitingProperty : I_Parameter;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitPrototype" Id="{150c8dd2-723b-4895-862b-60480672d0cd}">
+      <Declaration><![CDATA[METHOD VisitPrototype
+VAR_INPUT
+	VisitingPrototype : I_NodePrototype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[serializer.Reset();
+serializer.StartObject();
+serializer.AddKey('blueprints');
+serializer.StartArray();
+
+serializer.EndArray();
+serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

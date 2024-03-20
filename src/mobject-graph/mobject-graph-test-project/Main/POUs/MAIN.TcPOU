@@ -6,13 +6,15 @@ VAR
 	graph_TestSuite : Graph_TestSuite;
 	
 	// playground
+	datatypes : Datatypes;
 	nodePrototypes : NodePrototypes;
 	graph : Graph(nodePrototypes);
+	basicPlcDatatypes : BasicPlcDatatypes;
 	nodePack_PlcBasic : NodePack_PlcBasic;
 	initialise: BOOL;
 
 	server : RpcServer;
-	loadGraphRpcHandler : LoadGraphRpcHandler(graph);	
+	graphApi : graphApi(graph, nodePrototypes, datatypes);	
 
 	jsonDeserializer : JsonDeserializer;
 	loadFirst, loadSecond : BOOL;
@@ -26,8 +28,9 @@ END_VAR]]></Declaration>
 //TcUnit.RUN();
 
 IF NOT initialise THEN
+	basicPlcDatatypes.RegisterWith(datatypes);
 	nodePrototypes.InstallNodePack(nodePack_PlcBasic);
-	server.RegisterRpcHandler('LoadGraph',loadGraphRpcHandler);
+	graphApi.RegisterWith(server);
 	initialise := TRUE;
 END_IF
 
