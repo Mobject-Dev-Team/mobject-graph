@@ -11,7 +11,6 @@ VAR
 	_parent : I_HostParameters;
 	eventEmitter : EventEmitter;
 	metadataHost : MetadataHost(THIS^, eventEmitter);
-	selfCreatedParameters : Stack;
 END_VAR
 ]]></Declaration>
     <Implementation>
