@@ -3,16 +3,9 @@
   <Itf Name="I_HostAlarms" Id="{6c14ee43-6ab7-0c30-3bf7-4a331785d2fc}">
     <Declaration><![CDATA[INTERFACE I_HostAlarms EXTENDS __SYSTEM.IQueryInterface
 ]]></Declaration>
-    <Method Name="AddAlarm" Id="{23aee699-1229-0461-1c27-f5ff339c8835}">
-      <Declaration><![CDATA[METHOD AddAlarm
-VAR_INPUT
-	Alarm : I_Alarm;
-END_VAR
-]]></Declaration>
-    </Method>
-    <Property Name="HasRaisedAlarm" Id="{89f3b71d-f74d-4e4e-b2e3-984400e16d37}">
-      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedAlarm : BOOL]]></Declaration>
-      <Get Name="Get" Id="{d76a8ec5-a42a-4c96-8539-f71507e247fc}">
+    <Property Name="Alarms" Id="{6f265ed4-abd3-4732-b9b8-a85441e1544a}">
+      <Declaration><![CDATA[PROPERTY Alarms : I_Alarms]]></Declaration>
+      <Get Name="Get" Id="{4ba9afd1-6ee0-456b-99a0-aa6396a2593b}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>

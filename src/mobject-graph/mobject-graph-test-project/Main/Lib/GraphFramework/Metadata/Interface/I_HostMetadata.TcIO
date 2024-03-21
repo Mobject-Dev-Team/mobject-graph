@@ -3,26 +3,11 @@
   <Itf Name="I_HostMetadata" Id="{96f646d1-a4c9-0134-213d-25e203a1beca}">
     <Declaration><![CDATA[INTERFACE I_HostMetadata EXTENDS __SYSTEM.IQueryInterface
 ]]></Declaration>
-    <Method Name="AddDataAsMetadata" Id="{98c8f295-29dc-488d-925c-4b6b6b90dde5}">
-      <Declaration><![CDATA[METHOD PUBLIC AddDataAsMetadata : I_Metadata
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Data : I_Datatype;
-END_VAR]]></Declaration>
-    </Method>
-    <Method Name="AddMetadata" Id="{c58c1d1e-b1d1-0e7a-041f-b8740747188f}">
-      <Declaration><![CDATA[METHOD AddMetadata
-VAR_INPUT
-	Metadata : I_Metadata;
-END_VAR
-]]></Declaration>
-    </Method>
-    <Method Name="TryGetMetadataByName" Id="{8bd144a5-6123-06fd-0e73-e7fee3e3c69c}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetMetadataByName : BOOL
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Destination : REFERENCE TO I_Metadata;
-END_VAR]]></Declaration>
-    </Method>
+    <Property Name="Metadatum" Id="{b8e33c36-e3ec-44a3-b3e2-d958ae9abdc7}">
+      <Declaration><![CDATA[PROPERTY Metadatum : I_Metadatum]]></Declaration>
+      <Get Name="Get" Id="{a7c1e0d6-4719-42f5-b02d-5d3159a44b58}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
   </Itf>
 </TcPlcObject>

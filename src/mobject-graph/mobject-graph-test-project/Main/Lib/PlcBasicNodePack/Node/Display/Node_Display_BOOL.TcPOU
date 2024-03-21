@@ -29,8 +29,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.AddDataAsInputPort('in', in);
-THIS^.AddDataAsContent('display', display);]]></ST>
+        <ST><![CDATA[InputPorts.AddDataAsInputPort('in', in);
+Contents.AddDataAsContent('display', display);]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnExecute" Id="{3eea65a5-6bf3-0e0b-2473-3b373deefdf4}">

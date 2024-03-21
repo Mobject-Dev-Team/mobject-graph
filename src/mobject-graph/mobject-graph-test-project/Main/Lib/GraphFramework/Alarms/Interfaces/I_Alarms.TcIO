@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Alarms" Id="{1df4bc81-a0d0-4e0d-92db-91e8b07c8926}">
+    <Declaration><![CDATA[INTERFACE I_Alarms
+]]></Declaration>
+    <Method Name="Accept" Id="{4d2755cc-863f-48bb-9614-1e9836e770f4}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_AlarmVisitor;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddAlarm" Id="{23aee699-1229-0461-1c27-f5ff339c8835}">
+      <Declaration><![CDATA[METHOD AddAlarm
+VAR_INPUT
+	Alarm : I_Alarm;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="HasRaisedAlarm" Id="{89f3b71d-f74d-4e4e-b2e3-984400e16d37}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedAlarm : BOOL]]></Declaration>
+      <Get Name="Get" Id="{d76a8ec5-a42a-4c96-8539-f71507e247fc}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

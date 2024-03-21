@@ -1,12 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="I_Node" Id="{7e28b21d-6b2a-0b88-18bc-3ad32fd1a6c2}">
-    <Declaration><![CDATA[INTERFACE I_Node EXTENDS I_NodePrototype, I_Disposable, I_HostContent, I_HostInputPorts, I_HostOutputPorts, I_HostAlarms, I_HostParameters, I_HostExtensions, I_HostMetadata, I_EventEmitter, I_Deserializable, I_Serializable
+    <Declaration><![CDATA[INTERFACE I_Node EXTENDS I_Disposable, I_HostContent, I_HostInputPorts, I_HostOutputPorts, I_HostAlarms, I_HostParameters, I_HostExtensions, I_HostMetadata, I_EventEmitter, I_Deserializable, I_Serializable
 ]]></Declaration>
     <Method Name="Accept" Id="{9a7ac280-4430-0727-2fa0-fc419b9e7a74}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
 	Visitor : I_NodeVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Clone" Id="{62d9dc29-2fee-4076-b659-b7930dea5aca}">
+      <Declaration><![CDATA[METHOD Clone : I_Node
+VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>

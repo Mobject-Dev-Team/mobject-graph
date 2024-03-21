@@ -3,19 +3,11 @@
   <Itf Name="I_HostOutputPorts" Id="{5e1aea97-5e53-08af-11e9-4031292affee}">
     <Declaration><![CDATA[INTERFACE I_HostOutputPorts EXTENDS __SYSTEM.IQueryInterface
 ]]></Declaration>
-    <Method Name="AddOutputPort" Id="{ccc39ff5-e25c-0f20-3efe-f937f75d1bdc}">
-      <Declaration><![CDATA[METHOD AddOutputPort
-VAR_INPUT
-	OutputPort : I_OutputPort;
-END_VAR
-]]></Declaration>
-    </Method>
-    <Method Name="TryGetOutputPortByName" Id="{a3a67671-970b-01d6-2705-151b345eba16}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetOutputPortByName : BOOL
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Destination : REFERENCE TO I_OutputPort;
-END_VAR]]></Declaration>
-    </Method>
+    <Property Name="OutputPorts" Id="{322c555c-765b-4c46-868e-27ab1f66c979}">
+      <Declaration><![CDATA[PROPERTY OutputPorts : I_OutputPorts]]></Declaration>
+      <Get Name="Get" Id="{bd785b82-da57-4d39-8bd8-a70a563c2204}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
   </Itf>
 </TcPlcObject>

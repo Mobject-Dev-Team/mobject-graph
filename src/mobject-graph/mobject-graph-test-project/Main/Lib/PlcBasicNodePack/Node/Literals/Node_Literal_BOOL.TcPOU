@@ -29,8 +29,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.AddDataAsParameter('value', value);
-THIS^.AddDataAsOutputPort('out', out);
+        <ST><![CDATA[Parameters.AddDataAsParameter('value', value);
+OutputPorts.AddDataAsOutputPort('out', out);
 ]]></ST>
       </Implementation>
     </Method>

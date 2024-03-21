@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="RetrieveNodeContentValue" Id="{a2720bfd-27df-4afa-9981-101fa962f32b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RetrieveNodeContentValue IMPLEMENTS I_GraphVisitor, I_NodeVisitor, I_ContentVisitor
+VAR
+	graphUuid : T_MAXSTRING;
+	nodeId : T_MAXSTRING;
+	contentName : T_MAXSTRING;
+	serializer : I_Serializer;
+	_done : BOOL;
+	_error : BOOL;
+	_errorMessage : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Private" Id="{07f7e8fb-406b-429c-800a-db87c2710562}" />
+    <Property Name="Done" Id="{086482da-6f85-4bc9-972c-eac3bb403e99}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Done : BOOL]]></Declaration>
+      <Get Name="Get" Id="{56742960-b6c7-49fb-9320-eec7c5504b00}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Done := _done;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{9202541f-22bf-44e6-908a-fe4792893256}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Error : BOOL]]></Declaration>
+      <Get Name="Get" Id="{c8cddf81-ec66-4ce3-b1c2-6b686e978765}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error := _error;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ErrorMessage" Id="{0225b7bf-6149-4009-bb28-43bacb1eff25}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ErrorMessage : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{260cc865-b539-4d1f-a3e4-7363d732c7b2}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ErrorMessage := _errorMessage;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Initialize" Id="{14fda997-e6bf-42c6-a0fc-8972feea2d05}">
+      <Declaration><![CDATA[METHOD PUBLIC Initialize
+VAR_INPUT
+	GraphUuid : T_MAXSTRING;
+	NodeId : T_MAXSTRING;
+	ContentName : T_MAXSTRING;
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.graphUuid := GraphUuid;
+THIS^.nodeId := NodeId;
+THIS^.contentName := ContentName;
+THIS^.serializer := Serializer;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LogInvalidContentNameError" Id="{9a9aad6f-ad18-4e4e-9950-2c5635bb2fe0}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE LogInvalidContentNameError
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_errorMessage := 'Invalid Content Name';
+_error := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LogInvalidNodeIdError" Id="{4d2f526f-a648-438a-8d02-98d1a6e562bb}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE LogInvalidNodeIdError
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_errorMessage := 'Invalid Node Id';
+_error := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LogInvalidUuidError" Id="{ce699ee4-ae17-4537-aa0a-464f8dbf3ad0}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE LogInvalidUuidError
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_errorMessage := 'Invalid Graph UUID';
+_error := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Reset" Id="{932380b7-b4a1-46d5-91d3-91ec05f92418}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_done := FALSE;
+_errorMessage := '';
+_error := FALSE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitContent" Id="{9f0a2c1b-15c8-4cbb-995b-bb40d8e7728d}">
+      <Declaration><![CDATA[METHOD VisitContent
+VAR_INPUT
+	VisitingContent : I_Content;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[VisitingContent.SerializeWith(serializer);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitGraph" Id="{fc5981b6-3a3b-4f96-86fa-17e119119772}">
+      <Declaration><![CDATA[METHOD VisitGraph
+VAR_INPUT
+	VisitingGraph : I_Graph;
+END_VAR
+VAR
+	node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Reset();
+
+IF NOT (VisitingGraph.Uuid = graphUuid) THEN
+	LogInvalidUuidError();
+	RETURN;
+END_IF
+
+IF NOT VisitingGraph.Nodes.TryGetNodeById(nodeId, node) THEN
+	LogInvalidNodeIdError();
+	RETURN;
+END_IF
+
+node.Accept(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitNode" Id="{025f5b15-189e-4a15-b250-da2072a01893}">
+      <Declaration><![CDATA[METHOD VisitNode
+VAR_INPUT
+	VisitingNode : I_Node;
+END_VAR
+VAR
+	content : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT VisitingNode.Contents.TryGetContentByName(contentName, content) THEN
+	LogInvalidContentNameError();
+	RETURN;
+END_IF
+
+content.Accept(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

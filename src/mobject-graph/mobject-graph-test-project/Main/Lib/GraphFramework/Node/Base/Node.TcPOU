@@ -10,27 +10,20 @@ VAR
 	_order : DINT;
 	_mode : DINT;
 	eventEmitter : EventEmitter;
-	inputPortHost : InputPortHost(eventEmitter);
-	outputPortHost : OutputPortHost(eventEmitter);
-	parameterHost : ParameterHost(eventEmitter);
-	contentHost : ContentHost(eventEmitter);
-	alarmHost : AlarmHost(eventEmitter);
-	extensionHost : ExtensionHost(eventEmitter);
-	metadataHost : MetadataHost(eventEmitter);
-	selfCreatedContent : Stack;
-	selfCreatedInputPorts : Stack;
-	selfCreatedOutputPorts : Stack;
-	selfCreatedParameters : Stack;
-	selfCreatedMetadata : Stack;
+	inputPortHost : InputPortHost(THIS^, eventEmitter);
+	outputPortHost : OutputPortHost(THIS^, eventEmitter);
+	parameterHost : ParameterHost(THIS^, eventEmitter);
+	contentHost : ContentHost(THIS^, eventEmitter);
+	alarmHost : AlarmHost(THIS^, eventEmitter);
+	metadataHost : MetadataHost(THIS^, eventEmitter);
+	extensionHost : ExtensionHost(THIS^,eventEmitter);
 	deserializationFailedAlarm : DeserializationFailedAlarm(THIS^);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Abstract" Id="{dbd4d2fd-33d8-0c09-0e75-48a8aa9fa6b2}" />
-    <Folder Name="Destructor" Id="{2c9ac784-74b9-4332-8413-33f9ea278167}" />
     <Folder Name="Private" Id="{8ec16d65-8c65-4a95-b86c-ce0d7b115d7e}" />
-    <Folder Name="Protected" Id="{f0af3386-ca84-0b52-03e7-a20a015d9afb}" />
     <Method Name="Accept" Id="{4230f410-f451-039d-2604-d2edaf4d13f7}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
@@ -38,159 +31,20 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Visitor.VisitNode(THIS^);
-inputPortHost.Accept(Visitor);
-outputPortHost.Accept(Visitor);
-parameterHost.Accept(Visitor);
-contentHost.Accept(Visitor);
-alarmHost.Accept(Visitor);
-metadataHost.Accept(Visitor);
-extensionHost.Accept(Visitor);]]></ST>
+        <ST><![CDATA[Visitor.VisitNode(THIS^);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="AddAlarm" Id="{68a33ee7-a8d2-4500-8be9-00fe1a233658}">
-      <Declaration><![CDATA[METHOD AddAlarm
-VAR_INPUT
-	Alarm : I_Alarm;
+    <Property Name="Alarms" Id="{3b43eacd-84fc-4f31-84af-331f83c46038}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Alarms : I_Alarms]]></Declaration>
+      <Get Name="Get" Id="{c0f42bf3-45e2-4d50-8a8d-795af7c4ec32}">
+        <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[alarmHost.AddAlarm(Alarm);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddContent" Id="{c0b648e0-1253-452b-90ed-e8143a2d89de}">
-      <Declaration><![CDATA[METHOD AddContent
-VAR_INPUT
-	Content : I_Content;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[contentHost.AddContent(Content);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddDataAsContent" Id="{72b00f64-399c-493e-9ab7-53deab7dc16a}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED AddDataAsContent : I_Content
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Data : I_Datatype;
-END_VAR
-VAR
-	content : I_Content;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[content := CreateContent(Name, Data);
-selfCreatedContent.Push(content);
-AddDataAsContent := content;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddDataAsInputPort" Id="{988e95dc-fbdb-469f-ba49-8e87d4c90e91}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED AddDataAsInputPort : I_InputPort
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Data : I_Datatype;
-END_VAR
-VAR
-	port : I_InputPort;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[port := CreateInputPort(Name, Data);
-selfCreatedInputPorts.Push(port);
-AddDataAsInputPort := port;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddDataAsMetadata" Id="{7f79a396-9377-4fa0-b2f1-236e8876e245}">
-      <Declaration><![CDATA[METHOD PUBLIC AddDataAsMetadata : I_Metadata
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Data : I_Datatype;
-END_VAR
-VAR
-	metadata : I_Metadata;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[metadata := CreateMetadata(Name, Data);
-selfCreatedMetadata.Push(metadata);
-AddDataAsMetadata := metadata;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddDataAsOutputPort" Id="{1afc1e8a-b521-4c43-8f46-6c4e8ff8a267}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED AddDataAsOutputPort : I_OutputPort
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Data : I_Datatype;
-END_VAR
-VAR
-	port : I_OutputPort;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[port := CreateOutputPort(Name, Data);
-selfCreatedOutputPorts.Push(port);
-AddDataAsOutputPort := port;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddDataAsParameter" Id="{cc2ea30f-5d60-437d-9a59-4e87c271012d}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED AddDataAsParameter : I_Parameter
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Data : I_Datatype;
-END_VAR
-VAR
-	parameter : I_Parameter;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[parameter := CreateParameter(Name, Data);
-selfCreatedParameters.Push(parameter);
-AddDataAsParameter := parameter;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddExtension" Id="{3c2efc0a-31a2-4144-a0f8-6a9d285ba29e}">
-      <Declaration><![CDATA[METHOD AddExtension
-VAR_INPUT
-	Extension : I_Extension;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[extensionHost.AddExtension(Extension);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddInputPort" Id="{f3d8ee87-5b7a-4f8c-afb8-98ced33fe48d}">
-      <Declaration><![CDATA[METHOD AddInputPort
-VAR_INPUT
-	InputPort : I_InputPort;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[inputPortHost.AddInputPort(InputPort);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddMetadata" Id="{0f29f336-eda4-437c-a7a8-83e334c02d43}">
-      <Declaration><![CDATA[METHOD AddMetadata
-VAR_INPUT
-	Metadata : I_Metadata;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[metadataHost.AddMetadata(Metadata);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddOutputPort" Id="{baff6e52-981c-417b-a16e-c84e80784dd2}">
-      <Declaration><![CDATA[METHOD AddOutputPort
-VAR_INPUT
-	OutputPort : I_OutputPort;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[outputPortHost.AddOutputPort(OutputPort);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddParameter" Id="{697d49dc-f6b8-4cfb-981a-457bda0c8dd7}">
-      <Declaration><![CDATA[METHOD AddParameter
-VAR_INPUT
-	Parameter : I_Parameter;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[parameterHost.AddParameter(Parameter);]]></ST>
-      </Implementation>
-    </Method>
+        <Implementation>
+          <ST><![CDATA[Alarms := alarmHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="Clone" Id="{026c4113-8518-4d67-89a7-84bf1813f983}" FolderPath="Abstract\">
       <Declaration><![CDATA[METHOD PUBLIC ABSTRACT Clone : I_Node
 VAR_INPUT
@@ -199,136 +53,17 @@ END_VAR]]></Declaration>
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Method Name="CreateContent" Id="{1bf2211f-7042-4824-a41b-b52f1fa50610}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE CreateContent : I_Content
-VAR_INPUT
-	ContentName : T_MAXSTRING;
-	ContentData : I_Datatype;
-END_VAR
-VAR
-	pContent : POINTER TO Content;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[pContent := __NEW(Content(Name := ContentName, Data := ContentData, Parent := THIS^));
-CreateContent := pContent^;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="CreateInputPort" Id="{47a0f189-9655-47f5-aaeb-d02a032d1ee4}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE CreateInputPort : I_InputPort
-VAR_INPUT
-	PortName : T_MAXSTRING;
-	PortData : I_Datatype;
-END_VAR
-VAR
-	pPort : POINTER TO InputPort;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[pPort := __NEW(InputPort(Name := PortName, Data := PortData, Parent := THIS^));
-CreateInputPort := pPort^;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="CreateMetadata" Id="{9cb6f2d6-525a-4d98-b9a2-2df300e5a7cb}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE CreateMetadata : I_Metadata
-VAR_INPUT
-	MetadataName : T_MAXSTRING;
-	MetadataData : I_Datatype;
-END_VAR
-VAR
-	pMetadata : POINTER TO Metadata;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[pMetadata := __NEW(Metadata(Name := MetadataName, Data := MetadataData, Parent := THIS^));
-CreateMetadata := pMetadata^;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="CreateOutputPort" Id="{946b86f4-d919-451a-a899-9a012ab2dd19}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE CreateOutputPort : I_OutputPort
-VAR_INPUT
-	PortName : T_MAXSTRING;
-	PortData : I_Datatype;
-END_VAR
-VAR
-	pPort : POINTER TO OutputPort;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[pPort := __NEW(OutputPort(Name := PortName, Data := PortData, Parent := THIS^));
-CreateOutputPort := pPort^;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="CreateParameter" Id="{5e797fdd-3539-4ab9-897a-7acc07da8de9}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE CreateParameter : I_Parameter
-VAR_INPUT
-	ParameterName : T_MAXSTRING;
-	ParameterData : I_Datatype;
-END_VAR
-VAR
-	pParameter : POINTER TO Parameter;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[pParameter := __NEW(Parameter(Name := ParameterName, Data := ParameterData, Parent := THIS^));
-CreateParameter := pParameter^;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="DisposeSelfCreatedContent" Id="{443fefcd-474c-4185-9471-e35ed738110e}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedContent : BOOL
-VAR
-	content : I_Content;
+    <Property Name="Contents" Id="{f653d4ef-9d84-4f61-9bb0-977307379411}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Contents : I_Contents]]></Declaration>
+      <Get Name="Get" Id="{f2881c12-46ff-4e77-8eaa-620c32566948}">
+        <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[WHILE selfCreatedContent.TryPop(content) DO
-	content.Dispose();
-END_WHILE]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="DisposeSelfCreatedInputPorts" Id="{3f75eb1f-4a84-42e7-87da-089940742dfb}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedInputPorts : BOOL
-VAR
-	port : I_InputPort;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[WHILE selfCreatedInputPorts.TryPop(port) DO
-	port.Dispose();
-END_WHILE]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="DisposeSelfCreatedMetadata" Id="{329a9281-3d84-4016-9f08-40c4bd2bd63c}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PROTECTED DisposeSelfCreatedMetadata : BOOL
-VAR
-	metadata : I_Metadata;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[WHILE selfCreatedMetadata.TryPop(metadata) DO
-	metadata.Dispose();
-END_WHILE]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="DisposeSelfCreatedOutputPorts" Id="{c730ed2e-28cd-4dc4-94f1-17af30559e25}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedOutputPorts : BOOL
-VAR
-	port : I_OutputPort;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[WHILE selfCreatedOutputPorts.TryPop(port) DO
-	port.Dispose();
-END_WHILE]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="DisposeSelfCreatedParameters" Id="{9fc5c687-8466-4803-ba8d-bd4e514b0e8e}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedParameters : BOOL
-VAR
-	parameter : I_Parameter;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[WHILE selfCreatedParameters.TryPop(parameter) DO
-	parameter.Dispose();
-END_WHILE]]></ST>
-      </Implementation>
-    </Method>
+        <Implementation>
+          <ST><![CDATA[Contents := contentHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="EmitNodeExecuteBeginEvent" Id="{446e8833-be75-08b5-20ae-de0735b20b11}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE EmitNodeExecuteBeginEvent : BOOL;
 VAR
@@ -387,23 +122,17 @@ OnExecute();
 EmitNodeExecuteEndEvent();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="FB_exit" Id="{5c2bb896-8f98-4d7f-853c-da13e9566c86}" FolderPath="Destructor\">
-      <Declaration><![CDATA[METHOD FB_exit : BOOL
-VAR_INPUT
-	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF bInCopyCode THEN
-	RETURN;
-END_IF
-
-DisposeSelfCreatedContent();
-DisposeSelfCreatedInputPorts();
-DisposeSelfCreatedOutputPorts();
-DisposeSelfCreatedParameters();
-DisposeSelfCreatedMetadata();]]></ST>
-      </Implementation>
-    </Method>
+    <Property Name="Extensions" Id="{b0cbc392-7ab9-4d0a-800e-14cef51f010a}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Extensions : I_Extensions]]></Declaration>
+      <Get Name="Get" Id="{149953d7-ea70-42c2-bd85-d5137271febf}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Extensions := extensionHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="HasRaisedAlarm" Id="{22345341-7d3f-4d62-a518-a9ca2b5c1250}">
       <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedAlarm : BOOL]]></Declaration>
       <Get Name="Get" Id="{5e835deb-b0f9-4cd7-8952-c0ace36b7516}">
@@ -422,6 +151,28 @@ END_VAR
 ]]></Declaration>
         <Implementation>
           <ST><![CDATA[Id := _id;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="InputPorts" Id="{37d3fd5b-736f-4c56-98a2-d84e0d7d4f5e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC InputPorts : I_InputPorts]]></Declaration>
+      <Get Name="Get" Id="{838903ab-1553-40bd-badc-97131512845f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[InputPorts := inputPortHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Metadatum" Id="{3213d491-aef3-4b04-928b-7192fe0ecc67}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Metadatum : I_Metadatum]]></Declaration>
+      <Get Name="Get" Id="{a2248a60-5344-4984-a941-c379877867d2}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Metadatum := metadataHost;]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -480,6 +231,28 @@ END_VAR
 ]]></Declaration>
         <Implementation>
           <ST><![CDATA[Order := _order;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="OutputPorts" Id="{6ad67326-4a64-4212-98e1-2127c4719493}">
+      <Declaration><![CDATA[PROPERTY PUBLIC OutputPorts : I_OutputPorts]]></Declaration>
+      <Get Name="Get" Id="{983d1791-d2a1-425a-a774-eec6f4f45ef8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[OutputPorts := outputPortHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Parameters" Id="{a09fa6df-c38c-40a4-b4c5-33dc43d201cd}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parameters : I_Parameters]]></Declaration>
+      <Get Name="Get" Id="{1b79833f-7bd2-44d3-a48c-4151e3ed7609}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parameters := parameterHost;]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -550,119 +323,6 @@ IF NOT extensionHost.TryDeserializeFrom(Deserializer, Feedback) THEN
 END_IF
 
 TryDeserializeFrom := TRUE;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="TryGetContentByName" Id="{e9949623-efee-4292-8ef1-a0dfa9763f58}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetContentByName : BOOL
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Destination : REFERENCE TO I_Content;
-END_VAR
-VAR
-	extensionNamespace : ExtensionNamespace(Name);
-	extension : I_Extension;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF NOT extensionNamespace.IsExtensionPath THEN
-	TryGetContentByName := contentHost.TryGetContentByName(Name,Destination);
-	RETURN;
-END_IF
-
-IF NOT TryGetExtensionByName(extensionNamespace.ExtensionName, extension) THEN
-	RETURN;
-END_IF
-
-TryGetContentByName := extension.TryGetContentByName(extensionNamespace.TargetName, Destination);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="TryGetExtensionByName" Id="{f31010b5-cd16-4ab4-8e30-e0b827c31eb1}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetExtensionByName : BOOL
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Destination : REFERENCE TO I_Extension;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[TryGetExtensionByName := extensionHost.TryGetExtensionByName(Name, Destination);
-	]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="TryGetInputPortByName" Id="{9be4fe99-f9c6-4bfc-9668-d13bf0ca1cfb}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetInputPortByName : BOOL
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Destination : REFERENCE TO I_InputPort;
-END_VAR
-VAR
-	extensionNamespace : ExtensionNamespace(Name);
-	extension : I_Extension;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF NOT extensionNamespace.IsExtensionPath THEN
-	TryGetInputPortByName := inputPortHost.TryGetInputPortByName(Name,Destination);
-	RETURN;
-END_IF
-
-IF NOT TryGetExtensionByName(extensionNamespace.ExtensionName, extension) THEN
-	RETURN;
-END_IF
-
-TryGetInputPortByName := extension.TryGetInputPortByName(extensionNamespace.TargetName, Destination);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="TryGetMetadataByName" Id="{da24e785-ecaf-4933-9754-5f67eea3d131}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetMetadataByName : BOOL
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Destination : REFERENCE TO I_Metadata;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[TryGetMetadataByName := metadatahost.TryGetMetadataByName(Name, Destination);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="TryGetOutputPortByName" Id="{bed6d2f7-3426-4499-b0ba-77d127469544}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetOutputPortByName : BOOL
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Destination : REFERENCE TO I_OutputPort;
-END_VAR
-VAR
-	extensionNamespace : ExtensionNamespace(Name);
-	extension : I_Extension;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF NOT extensionNamespace.IsExtensionPath THEN
-	TryGetOutputPortByName := outputPortHost.TryGetOutputPortByName(Name,Destination);
-	RETURN;
-END_IF
-
-IF NOT TryGetExtensionByName(extensionNamespace.ExtensionName, extension) THEN
-	RETURN;
-END_IF
-
-TryGetOutputPortByName := extension.TryGetOutputPortByName(extensionNamespace.TargetName, Destination);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="TryGetParameterByName" Id="{afe41fda-5526-4e29-bcae-5944d27de2f9}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetParameterByName : BOOL
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Destination : REFERENCE TO I_Parameter;
-END_VAR
-VAR
-	extensionNamespace : ExtensionNamespace(Name);
-	extension : I_Extension;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF NOT extensionNamespace.IsExtensionPath THEN
-	TryGetParameterByName := parameterHost.TryGetParameterByName(Name,Destination);
-	RETURN;
-END_IF
-
-IF NOT TryGetExtensionByName(extensionNamespace.ExtensionName, extension) THEN
-	RETURN;
-END_IF
-
-TryGetParameterByName := extension.TryGetParameterByName(extensionNamespace.TargetName, Destination);]]></ST>
       </Implementation>
     </Method>
   </POU>

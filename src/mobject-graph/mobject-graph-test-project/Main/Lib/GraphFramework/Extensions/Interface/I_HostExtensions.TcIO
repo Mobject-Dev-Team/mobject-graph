@@ -3,20 +3,11 @@
   <Itf Name="I_HostExtensions" Id="{2c4d3330-a4d5-0bf1-1982-102b528ecb24}">
     <Declaration><![CDATA[INTERFACE I_HostExtensions EXTENDS __SYSTEM.IQueryInterface
 ]]></Declaration>
-    <Method Name="AddExtension" Id="{21dfd60d-3eac-0633-1fbc-e2a67a4a7248}">
-      <Declaration><![CDATA[METHOD AddExtension
-VAR_INPUT
-	Extension : I_Extension;
-END_VAR
-]]></Declaration>
-    </Method>
-    <Method Name="TryGetExtensionByName" Id="{6387349c-8660-06ad-3b9d-60ffa3ef67c8}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetExtensionByName : BOOL
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Destination : REFERENCE TO I_Extension;
-END_VAR
-]]></Declaration>
-    </Method>
+    <Property Name="Extensions" Id="{a2b464af-5b46-4255-b253-1cd7aa283d6e}">
+      <Declaration><![CDATA[PROPERTY Extensions : I_Extensions]]></Declaration>
+      <Get Name="Get" Id="{5621afa0-ca92-4e9c-9f98-7a2cc6188420}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
   </Itf>
 </TcPlcObject>

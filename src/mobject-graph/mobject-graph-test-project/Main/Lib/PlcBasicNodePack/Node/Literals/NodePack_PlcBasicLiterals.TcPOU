@@ -9,14 +9,14 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="RegisterWithNodePrototypes" Id="{3ef8db7d-47fb-090b-3597-c30640cd5056}">
-      <Declaration><![CDATA[METHOD PUBLIC RegisterWithNodePrototypes
+    <Method Name="RegisterWithNodeFactory" Id="{3ef8db7d-47fb-090b-3597-c30640cd5056}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterWithNodeFactory
 VAR_INPUT
-	NodePrototypes : I_NodePrototypes;
+	NodeFactory : I_NodeFactory;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[NodePrototypes.RegisterNodeByType('PLC Basic/Literals/BOOL',node_Literal_BOOL);]]></ST>
+        <ST><![CDATA[NodeFactory.AddNodeAsPrototype('PlcBasic.Literals.Bool',node_Literal_BOOL);]]></ST>
       </Implementation>
     </Method>
   </POU>

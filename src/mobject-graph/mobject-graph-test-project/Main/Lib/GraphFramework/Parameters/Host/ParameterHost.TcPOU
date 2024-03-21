@@ -4,16 +4,20 @@
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK ParameterHost IMPLEMENTS I_HostParameters, I_Serializable
+FUNCTION_BLOCK ParameterHost IMPLEMENTS I_Parameters, I_Serializable
 VAR
+	hostParent : I_HostParameters;
 	eventTarget : I_EventTarget;
 	parameters : Dictionary;
+	selfCreatedParameters : Stack;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{d962da93-42f3-408c-9e94-0c5674d47b60}" />
+    <Folder Name="Destructor" Id="{3738ba85-f78b-4784-bc7e-ba717d45d1fd}" />
+    <Folder Name="Private" Id="{579ccdeb-bdd6-417d-b99a-5960c5bca8fa}" />
     <Folder Name="Protected" Id="{fa8eb0b0-8e53-404f-9aa4-b19cb7b4447d}" />
     <Method Name="Accept" Id="{67a986cb-c3c8-4714-95da-82654735a15b}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
@@ -38,6 +42,21 @@ END_WHILE
 enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
+    <Method Name="AddDataAsParameter" Id="{170def95-49b8-459a-a221-caabe1bca48d}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsParameter : I_Parameter
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+VAR
+	parameter : I_Parameter;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[parameter := CreateParameter(Name, Data);
+selfCreatedParameters.Push(parameter);
+AddDataAsParameter := parameter;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="AddParameter" Id="{62100911-1991-410b-b3b5-a2e6486a3099}">
       <Declaration><![CDATA[METHOD PUBLIC AddParameter
 VAR_INPUT
@@ -46,6 +65,32 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[parameters.AddOrUpdate(Parameter.Name, Parameter);
 EmitOnParameterAddedEvent(Parameter);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateParameter" Id="{6acdf74d-d8ae-4856-aa30-abaac77d646e}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateParameter : I_Parameter
+VAR_INPUT
+	ParameterName : T_MAXSTRING;
+	ParameterData : I_Datatype;
+END_VAR
+VAR
+	pParameter : POINTER TO Parameter;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pParameter := __NEW(Parameter(Name := ParameterName, Data := ParameterData, Parent := hostParent));
+CreateParameter := pParameter^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSelfCreatedParameters" Id="{7784aab7-6df6-4fb6-bd06-2552ff15024a}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedParameters : BOOL
+VAR
+	parameter : I_Parameter;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedParameters.TryPop(parameter) DO
+	parameter.Dispose();
+END_WHILE]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitOnParameterAddedEvent" Id="{2bfcadd9-8f8c-414b-8ace-7e1444c758d9}" FolderPath="Protected\">
@@ -66,16 +111,31 @@ eventTarget.Emit('OnParameterAdded',pParameterAddedEvent^);
 pParameterAddedEvent^.Dispose();]]></ST>
       </Implementation>
     </Method>
+    <Method Name="FB_exit" Id="{13029f4e-91b6-4faa-833b-698cd56b2c4d}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DisposeSelfCreatedParameters();]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_init" Id="{163161dd-2b78-474f-b1ea-d4408046e436}" FolderPath="Constructor\">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	parentEventTarget : I_EventTarget;
+	Parent : I_HostParameters;
+	ParentEventTarget : I_EventTarget;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
+        <ST><![CDATA[hostParent := Parent;
+eventTarget := ParentEventTarget;]]></ST>
       </Implementation>
     </Method>
     <Method Name="SerializeWith" Id="{3efcd39e-7699-4bc3-a13e-91d6be2edb8c}">

@@ -3,19 +3,11 @@
   <Itf Name="I_HostInputPorts" Id="{20821798-bf3c-013b-3f9d-c61656a9dfcd}">
     <Declaration><![CDATA[INTERFACE I_HostInputPorts EXTENDS __SYSTEM.IQueryInterface
 ]]></Declaration>
-    <Method Name="AddInputPort" Id="{135eb44b-cbc4-0e2f-0792-05757aacdb77}">
-      <Declaration><![CDATA[METHOD AddInputPort
-VAR_INPUT
-	InputPort : I_InputPort;
-END_VAR
-]]></Declaration>
-    </Method>
-    <Method Name="TryGetInputPortByName" Id="{a21ad5ef-ba3e-0598-3880-d9f06b97f2a5}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetInputPortByName : BOOL
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Destination : REFERENCE TO I_InputPort;
-END_VAR]]></Declaration>
-    </Method>
+    <Property Name="InputPorts" Id="{cb36dc5e-8cf6-4a24-afb1-3f45d5e427a4}">
+      <Declaration><![CDATA[PROPERTY InputPorts : I_InputPorts]]></Declaration>
+      <Get Name="Get" Id="{96663689-d5dc-4d1d-bace-8e2b0c323818}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
   </Itf>
 </TcPlcObject>

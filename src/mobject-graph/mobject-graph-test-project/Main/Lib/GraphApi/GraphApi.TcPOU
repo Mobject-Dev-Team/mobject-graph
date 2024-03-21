@@ -9,6 +9,7 @@ VAR
 	loadGraphRpcHandler : LoadGraphRpcHandler(0);
 	getBlueprintsRpcHandler : GetBlueprintsRpcHandler(0);
 	getDatatypesRpcHandler : GetDatatypesRpcHandler(0);
+	getContentValueHandler : GetContentValueHandler(0);
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -21,14 +22,15 @@ VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	Graph : I_Graph;
-	NodePrototypes : I_NodePrototypes;
+	NodePrototypes : I_NodeFactory;
 	Datatypes : I_Datatypes;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[loadGraphRpcHandler.Initialize(Graph);
 getBlueprintsRpcHandler.Initialize(NodePrototypes);
-getDatatypesRpcHandler.Initialize(Datatypes);]]></ST>
+getDatatypesRpcHandler.Initialize(Datatypes);
+getContentValueHandler.Initialize(Graph);]]></ST>
       </Implementation>
     </Method>
     <Method Name="RegisterWith" Id="{8110307c-5ce7-4eb2-aa8c-6ce5497795c1}">
@@ -40,7 +42,8 @@ END_VAR
       <Implementation>
         <ST><![CDATA[Server.RegisterRpcHandler('LoadGraph',loadGraphRpcHandler);
 Server.RegisterRpcHandler('GetBlueprints',getBlueprintsRpcHandler);
-Server.RegisterRpcHandler('GetDatatypes',getDatatypesRpcHandler);]]></ST>
+Server.RegisterRpcHandler('GetDatatypes',getDatatypesRpcHandler);
+Server.RegisterRpcHandler('GetContentValue',getContentValueHandler);]]></ST>
       </Implementation>
     </Method>
   </POU>

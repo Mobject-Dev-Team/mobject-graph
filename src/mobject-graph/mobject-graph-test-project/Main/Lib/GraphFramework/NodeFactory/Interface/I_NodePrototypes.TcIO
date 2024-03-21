@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_NodePrototypes" Id="{f17dfa9a-d58a-0253-28a9-a9333d414dc7}">
+    <Declaration><![CDATA[INTERFACE I_NodePrototypes
+]]></Declaration>
+    <Method Name="Accept" Id="{130c651f-9790-4ffb-80fd-ac3f957fad9e}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_NodePrototypeVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

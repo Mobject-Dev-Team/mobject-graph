@@ -15,7 +15,7 @@ VAR_GLOBAL CONSTANT
 		  "nodes": [
 			{
 			  "id": "1",
-			  "type": "PLC Basic/Literals/BOOL",
+			  "type": "PlcBasic.Literals.Bool",
 			  "order": 0,
 			  "mode": 0,
 			  "outputs": [
@@ -34,7 +34,7 @@ VAR_GLOBAL CONSTANT
 		  "nodes": [
 			{
 			  "id": "2",
-			  "type": "PLC Basic/Display/BOOL",
+			  "type": "PlcBasic.Display.Bool",
 			  "order": 1,
 			  "mode": 0,
 			  "inputs": [
@@ -47,7 +47,7 @@ VAR_GLOBAL CONSTANT
 			},
 			{
 			  "id": "1",
-			  "type": "PLC Basic/Literals/BOOL",
+			  "type": "PlcBasic.Literals.Bool",
 			  "order": 0,
 			  "mode": 0,
 			  "outputs": [
@@ -80,7 +80,7 @@ VAR_GLOBAL CONSTANT
 		  "nodes": [
 			{
 			  "id": "2",
-			  "type": "PLC Basic/Display/BOOL",
+			  "type": "PlcBasic.Display.Bool",
 			  "order": 1,
 			  "mode": 0,
 			  "inputs": [
@@ -93,7 +93,7 @@ VAR_GLOBAL CONSTANT
 			},
 			{
 			  "id": "1",
-			  "type": "PLC Basic/Literals/BOOL",
+			  "type": "PlcBasic.Literals.Bool",
 			  "order": 0,
 			  "mode": 0,
 			  "outputs": [

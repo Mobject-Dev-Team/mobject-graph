@@ -18,16 +18,27 @@
     <LibraryReferences>{0316d8aa-5460-44e8-a6c7-40422389f1e0}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Lib\GraphApi\GetDatatypesRpcHandler.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Lib\GraphApi\GraphApi.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphApi\LoadGraphRpcHandler.TcPOU">
+    <Compile Include="Lib\GraphApi\Handlers\GetBlueprintsRpcHandler.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphApi\GetBlueprintsRpcHandler.TcPOU">
+    <Compile Include="Lib\GraphApi\Handlers\GetDatatypesRpcHandler.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphApi\Handlers\GetContentValueHandler.TcPOU">
+      <SubType>Code</SubType>
+      <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="Lib\GraphApi\Handlers\LoadGraphRpcHandler.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphApi\Visitors\RetrieveNodeContentValue.TcPOU">
+      <SubType>Code</SubType>
+      <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Alarms\Interfaces\I_Alarms.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Content\Base\Content.TcPOU">
@@ -43,6 +54,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Content\Interface\I_Content.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Content\Interface\I_Contents.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Content\Interface\I_HostContent.TcIO">
@@ -93,10 +107,16 @@
     <Compile Include="Lib\GraphFramework\Extensions\Interface\I_Extension.TcIO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Lib\GraphFramework\Extensions\Interface\I_Extensions.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Lib\GraphFramework\Extensions\Interface\I_HostExtensions.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Extensions\Namespace\ExtensionNamespace.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\InputPort\Interface\I_InputPorts.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Metadata\Events\I_MetadataAddedEvent.TcIO">
@@ -105,10 +125,28 @@
     <Compile Include="Lib\GraphFramework\Metadata\Events\MetadataAddedEvent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\NodePrototypes\Enumerator\I_NodePrototypeEnumerator.TcIO">
+    <Compile Include="Lib\GraphFramework\Metadata\Interface\I_Metadatum.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\NodePrototypes\Enumerator\NodePrototypeEnumerator.TcPOU">
+    <Compile Include="Lib\GraphFramework\NodeFactory\Host\NodePrototypeHost.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\NodeFactory\Interface\I_NodeFactory.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\NodePrototype\I_NodePrototype.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\NodePrototype\NodePrototype.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Node\Interface\I_Nodes.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\OutputPort\Interface\I_OutputPorts.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Parameters\Interface\I_Parameters.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\TestJson.TcGVL">
@@ -157,13 +195,10 @@
     <Compile Include="Lib\GraphFramework\Metadata\Interface\I_Metadata.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\NodePrototypes\Base\NodePrototypes.TcPOU">
+    <Compile Include="Lib\GraphFramework\NodeFactory\Base\NodeFactory.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\NodePrototypes\Interface\I_NodePrototypes.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphFramework\NodePrototypes\Interface\I_NodePrototype.TcIO">
+    <Compile Include="Lib\GraphFramework\NodeFactory\Interface\I_NodePrototypes.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\NodePack\I_NodePack.TcIO">
@@ -247,9 +282,6 @@
     <Compile Include="Lib\GraphFramework\Parameters\Interface\I_HostParameters.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphFramework\Visitors\GetBlueprintVisitor\GetBlueprintVisitor.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_ContentVisitor.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -266,6 +298,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_MetadataVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_NodeFactoryVisitor.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphFramework\Visitors\Interfaces\I_NodeVisitor.TcIO">
@@ -313,6 +348,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Lib" />
+    <Folder Include="Lib\GraphApi\Handlers" />
+    <Folder Include="Lib\GraphApi\Visitors" />
     <Folder Include="Lib\GraphFramework" />
     <Folder Include="Lib\GraphFramework\Content" />
     <Folder Include="Lib\GraphFramework\Content\Base" />
@@ -342,14 +379,15 @@
     <Folder Include="Lib\GraphFramework\InputPort" />
     <Folder Include="Lib\GraphFramework\Metadata\Events" />
     <Folder Include="Lib\GraphFramework\Errors" />
-    <Folder Include="Lib\GraphFramework\NodePrototypes\Enumerator" />
+    <Folder Include="Lib\GraphFramework\NodeFactory\Host" />
+    <Folder Include="Lib\GraphFramework\NodePrototype" />
     <Folder Include="Lib\GraphFramework\Node\Events" />
     <Folder Include="Lib\GraphFramework\Node\Host" />
     <Folder Include="Lib\GraphFramework\OutputPort" />
-    <Folder Include="Lib\GraphFramework\NodePrototypes\Interface" />
+    <Folder Include="Lib\GraphFramework\NodeFactory\Interface" />
     <Folder Include="Lib\GraphFramework\Node" />
-    <Folder Include="Lib\GraphFramework\NodePrototypes" />
-    <Folder Include="Lib\GraphFramework\NodePrototypes\Base" />
+    <Folder Include="Lib\GraphFramework\NodeFactory" />
+    <Folder Include="Lib\GraphFramework\NodeFactory\Base" />
     <Folder Include="Lib\GraphFramework\NodePack" />
     <Folder Include="Lib\GraphFramework\Node\Base" />
     <Folder Include="Lib\GraphFramework\Node\Interface" />
@@ -365,7 +403,6 @@
     <Folder Include="Lib\GraphFramework\Visitors" />
     <Folder Include="Lib\GraphFramework\Visitors\Interfaces" />
     <Folder Include="Lib\GraphApi" />
-    <Folder Include="Lib\GraphFramework\Visitors\GetBlueprintVisitor" />
     <Folder Include="Lib\PlcBasicNodePack" />
     <Folder Include="Lib\PlcBasicNodePack\Node" />
     <Folder Include="Lib\PlcBasicNodePack\Node\Display" />

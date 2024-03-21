@@ -7,14 +7,14 @@ VAR
 	
 	// playground
 	datatypes : Datatypes;
-	nodePrototypes : NodePrototypes;
-	graph : Graph(nodePrototypes);
+	nodeFactory : NodeFactory;
+	graph : Graph(nodeFactory);
 	basicPlcDatatypes : BasicPlcDatatypes;
 	nodePack_PlcBasic : NodePack_PlcBasic;
 	initialise: BOOL;
 
 	server : RpcServer;
-	graphApi : graphApi(graph, nodePrototypes, datatypes);	
+	graphApi : graphApi(graph, NodeFactory, datatypes);	
 
 	jsonDeserializer : JsonDeserializer;
 	loadFirst, loadSecond : BOOL;
@@ -29,7 +29,7 @@ END_VAR]]></Declaration>
 
 IF NOT initialise THEN
 	basicPlcDatatypes.RegisterWith(datatypes);
-	nodePrototypes.InstallNodePack(nodePack_PlcBasic);
+	nodeFactory.InstallNodePack(nodePack_PlcBasic);
 	graphApi.RegisterWith(server);
 	initialise := TRUE;
 END_IF
@@ -46,7 +46,9 @@ graph.Run();
 //	loadSecond := FALSE;
 //	jsonDeserializer.TryLoad(TestJson.literalBoolLinkedToDisplayBool2);
 //	graph.TryDeserializeFrom(jsonDeserializer);
-//END_IF]]></ST>
+//END_IF
+
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

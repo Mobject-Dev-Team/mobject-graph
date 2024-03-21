@@ -14,8 +14,8 @@ TestDeserializeSerialize();]]></ST>
       <Declaration><![CDATA[METHOD PRIVATE TestDeserializeExecuteSerialize
 VAR
 	nodePack_PlcBasic : NodePack_PlcBasic;
-	nodePrototypes : NodePrototypes;
-	graph : Graph(nodePrototypes);
+	nodeFactory : NodeFactory;
+	graph : Graph(nodeFactory);
 	jsonDeserializer : JsonDeserializer;
 	feedback : DeserializerFeedback;
 	jsonSerializer : JsonSerializer;
@@ -26,7 +26,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[TEST('TestDeserializeExecuteSerialize');
 
-nodePrototypes.InstallNodePack(nodePack_PlcBasic);
+nodeFactory.InstallNodePack(nodePack_PlcBasic);
 jsonDeserializer.TryLoad(TestJson.literalBoolLinkedToDisplayBool);
 graph.TryDeserializeFrom(jsonDeserializer, feedback);
 graph.Run();
@@ -47,8 +47,8 @@ TEST_FINISHED();]]></ST>
       <Declaration><![CDATA[METHOD PRIVATE TestDeserializeSerialize
 VAR
 	nodePack_PlcBasic : NodePack_PlcBasic;
-	nodePrototypes : NodePrototypes;
-	graph : Graph(nodePrototypes);
+	nodeFactory : NodeFactory;
+	graph : Graph(nodeFactory);
 	jsonDeserializer : JsonDeserializer;
 	feedback : DeserializerFeedback;
 	jsonSerializer : JsonSerializer;
@@ -59,7 +59,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[TEST('TestDeserializeSerialize');
 
-nodePrototypes.InstallNodePack(nodePack_PlcBasic);
+nodeFactory.InstallNodePack(nodePack_PlcBasic);
 jsonDeserializer.TryLoad(TestJson.literalBoolLinkedToDisplayBool);
 graph.TryDeserializeFrom(jsonDeserializer, feedback);
 graph.SerializeWith(jsonSerializer);

@@ -4,16 +4,20 @@
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK InputPortHost IMPLEMENTS I_HostInputPorts, I_Serializable
+FUNCTION_BLOCK InputPortHost IMPLEMENTS I_InputPorts, I_Serializable
 VAR
+	hostParent : I_HostInputPorts;
 	eventTarget : I_EventTarget;
 	ports : Dictionary;
+	selfCreatedInputPorts : Stack;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{8dde942f-4323-4fa1-9804-9541e8cea698}" />
+    <Folder Name="Destructor" Id="{afbfc047-78af-493f-809e-d31663554067}" />
+    <Folder Name="Private" Id="{5cb1fd7a-78ef-4417-8a09-886952042417}" />
     <Folder Name="Protected" Id="{badb4534-ffc4-49f0-987a-5da4faf0a42a}" />
     <Method Name="Accept" Id="{8201a6ae-d036-490b-a3e6-8c2ed40d0f50}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
@@ -38,6 +42,21 @@ END_WHILE
 enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
+    <Method Name="AddDataAsInputPort" Id="{dc90c0b0-62bb-4934-be2a-82e8a9e014f5}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsInputPort : I_InputPort
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+VAR
+	port : I_InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[port := CreateInputPort(Name, Data);
+selfCreatedInputPorts.Push(port);
+AddDataAsInputPort := port;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="AddInputPort" Id="{b8a2721d-900a-4327-819d-af7c38fc2f18}">
       <Declaration><![CDATA[METHOD PUBLIC AddInputPort
 VAR_INPUT
@@ -46,6 +65,32 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[ports.AddOrUpdate(InputPort.Name, InputPort);
 EmitOnPortAddedEvent(InputPort);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateInputPort" Id="{9a3ddac0-dcaa-4449-842b-acd97f2fb16a}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateInputPort : I_InputPort
+VAR_INPUT
+	PortName : T_MAXSTRING;
+	PortData : I_Datatype;
+END_VAR
+VAR
+	pPort : POINTER TO InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pPort := __NEW(InputPort(Name := PortName, Data := PortData, Parent := hostParent));
+CreateInputPort := pPort^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSelfCreatedInputPorts" Id="{d5ddcb04-8547-4bb0-a20a-30424cd429e6}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedInputPorts : BOOL
+VAR
+	port : I_InputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedInputPorts.TryPop(port) DO
+	port.Dispose();
+END_WHILE]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitOnPortAddedEvent" Id="{7ddbe6ad-349c-48e3-b30f-79ef4ac8af9b}" FolderPath="Protected\">
@@ -66,16 +111,31 @@ eventTarget.Emit('OnInputPortAdded',pInputPortAddedEvent^);
 pInputPortAddedEvent^.Dispose();]]></ST>
       </Implementation>
     </Method>
+    <Method Name="FB_exit" Id="{5a32ac93-7278-444b-87d7-99f70ab482b9}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DisposeSelfCreatedInputPorts();]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_init" Id="{e19fa22d-a160-44ca-b450-8dcb5d5aefa4}" FolderPath="Constructor\">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Parent : I_HostInputPorts;
 	parentEventTarget : I_EventTarget;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
+        <ST><![CDATA[hostParent := Parent;
+eventTarget := parentEventTarget;]]></ST>
       </Implementation>
     </Method>
     <Method Name="SerializeWith" Id="{3c42266c-de93-43bf-8c86-b3b026493e0d}">

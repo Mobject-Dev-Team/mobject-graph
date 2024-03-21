@@ -11,15 +11,12 @@ VAR
 	_connectedTo : I_OutputPort;
 	parent : I_HostInputPorts;
 	eventEmitter : EventEmitter;
-	metadataHost : MetadataHost(eventEmitter);
-	selfCreatedMetadata : Stack;
+	metadataHost : MetadataHost(THIS^, eventEmitter);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{c02273f4-e8fc-0d09-3c19-79f73fa57a1b}" />
-    <Folder Name="Destructor" Id="{4570fb36-9adb-4191-a9a5-61e46b1d816d}" />
-    <Folder Name="Private" Id="{1de64b68-f7ef-4fc3-954f-f97872619990}" />
     <Folder Name="Protected" Id="{1f1fa75f-3537-0229-2498-8638fd4c140f}" />
     <Method Name="Accept" Id="{1625d170-79e2-014d-2c2b-8ace06c47aa1}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
@@ -28,32 +25,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Visitor.VisitInputPort(THIS^);
-metadataHost.Accept(Visitor);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddDataAsMetadata" Id="{a5f6d3ba-1b5b-4472-a132-bae6dd8b4cb3}">
-      <Declaration><![CDATA[METHOD PUBLIC AddDataAsMetadata : I_Metadata
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Data : I_Datatype;
-END_VAR
-VAR
-	metadata : I_Metadata;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[metadata := CreateMetadata(Name, Data);
-selfCreatedMetadata.Push(metadata);
-AddDataAsMetadata := metadata;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AddMetadata" Id="{285689fb-673d-4cd1-837b-d081f2ca0e5f}">
-      <Declaration><![CDATA[METHOD AddMetadata
-VAR_INPUT
-	Metadata : I_Metadata;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[metadataHost.AddMetadata(Metadata);]]></ST>
+        <ST><![CDATA[Visitor.VisitInputPort(THIS^);]]></ST>
       </Implementation>
     </Method>
     <Property Name="Connected" Id="{0eeca197-140f-0917-0914-20aa772b83ae}">
@@ -67,20 +39,6 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="CreateMetadata" Id="{84ecf84e-8734-49bb-9b34-ad514c5ec452}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE CreateMetadata : I_Metadata
-VAR_INPUT
-	MetadataName : T_MAXSTRING;
-	MetadataData : I_Datatype;
-END_VAR
-VAR
-	pMetadata : POINTER TO Metadata;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[pMetadata := __NEW(Metadata(Name := MetadataName, Data := MetadataData, Parent := THIS^));
-CreateMetadata := pMetadata^;]]></ST>
-      </Implementation>
-    </Method>
     <Property Name="Data" Id="{f697d0c9-35bd-003b-2eed-d1db3a1aaa7d}">
       <Declaration><![CDATA[PROPERTY PUBLIC Data : I_Datatype]]></Declaration>
       <Get Name="Get" Id="{9027c130-d714-0b66-2e0c-fed40c3b84cf}">
@@ -104,18 +62,6 @@ _connectedTo := 0;
 _data.ClearReference();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="DisposeSelfCreatedMetadata" Id="{1cebc207-eff4-4abd-a1f5-6e19a86ab4c3}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PROTECTED DisposeSelfCreatedMetadata : BOOL
-VAR
-	metadata : I_Metadata;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[WHILE selfCreatedMetadata.TryPop(metadata) DO
-	metadata.Dispose();
-END_WHILE]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="EmitOnInputPortChanged" Id="{7ac9cdfd-9dc5-4ff8-8987-c18d9fe1fa6d}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED EmitOnInputPortChanged
 VAR_INPUT
@@ -128,19 +74,6 @@ END_VAR]]></Declaration>
         <ST><![CDATA[pInputPortChangeEvent := __NEW(InputPortChangedEvent(Target := PortChanged));
 eventEmitter.Emit('OnInputPortChanged',pInputPortChangeEvent^);
 pInputPortChangeEvent^.Dispose();]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="FB_exit" Id="{6e882dd7-9d34-4495-b524-7b489ff415e9}" FolderPath="Destructor\">
-      <Declaration><![CDATA[METHOD FB_exit : BOOL
-VAR_INPUT
-	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF bInCopyCode THEN
-	RETURN;
-END_IF
-
-DisposeSelfCreatedMetadata();]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{85cb6971-3869-03dd-0362-0b78635177f7}" FolderPath="Constructor\">
@@ -181,6 +114,17 @@ END_VAR]]></Declaration>
         <ST><![CDATA[EmitOnInputPortChanged(THIS^);]]></ST>
       </Implementation>
     </Method>
+    <Property Name="Metadatum" Id="{eb0917b1-0b37-4c8b-9015-72b581d2834d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Metadatum : I_Metadatum]]></Declaration>
+      <Get Name="Get" Id="{d85e6dc1-fa8e-4d2f-bca9-2f9f90f2796c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Metadatum := metadataHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="Name" Id="{bed621d8-5fb5-029d-2ec1-72a1805573da}">
       <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
       <Get Name="Get" Id="{81e0229a-69c1-0712-0a6c-c9c3a3d10c8f}">
@@ -233,7 +177,7 @@ END_VAR]]></Declaration>
 END_IF
 
 THIS^.parent := Parent;
-Parent.AddInputPort(THIS^);]]></ST>
+Parent.InputPorts.AddInputPort(THIS^);]]></ST>
       </Implementation>
     </Method>
     <Method Name="SerializeWith" Id="{baf1e5a1-8726-45d4-a3c3-4b5a88746bac}">
@@ -268,16 +212,6 @@ END_IF
 _connectedTo := OutputPort;
 _connectedTo.OnEvent('OnOutputPortChanged', THIS^);
 TryConnectTo := TRUE;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="TryGetMetadataByName" Id="{9fa16fc6-6579-49be-8cea-0f81ee7da550}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetMetadataByName : BOOL
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Destination : REFERENCE TO I_Metadata;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[TryGetMetadataByName := metadataHost.TryGetMetadataByName(Name,Destination);]]></ST>
       </Implementation>
     </Method>
   </POU>

@@ -83,7 +83,7 @@ END_VAR
 	RETURN;
 END_IF
 
-Parent.AddAlarm(THIS^);]]></ST>
+Parent.Alarms.AddAlarm(THIS^);]]></ST>
       </Implementation>
     </Method>
     <Method Name="SerializeWith" Id="{a2ed8123-2f68-4e86-a79d-a0fb02c58153}">

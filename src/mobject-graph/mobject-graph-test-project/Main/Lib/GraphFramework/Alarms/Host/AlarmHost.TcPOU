@@ -4,8 +4,9 @@
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK AlarmHost IMPLEMENTS I_HostAlarms, I_Serializable
+FUNCTION_BLOCK AlarmHost IMPLEMENTS I_Alarms, I_Serializable
 VAR
+	hostParent : I_HostAlarms;
 	eventTarget : I_EventTarget;
 	alarms : Stack;
 END_VAR
@@ -71,11 +72,13 @@ pAlarmAddedEvent^.Dispose();]]></ST>
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	parentEventTarget : I_EventTarget;
+	Parent : I_HostAlarms;
+	ParentEventTarget : I_EventTarget;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
+        <ST><![CDATA[hostParent := Parent;
+eventTarget := parentEventTarget;]]></ST>
       </Implementation>
     </Method>
     <Property Name="HasRaisedAlarm" Id="{0e9d7d0f-b9ab-45ac-9f39-de7d687d3cfb}">

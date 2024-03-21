@@ -6,7 +6,7 @@
 {attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK GetBlueprintsRpcHandler IMPLEMENTS I_RpcHandler
 VAR
-	nodePrototypes : I_NodePrototypes;
+	nodeFactory : I_NodeFactory;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -18,11 +18,11 @@ END_VAR
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	NodePrototypes : I_NodePrototypes;
+	NodeFactory : I_NodeFactory;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[this^.nodePrototypes := NodePrototypes;]]></ST>
+        <ST><![CDATA[this^.nodeFactory := NodeFactory;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Handle" Id="{27315dcd-2d70-4147-9721-52dd88a1612b}">
@@ -32,22 +32,22 @@ VAR_INPUT
 	Response : I_SynchronousRpcResponse;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF nodePrototypes = 0 THEN
+        <ST><![CDATA[IF nodeFactory = 0 THEN
 	Response.RejectWithMessage('GetBlueprintsRpcHandler has not been initialized with a valid nodePrototypes object');
 	RETURN;
 END_IF
 
-Response.CompleteWithObject(nodePrototypes);]]></ST>
+Response.RejectWithMessage('not yet implemented');]]></ST>
       </Implementation>
     </Method>
     <Method Name="Initialize" Id="{9ad671d0-ce42-4ff2-977f-33468cbea023}">
       <Declaration><![CDATA[METHOD PUBLIC Initialize
 VAR_INPUT
-	NodePrototypes : I_NodePrototypes;
+	NodeFactory : I_NodeFactory;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[this^.nodePrototypes := NodePrototypes;]]></ST>
+        <ST><![CDATA[this^.nodeFactory := NodeFactory;]]></ST>
       </Implementation>
     </Method>
   </POU>

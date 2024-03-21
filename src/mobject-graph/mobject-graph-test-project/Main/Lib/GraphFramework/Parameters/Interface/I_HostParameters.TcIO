@@ -3,20 +3,11 @@
   <Itf Name="I_HostParameters" Id="{c5806033-3adc-0f99-304c-e569fa5b2b9f}">
     <Declaration><![CDATA[INTERFACE I_HostParameters EXTENDS __SYSTEM.IQueryInterface
 ]]></Declaration>
-    <Method Name="AddParameter" Id="{629b0de3-c6af-0abc-2e2a-6709cf7d0165}">
-      <Declaration><![CDATA[METHOD AddParameter
-VAR_INPUT
-	Parameter : I_Parameter;
-END_VAR
-]]></Declaration>
-    </Method>
-    <Method Name="TryGetParameterByName" Id="{54f7a4bd-70df-0013-2d50-559760c48b28}">
-      <Declaration><![CDATA[METHOD PUBLIC TryGetParameterByName : BOOL
-VAR_INPUT
-	Name : T_MAXSTRING;
-	Destination : REFERENCE TO I_Parameter;
-END_VAR
-]]></Declaration>
-    </Method>
+    <Property Name="Parameters" Id="{bfa0ae51-4de8-4c1c-b4b0-c7f2aed30aad}">
+      <Declaration><![CDATA[PROPERTY Parameters : I_Parameters]]></Declaration>
+      <Get Name="Get" Id="{f6c348a5-9d35-42b4-b680-8efc6ad4c195}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
   </Itf>
 </TcPlcObject>

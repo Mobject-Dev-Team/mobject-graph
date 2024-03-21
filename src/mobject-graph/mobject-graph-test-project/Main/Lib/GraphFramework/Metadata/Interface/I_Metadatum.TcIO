@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Metadatum" Id="{cf266afc-79c2-4536-a974-c250880601c4}">
+    <Declaration><![CDATA[INTERFACE I_Metadatum
+]]></Declaration>
+    <Method Name="Accept" Id="{17cbba76-83ea-443c-9e33-be6cbe9f09e9}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_MetadataVisitor;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddDataAsMetadata" Id="{98c8f295-29dc-488d-925c-4b6b6b90dde5}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsMetadata : I_Metadata
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddMetadata" Id="{c58c1d1e-b1d1-0e7a-041f-b8740747188f}">
+      <Declaration><![CDATA[METHOD AddMetadata
+VAR_INPUT
+	Metadata : I_Metadata;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetMetadataByName" Id="{8bd144a5-6123-06fd-0e73-e7fee3e3c69c}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetMetadataByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Metadata;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

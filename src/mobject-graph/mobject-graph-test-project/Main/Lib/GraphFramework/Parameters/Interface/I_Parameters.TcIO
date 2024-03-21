@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Parameters" Id="{ca73fae7-4f0b-47d5-84b4-22dabfc61ce6}">
+    <Declaration><![CDATA[INTERFACE I_Parameters
+]]></Declaration>
+    <Method Name="Accept" Id="{504505a4-65c8-4407-b6c3-75f4f81d5eea}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_ParameterVisitor;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddDataAsParameter" Id="{202bbf88-4d6b-4c85-a8ce-267c46f41ef7}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsParameter : I_Parameter
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddParameter" Id="{629b0de3-c6af-0abc-2e2a-6709cf7d0165}">
+      <Declaration><![CDATA[METHOD AddParameter
+VAR_INPUT
+	Parameter : I_Parameter;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetParameterByName" Id="{54f7a4bd-70df-0013-2d50-559760c48b28}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetParameterByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Parameter;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

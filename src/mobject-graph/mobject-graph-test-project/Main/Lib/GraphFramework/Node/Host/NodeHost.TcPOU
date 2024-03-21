@@ -4,8 +4,9 @@
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK NodeHost IMPLEMENTS I_HostNodes, I_Serializable
+FUNCTION_BLOCK NodeHost IMPLEMENTS I_Nodes, I_Serializable
 VAR
+	hostParent : I_HostNodes;
 	eventTarget : I_EventTarget;
 	nodes : Dictionary;
 	nodesInOrder : LinkedList;
@@ -93,11 +94,13 @@ enumerator.Dispose();]]></ST>
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Parent : I_HostNodes;
 	parentEventTarget : I_EventTarget;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[eventTarget := parentEventTarget;]]></ST>
+        <ST><![CDATA[hostParent := Parent;
+eventTarget := parentEventTarget;]]></ST>
       </Implementation>
     </Method>
     <Method Name="RemoveNode" Id="{c092aa2e-ba4e-445b-9f3c-109fa70adaec}">

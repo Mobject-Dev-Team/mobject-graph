@@ -84,7 +84,7 @@ END_VAR]]></Declaration>
 END_IF
 
 THIS^._parent := Parent;
-Parent.AddMetadata(THIS^);]]></ST>
+Parent.Metadatum.AddMetadata(THIS^);]]></ST>
       </Implementation>
     </Method>
     <Method Name="SerializeWith" Id="{3a929e06-fbb8-41a6-bc16-617fa49ea7fb}">
