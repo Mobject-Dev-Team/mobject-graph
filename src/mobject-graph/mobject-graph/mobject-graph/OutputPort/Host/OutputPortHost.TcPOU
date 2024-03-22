@@ -38,7 +38,8 @@ WHILE (enumerator.MoveNext()) DO
 	END_IF
 
 END_WHILE
-]]></ST>
+
+enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddDataAsOutputPort" Id="{b3af1bb3-cf3a-4ac9-83bf-bc9c36d8f2d4}">
@@ -162,8 +163,8 @@ WHILE enumerator.MoveNext() DO
 	END_IF
 END_WHILE
 
-
-Serializer.EndArray();]]></ST>
+Serializer.EndArray();
+enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetOutputPortByName" Id="{ad4dfefe-a004-4255-aaab-4e223f115d52}">

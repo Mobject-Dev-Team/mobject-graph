@@ -35,7 +35,8 @@ WHILE (enumerator.MoveNext()) DO
 	END_IF
 
 END_WHILE
-]]></ST>
+
+enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddGraph" Id="{a3e65d26-9cdf-48b2-83a5-6bcb5ed22c3c}">
@@ -65,7 +66,9 @@ WHILE enumerator.MoveNext() DO
 	END_IF
 END_WHILE
 
-graphs.Clear();]]></ST>
+graphs.Clear();
+
+enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitOnGraphAddedEvent" Id="{2e7b1359-9489-4dc5-8118-fbc9ba6ad891}" FolderPath="Protected\">
@@ -102,7 +105,8 @@ WHILE enumerator.MoveNext() DO
 		graph.Execute();
 	END_IF
 END_WHILE
-]]></ST>
+
+enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{7b7dec1a-49af-465c-9d0a-70ec7264c3fb}" FolderPath="Constructor\">
@@ -153,7 +157,8 @@ WHILE enumerator.MoveNext() DO
 	END_IF
 END_WHILE
 
-Serializer.EndArray();]]></ST>
+Serializer.EndArray();
+enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetGraphByUuid" Id="{11cb0c37-294f-44c7-b092-801efca6ae37}">

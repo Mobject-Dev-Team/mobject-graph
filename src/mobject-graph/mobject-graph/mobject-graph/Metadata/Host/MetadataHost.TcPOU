@@ -38,7 +38,8 @@ WHILE (enumerator.MoveNext()) DO
 	END_IF
 
 END_WHILE
-]]></ST>
+
+enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddDataAsMetadata" Id="{81581471-6307-487b-82da-774b6c952948}">
@@ -162,8 +163,8 @@ WHILE enumerator.MoveNext() DO
 	END_IF
 END_WHILE
 
-
-Serializer.EndArray();]]></ST>
+Serializer.EndArray();
+enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetMetadataByName" Id="{ec4bda78-3782-41a3-9a98-f6ef89a0f5fe}">

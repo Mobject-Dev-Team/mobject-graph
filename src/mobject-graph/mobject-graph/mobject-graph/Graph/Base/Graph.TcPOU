@@ -313,52 +313,62 @@ WHILE linksEnumerator.MoveNext() DO
 	
 	IF NOT linkDeserializer.GetElementByIndex(1).TryGetString(sourceNodeId, Feedback) THEN
 		DeserializationFailedAlarm.Raise('Missing source node id from link');
+		linksEnumerator.Dispose();
 		RETURN;
 	END_IF
 	
 	IF NOT linkDeserializer.GetElementByIndex(2).TryGetString(sourcePortName, Feedback) THEN
 		DeserializationFailedAlarm.Raise('Missing source port name from link');
+		linksEnumerator.Dispose();
 		RETURN;
 	END_IF
 	
 	IF NOT linkDeserializer.GetElementByIndex(3).TryGetString(destinationNodeId, Feedback) THEN
 		DeserializationFailedAlarm.Raise('Missing destination node id from link');
+		linksEnumerator.Dispose();
 		RETURN;
 	END_IF
 	
 	IF NOT linkDeserializer.GetElementByIndex(4).TryGetString(destinationPortName, Feedback) THEN
 		DeserializationFailedAlarm.Raise('Missing destination port name from link');
+		linksEnumerator.Dispose();
 		RETURN;
 	END_IF
 	
 	IF NOT nodeHost.TryGetNodeById(sourceNodeId, sourceNode) THEN
 		DeserializationFailedAlarm.Raise('Unable to get source node when creating link');
+		linksEnumerator.Dispose();
 		RETURN;
 	END_IF
 	
 	IF NOT nodeHost.TryGetNodeById(destinationNodeId, destinationNode) THEN
 		DeserializationFailedAlarm.Raise('Unable to get destination node when creating link');
+		linksEnumerator.Dispose();
 		RETURN;
 	END_IF
 	
 	IF NOT sourceNode.OutputPorts.TryGetOutputPortByName(sourcePortName, sourcePort) THEN
 		DeserializationFailedAlarm.Raise('Unable to get source port when creating link');
+		linksEnumerator.Dispose();
 		RETURN;
 	END_IF
 	
 	IF NOT destinationNode.InputPorts.TryGetInputPortByName(destinationPortName, destinationPort) THEN
 		DeserializationFailedAlarm.Raise('Unable to get destination port when creating link');
+		linksEnumerator.Dispose();
 		RETURN;
 	END_IF
 	
 	IF NOT destinationPort.TryConnectTo(sourcePort) THEN
 		DeserializationFailedAlarm.Raise('Unable to connect source to destination when creating link');
+		linksEnumerator.Dispose();
 		RETURN;
 	END_IF
 	
 END_WHILE
 
-TryDeserializeLinks := TRUE;]]></ST>
+TryDeserializeLinks := TRUE;
+linksEnumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryDeserializeNodes" Id="{60e31c8f-dfb7-4e50-9eb3-cf6b2e5c65ed}" FolderPath="Private\">
@@ -388,6 +398,7 @@ WHILE nodesEnumerator.MoveNext() DO
 		pError := __NEW(MissingNodePrototypeDeserializationError(MissingType := nodeType));
 		Feedback.LogError(pError^);
 		DeserializationFailedNodeNotSupportedAlarm.Raise(nodeType);
+		nodesEnumerator.Dispose();
 		RETURN;
 	END_IF
 	
@@ -395,6 +406,7 @@ WHILE nodesEnumerator.MoveNext() DO
 	
 	IF NOT node.TryDeserializeFrom(nodesEnumerator.Current, Feedback) THEN
 		DeserializationFailedAlarm.Raise('Node failed to deserialize');
+		nodesEnumerator.Dispose();
 		RETURN;
 	END_IF
 	
@@ -402,7 +414,8 @@ WHILE nodesEnumerator.MoveNext() DO
 
 END_WHILE
 
-TryDeserializeNodes := TRUE;]]></ST>
+TryDeserializeNodes := TRUE;
+nodesEnumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Property Name="Uuid" Id="{49626b2c-97e3-470f-84b1-506421c5c986}">

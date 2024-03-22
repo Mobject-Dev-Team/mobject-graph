@@ -38,7 +38,8 @@ WHILE (enumerator.MoveNext()) DO
 	END_IF
 
 END_WHILE
-]]></ST>
+
+enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddContent" Id="{1e42df45-60ad-4745-9e46-6fb3980191cc}">
@@ -162,7 +163,8 @@ WHILE enumerator.MoveNext() DO
 	END_IF
 END_WHILE
 
-Serializer.EndArray();]]></ST>
+Serializer.EndArray();
+enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetContentByName" Id="{076edd3f-d171-46dc-b5e5-26dd2689e196}">

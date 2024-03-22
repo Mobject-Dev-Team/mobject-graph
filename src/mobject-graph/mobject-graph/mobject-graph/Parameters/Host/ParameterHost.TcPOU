@@ -38,7 +38,8 @@ WHILE (enumerator.MoveNext()) DO
 	END_IF
 
 END_WHILE
-]]></ST>
+
+enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddDataAsParameter" Id="{6f547ae5-7b41-4543-919d-4e6d264bfb98}">
@@ -162,8 +163,8 @@ WHILE enumerator.MoveNext() DO
 	END_IF
 END_WHILE
 
-
-Serializer.EndArray();]]></ST>
+Serializer.EndArray();
+enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryDeserializeFrom" Id="{fa72a1f9-bef5-4f92-bfc0-ce555ff21e3e}">
@@ -193,7 +194,8 @@ WHILE parametersEnumerator.MoveNext() DO
 
 END_WHILE
 
-TryDeserializeFrom := TRUE;]]></ST>
+TryDeserializeFrom := TRUE;
+parametersEnumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetParameterByName" Id="{8c7a0833-5598-492f-a118-fdfe501b5015}">

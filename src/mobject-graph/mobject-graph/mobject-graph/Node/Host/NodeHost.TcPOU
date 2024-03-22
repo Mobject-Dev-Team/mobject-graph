@@ -36,7 +36,8 @@ WHILE (enumerator.MoveNext()) DO
 	END_IF
 
 END_WHILE
-]]></ST>
+
+enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddNode" Id="{61111174-f337-4dbc-8283-ea8e9cfab287}">
@@ -84,7 +85,8 @@ WHILE enumerator.MoveNext() DO
 		node.Execute();
 	END_IF
 END_WHILE
-]]></ST>
+
+enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{2dd03000-3672-4a07-8807-8ef83f774afa}" FolderPath="Constructor\">
@@ -136,8 +138,8 @@ WHILE enumerator.MoveNext() DO
 	END_IF
 END_WHILE
 
-
-Serializer.EndArray();]]></ST>
+Serializer.EndArray();
+enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryDeserializeFrom" Id="{c4dbe3ee-14be-4de9-8449-2400c87022b6}">
@@ -168,7 +170,9 @@ WHILE nodesEnumerator.MoveNext() DO
 	
 	node.TryDeserializeFrom(nodesEnumerator.Current, Feedback);
 
-END_WHILE]]></ST>
+END_WHILE
+
+nodesEnumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetNodeById" Id="{fc1d8da3-e2f2-4d63-aba0-e38916a81437}">
