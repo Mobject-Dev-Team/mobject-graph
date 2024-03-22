@@ -38,8 +38,7 @@ WHILE (enumerator.MoveNext()) DO
 	END_IF
 
 END_WHILE
-
-enumerator.Dispose();]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddDataAsInputPort" Id="{fd63a553-55a0-44bc-bb6e-22b5a839e04b}">
@@ -163,7 +162,6 @@ WHILE enumerator.MoveNext() DO
 	END_IF
 END_WHILE
 
-enumerator.Dispose();
 
 Serializer.EndArray();]]></ST>
       </Implementation>

@@ -38,8 +38,7 @@ WHILE (enumerator.MoveNext()) DO
 	END_IF
 
 END_WHILE
-
-enumerator.Dispose();]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddContent" Id="{1e42df45-60ad-4745-9e46-6fb3980191cc}">
@@ -163,7 +162,6 @@ WHILE enumerator.MoveNext() DO
 	END_IF
 END_WHILE
 
-enumerator.Dispose();
 Serializer.EndArray();]]></ST>
       </Implementation>
     </Method>

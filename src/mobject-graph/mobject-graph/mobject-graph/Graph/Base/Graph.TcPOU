@@ -358,7 +358,6 @@ WHILE linksEnumerator.MoveNext() DO
 	
 END_WHILE
 
-linksEnumerator.Dispose();
 TryDeserializeLinks := TRUE;]]></ST>
       </Implementation>
     </Method>

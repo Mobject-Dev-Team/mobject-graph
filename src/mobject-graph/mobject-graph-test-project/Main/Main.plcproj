@@ -31,10 +31,10 @@
       <SubType>Code</SubType>
       <ExcludeFromBuild>false</ExcludeFromBuild>
     </Compile>
-    <Compile Include="Lib\GraphApi\Handlers\LoadGraphRpcHandler.TcPOU">
+    <Compile Include="Lib\GraphApi\Handlers\CreateGraphRpcHandler.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\GraphApi\Handlers\MultiUserLoadGraphRpcHandler.TcPOU">
+    <Compile Include="Lib\GraphApi\Handlers\CreateGraphMultiUserRpcHandler.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\GraphApi\Visitors\RetrieveNodeContentValue.TcPOU">

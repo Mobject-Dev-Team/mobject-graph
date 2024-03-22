@@ -35,8 +35,7 @@ WHILE (enumerator.MoveNext()) DO
 	END_IF
 
 END_WHILE
-
-enumerator.Dispose();]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddExtension" Id="{42b7879a-6c0b-409a-a931-045c18793742}">
@@ -106,7 +105,6 @@ WHILE enumerator.MoveNext() DO
 	END_IF
 END_WHILE
 
-enumerator.Dispose();
 Serializer.EndArray();]]></ST>
       </Implementation>
     </Method>
@@ -142,8 +140,7 @@ WHILE extensionsEnumerator.MoveNext() DO
 
 END_WHILE
 
-extensionsEnumerator.Dispose();
-TryDeserializeFrom := true;]]></ST>
+TryDeserializeFrom := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryGetExtensionByName" Id="{b998adb0-f111-4cb3-bea7-519b22b71849}">

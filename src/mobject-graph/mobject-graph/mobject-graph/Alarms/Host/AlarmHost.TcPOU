@@ -35,8 +35,7 @@ WHILE (enumerator.MoveNext()) DO
 	END_IF
 
 END_WHILE
-
-enumerator.Dispose();]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddAlarm" Id="{ff0f1474-5d7f-4412-a12a-1c8d7ed8b51a}">
@@ -103,8 +102,7 @@ WHILE (enumerator.MoveNext()) DO
 	END_IF
 
 END_WHILE
-
-enumerator.Dispose();]]></ST>
+]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -133,7 +131,6 @@ WHILE enumerator.MoveNext() DO
 	END_IF
 END_WHILE
 
-enumerator.Dispose();
 Serializer.EndArray();]]></ST>
       </Implementation>
     </Method>

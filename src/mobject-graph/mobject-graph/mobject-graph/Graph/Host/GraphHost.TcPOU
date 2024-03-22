@@ -35,8 +35,7 @@ WHILE (enumerator.MoveNext()) DO
 	END_IF
 
 END_WHILE
-
-enumerator.Dispose();]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddGraph" Id="{a3e65d26-9cdf-48b2-83a5-6bcb5ed22c3c}">
@@ -66,7 +65,6 @@ WHILE enumerator.MoveNext() DO
 	END_IF
 END_WHILE
 
-enumerator.Dispose();
 graphs.Clear();]]></ST>
       </Implementation>
     </Method>
@@ -104,8 +102,7 @@ WHILE enumerator.MoveNext() DO
 		graph.Execute();
 	END_IF
 END_WHILE
-
-enumerator.Dispose();]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{7b7dec1a-49af-465c-9d0a-70ec7264c3fb}" FolderPath="Constructor\">
@@ -156,7 +153,6 @@ WHILE enumerator.MoveNext() DO
 	END_IF
 END_WHILE
 
-enumerator.Dispose();
 Serializer.EndArray();]]></ST>
       </Implementation>
     </Method>

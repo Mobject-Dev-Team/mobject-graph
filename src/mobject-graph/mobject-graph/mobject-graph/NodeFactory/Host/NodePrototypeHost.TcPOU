@@ -34,8 +34,7 @@ WHILE enumerator.MoveNext() DO
 	END_IF
 
 END_WHILE
-
-enumerator.Dispose();]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddNodeAsPrototype" Id="{4e228139-3b70-4223-8b48-8100579efbfe}">
