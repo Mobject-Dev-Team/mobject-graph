@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_GraphAddedEvent" Id="{c6433338-b296-4475-933e-3ef65a5a4bf7}">
+    <Declaration><![CDATA[INTERFACE I_GraphAddedEvent EXTENDS I_Event]]></Declaration>
+    <Property Name="Target" Id="{f84e34f4-2ba9-444e-bc13-ef9d2a1b9a55}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Graph]]></Declaration>
+      <Get Name="Get" Id="{4854e24c-11f0-4a4a-ae94-5457e82fb0bb}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

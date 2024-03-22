@@ -6,25 +6,12 @@
 {attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK GetContentValueHandler IMPLEMENTS I_RpcHandler
 VAR
-	graph : I_Graph;
+	graphs : I_Graphs;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="Constructor" Id="{3e3b2ad6-6f70-4dec-9ee9-1abb0709c4a5}" />
-    <Method Name="FB_init" Id="{2b27a595-3f33-447b-b854-74e1fe29c513}" FolderPath="Constructor\">
-      <Declaration><![CDATA[METHOD FB_init : BOOL
-VAR_INPUT
-	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
-	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	Graph : I_Graph;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[this^.graph := Graph;]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="Handle" Id="{1186bfa6-d816-4a70-9d73-9b6d07696e2d}">
       <Declaration><![CDATA[METHOD Handle
 VAR_INPUT
@@ -40,9 +27,7 @@ VAR
 	feedback : DeserializerFeedback;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[serializer := Response.GetSerializer();
-
-IF NOT Parameters.TryGetKeyString('graphUuid', graphUuid, feedback) THEN
+        <ST><![CDATA[IF NOT Parameters.TryGetKeyString('graphUuid', graphUuid, feedback) THEN
 	Response.RejectWithMessage(feedback.FirstError.Message);
 	RETURN;
 END_IF
@@ -57,11 +42,19 @@ IF NOT Parameters.TryGetKeyString('contentName', contentName, feedback) THEN
 	RETURN;
 END_IF
 
+serializer := Response.GetSerializer();
 visitor.Initialize(graphUuid, nodeId, contentName, serializer);
-graph.Accept(visitor);
+graphs.Accept(visitor);
 
 IF visitor.Error THEN
 	Response.RejectWithMessage(visitor.ErrorMessage);
+	serializer.Dispose();
+	RETURN;
+END_IF
+
+IF NOT visitor.Done THEN
+	Response.RejectWithMessage('Invalid graphUuid');
+	serializer.Dispose();
 	RETURN;
 END_IF
 
@@ -72,11 +65,11 @@ serializer.Dispose();]]></ST>
     <Method Name="Initialize" Id="{75a56b56-6075-4973-a859-b52a93ed0eaf}">
       <Declaration><![CDATA[METHOD PUBLIC Initialize
 VAR_INPUT
-	Graph : I_Graph;
+	Graphs : I_Graphs;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[this^.graph := Graph;]]></ST>
+        <ST><![CDATA[this^.graphs := Graphs;]]></ST>
       </Implementation>
     </Method>
   </POU>

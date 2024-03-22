@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="DeserializationFailedNodeNotSupportedAlarm" Id="{8760a8c2-b7f4-42b1-8fb1-4e150dff7521}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK PUBLIC DeserializationFailedNodeNotSupportedAlarm EXTENDS Alarm
+VAR
+	state : (CLEARED, RAISED);
+	_reason : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="Active" Id="{ad045389-6112-456a-a667-a8dd25812b14}">
+      <Declaration><![CDATA[PROPERTY Active : BOOL]]></Declaration>
+      <Get Name="Get" Id="{cef97d97-273a-4437-a51d-376b76ece23b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Active := state <> CLEARED;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Clear" Id="{7b2507cf-295d-4343-b7c8-3980a7008dbb}">
+      <Declaration><![CDATA[METHOD PUBLIC Clear
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_reason := '';
+state := CLEARED;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Message" Id="{d3d07426-175b-4870-8778-2dbc984f06dd}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Message : T_MaxString]]></Declaration>
+      <Get Name="Get" Id="{07a4af6d-4bed-455e-a300-528f11c724b1}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Message := 'Node type is not installed';]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Raise" Id="{d3655f05-8e18-4e49-8645-2500f3cd818a}">
+      <Declaration><![CDATA[METHOD PUBLIC Raise
+VAR_INPUT
+	NodeType : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_reason := NodeType;
+state := RAISED;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Reason" Id="{104dd125-7727-4097-9047-d795d8ce794b}">
+      <Declaration><![CDATA[PROPERTY Reason : T_MaxString]]></Declaration>
+      <Get Name="Get" Id="{caf1195d-8315-4795-9e55-3a7a0feba10d}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Reason := _reason;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_HostNodes" Id="{7df61bc8-9e76-43d8-902c-1f4a3879191e}">
+    <Declaration><![CDATA[INTERFACE I_HostNodes
+]]></Declaration>
+    <Property Name="Nodes" Id="{fab13836-ac03-442d-82ab-adc0634fa43e}">
+      <Declaration><![CDATA[PROPERTY Nodes : I_Nodes]]></Declaration>
+      <Get Name="Get" Id="{7aa44a45-2529-48b7-9d3c-afff5b216e3a}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

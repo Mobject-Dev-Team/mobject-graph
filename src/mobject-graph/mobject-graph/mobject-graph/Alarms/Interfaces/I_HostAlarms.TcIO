@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_HostAlarms" Id="{a18e036e-7d84-4d5d-a69d-92b8d5a85939}">
+    <Declaration><![CDATA[INTERFACE I_HostAlarms EXTENDS __SYSTEM.IQueryInterface
+]]></Declaration>
+    <Property Name="Alarms" Id="{62f8e870-ea16-435f-aa2b-063d1f5748e5}">
+      <Declaration><![CDATA[PROPERTY Alarms : I_Alarms]]></Declaration>
+      <Get Name="Get" Id="{b0380cb8-7389-4ceb-8651-e8d313425a71}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

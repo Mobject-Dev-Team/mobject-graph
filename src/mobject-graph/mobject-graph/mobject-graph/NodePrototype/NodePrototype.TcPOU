@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NodePrototype" Id="{55dc7f94-c1e6-467e-bf2f-6027928ce074}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK NodePrototype EXTENDS Disposable IMPLEMENTS I_NodePrototype
+VAR
+	_path : T_MAXSTRING;
+	_node : I_Node;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{58ae38fd-1684-4215-8d1e-e680462ff56d}" />
+    <Method Name="Accept" Id="{1a99a20e-aedc-429b-befc-14f4054c7a82}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_NodePrototypeVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitNodePrototype(This^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Clone" Id="{d1c6cf2a-5559-4198-8f05-596e9b2cccb4}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Clone := _node.Clone();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{80c1dd88-715a-4de4-ac62-05497ade383c}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Path : T_MAXSTRING;
+	Node : I_Node;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_path := Path;
+_node := Node;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Node" Id="{94dbaad0-819a-44a5-9024-04676fdd0fee}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Node : I_Node]]></Declaration>
+      <Get Name="Get" Id="{c690bf1e-51db-4376-9b60-8b3ee9977859}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Node := _node;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Path" Id="{c9487224-8d2d-42de-ac8f-a0ebce872a91}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Path : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{aedc72d9-5311-43eb-abf6-e2311e22985e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Path := _path;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

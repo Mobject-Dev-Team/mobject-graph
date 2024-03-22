@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="GraphAddedEvent" Id="{e827c281-d961-4b38-b029-40610c1b0630}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK GraphAddedEvent EXTENDS Disposable IMPLEMENTS I_GraphAddedEvent
+VAR
+	_target : I_Graph;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{9bcd7e2c-7b9a-43df-b330-1f1b0436509c}" />
+    <Method Name="FB_init" Id="{6a01e92b-5340-44b6-9721-5e86698677d3}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Target : I_Graph;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[This^._target := Target;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Target" Id="{80bdbaaa-0469-4214-b344-cf420eb7626c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Graph]]></Declaration>
+      <Get Name="Get" Id="{61dceeba-802a-4b6e-b203-d397b92a9dd4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Target := _target;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

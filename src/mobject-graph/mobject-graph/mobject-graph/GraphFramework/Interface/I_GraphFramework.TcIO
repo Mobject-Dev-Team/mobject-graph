@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_GraphFramework" Id="{f3353d67-fe68-422a-8558-089dff4b9a79}">
+    <Declaration><![CDATA[INTERFACE I_GraphFramework
+]]></Declaration>
+    <Method Name="Create" Id="{ac947962-8060-47be-8a13-b27b6702168a}">
+      <Declaration><![CDATA[METHOD PUBLIC Create : I_Graph
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Datatypes" Id="{aaf13d06-2670-4934-aa21-f9395287f1c7}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Datatypes : I_Datatypes]]></Declaration>
+      <Get Name="Get" Id="{71680b95-9334-4f3e-9564-42b2ba265567}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="NodeFactory" Id="{edf7f767-4697-41c5-b9ba-9bf9e9d25a3b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC NodeFactory : I_NodeFactory]]></Declaration>
+      <Get Name="Get" Id="{f1017b5c-4b53-42cc-8ed6-f8ae79e6a313}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

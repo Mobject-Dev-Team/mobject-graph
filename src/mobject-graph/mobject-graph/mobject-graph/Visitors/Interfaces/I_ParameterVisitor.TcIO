@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_ParameterVisitor" Id="{2b8d46db-1503-4c93-9b55-80e7a901db90}">
+    <Declaration><![CDATA[INTERFACE I_ParameterVisitor]]></Declaration>
+    <Method Name="VisitParameter" Id="{0ba9be72-c689-4093-bb8b-26759a8e218d}">
+      <Declaration><![CDATA[METHOD VisitParameter
+VAR_INPUT
+	VisitingProperty : I_Parameter;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

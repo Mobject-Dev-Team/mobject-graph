@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_HostContent" Id="{e1e0eb08-bfd1-4547-a6bc-473321063a08}">
+    <Declaration><![CDATA[INTERFACE I_HostContent
+]]></Declaration>
+    <Property Name="Contents" Id="{b49ca806-3c29-4d74-a1af-1efc03a7ce91}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Contents : I_Contents]]></Declaration>
+      <Get Name="Get" Id="{88e896f6-b846-463e-9fb3-0f24acf0c655}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

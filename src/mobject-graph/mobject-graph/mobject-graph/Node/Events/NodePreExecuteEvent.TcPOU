@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NodePreExecuteEvent" Id="{6e27cc1e-c310-4d8f-82e7-28ae5f2b4bcc}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK NodePreExecuteEvent EXTENDS Disposable IMPLEMENTS I_NodePreExecuteEvent
+VAR
+	_target : I_Node;
+	_cancelExecute : BOOL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{37a2a32f-692b-4522-9061-94c8a73fda6b}" />
+    <Method Name="Cancel" Id="{4ecc4130-de8c-401d-be86-7c4cb9c56018}">
+      <Declaration><![CDATA[METHOD PUBLIC Cancel
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_cancelExecute := true;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="ExecuteCancelled" Id="{b1cff844-64e2-4c8d-b97a-7f3dd22674c9}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ExecuteCancelled : BOOL]]></Declaration>
+      <Get Name="Get" Id="{76bfbcfc-624f-4966-8e63-b6455db25a58}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ExecuteCancelled := _cancelExecute;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_init" Id="{221b5ca8-b208-4530-840a-bd932741ae81}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Target : I_Node;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_target := Target;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Target" Id="{e8cc0ba3-4643-4d25-ba56-3a31b949649f}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Node]]></Declaration>
+      <Get Name="Get" Id="{34197992-a339-4436-b9bd-28db7ebd404d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Target := _target;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Contents" Id="{9368e65b-4bd0-4d9e-bc9f-f991e3d997bb}">
+    <Declaration><![CDATA[INTERFACE I_Contents
+]]></Declaration>
+    <Method Name="Accept" Id="{be6b54dd-1ab6-4cf9-9067-f2413e038e28}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	visitor : I_ContentVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddContent" Id="{feda0619-1337-4585-b0fe-1bec70359200}">
+      <Declaration><![CDATA[METHOD AddContent
+VAR_INPUT
+	Content : I_Content;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddDataAsContent" Id="{f83a19ea-8221-4332-bccf-a4575187d79d}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsContent : I_Content
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryGetContentByName" Id="{b903e043-583e-4c23-be1e-4ad8b4e81294}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetContentByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Content;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

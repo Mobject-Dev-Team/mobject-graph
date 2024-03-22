@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_OutputPorts" Id="{7106d115-8795-4b25-8759-763d1e526662}">
+    <Declaration><![CDATA[INTERFACE I_OutputPorts
+]]></Declaration>
+    <Method Name="Accept" Id="{79fdd00f-4f69-4c1b-a985-c60d009ac80a}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_OutputPortVisitor;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddDataAsOutputPort" Id="{123eab4b-32fd-4da5-9fe0-541c899fba27}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsOutputPort : I_OutputPort
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddOutputPort" Id="{9cf945e5-debb-4ba1-b08e-ce2d568d025a}">
+      <Declaration><![CDATA[METHOD AddOutputPort
+VAR_INPUT
+	OutputPort : I_OutputPort;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TryGetOutputPortByName" Id="{a51707f2-05d5-44f8-bd48-066fefa88e9c}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetOutputPortByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_OutputPort;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="ContentHost" Id="{f669076c-98b4-4a80-95e6-218c34075d57}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ContentHost IMPLEMENTS I_Contents, I_Serializable
+VAR
+	hostParent : I_HostContent;
+	eventTarget : I_EventTarget;
+	contents : Dictionary;
+	selfCreatedContent : Stack;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{f008522b-915a-458b-a34e-a4b0e3dc9ab0}" />
+    <Folder Name="Destructor" Id="{00e7ca70-7dfc-4dff-995d-0093bd5ee8e6}" />
+    <Folder Name="Private" Id="{23a79408-daaa-4d15-91ac-6dc86697ba28}" />
+    <Folder Name="Protected" Id="{620723ea-20f7-482a-8167-dd0825e3806d}" />
+    <Method Name="Accept" Id="{a1606e8f-5876-48c0-98f6-46743768f294}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	visitor : I_ContentVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	content : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := contents.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF enumerator.TryGet(content) THEN
+		content.Accept(Visitor);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddContent" Id="{1e42df45-60ad-4745-9e46-6fb3980191cc}">
+      <Declaration><![CDATA[METHOD PUBLIC AddContent
+VAR_INPUT
+	Content : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[contents.AddOrUpdate(Content.Name, Content);
+EmitOnContentAddedEvent(Content);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsContent" Id="{58b8f25f-0c66-4286-abf4-d1fab45146a1}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsContent : I_Content
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+VAR
+	content : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[content := CreateContent(Name, Data);
+selfCreatedContent.Push(content);
+AddDataAsContent := content;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateContent" Id="{46250da3-e89e-409d-ac35-273b0dbb0c12}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateContent : I_Content
+VAR_INPUT
+	ContentName : T_MAXSTRING;
+	ContentData : I_Datatype;
+END_VAR
+VAR
+	pContent : POINTER TO Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pContent := __NEW(Content(Name := ContentName, Data := ContentData, Parent := hostParent));
+CreateContent := pContent^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSelfCreatedContent" Id="{032c088f-b9ac-4503-a0f4-bdfa212e7d69}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedContent : BOOL
+VAR
+	content : I_Content;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedContent.TryPop(content) DO
+	content.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnContentAddedEvent" Id="{f5818c89-d124-4fae-89ec-6a573e586bff}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnContentAddedEvent
+VAR_INPUT
+	Content : I_Content;
+END_VAR
+VAR
+	pContentAddedEvent : POINTER TO ContentAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eventTarget = 0 THEN
+	RETURN;
+END_IF
+
+pContentAddedEvent := __NEW(ContentAddedEvent(Target := Content));
+eventTarget.Emit('OnContentAdded',pContentAddedEvent^);
+pContentAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{26c6e675-826b-462f-aea9-8fc06a71ab1a}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DisposeSelfCreatedContent();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{e3eea328-9f65-424f-996f-3f82903e3715}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Parent : I_HostContent;
+	ParentEventTarget : I_EventTarget;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[hostParent := Parent;
+eventTarget := parentEventTarget;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{e6b63081-e905-4fe8-a595-01f60b980081}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	content : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF contents.Count = 0 THEN
+	RETURN;
+END_IF
+
+Serializer.AddKey('contents');
+Serializer.StartArray();
+
+enumerator := contents.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(content) THEN
+		content.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetContentByName" Id="{076edd3f-d171-46dc-b5e5-26dd2689e196}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetContentByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Content;
+END_VAR
+VAR
+	content : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT contents.TryGetValue(Name, content) THEN
+	RETURN;
+END_IF
+
+Destination := content;
+TryGetContentByName := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

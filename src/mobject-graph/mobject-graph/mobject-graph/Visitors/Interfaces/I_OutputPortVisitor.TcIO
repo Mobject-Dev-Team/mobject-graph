@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_OutputPortVisitor" Id="{8598d448-75ec-4ea6-bc6f-68222ff84725}">
+    <Declaration><![CDATA[INTERFACE I_OutputPortVisitor]]></Declaration>
+    <Method Name="VisitOutputPort" Id="{0bf119fc-6e60-46c1-b9f9-5f3a0edd4b44}">
+      <Declaration><![CDATA[METHOD VisitOutputPort
+VAR_INPUT
+	VisitingOutputPort : I_OutputPort;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

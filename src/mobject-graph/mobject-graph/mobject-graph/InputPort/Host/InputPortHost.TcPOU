@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="InputPortHost" Id="{cecd9dd2-7f53-4ad2-af73-6046029b062d}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK InputPortHost IMPLEMENTS I_InputPorts, I_Serializable
+VAR
+	hostParent : I_HostInputPorts;
+	eventTarget : I_EventTarget;
+	ports : Dictionary;
+	selfCreatedInputPorts : Stack;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{66640da0-71d9-4c22-aaeb-217d1735c5e7}" />
+    <Folder Name="Destructor" Id="{27bdc50f-eac0-4864-81fe-7ffa52bc950f}" />
+    <Folder Name="Private" Id="{609bc1bb-fd3b-4cc0-8c03-cdb15839d984}" />
+    <Folder Name="Protected" Id="{9fb1c6b4-f66f-4e36-b699-e1274009f2a5}" />
+    <Method Name="Accept" Id="{e32b5f71-f282-4c5c-bfe3-053310d540e5}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_InputPortVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	port : I_InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := ports.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF enumerator.TryGet(port) THEN
+		port.Accept(Visitor);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsInputPort" Id="{fd63a553-55a0-44bc-bb6e-22b5a839e04b}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsInputPort : I_InputPort
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+VAR
+	port : I_InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[port := CreateInputPort(Name, Data);
+selfCreatedInputPorts.Push(port);
+AddDataAsInputPort := port;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddInputPort" Id="{15be3fe9-fca6-4fe5-b1dd-9d394b1ca9d7}">
+      <Declaration><![CDATA[METHOD PUBLIC AddInputPort
+VAR_INPUT
+	InputPort : I_InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ports.AddOrUpdate(InputPort.Name, InputPort);
+EmitOnPortAddedEvent(InputPort);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateInputPort" Id="{fb8839f4-ec32-45ef-b411-1f471eb1d240}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateInputPort : I_InputPort
+VAR_INPUT
+	PortName : T_MAXSTRING;
+	PortData : I_Datatype;
+END_VAR
+VAR
+	pPort : POINTER TO InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pPort := __NEW(InputPort(Name := PortName, Data := PortData, Parent := hostParent));
+CreateInputPort := pPort^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSelfCreatedInputPorts" Id="{8c62de9c-3379-430f-a427-f984f7c310ab}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedInputPorts : BOOL
+VAR
+	port : I_InputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedInputPorts.TryPop(port) DO
+	port.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnPortAddedEvent" Id="{e346ef72-64ce-4a26-a4be-1304f7378cb8}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnPortAddedEvent
+VAR_INPUT
+	Port : I_InputPort;
+END_VAR
+VAR
+	pInputPortAddedEvent : POINTER TO InputPortAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eventTarget = 0 THEN
+	RETURN;
+END_IF
+
+pInputPortAddedEvent := __NEW(InputPortAddedEvent(Target := Port));
+eventTarget.Emit('OnInputPortAdded',pInputPortAddedEvent^);
+pInputPortAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{9f0ca865-173c-40fe-acef-9dd858235f5e}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DisposeSelfCreatedInputPorts();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{31379ef5-f144-4015-ab6f-24950b42f5ce}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Parent : I_HostInputPorts;
+	parentEventTarget : I_EventTarget;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[hostParent := Parent;
+eventTarget := parentEventTarget;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{7c1e2b8c-331a-4d38-b330-d2d0fab60284}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	port : I_InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF ports.Count = 0 THEN
+	RETURN;
+END_IF
+
+Serializer.AddKey('inputPorts');
+Serializer.StartArray();
+
+enumerator := ports.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(port) THEN
+		port.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetInputPortByName" Id="{b0d16cef-9c86-47e9-9845-69d6951c82b6}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetInputPortByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_InputPort;
+END_VAR
+VAR
+	port : I_InputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT ports.TryGetValue(Name, port) THEN
+	RETURN;
+END_IF
+
+Destination := port;
+TryGetInputPortByName := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

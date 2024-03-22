@@ -1,0 +1,329 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Node" Id="{dea4a6e6-88e8-4a03-84ea-b39393a5373f}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ABSTRACT Node EXTENDS Disposable IMPLEMENTS I_Node
+VAR
+	_id : T_MAXSTRING;
+	_order : DINT;
+	_mode : DINT;
+	eventEmitter : EventEmitter;
+	inputPortHost : InputPortHost(THIS^, eventEmitter);
+	outputPortHost : OutputPortHost(THIS^, eventEmitter);
+	parameterHost : ParameterHost(THIS^, eventEmitter);
+	contentHost : ContentHost(THIS^, eventEmitter);
+	alarmHost : AlarmHost(THIS^, eventEmitter);
+	metadataHost : MetadataHost(THIS^, eventEmitter);
+	extensionHost : ExtensionHost(THIS^,eventEmitter);
+	deserializationFailedAlarm : DeserializationFailedAlarm(THIS^);
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Abstract" Id="{8193ee30-b78d-4ea0-bfbe-c2a5814340d9}" />
+    <Folder Name="Private" Id="{b58aec16-127f-40f3-807e-1336c1cce4cc}" />
+    <Method Name="Accept" Id="{dd7a8e72-4444-4df2-b876-dec7f4fae19f}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_NodeVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitNode(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Alarms" Id="{f0a6c976-17db-4461-8af3-623f6953058b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Alarms : I_Alarms]]></Declaration>
+      <Get Name="Get" Id="{011e7dea-c711-4aab-8fe6-920c2a083dc5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Alarms := alarmHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Clone" Id="{864cba3a-3ba1-492d-b1fd-367b7ddeeac3}" FolderPath="Abstract\">
+      <Declaration><![CDATA[METHOD PUBLIC ABSTRACT Clone : I_Node
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Contents" Id="{043f0496-9047-4c55-a014-a217d44038a6}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Contents : I_Contents]]></Declaration>
+      <Get Name="Get" Id="{82d4143b-5313-4d9b-a102-f6756ed3e4aa}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Contents := contentHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="EmitNodeExecuteBeginEvent" Id="{77ca6a46-059c-4018-b367-fa23a314306c}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitNodeExecuteBeginEvent : BOOL;
+VAR
+	pNodeExecuteBeginEvent : POINTER TO NodeExecuteBeginEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pNodeExecuteBeginEvent := __NEW(NodeExecuteBeginEvent(Target := THIS^));
+eventEmitter.Emit('OnNodeExecuteBegin',pNodeExecuteBeginEvent^);
+pNodeExecuteBeginEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitNodeExecuteEndEvent" Id="{a42b5b3b-ff9d-471e-a9b1-7e26b88f78ad}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitNodeExecuteEndEvent : BOOL;
+VAR
+	pNodeExecuteEndEvent : POINTER TO NodeExecuteEndEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pNodeExecuteEndEvent := __NEW(NodeExecuteEndEvent(Target := THIS^));
+eventEmitter.Emit('OnNodeExecuteEnd',pNodeExecuteEndEvent^);
+pNodeExecuteEndEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnNodePreExecuteEvent" Id="{e6c90d14-caf8-469c-8e84-a87816f43889}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE EmitOnNodePreExecuteEvent : BOOL;
+VAR_INPUT
+	CancelRequested : REFERENCE TO BOOL;
+END_VAR
+VAR
+	pNodePreExecuteEvent : POINTER TO NodePreExecuteEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pNodePreExecuteEvent := __NEW(NodePreExecuteEvent(Target := THIS^));
+eventEmitter.Emit('OnNodePreExecute',pNodePreExecuteEvent^);
+
+IF pNodePreExecuteEvent^.ExecuteCancelled THEN
+	CancelRequested := TRUE;
+END_IF
+
+pNodePreExecuteEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Execute" Id="{53111ca4-ff22-4d20-85e1-3d604fc86fe1}">
+      <Declaration><![CDATA[METHOD PUBLIC Execute
+VAR
+	cancelExecuteResponse : BOOL := FALSE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[EmitOnNodePreExecuteEvent(cancelExecuteResponse);
+
+IF cancelExecuteResponse THEN
+	RETURN;
+END_IF
+
+EmitNodeExecuteBeginEvent();
+OnExecute();
+EmitNodeExecuteEndEvent();]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Extensions" Id="{d2cfced0-e0d5-465c-bcc4-ce23e7f52568}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Extensions : I_Extensions]]></Declaration>
+      <Get Name="Get" Id="{2659ad4f-3e76-4c6d-8fd3-7d40632c166f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Extensions := extensionHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="HasRaisedAlarm" Id="{4249ccf7-b508-431a-9ef2-e1a366472d7e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedAlarm : BOOL]]></Declaration>
+      <Get Name="Get" Id="{488e699a-a946-49fc-97e6-db19d62c0c4c}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasRaisedAlarm := alarmHost.HasRaisedAlarm;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Id" Id="{63f297b4-8bc6-432b-9391-959282b386ac}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Id : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{c7cddb10-45f3-4cb1-94e1-6c7bf991fee1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Id := _id;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="InputPorts" Id="{667e2ef4-8314-4f08-b4e3-05a0e645d26e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC InputPorts : I_InputPorts]]></Declaration>
+      <Get Name="Get" Id="{600fe8c7-2deb-41f2-a84d-75775139cb4d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[InputPorts := inputPortHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Metadatum" Id="{dc1c33ab-3c00-4382-a179-94135e27aa02}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Metadatum : I_Metadatum]]></Declaration>
+      <Get Name="Get" Id="{c5fb408d-4da2-4d29-9876-e015636ab2f5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Metadatum := metadataHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Mode" Id="{f3a4ecf5-6aa2-4420-a695-7b91c1e23089}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Mode : DINT]]></Declaration>
+      <Get Name="Get" Id="{ca53613b-1735-4175-9d85-7543ddd08da7}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Mode := _mode;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="OffEvent" Id="{be27ce50-cd40-41ee-ba8b-d8a27b92e94e}">
+      <Declaration><![CDATA[METHOD PUBLIC OffEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OffEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnceEvent" Id="{44098522-81d9-4a99-b4fa-7682f4e2c6aa}">
+      <Declaration><![CDATA[METHOD PUBLIC OnceEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnceEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnEvent" Id="{9f6ebfb1-fc41-4f9a-a9e6-3469f96c80ea}">
+      <Declaration><![CDATA[METHOD PUBLIC OnEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnExecute" Id="{f0f0499a-5f72-4d57-9065-48b06559724d}" FolderPath="Abstract\">
+      <Declaration><![CDATA[METHOD PROTECTED ABSTRACT OnExecute : HRESULT]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Order" Id="{0ad930d6-e597-400e-905a-66b1d732b9fb}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Order : DINT]]></Declaration>
+      <Get Name="Get" Id="{688751d6-d2ec-49a7-a744-ad796dd65c51}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Order := _order;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="OutputPorts" Id="{0fbd802c-e4d8-449d-9fbb-541b4b378024}">
+      <Declaration><![CDATA[PROPERTY PUBLIC OutputPorts : I_OutputPorts]]></Declaration>
+      <Get Name="Get" Id="{4fc89f54-cd65-48c8-a4b8-5d34cce1154c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[OutputPorts := outputPortHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Parameters" Id="{0b68b859-b935-4386-9545-23a9d1985319}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parameters : I_Parameters]]></Declaration>
+      <Get Name="Get" Id="{d9e95db6-d150-4bed-aaa7-83500b4095f9}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parameters := parameterHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Self" Id="{d0638425-cacb-415b-9410-d46817128d19}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Self : I_Node]]></Declaration>
+      <Get Name="Get" Id="{6f132944-1e78-41dc-953b-8c04f1cf77ef}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Self := This^;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="SerializeWith" Id="{0900fa8f-2c1c-4681-b602-0d226a708c72}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartObject();
+Serializer.AddKeyString('id',_id);
+Serializer.AddKeyDint('order',_order);
+Serializer.AddKeyDint('mode',_mode);
+inputPortHost.SerializeWith(Serializer);
+outputPortHost.SerializeWith(Serializer);
+parameterHost.SerializeWith(Serializer);
+contentHost.SerializeWith(Serializer);
+alarmHost.SerializeWith(Serializer);
+extensionHost.SerializeWith(Serializer);
+metadataHost.SerializeWith(Serializer);
+Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeFrom" Id="{feda9c40-f82c-4c3a-b07d-cecee9133921}">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DeserializationFailedAlarm.Clear();
+
+IF NOT Deserializer.TryGetKeyString('id', _id, Feedback) THEN
+	DeserializationFailedAlarm.Raise('Missing node id');	
+	RETURN;
+END_IF
+
+IF NOT Deserializer.TryGetKeyDint('order', _order, Feedback) THEN
+	DeserializationFailedAlarm.Raise('Missing node order');	
+	RETURN;
+END_IF
+
+IF NOT Deserializer.TryGetKeyDint('mode', _mode, Feedback) THEN
+	DeserializationFailedAlarm.Raise('Missing node mode');	
+	RETURN;
+END_IF
+
+IF NOT parameterHost.TryDeserializeFrom(Deserializer, Feedback) THEN
+	DeserializationFailedAlarm.Raise('Failed to deserialize parameters');	
+	RETURN;
+END_IF
+
+IF NOT extensionHost.TryDeserializeFrom(Deserializer, Feedback) THEN
+	DeserializationFailedAlarm.Raise('Failed to deserialize extensions');	
+	RETURN;
+END_IF
+
+TryDeserializeFrom := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

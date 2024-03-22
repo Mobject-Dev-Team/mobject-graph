@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NodeAddedEvent" Id="{a164848c-0712-403f-bfa7-3a8620f2bd06}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK NodeAddedEvent EXTENDS Disposable IMPLEMENTS I_NodeAddedEvent
+VAR
+	_target : I_Node;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{86278dce-960f-4d30-b86a-14019b49dbb6}" />
+    <Method Name="FB_init" Id="{13f0c36f-a8a7-4590-a5c3-592797e5b680}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Target : I_Node;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[This^._target := Target;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Target" Id="{ada082d6-08ce-4cb6-bc5a-56b8b336abbf}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Node]]></Declaration>
+      <Get Name="Get" Id="{1e24364b-ce8c-4232-800e-74be4afe7b26}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Target := _target;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

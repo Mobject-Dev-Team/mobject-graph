@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Extension" Id="{fcf6a113-6db5-4444-b6d3-5deb7714fdb8}">
+    <Declaration><![CDATA[INTERFACE I_Extension EXTENDS I_Disposable, I_HostContent, I_HostInputPorts, I_HostOutputPorts, I_HostAlarms, I_HostParameters, I_HostMetadata, I_EventEmitter, I_Deserializable, I_Serializable
+]]></Declaration>
+    <Method Name="Accept" Id="{3e1fcfc7-5aaf-41a1-b5c1-9979c5a08631}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_ExtensionVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Name" Id="{3d65ad24-d565-454f-9556-453c6b6cb957}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{81e481e0-dae9-4340-8fa5-9aa67ad94e69}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

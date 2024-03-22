@@ -3,52 +3,33 @@
   <POU Name="MAIN" Id="{1c7dbdb3-3ad9-058e-2a75-807bd1bcee45}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR		
-	graph_TestSuite : Graph_TestSuite;
+	graphFramework : GraphFramework;
 	
-	// playground
-	datatypes : Datatypes;
-	nodeFactory : NodeFactory;
-	graph : Graph(nodeFactory);
-	basicPlcDatatypes : BasicPlcDatatypes;
-	nodePack_PlcBasic : NodePack_PlcBasic;
+	plcBasicDatatypePack : PlcBasicDatatypePack;
+	plcBasicNodePack : PlcBasicNodePack;
+	
+	server : RpcServer;
+	graphApi : graphApi(graphFramework);	
+	
 	initialise: BOOL;
 
-	server : RpcServer;
-	graphApi : graphApi(graph, NodeFactory, datatypes);	
-
-	jsonDeserializer : JsonDeserializer;
-	loadFirst, loadSecond : BOOL;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// todo
-// modify json to suit ideal
-// - node id is now unique string
-// - link is now [id_dint, sourceId_String, sourcePortName_String, destinationId_String, destinationPortName_String].
+      <ST><![CDATA[IF NOT initialise THEN
+	
+	// setup graph
+	graphFramework.InstallDatatypePack(plcBasicDatatypePack);
+	graphFramework.InstallNodePack(plcBasicNodePack);
 
-//TcUnit.RUN();
-
-IF NOT initialise THEN
-	basicPlcDatatypes.RegisterWith(datatypes);
-	nodeFactory.InstallNodePack(nodePack_PlcBasic);
+	// setup the api
 	graphApi.RegisterWith(server);
+
+	// done
 	initialise := TRUE;
+	
 END_IF
 
-graph.Run();
-
-//IF loadFirst THEN
-//	loadFirst := FALSE;
-//	jsonDeserializer.TryLoad(TestJson.literalBoolLinkedToDisplayBool);
-//	graph.TryDeserializeFrom(jsonDeserializer);
-//END_IF
-
-//IF loadSecond THEN
-//	loadSecond := FALSE;
-//	jsonDeserializer.TryLoad(TestJson.literalBoolLinkedToDisplayBool2);
-//	graph.TryDeserializeFrom(jsonDeserializer);
-//END_IF
-
-]]></ST>
+graphApi.Graphs.Execute();]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

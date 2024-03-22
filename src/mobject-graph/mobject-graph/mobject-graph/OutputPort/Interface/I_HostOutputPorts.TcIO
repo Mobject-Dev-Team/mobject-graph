@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_HostOutputPorts" Id="{5872ecbb-48ea-4fed-aef0-4c38a6cb5a4a}">
+    <Declaration><![CDATA[INTERFACE I_HostOutputPorts EXTENDS __SYSTEM.IQueryInterface
+]]></Declaration>
+    <Property Name="OutputPorts" Id="{60041a55-49fe-418a-9425-024a7d67b79e}">
+      <Declaration><![CDATA[PROPERTY OutputPorts : I_OutputPorts]]></Declaration>
+      <Get Name="Get" Id="{47305b30-8ba5-40d4-98d2-c4ce8aa740eb}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

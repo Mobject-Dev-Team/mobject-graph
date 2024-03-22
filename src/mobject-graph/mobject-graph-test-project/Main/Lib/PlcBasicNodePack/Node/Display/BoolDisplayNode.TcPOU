@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="BoolDisplayNode" Id="{0f08307d-4041-4da5-a467-5b06e7eedf33}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK FINAL BoolDisplayNode EXTENDS Node
+VAR
+	in : _BOOL(FALSE);
+	display : _BOOL(FALSE);
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{227aa244-3e7a-4525-bac6-987f3cb4f2f0}" />
+    <Method Name="Clone" Id="{becf0f39-df3c-403f-9972-d66a56950b8c}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
+VAR
+	pointerToNode : POINTER TO Node_Display_BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pointerToNode := __NEW(Node_Display_BOOL);
+Clone := pointerToNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{e4cb0d0b-c40f-40c5-b63b-f9237053b3c1}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[InputPorts.AddDataAsInputPort('in', in);
+Contents.AddDataAsContent('display', display);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnExecute" Id="{2fac624a-eb27-478f-8639-998a4165478e}">
+      <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[display.Value := in.Value;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Alarm" Id="{86a2a33f-fdd7-41b8-9777-6da94dd2a119}">
+    <Declaration><![CDATA[INTERFACE I_Alarm EXTENDS I_Serializable]]></Declaration>
+    <Method Name="Accept" Id="{0a32d5aa-bebd-4bf3-b11b-e602cdcea0d5}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_AlarmVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Active" Id="{84bfc066-f09c-42f2-8df7-e5e21a46d47a}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Active : BOOL]]></Declaration>
+      <Get Name="Get" Id="{70fa86e7-8487-49b4-a578-08410b0aa982}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Message" Id="{f47449c6-bd3b-48e4-a094-3b11b15515be}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Message : T_MaxString]]></Declaration>
+      <Get Name="Get" Id="{9d789d5f-bf78-4b41-ba80-c544ab35bf29}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Reason" Id="{87ad8f9d-b28e-4df2-af26-4da9a80b516e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Reason : T_MaxString]]></Declaration>
+      <Get Name="Get" Id="{d973eb1d-6672-42b5-bbc2-b792b7a04638}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_AlarmAddedEvent" Id="{a6b5112b-3551-45ae-9087-dc89dbec17ce}">
+    <Declaration><![CDATA[INTERFACE I_AlarmAddedEvent EXTENDS I_Event
+]]></Declaration>
+    <Property Name="Target" Id="{1f1ed65f-ea1c-4350-9e16-a5e26cc872a7}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Alarm]]></Declaration>
+      <Get Name="Get" Id="{449f5696-3e87-4871-80ab-e5ce05be5033}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

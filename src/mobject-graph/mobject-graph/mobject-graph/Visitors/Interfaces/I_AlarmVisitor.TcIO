@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_AlarmVisitor" Id="{66b3db5f-9868-4317-b709-8cea6ef4ca14}">
+    <Declaration><![CDATA[INTERFACE I_AlarmVisitor]]></Declaration>
+    <Method Name="VisitError" Id="{24923fb7-4c34-47be-9e63-4b0b306988aa}">
+      <Declaration><![CDATA[METHOD VisitError
+VAR_INPUT
+	VisitingError : I_Alarm;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

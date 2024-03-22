@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_HostParameters" Id="{d0522bc1-9686-4532-9647-ae9732b4bf43}">
+    <Declaration><![CDATA[INTERFACE I_HostParameters EXTENDS __SYSTEM.IQueryInterface
+]]></Declaration>
+    <Property Name="Parameters" Id="{fcb4c504-d0fc-498a-a39a-8f84628064d8}">
+      <Declaration><![CDATA[PROPERTY Parameters : I_Parameters]]></Declaration>
+      <Get Name="Get" Id="{2532a93a-3fe7-4b04-b285-063a230e388c}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

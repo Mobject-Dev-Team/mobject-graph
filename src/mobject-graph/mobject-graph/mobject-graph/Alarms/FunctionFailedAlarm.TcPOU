@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FunctionFailedAlarm" Id="{aaf07711-6308-497b-9f16-56e041ee5f52}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK PUBLIC FunctionFailedAlarm EXTENDS Alarm
+VAR
+	state : (CLEARED, RAISED);
+	functionName : STRING;
+	hresult : HRESULT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="Active" Id="{b0ccf951-bf27-49a5-a8e3-681610877675}">
+      <Declaration><![CDATA[PROPERTY Active : BOOL]]></Declaration>
+      <Get Name="Get" Id="{3a90b531-170c-4fdf-9331-5b4992ea2269}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Active := state <> CLEARED;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Clear" Id="{e37c7915-918a-46b3-90d8-cc173b3905b6}">
+      <Declaration><![CDATA[METHOD PUBLIC Clear
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[functionName := '';
+hresult := 0;
+state := CLEARED;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Message" Id="{581d6870-0f05-47d8-9c48-16aca6c21341}">
+      <Declaration><![CDATA[PROPERTY Message : T_MaxString]]></Declaration>
+      <Get Name="Get" Id="{1c07b065-6284-4c4d-98db-9f89e74db891}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Message := 'Function failed';]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Raise" Id="{3feec228-af3b-4efe-b38f-aa1351ec6637}">
+      <Declaration><![CDATA[METHOD PUBLIC Raise
+VAR_INPUT
+	FunctionName : STRING;
+	HResult : HRESULT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.functionName := FunctionName;
+THIS^.hresult := HResult;
+state := RAISED;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Reason" Id="{5bcabfda-8eef-403a-8eb1-2a4c70c1d271}">
+      <Declaration><![CDATA[PROPERTY Reason : T_MaxString]]></Declaration>
+      <Get Name="Get" Id="{98ede736-19e8-4d13-b084-6e1470117b84}">
+        <Declaration><![CDATA[VAR
+	message : STRING;
+	returnCode : DWORD;
+	returnCodeString : STRING;
+	returnCodeMsg : STRING;
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF state = CLEARED THEN
+	RETURN;
+END_IF
+
+returnCode := DINT_TO_DWORD(hresult) AND 16#FFF;
+returnCodeString := DWORD_TO_HEXSTR(returnCode, 3, FALSE);
+
+CASE (returnCode) OF
+	
+	16#70A: returnCodeMsg := 'NOMEMORY';
+	16#70B: returnCodeMsg := 'INVALIDPARM';
+	16#70C: returnCodeMsg := 'NOTFOUND';
+	16#70E: returnCodeMsg := 'INCOMPATIBLE';
+	16#712: returnCodeMsg := 'INVALIDSTATE';
+	16#719: returnCodeMsg := 'TIMEOUT';
+	16#71A: returnCodeMsg := 'NOINTERFACE';
+	16#71B: returnCodeMsg := 'INVALIDINTERFACE';
+	16#71D: returnCodeMsg := 'INVALIDOBJID';
+	16#734: returnCodeMsg := 'OUTOFRANGE';
+	
+END_CASE
+
+
+message := functionName;
+message := CONCAT(message,', Msg : ');
+message := CONCAT(message,returnCodeMsg);
+message := CONCAT(message,', Code : 16#');
+message := CONCAT(message,returnCodeString);
+
+Reason := message;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

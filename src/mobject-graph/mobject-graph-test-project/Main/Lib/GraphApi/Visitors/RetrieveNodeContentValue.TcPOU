@@ -85,16 +85,6 @@ END_VAR
 _error := TRUE;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="LogInvalidUuidError" Id="{ce699ee4-ae17-4537-aa0a-464f8dbf3ad0}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE LogInvalidUuidError
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[_errorMessage := 'Invalid Graph UUID';
-_error := TRUE;]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="Reset" Id="{932380b7-b4a1-46d5-91d3-91ec05f92418}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE Reset
 VAR_INPUT
@@ -128,7 +118,6 @@ END_VAR]]></Declaration>
         <ST><![CDATA[Reset();
 
 IF NOT (VisitingGraph.Uuid = graphUuid) THEN
-	LogInvalidUuidError();
 	RETURN;
 END_IF
 

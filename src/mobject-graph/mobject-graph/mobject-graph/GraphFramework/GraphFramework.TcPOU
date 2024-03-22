@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="GraphFramework" Id="{55908e16-d4de-485c-8d69-f119453fe181}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK GraphFramework IMPLEMENTS I_GraphFramework
+VAR
+	_nodeFactory : NodeFactory;
+	_datatypes : Datatypes;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Create" Id="{bb10b59b-8876-48c1-a25f-6c91a750d037}">
+      <Declaration><![CDATA[METHOD PUBLIC Create : I_Graph
+VAR
+	pGraph : POINTER TO Graph;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pGraph := __NEW(Graph(NodeFactory := _nodeFactory));
+Create := pGraph^;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Datatypes" Id="{11db57fe-5650-4afc-a04b-0fd8208f9293}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Datatypes : I_Datatypes]]></Declaration>
+      <Get Name="Get" Id="{3e243290-827e-405d-b647-e2ae05f0f9b6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Datatypes := _datatypes;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="InstallDatatypePack" Id="{411c3c3d-3406-4c46-aa67-4c736fa7073a}">
+      <Declaration><![CDATA[METHOD PUBLIC InstallDatatypePack
+VAR_INPUT
+	DatatypePack : I_DatatypePack;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DatatypePack.RegisterWith(Datatypes);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InstallNodePack" Id="{b8bf889c-c29f-42aa-aac8-841789b4f4d4}">
+      <Declaration><![CDATA[METHOD PUBLIC InstallNodePack
+VAR_INPUT
+	NodePack : I_NodePack;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[NodePack.RegisterWithNodeFactory(NodeFactory);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="NodeFactory" Id="{2a4f3a49-3a80-4475-bdc3-fa7105b5ece9}">
+      <Declaration><![CDATA[PROPERTY PUBLIC NodeFactory : I_NodeFactory]]></Declaration>
+      <Get Name="Get" Id="{e9e37f33-4e35-454d-aa0b-2af694dba608}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NodeFactory := _nodeFactory;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

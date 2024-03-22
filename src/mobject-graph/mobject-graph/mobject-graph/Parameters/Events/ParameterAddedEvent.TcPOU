@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="ParameterAddedEvent" Id="{04bdbd93-c83e-46a8-b12e-cb3633e97c82}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ParameterAddedEvent EXTENDS Disposable IMPLEMENTS I_ParameterAddedEvent
+VAR
+	_targetParameter : I_Parameter;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{f3327044-872a-4e76-8e85-dd146d3a76c9}" />
+    <Method Name="FB_init" Id="{8c496390-6fb1-4cd5-a82d-1514795deb0e}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	TargetParameter : I_Parameter;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[This^._targetParameter := TargetParameter;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="TargetParameter" Id="{694ef420-5dac-4410-aa5b-fc99f8894e8b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC TargetParameter : I_Parameter]]></Declaration>
+      <Get Name="Get" Id="{dd705d6a-26e7-47d6-9c2e-3eb89a79c274}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TargetParameter := _targetParameter;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

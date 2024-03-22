@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NodeExecuteBeginEvent" Id="{099dccbd-4b03-47d2-99bd-82fca18aee68}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK NodeExecuteBeginEvent EXTENDS Disposable IMPLEMENTS I_NodeExecuteBeginEvent
+VAR
+	_target : I_Node;
+	_cpuCounterLowBytes : UDINT;
+	_cpuCounterHighBytes : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{1a6c8cd5-bcb5-4c10-b56d-6c473d81d706}" />
+    <Property Name="CpuCounterHighBytes" Id="{cedc6650-b823-42b9-aa58-ff8fb90d7bb7}">
+      <Declaration><![CDATA[PROPERTY PUBLIC CpuCounterHighBytes : UDINT]]></Declaration>
+      <Get Name="Get" Id="{a8c57d2d-cb61-4738-b92e-97af1cc14593}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CpuCounterHighBytes := _cpuCounterHighBytes;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="CpuCounterLowBytes" Id="{57f83f18-ddd0-4b38-aac8-92c36132de94}">
+      <Declaration><![CDATA[PROPERTY PUBLIC CpuCounterLowBytes : UDINT]]></Declaration>
+      <Get Name="Get" Id="{ed4bec57-ac38-4207-86c4-c621876ab65a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CpuCounterLowBytes := _cpuCounterLowBytes;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_init" Id="{4ec819db-f346-4b43-8801-a31bd8c2496d}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Target : I_Node;
+END_VAR
+VAR
+	getCount : GETCPUCOUNTER;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_target := Target;
+getCount(cpuCntLoDW => _cpuCounterLowBytes, cpuCntHiDW => _cpuCounterHighBytes);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Target" Id="{ed5dfaf5-a388-4a64-96b4-f9ac8b1cd611}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Node]]></Declaration>
+      <Get Name="Get" Id="{a32eee2b-f93d-45f0-a7a8-fda0a40cdb68}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Target := _target;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NodePrototypeHost" Id="{914d9c6b-bd30-40a5-95e4-f09755f56101}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK NodePrototypeHost IMPLEMENTS I_NodePrototypes
+VAR
+	prototypes : Dictionary;
+	selfCreatedPrototypes : Stack;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Destructor" Id="{fd4ddcc4-6a2f-40fd-b8d4-237982788c4c}" />
+    <Folder Name="Private" Id="{38b6d06f-6358-4ea2-84fb-cf0c9c8338c0}" />
+    <Method Name="Accept" Id="{c4fa52c0-4c66-43b9-9259-cdb3e8dae152}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	visitor : I_NodePrototypeVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	nodePrototype : I_NodePrototype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := prototypes.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	
+	IF enumerator.TryGet(nodePrototype) THEN
+		nodePrototype.Accept(Visitor);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddNodeAsPrototype" Id="{4e228139-3b70-4223-8b48-8100579efbfe}">
+      <Declaration><![CDATA[METHOD AddNodeAsPrototype : I_NodePrototype
+VAR_INPUT
+	Path : T_MAXSTRING;
+	Node : I_Node;
+END_VAR
+VAR
+	prototype : I_NodePrototype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[prototype := CreatePrototype(Path, Node);
+selfCreatedPrototypes.Push(prototype);
+AddNodePrototype(prototype);
+AddNodeAsPrototype := prototype;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddNodePrototype" Id="{03106b3e-f837-4962-abaa-f183b427dbe6}">
+      <Declaration><![CDATA[METHOD PUBLIC AddNodePrototype
+VAR_INPUT
+	NodePrototype : I_NodePrototype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[prototypes.AddOrUpdate(NodePrototype.Path, NodePrototype);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreatePrototype" Id="{dfc3bfb0-87ba-42cb-a040-d61eaae3a9da}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreatePrototype : I_NodePrototype
+VAR_INPUT
+	PrototypePath : T_MAXSTRING;
+	PrototypeNode : I_Node;
+END_VAR
+VAR
+	pNodePrototype : POINTER TO NodePrototype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pNodePrototype := __NEW(NodePrototype(Path := PrototypePath, Node := PrototypeNode));
+CreatePrototype := pNodePrototype^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSelfCreatedNodePrototypes" Id="{e9fd5fd1-ed0c-4f06-ace2-bfca8dd8f74a}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedNodePrototypes : BOOL
+VAR
+	prototype : I_NodePrototype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedPrototypes.TryPop(prototype) DO
+	prototype.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{93992ebc-730e-4c88-9a93-d2471716219f}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DisposeSelfCreatedNodePrototypes();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetNodePrototypeByPath" Id="{c6c3ebb4-96dc-47af-9919-4630de39717d}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetNodePrototypeByPath : BOOL
+VAR_INPUT
+	Path : T_MAXSTRING;
+	Destination : REFERENCE TO I_NodePrototype;
+END_VAR
+VAR
+	nodePrototype : I_NodePrototype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT prototypes.TryGetValue(Path, nodePrototype) THEN
+	RETURN;
+END_IF
+
+Destination := nodePrototype;
+TryGetNodePrototypeByPath := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

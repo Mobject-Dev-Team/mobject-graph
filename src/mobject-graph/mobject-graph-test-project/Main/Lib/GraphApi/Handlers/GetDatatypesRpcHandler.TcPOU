@@ -12,19 +12,6 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="Constructor" Id="{28ba18e3-0660-4640-8825-f8dd6c46f5f8}" />
-    <Method Name="FB_init" Id="{07021949-768a-43ed-a335-ae372eee4aa3}" FolderPath="Constructor\">
-      <Declaration><![CDATA[METHOD FB_init : BOOL
-VAR_INPUT
-	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
-	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	Datatypes : I_Datatypes;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[this^.datatypes := Datatypes;]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="Handle" Id="{b323c91b-c631-4242-8b5b-8446f49cc41e}">
       <Declaration><![CDATA[METHOD Handle
 VAR_INPUT

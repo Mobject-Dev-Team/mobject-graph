@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="GraphHost" Id="{d8bdf358-836b-4db8-b696-af3292728ab1}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK GraphHost IMPLEMENTS I_Graphs, I_Serializable
+VAR
+	hostParent : I_HostGraphs;
+	eventTarget : I_EventTarget;
+	graphs : Dictionary;	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{f25bd80e-b5ba-4d7a-a85b-c5a199c89bf1}" />
+    <Folder Name="Protected" Id="{6edebdb4-e754-40bd-84c5-059b9370b3b2}" />
+    <Method Name="Accept" Id="{da78c30d-2ed2-4f4c-99ce-693898aa3291}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	visitor : I_GraphVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	graph : I_Graph;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := graphs.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF enumerator.TryGet(graph) THEN
+		graph.Accept(Visitor);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddGraph" Id="{a3e65d26-9cdf-48b2-83a5-6bcb5ed22c3c}">
+      <Declaration><![CDATA[METHOD PUBLIC AddGraph
+VAR_INPUT
+	Graph : I_Graph;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[graphs.AddOrUpdate(Graph.Uuid, Graph);
+EmitOnGraphAddedEvent(Graph);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeAll" Id="{ac1f4099-32aa-4a47-8507-6b3f60659847}">
+      <Declaration><![CDATA[METHOD PUBLIC DisposeAll
+VAR_INPUT
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	graph : I_Graph;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := graphs.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(graph) THEN
+		graph.Dispose();
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+graphs.Clear();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnGraphAddedEvent" Id="{2e7b1359-9489-4dc5-8118-fbc9ba6ad891}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnGraphAddedEvent
+VAR_INPUT
+	Graph : I_Graph;
+END_VAR
+VAR
+	pGraphAddedEvent : POINTER TO GraphAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eventTarget = 0 THEN
+	RETURN;
+END_IF
+
+pGraphAddedEvent := __NEW(GraphAddedEvent(Target := Graph));
+eventTarget.Emit('OnGraphAdded',pGraphAddedEvent^);
+pGraphAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Execute" Id="{978f1528-b5ad-4c0e-8a71-79f347dfb578}">
+      <Declaration><![CDATA[METHOD PUBLIC Execute
+VAR_INPUT
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	graph : I_Graph;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := graphs.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(graph) THEN
+		graph.Execute();
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{7b7dec1a-49af-465c-9d0a-70ec7264c3fb}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Parent : I_HostGraphs;
+	ParentEventTarget : I_EventTarget;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[hostParent := Parent;
+eventTarget := parentEventTarget;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RemoveGraph" Id="{0871f21e-46c6-449c-b415-9bdb3b7cd117}">
+      <Declaration><![CDATA[METHOD PUBLIC RemoveGraph
+VAR_INPUT
+	Graph : I_Graph;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[graphs.Remove(Graph.Uuid);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{f6a8f3f9-0ff2-4626-9b0f-04971cf0e38e}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	graph : I_Graph;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF graphs.Count = 0 THEN
+	RETURN;
+END_IF
+
+Serializer.AddKey('graphs');
+Serializer.StartArray();
+
+enumerator := graphs.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(graph) THEN
+		graph.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();
+Serializer.EndArray();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetGraphByUuid" Id="{11cb0c37-294f-44c7-b092-801efca6ae37}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetGraphByUuid : BOOL
+VAR_INPUT
+	Uuid : T_MAXSTRING;
+	Destination : REFERENCE TO I_Graph;
+END_VAR
+VAR
+	graph : I_Graph;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT graphs.TryGetValue(Uuid, graph) THEN
+	RETURN;
+END_IF
+
+Destination := graph;
+TryGetGraphByUuid := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
