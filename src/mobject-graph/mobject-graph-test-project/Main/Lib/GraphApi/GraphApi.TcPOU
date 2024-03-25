@@ -21,8 +21,8 @@ END_VAR
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{a5a3a9e0-4cb7-4fba-88b9-60a3e6636f4c}" />
-    <Folder Name="Distructor" Id="{0fdb84a8-ace4-4238-b174-550597ff2aba}" />
-    <Method Name="FB_exit" Id="{d9538b94-d79a-4082-86d0-2c014ba7836c}" FolderPath="Distructor\">
+    <Folder Name="Destructor" Id="{0fdb84a8-ace4-4238-b174-550597ff2aba}" />
+    <Method Name="FB_exit" Id="{d9538b94-d79a-4082-86d0-2c014ba7836c}" FolderPath="Destructor\">
       <Declaration><![CDATA[METHOD FB_exit : BOOL
 VAR_INPUT
 	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).

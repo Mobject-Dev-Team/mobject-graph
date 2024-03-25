@@ -23,8 +23,8 @@ END_VAR]]></Declaration>
 	Response.RejectWithMessage('GetBlueprintsRpcHandler has not been initialized with a valid nodePrototypes object');
 	RETURN;
 END_IF
-
-Response.CompleteWithObject(nodeFactory);]]></ST>
+Response.RejectWithMessage('not yet implemented');
+//Response.CompleteWithObject(nodeFactory);]]></ST>
       </Implementation>
     </Method>
     <Method Name="Initialize" Id="{9ad671d0-ce42-4ff2-977f-33468cbea023}">

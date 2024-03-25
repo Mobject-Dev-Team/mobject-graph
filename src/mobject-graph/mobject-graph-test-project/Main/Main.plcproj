@@ -16,6 +16,7 @@
     <Implicit_KindOfTask>{39d4ff3b-997a-4fc1-9162-ee76a5dc0a37}</Implicit_KindOfTask>
     <Implicit_Jitter_Distribution>{98761ab1-8951-4b77-bb99-a6853a40f308}</Implicit_Jitter_Distribution>
     <LibraryReferences>{0316d8aa-5460-44e8-a6c7-40422389f1e0}</LibraryReferences>
+    <Released>false</Released>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Lib\GraphApi\GraphApi.TcPOU">
