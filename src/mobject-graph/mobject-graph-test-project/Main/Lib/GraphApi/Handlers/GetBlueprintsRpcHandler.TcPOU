@@ -24,7 +24,7 @@ END_VAR]]></Declaration>
 	RETURN;
 END_IF
 
-Response.RejectWithMessage('not yet implemented');]]></ST>
+Response.CompleteWithObject(nodeFactory);]]></ST>
       </Implementation>
     </Method>
     <Method Name="Initialize" Id="{9ad671d0-ce42-4ff2-977f-33468cbea023}">

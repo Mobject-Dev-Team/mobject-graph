@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="GetBlueprintsVisitor" Id="{9a2eaf75-20aa-0bd3-13b7-cac193f2dd25}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK GetBlueprintsVisitor IMPLEMENTS I_GraphVisitor, I_NodeVisitor, I_ContentVisitor
+VAR
+	graphUuid : T_MAXSTRING;
+	nodeId : T_MAXSTRING;
+	contentName : T_MAXSTRING;
+	serializer : I_Serializer;
+	_done : BOOL;
+	_error : BOOL;
+	_errorMessage : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Initialize" Id="{29462709-d7fd-030c-2f49-7ef200611ec1}">
+      <Declaration><![CDATA[METHOD PUBLIC Initialize
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.serializer := Serializer;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitContent" Id="{90f27233-a833-043b-3d4b-baa21f937c5a}">
+      <Declaration><![CDATA[METHOD VisitContent
+VAR_INPUT
+	VisitingContent : I_Content;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[VisitingContent.SerializeWith(serializer);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitGraph" Id="{2afae386-a62a-0dc0-190f-0b9a578bdd40}">
+      <Declaration><![CDATA[METHOD VisitGraph
+VAR_INPUT
+	VisitingGraph : I_Graph;
+END_VAR
+VAR
+	node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Reset();
+
+IF NOT (VisitingGraph.Uuid = graphUuid) THEN
+	RETURN;
+END_IF
+
+IF NOT VisitingGraph.Nodes.TryGetNodeById(nodeId, node) THEN
+	LogInvalidNodeIdError();
+	RETURN;
+END_IF
+
+node.Accept(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitNode" Id="{6c08a1c9-8b00-0d3e-31f1-90a436f3e52e}">
+      <Declaration><![CDATA[METHOD VisitNode
+VAR_INPUT
+	VisitingNode : I_Node;
+END_VAR
+VAR
+	content : I_Content;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT VisitingNode.Contents.TryGetContentByName(contentName, content) THEN
+	LogInvalidContentNameError();
+	RETURN;
+END_IF
+
+content.Accept(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

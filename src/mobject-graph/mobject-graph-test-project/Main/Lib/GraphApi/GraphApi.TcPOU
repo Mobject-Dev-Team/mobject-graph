@@ -11,6 +11,7 @@ VAR
 	graphHost : GraphHost(THIS^, eventEmitter);
 	createGraphRpcHandler : CreateGraphRpcHandler;
 	createGraphMultiUserRpcHandler : CreateGraphMultiUserRpcHandler;
+	getStatusRpcHandler : GetStatusRpcHandler;
 	getBlueprintsRpcHandler : GetBlueprintsRpcHandler;
 	getDatatypesRpcHandler : GetDatatypesRpcHandler;
 	getContentValueHandler : GetContentValueHandler;
@@ -48,6 +49,7 @@ END_VAR
 
 getBlueprintsRpcHandler.Initialize(GraphFramework.NodeFactory);
 getDatatypesRpcHandler.Initialize(GraphFramework.Datatypes);
+getStatusRpcHandler.Initialize(graphHost);
 createGraphRpcHandler.Initialize(GraphFramework, graphHost);
 createGraphMultiUserRpcHandler.Initialize(GraphFramework, graphHost);
 getContentValueHandler.Initialize(graphHost);]]></ST>
@@ -102,7 +104,8 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Server.RegisterRpcHandler('CreateGraph',createGraphRpcHandler);
-Server.RegisterRpcHandler('CreateGraphMultiUser',CreateGraphMultiUserRpcHandler);
+Server.RegisterRpcHandler('CreateGraphMultiUser',createGraphMultiUserRpcHandler);
+Server.RegisterRpcHandler('GetStatus',getStatusRpcHandler);
 Server.RegisterRpcHandler('GetBlueprints',getBlueprintsRpcHandler);
 Server.RegisterRpcHandler('GetDatatypes',getDatatypesRpcHandler);
 Server.RegisterRpcHandler('GetContentValue',getContentValueHandler);]]></ST>

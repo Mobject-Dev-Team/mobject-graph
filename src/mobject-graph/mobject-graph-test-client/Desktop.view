@@ -407,7 +407,7 @@
 
             window.addEventListener("resize", function () { canvas.resize(); });
 
-            graph.start();
+           
 
             //var dncf = new DefaultNodeClassFactory(graph);
 
@@ -426,7 +426,55 @@
             //// console.log(actualNode);
 
 
+           
+function generateClassFromBlueprint(blueprint) {
+    // Dynamically create a class that extends NodeBase
+    return class extends NodeBase {
+        constructor() {
+            super(blueprint.name);
 
+            // Add properties from the blueprint
+            blueprint.properties.forEach(({ name, defaultValue, type }) => {
+                this.addContent(name, defaultValue, type);
+            });
+
+            // Add inputs from the blueprint
+            blueprint.inputs.forEach(({ name, type }) => {
+                this.addInput(name, type);
+            });
+        }
+    };
+}
+
+// Example blueprint
+const blueprint = {
+    "name": "Node_Display_Ben",
+    "properties": [
+        {
+            "name": "display",
+            "type": "BOOL",
+            "defaultValue": false,
+        }
+    ],
+    "inputs": [
+        {
+            "name": "in",
+            "type": "BOOL",
+        }
+    ]
+};
+
+// Generate the class from the blueprint
+const DynamicNodeClass = generateClassFromBlueprint(blueprint);
+
+// The DynamicNodeClass can now be instantiated elsewhere in your framework
+// For example:
+const nodeInstance = new DynamicNodeClass();
+console.log(nodeInstance);
+
+graph.registerNodeByType("PLC Basic/Literals/BOOLd", DynamicNodeClass);
+
+ graph.start();
 
     </script>
 

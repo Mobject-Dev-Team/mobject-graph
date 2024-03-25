@@ -21,6 +21,9 @@
     <Compile Include="Lib\GraphApi\GraphApi.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Lib\GraphApi\Handlers\GetStatusRpcHandler.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Lib\GraphApi\Handlers\GetBlueprintsRpcHandler.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -40,6 +43,9 @@
     <Compile Include="Lib\GraphApi\Visitors\RetrieveNodeContentValue.TcPOU">
       <SubType>Code</SubType>
       <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="Lib\GraphApi\Visitors\GetBlueprintsVisitor.TcPOU">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\PlcBasicNodePack\Node\Display\BoolDisplayNode.TcPOU">
       <SubType>Code</SubType>
