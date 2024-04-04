@@ -276,9 +276,9 @@ IF NOT TryDeserializeNodes(Deserializer, Feedback) THEN
 	RETURN;
 END_IF
 
-IF NOT TryDeserializeLinks(Deserializer, Feedback) THEN
-	RETURN;
-END_IF
+//IF NOT TryDeserializeLinks(Deserializer, Feedback) THEN
+//	RETURN;
+//END_IF
 
 _uuid := receivedUuid;
 TryDeserializeFrom := TRUE;]]></ST>

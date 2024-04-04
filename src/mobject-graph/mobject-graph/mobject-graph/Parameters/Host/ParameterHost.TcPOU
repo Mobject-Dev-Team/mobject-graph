@@ -138,6 +138,17 @@ END_VAR
 eventTarget := ParentEventTarget;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="HasParameters" Id="{a3c0930d-6389-0b6d-044e-a5f3a3dd59dd}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasParameters : BOOL]]></Declaration>
+      <Get Name="Get" Id="{07f1c529-71b3-0619-191d-a6eecd55cb70}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasParameters := parameters.Count > 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="SerializeWith" Id="{7cfe0e04-ce63-4ecd-aeaf-fc738ba94c0f}">
       <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT

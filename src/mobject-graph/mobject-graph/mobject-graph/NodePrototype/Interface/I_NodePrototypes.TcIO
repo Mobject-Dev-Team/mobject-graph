@@ -10,5 +10,11 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Property Name="HasNodePrototypes" Id="{26e6d624-d752-06f3-2b7f-863472e96820}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasNodePrototypes : BOOL]]></Declaration>
+      <Get Name="Get" Id="{23727720-c27c-0a22-104a-393a041d9e2d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
   </Itf>
 </TcPlcObject>

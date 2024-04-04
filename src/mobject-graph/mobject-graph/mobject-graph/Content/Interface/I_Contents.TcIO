@@ -24,6 +24,12 @@ VAR_INPUT
 	Data : I_Datatype;
 END_VAR]]></Declaration>
     </Method>
+    <Property Name="HasContents" Id="{aaf532c9-8b4b-06b2-2195-113ddcef578a}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasContents : BOOL]]></Declaration>
+      <Get Name="Get" Id="{4f05a4e9-c3d2-0d08-3583-728ceef85db3}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Method Name="TryGetContentByName" Id="{b903e043-583e-4c23-be1e-4ad8b4e81294}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetContentByName : BOOL
 VAR_INPUT

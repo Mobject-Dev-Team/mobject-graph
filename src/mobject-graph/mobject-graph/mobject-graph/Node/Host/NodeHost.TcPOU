@@ -103,6 +103,17 @@ END_VAR
 eventTarget := parentEventTarget;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="HasNodes" Id="{bc9a2333-a5a9-0d80-29bd-ba707b99e3bf}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasNodes : BOOL]]></Declaration>
+      <Get Name="Get" Id="{c5f61ad7-9f7f-0a89-12c5-feb82a74ed7a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasNodes := nodes.Count > 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="RemoveNode" Id="{b3867099-74d5-4e35-b89b-24944e04330f}">
       <Declaration><![CDATA[METHOD PUBLIC RemoveNode
 VAR_INPUT
@@ -203,25 +214,38 @@ VAR
 	currentNode : I_Node;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF nodesInOrder.First = 0 THEN
+        <ST><![CDATA[// is the list empty?
+IF nodesInOrder.First = 0 THEN
+	// if so, add our node first and jump out as done.
 	nodesInOrder.AddFirst(Node);
 	RETURN;
 END_IF
 
+// if not empty, then is our node higher priorty than the first in the list. 
 NodesInOrder.First.TryGet(currentNode); 
 IF currentNode.Order > Node.Order THEN
+	// if yes, we are now first, jump out as done. 
 	nodesInOrder.AddFirst(Node);
 	RETURN;
 END_IF
 
+// here, the list has something in it, and we have less priority than the node in first place.
+
+// get the last node in the list and remember this as "currentPosition" 
 currentPosition := nodesInOrder.Last;
+
 WHILE (TRUE) DO
 	
 	currentPosition.TryGet(currentNode); 
+	// is the current position higer priority than our node?
 	IF currentNode.Order <= Node.Order THEN
+		// if so, then we go after, jump out as we are done. 
 		nodesInOrder.AddAfter(currentPosition, Node);
 		RETURN;
 	END_IF
+	
+	// move one up the list towards the top and try again.
+	currentPosition := currentPosition.Previous;
 
 END_WHILE]]></ST>
       </Implementation>

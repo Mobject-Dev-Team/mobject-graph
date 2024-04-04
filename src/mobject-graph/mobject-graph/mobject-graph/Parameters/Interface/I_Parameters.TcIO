@@ -23,6 +23,12 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Property Name="HasParameters" Id="{5283ba88-90d0-0e9c-26ef-fef42f57e62d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasParameters : BOOL]]></Declaration>
+      <Get Name="Get" Id="{fa077192-3461-0fda-0596-79eec91c12d3}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Method Name="TryGetParameterByName" Id="{69d9d93c-b35b-43f3-a3f1-7dfd1697741f}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetParameterByName : BOOL
 VAR_INPUT

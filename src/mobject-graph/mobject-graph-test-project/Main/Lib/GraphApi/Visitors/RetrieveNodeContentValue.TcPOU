@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="RetrieveNodeContentValue" Id="{a2720bfd-27df-4afa-9981-101fa962f32b}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK RetrieveNodeContentValue IMPLEMENTS I_GraphVisitor, I_NodeVisitor, I_ContentVisitor
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK RetrieveNodeContentValue IMPLEMENTS I_GraphVisitor, I_NodeVisitor, I_ContentVisitor
 VAR
 	graphUuid : T_MAXSTRING;
 	nodeId : T_MAXSTRING;

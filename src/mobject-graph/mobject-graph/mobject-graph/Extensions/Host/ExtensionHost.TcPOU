@@ -81,6 +81,17 @@ END_VAR
 eventTarget := parentEventTarget;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="HasExtensions" Id="{0d166c03-b0e6-0f93-1bdc-cbe61996891b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasExtensions : BOOL]]></Declaration>
+      <Get Name="Get" Id="{b88cc1f5-60c3-08df-2ef4-cbbcf44048c5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasExtensions := extensions.Count > 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="SerializeWith" Id="{7cb20ebb-fbc3-4bf7-be48-3cce675f08ac}">
       <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT

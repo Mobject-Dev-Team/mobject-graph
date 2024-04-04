@@ -17,7 +17,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Visitor.VisitError(this^);]]></ST>
+        <ST><![CDATA[Visitor.VisitAlarm(this^);]]></ST>
       </Implementation>
     </Method>
     <Property Name="Active" Id="{b38435b1-3786-40d3-9015-61a5a18fb496}" FolderPath="Abstract\">

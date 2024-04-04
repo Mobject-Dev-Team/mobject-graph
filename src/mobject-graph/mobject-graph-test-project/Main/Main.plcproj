@@ -48,9 +48,6 @@
     <Compile Include="Lib\GraphApi\Visitors\GetBlueprintsVisitor.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\Node\Display\BoolDisplayNode.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Lib\PlcBasicNodePack\PlcBasicNodePack.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -64,12 +61,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Lib\PlcBasicNodePack\Node\Literals\Node_Literal_BOOL.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\Node\Literals\Node_Literal_Generic.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\Node\Literals\Node_Display_Generic.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PlcTask.TcTTO">

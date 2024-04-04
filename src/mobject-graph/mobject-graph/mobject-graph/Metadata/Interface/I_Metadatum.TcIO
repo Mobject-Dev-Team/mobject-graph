@@ -23,6 +23,12 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Property Name="HasMetadata" Id="{51aec957-b54d-0cdb-3689-9f8339ce236a}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasMetadata : BOOL]]></Declaration>
+      <Get Name="Get" Id="{a1396354-2d15-07e2-10f7-9b7f913e58f3}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Method Name="TryGetMetadataByName" Id="{15454fbb-65cf-4875-8f88-8113171874e4}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetMetadataByName : BOOL
 VAR_INPUT

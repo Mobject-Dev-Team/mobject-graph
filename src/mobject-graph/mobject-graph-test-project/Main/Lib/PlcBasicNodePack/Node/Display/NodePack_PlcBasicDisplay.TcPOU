@@ -16,7 +16,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[NodeFactory.AddNodeAsPrototype('PlcBasic.Display.Bool',node_Display_BOOL);]]></ST>
+        <ST><![CDATA[NodeFactory.AddNodeAsPrototype('PlcBasic.Display.DisplayBool',node_Display_BOOL);]]></ST>
       </Implementation>
     </Method>
   </POU>

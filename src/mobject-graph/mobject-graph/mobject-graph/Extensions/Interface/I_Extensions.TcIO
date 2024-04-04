@@ -16,6 +16,12 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Property Name="HasExtensions" Id="{5c37140e-d17a-0a09-0a2d-5a38a65d1f12}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasExtensions : BOOL]]></Declaration>
+      <Get Name="Get" Id="{af99cbd2-ca70-0d4f-0f23-17ec6485740d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Method Name="TryGetExtensionByName" Id="{5b8e704e-81bf-4c64-a676-068e39f90b17}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetExtensionByName : BOOL
 VAR_INPUT

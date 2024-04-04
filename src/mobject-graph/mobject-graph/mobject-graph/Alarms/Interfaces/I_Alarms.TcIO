@@ -16,6 +16,12 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Property Name="HasAlarms" Id="{6072cfcf-29ba-0734-3a14-41e15024d8b9}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasAlarms : BOOL]]></Declaration>
+      <Get Name="Get" Id="{e010bfaa-7fef-0e1e-0e34-ba2fee1d6894}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Property Name="HasRaisedAlarm" Id="{dbe30b3a-306f-439d-9c23-64761c18e3a5}">
       <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedAlarm : BOOL]]></Declaration>
       <Get Name="Get" Id="{e690e846-ab4c-4f3f-b6f0-5c00ac630b52}">

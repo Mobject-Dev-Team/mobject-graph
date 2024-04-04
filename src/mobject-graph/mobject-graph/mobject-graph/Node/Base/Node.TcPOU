@@ -271,8 +271,7 @@ END_VAR
       <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT
 	Serializer : I_Serializer;
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[Serializer.StartObject();
 Serializer.AddKeyString('id',_id);

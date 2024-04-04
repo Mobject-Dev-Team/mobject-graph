@@ -81,6 +81,17 @@ END_VAR
 eventTarget := parentEventTarget;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="HasAlarms" Id="{dcc5643e-6a41-0f91-09c9-d7dc750c8bc4}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasAlarms : BOOL]]></Declaration>
+      <Get Name="Get" Id="{094e2c76-c6b6-01f7-1912-67b6845ddf0e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasAlarms := alarms.Count > 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="HasRaisedAlarm" Id="{4af15c5c-8ca9-42ec-8077-223f00d6f97c}">
       <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedAlarm : BOOL]]></Declaration>
       <Get Name="Get" Id="{a2bb2c1e-57c7-4018-af06-d363e412529a}">

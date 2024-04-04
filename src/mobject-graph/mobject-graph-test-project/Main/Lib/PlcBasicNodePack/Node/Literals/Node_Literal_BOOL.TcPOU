@@ -6,6 +6,7 @@ FUNCTION_BLOCK FINAL Node_Literal_BOOL EXTENDS Node
 VAR
 	value : _BOOL(FALSE);
 	out : _BOOL(FALSE);
+	out2 : _BOOL(FALSE);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -30,8 +31,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Parameters.AddDataAsParameter('value', value);
-OutputPorts.AddDataAsOutputPort('out', out);
-]]></ST>
+OutputPorts.AddDataAsOutputPort('out', out);]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnExecute" Id="{17896f32-d471-0aa9-3949-762ff3592dce}">

@@ -104,6 +104,17 @@ END_IF
 DisposeSelfCreatedNodePrototypes();]]></ST>
       </Implementation>
     </Method>
+    <Property Name="HasNodePrototypes" Id="{389ff079-fcd9-0d72-311c-7c10304ff697}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasNodePrototypes : BOOL]]></Declaration>
+      <Get Name="Get" Id="{c483d543-052a-073b-3ac5-5149f7b7d9c5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasNodePrototypes := prototypes.Count > 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="TryGetNodePrototypeByPath" Id="{c6c3ebb4-96dc-47af-9919-4630de39717d}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetNodePrototypeByPath : BOOL
 VAR_INPUT

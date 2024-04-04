@@ -138,6 +138,17 @@ END_VAR
 eventTarget := parentEventTarget;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="HasInputPorts" Id="{987217cd-0406-0664-3a14-595cd75ee10d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasInputPorts : BOOL]]></Declaration>
+      <Get Name="Get" Id="{009d7a37-77d6-05f0-0a8f-7ecc4ade715e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasInputPorts := ports.Count > 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="SerializeWith" Id="{7c1e2b8c-331a-4d38-b330-d2d0fab60284}">
       <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT

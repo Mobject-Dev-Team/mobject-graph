@@ -15,6 +15,12 @@ VAR_INPUT
 	Node : I_Node;
 END_VAR]]></Declaration>
     </Method>
+    <Property Name="HasNodes" Id="{608d2b7e-39ad-04a0-20b2-169ee296276d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasNodes : BOOL]]></Declaration>
+      <Get Name="Get" Id="{c8564dc9-675b-0ae6-116c-1a5e907b6ea7}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Method Name="TryGetNodeById" Id="{08a8932c-41d1-49f6-947f-fc49e0d12e42}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetNodeById : BOOL
 VAR_INPUT

@@ -17,14 +17,23 @@ END_VAR
 VAR_INPUT
 	Parameters : I_Deserializer;
 	Response : I_SynchronousRpcResponse;
+END_VAR
+VAR
+	visitor : GetBlueprintsVisitor;
+	serializer : I_Serializer;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF nodeFactory = 0 THEN
-	Response.RejectWithMessage('GetBlueprintsRpcHandler has not been initialized with a valid nodePrototypes object');
+	Response.RejectWithMessage('GetBlueprintsRpcHandler has not been initialized with a valid nodeFactory object');
 	RETURN;
 END_IF
-Response.RejectWithMessage('not yet implemented');
-//Response.CompleteWithObject(nodeFactory);]]></ST>
+
+serializer := Response.GetSerializer();
+visitor.Initialize(serializer);
+nodeFactory.Accept(visitor);
+
+Response.CompleteWithSerializer(serializer);
+serializer.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="Initialize" Id="{9ad671d0-ce42-4ff2-977f-33468cbea023}">

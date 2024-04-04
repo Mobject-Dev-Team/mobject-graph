@@ -12,7 +12,6 @@ VAR
 	graphApi : graphApi(graphFramework);	
 	
 	initialise: BOOL;
-
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT initialise THEN
@@ -26,7 +25,7 @@ END_VAR]]></Declaration>
 
 	// done
 	initialise := TRUE;
-	
+
 END_IF
 
 graphApi.Graphs.Execute();]]></ST>

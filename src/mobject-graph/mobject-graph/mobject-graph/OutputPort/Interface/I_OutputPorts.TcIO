@@ -23,6 +23,12 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Property Name="HasOutputPorts" Id="{6054b98a-c133-025c-1121-f3967a211dc4}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasOutputPorts : BOOL]]></Declaration>
+      <Get Name="Get" Id="{5c0b444f-288b-0201-25cb-f63026639d21}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Method Name="TryGetOutputPortByName" Id="{a51707f2-05d5-44f8-bd48-066fefa88e9c}">
       <Declaration><![CDATA[METHOD PUBLIC TryGetOutputPortByName : BOOL
 VAR_INPUT

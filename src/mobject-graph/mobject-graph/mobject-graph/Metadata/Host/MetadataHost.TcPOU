@@ -138,6 +138,17 @@ END_VAR
 eventTarget := ParentEventTarget;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="HasMetadata" Id="{9d56891e-6a18-0078-3d79-3084b698502c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasMetadata : BOOL]]></Declaration>
+      <Get Name="Get" Id="{07280d45-6ef8-06d3-3613-31e506ad8ae7}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasMetadata := meta.Count > 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="SerializeWith" Id="{8109586c-4f47-42ee-b50b-8e7ec1425f80}">
       <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT

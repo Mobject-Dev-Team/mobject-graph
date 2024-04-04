@@ -92,10 +92,12 @@
     <Folder Include="Node" />
     <Folder Include="NodeFactory" />
     <Folder Include="NodeFactory\Base" />
-    <Folder Include="NodeFactory\Host" />
     <Folder Include="NodeFactory\Interface" />
     <Folder Include="NodePack" />
     <Folder Include="NodePrototype" />
+    <Folder Include="NodePrototype\Host" />
+    <Folder Include="NodePrototype\Interface" />
+    <Folder Include="NodePrototype\Base" />
     <Folder Include="Node\Base" />
     <Folder Include="Node\Events" />
     <Folder Include="Node\Host" />
@@ -270,22 +272,22 @@
     <Compile Include="NodeFactory\Base\NodeFactory.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NodeFactory\Host\NodePrototypeHost.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="NodeFactory\Interface\I_NodeFactory.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NodeFactory\Interface\I_NodePrototypes.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="NodePack\I_NodePack.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NodePrototype\I_NodePrototype.TcIO">
+    <Compile Include="NodePrototype\Base\NodePrototype.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NodePrototype\NodePrototype.TcPOU">
+    <Compile Include="NodePrototype\Host\NodePrototypeHost.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NodePrototype\Interface\I_NodePrototype.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NodePrototype\Interface\I_NodePrototypes.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Node\Base\Node.TcPOU">
