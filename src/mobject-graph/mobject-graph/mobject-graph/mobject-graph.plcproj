@@ -439,7 +439,7 @@
     <LibraryReference Include="mobject-serialization,0.4.0,mobject">
       <Namespace>mobject_serialization</Namespace>
     </LibraryReference>
-    <LibraryReference Include="mobject-types,0.1.0,mobject">
+    <LibraryReference Include="mobject-types,0.1.1,mobject">
       <Namespace>mobject_types</Namespace>
     </LibraryReference>
   </ItemGroup>

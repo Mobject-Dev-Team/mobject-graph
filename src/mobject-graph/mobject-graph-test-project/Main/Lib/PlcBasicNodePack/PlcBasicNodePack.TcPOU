@@ -3,8 +3,8 @@
   <POU Name="PlcBasicNodePack" Id="{b1a7208c-fa6a-0ca2-104f-e5f6ddafa07d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK PlcBasicNodePack IMPLEMENTS I_NodePack
 VAR
-	nodePack_PlcBasicDisplay : NodePack_PlcBasicDisplay;
-	nodePack_PlcBasicLiterals : NodePack_PlcBasicLiterals;
+	booleanLiteralNode : BooleanLiteralNode;
+	booleanDisplayNode : BooleanDisplayNode;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -17,8 +17,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[nodePack_PlcBasicDisplay.RegisterWithNodeFactory(NodeFactory);
-nodePack_PlcBasicLiterals.RegisterWithNodeFactory(NodeFactory);]]></ST>
+        <ST><![CDATA[NodeFactory.AddNodeAsPrototype('PlcBasic.Bool.BoolLiteral',booleanLiteralNode);
+NodeFactory.AddNodeAsPrototype('PlcBasic.Bool.BoolDisplay',booleanDisplayNode);]]></ST>
       </Implementation>
     </Method>
   </POU>

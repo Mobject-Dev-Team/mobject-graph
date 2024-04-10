@@ -51,16 +51,10 @@
     <Compile Include="Lib\PlcBasicNodePack\PlcBasicNodePack.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\Node\Display\NodePack_PlcBasicDisplay.TcPOU">
+    <Compile Include="Lib\PlcBasicNodePack\Node\Display\BooleanDisplayNode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\Node\Display\Node_Display_BOOL.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\Node\Literals\NodePack_PlcBasicLiterals.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\Node\Literals\Node_Literal_BOOL.TcPOU">
+    <Compile Include="Lib\PlcBasicNodePack\Node\Literals\BooleanLiteralNode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PlcTask.TcTTO">

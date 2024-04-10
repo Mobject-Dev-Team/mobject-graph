@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="Node_Display_BOOL" Id="{198c7521-1e12-0d04-01d4-91e52ee4f612}" SpecialFunc="None">
+  <POU Name="BooleanDisplayNode" Id="{198c7521-1e12-0d04-01d4-91e52ee4f612}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK FINAL Node_Display_BOOL EXTENDS Node
+FUNCTION_BLOCK FINAL BooleanDisplayNode EXTENDS Node
 VAR
 	in : _BOOL(FALSE);
 	display : _BOOL(FALSE);
@@ -14,11 +14,11 @@ END_VAR]]></Declaration>
     <Method Name="Clone" Id="{fe15fbb0-95d8-43e8-9272-57a633d25d58}">
       <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
 VAR
-	pointerToNode : POINTER TO Node_Display_BOOL;
+	pNode : POINTER TO BooleanDisplayNode;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pointerToNode := __NEW(Node_Display_BOOL);
-Clone := pointerToNode^;]]></ST>
+        <ST><![CDATA[pNode := __NEW(BooleanDisplayNode);
+Clone := pNode^;]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{fdebc071-57d9-4545-9e95-e3651aa87bbe}" FolderPath="Constructor\">
@@ -29,8 +29,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[InputPorts.AddDataAsInputPort('in', in);
-Contents.AddDataAsContent('display', display);]]></ST>
+        <ST><![CDATA[AddInput('in', in);
+AddContent('display', display);]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnExecute" Id="{3eea65a5-6bf3-0e0b-2473-3b373deefdf4}">

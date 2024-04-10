@@ -1,12 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="Node_Literal_BOOL" Id="{12053a2d-1811-05b8-274f-6b729ca726b1}" SpecialFunc="None">
+  <POU Name="BooleanLiteralNode" Id="{12053a2d-1811-05b8-274f-6b729ca726b1}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK FINAL Node_Literal_BOOL EXTENDS Node
+FUNCTION_BLOCK FINAL BooleanLiteralNode EXTENDS Node
 VAR
-	value : _BOOL(FALSE);
+	value : _BOOL(TRUE);
 	out : _BOOL(FALSE);
-	out2 : _BOOL(FALSE);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -15,11 +14,11 @@ END_VAR]]></Declaration>
     <Method Name="Clone" Id="{2952cb38-91f7-44e6-a935-c5279debf1b1}">
       <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
 VAR
-	pointerToNode : POINTER TO Node_Literal_BOOL;
+	pNode : POINTER TO BooleanLiteralNode;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pointerToNode := __NEW(Node_Literal_BOOL);
-Clone := pointerToNode^;]]></ST>
+        <ST><![CDATA[pNode := __NEW(BooleanLiteralNode);
+Clone := pNode^;]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{2b84cc63-8aa0-4cfa-9150-5d2446c77c1a}" FolderPath="Constructor\">
@@ -30,8 +29,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Parameters.AddDataAsParameter('value', value);
-OutputPorts.AddDataAsOutputPort('out', out);]]></ST>
+        <ST><![CDATA[AddParameter('value', value);
+AddOutput('out', out);]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnExecute" Id="{17896f32-d471-0aa9-3949-762ff3592dce}">

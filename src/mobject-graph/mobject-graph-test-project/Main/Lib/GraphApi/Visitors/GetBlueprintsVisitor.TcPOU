@@ -269,6 +269,8 @@ END_VAR
 serializer.AddKeyString('name',VisitingProperty.Name);
 serializer.Addkey('datatype');
 VisitingProperty.Data.SerializeTypeWith(serializer);
+serializer.Addkey('defaultValue');
+VisitingProperty.Data.SerializeWith(serializer);
 
 IF VisitingProperty.Metadatum.HasMetadata THEN
 	serializer.addkey('metadata');

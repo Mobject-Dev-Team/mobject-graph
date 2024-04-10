@@ -24,6 +24,7 @@ END_VAR]]></Declaration>
     </Implementation>
     <Folder Name="Abstract" Id="{8193ee30-b78d-4ea0-bfbe-c2a5814340d9}" />
     <Folder Name="Private" Id="{b58aec16-127f-40f3-807e-1336c1cce4cc}" />
+    <Folder Name="Protected" Id="{b89c0aab-4104-081c-26ed-eda79ec1f8c0}" />
     <Method Name="Accept" Id="{dd7a8e72-4444-4df2-b876-dec7f4fae19f}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
@@ -32,6 +33,50 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Visitor.VisitNode(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddContent" Id="{f94bf07c-731b-0ce4-1bdc-49a7103a3255}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddContent : I_Content
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddContent := Contents.AddDataAsContent(Name, Data);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddInput" Id="{0475b747-7d7c-0bc9-13ae-202f2a6a0841}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddInput : I_InputPort
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddInput := InputPorts.AddDataAsInputPort(Name, Data);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddOutput" Id="{d2ca7345-1329-099c-256e-314ef745dda3}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddOutput : I_OutputPort
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddOutput := OutputPorts.AddDataAsOutputPort(Name, Data);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddParameter" Id="{f55d9acc-06d9-0fdf-37f0-cff1f3e0aecb}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddParameter : I_Parameter
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddParameter := Parameters.AddDataAsParameter(Name, Data);]]></ST>
       </Implementation>
     </Method>
     <Property Name="Alarms" Id="{f0a6c976-17db-4461-8af3-623f6953058b}">
