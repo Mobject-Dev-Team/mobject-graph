@@ -1,9 +1,27 @@
 <?xml version="1.0"?>
 <TcSmItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.55" ClassName="CNestedPlcProjDef">
 	<Project GUID="{94D8E3A9-0358-472B-B545-0C567E2BB889}" Name="Main" PrjFilePath="..\..\Main\Main.plcproj" TmcFilePath="..\..\Main\Main.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Main\Main.tmc" TmcHash="{5426A22D-8028-88A7-DCD0-E9787811D99B}">
+		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Main\Main.tmc" TmcHash="{A30C9A07-007F-F052-629B-36C06794C03C}">
 			<Name>Main Instance</Name>
 			<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+			<Vars VarGrpType="1">
+				<Name>PlcTask Inputs</Name>
+				<Var>
+					<Name>MAIN.button.input</Name>
+					<Type>BOOL</Type>
+				</Var>
+			</Vars>
+			<Vars VarGrpType="2" AreaNo="1">
+				<Name>PlcTask Outputs</Name>
+				<Var>
+					<Name>MAIN.lamp.output</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.lamp2.output</Name>
+					<Type>BOOL</Type>
+				</Var>
+			</Vars>
 			<Contexts>
 				<Context>
 					<Id>0</Id>

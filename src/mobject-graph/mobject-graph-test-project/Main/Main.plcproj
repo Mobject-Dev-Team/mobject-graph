@@ -48,6 +48,18 @@
     <Compile Include="Lib\GraphApi\Visitors\GetBlueprintsVisitor.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Lib\PlcBasicNodePack\Node\Display\IntDisplayNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\PlcBasicNodePack\Node\Hardware\DigitalInputNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\PlcBasicNodePack\Node\Hardware\DigitalOutputNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lib\PlcBasicNodePack\Node\Literals\IntLiteralNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Lib\PlcBasicNodePack\PlcBasicNodePack.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -73,6 +85,7 @@
     <Folder Include="Lib\PlcBasicNodePack\Node" />
     <Folder Include="Lib\PlcBasicNodePack\Node\Display" />
     <Folder Include="Lib\PlcBasicNodePack\Node\Literals" />
+    <Folder Include="Lib\PlcBasicNodePack\Node\Hardware" />
     <Folder Include="Tests" />
     <Folder Include="POUs" />
   </ItemGroup>
@@ -116,7 +129,7 @@
     <LibraryReference Include="mobject-server,0.2.0,mobject">
       <Namespace>mobject_server</Namespace>
     </LibraryReference>
-    <LibraryReference Include="mobject-types,0.1.0,mobject">
+    <LibraryReference Include="mobject-types,0.1.1,mobject">
       <Namespace>mobject_types</Namespace>
     </LibraryReference>
   </ItemGroup>

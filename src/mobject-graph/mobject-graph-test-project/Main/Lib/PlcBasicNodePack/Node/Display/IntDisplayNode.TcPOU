@@ -1,27 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="BooleanLiteralNode" Id="{12053a2d-1811-05b8-274f-6b729ca726b1}" SpecialFunc="None">
+  <POU Name="IntDisplayNode" Id="{3bd6350d-d4bd-06bc-0c94-08b70fb6859d}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK FINAL BooleanLiteralNode EXTENDS Node
+FUNCTION_BLOCK FINAL IntDisplayNode EXTENDS Node
 VAR
-	value : _BOOL(FALSE);
-	out : _BOOL(FALSE);
+	in : _INT(0);
+	display : _INT(0);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="Constructor" Id="{066907f7-a45f-41f8-bd90-26a3e7745138}" />
-    <Method Name="Clone" Id="{2952cb38-91f7-44e6-a935-c5279debf1b1}">
+    <Folder Name="Constructor" Id="{bd80cb79-538a-04cc-0cef-192708d34cd5}" />
+    <Method Name="Clone" Id="{4db5e58e-8b4f-0406-25bf-9435efb0f53a}">
       <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
 VAR
-	pNode : POINTER TO BooleanLiteralNode;
+	pNode : POINTER TO IntDisplayNode;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pNode := __NEW(BooleanLiteralNode);
+        <ST><![CDATA[pNode := __NEW(IntDisplayNode);
 Clone := pNode^;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="FB_init" Id="{2b84cc63-8aa0-4cfa-9150-5d2446c77c1a}" FolderPath="Constructor\">
+    <Method Name="FB_init" Id="{d8cbd0df-fd6c-03fc-14da-a7d761901115}" FolderPath="Constructor\">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
@@ -29,16 +29,14 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[AddParameter('value', value);
-AddOutput('out', out);]]></ST>
+        <ST><![CDATA[AddInput('in', in);
+AddContent('display', display);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="OnExecute" Id="{17896f32-d471-0aa9-3949-762ff3592dce}">
-      <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT
-VAR
-END_VAR]]></Declaration>
+    <Method Name="OnExecute" Id="{540014d4-7c2b-0099-1eda-18753a8af52d}">
+      <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT]]></Declaration>
       <Implementation>
-        <ST><![CDATA[out.value := value.value;]]></ST>
+        <ST><![CDATA[display.Value := in.Value;]]></ST>
       </Implementation>
     </Method>
   </POU>

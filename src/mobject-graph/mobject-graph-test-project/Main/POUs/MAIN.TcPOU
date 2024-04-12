@@ -3,6 +3,10 @@
   <POU Name="MAIN" Id="{1c7dbdb3-3ad9-058e-2a75-807bd1bcee45}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR		
+	
+	button : DigitalInputNode;
+	lamp : DigitalOutputNode;
+	
 	graphFramework : GraphFramework;
 	
 	plcBasicDatatypePack : PlcBasicDatatypePack;
@@ -19,6 +23,9 @@ END_VAR]]></Declaration>
 	// setup graph
 	graphFramework.InstallDatatypePack(plcBasicDatatypePack);
 	graphFramework.InstallNodePack(plcBasicNodePack);
+	
+	graphFramework.NodeFactory.AddNodeAsPrototype('Inputs.Button',button);
+	graphFramework.NodeFactory.AddNodeAsPrototype('Outputs.Lamp',lamp);
 
 	// setup the api
 	graphApi.RegisterWith(server);

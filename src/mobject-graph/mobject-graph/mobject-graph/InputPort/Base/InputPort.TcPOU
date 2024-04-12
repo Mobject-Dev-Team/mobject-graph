@@ -28,6 +28,18 @@ END_VAR
         <ST><![CDATA[Visitor.VisitInputPort(THIS^);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="AddMetadata" Id="{459b1e09-740b-0d91-28a1-ca5b3b03d595}">
+      <Declaration><![CDATA[METHOD PUBLIC AddMetadata : I_HostMetadata
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Metadatum.AddDataAsMetadata(Name, Data);
+AddMetadata := THIS^;]]></ST>
+      </Implementation>
+    </Method>
     <Property Name="Connected" Id="{f028a532-c0cb-4ba6-a7e7-398ed37c8cb0}">
       <Declaration><![CDATA[PROPERTY PUBLIC Connected : BOOL]]></Declaration>
       <Get Name="Get" Id="{3740a9dd-f44f-4788-8e8a-881663f186d4}">

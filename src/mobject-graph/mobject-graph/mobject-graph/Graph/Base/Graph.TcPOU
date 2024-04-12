@@ -39,6 +39,18 @@ END_VAR
         <ST><![CDATA[Visitor.VisitGraph(THIS^);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="AddMetadata" Id="{4ca43156-cb2f-04c1-35a8-ab2ace778cc5}">
+      <Declaration><![CDATA[METHOD PUBLIC AddMetadata : I_HostMetadata
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Metadatum.AddDataAsMetadata(Name, Data);
+AddMetadata := THIS^;]]></ST>
+      </Implementation>
+    </Method>
     <Property Name="Alarms" Id="{b1f795bf-0213-4d0d-bc86-6524da440089}">
       <Declaration><![CDATA[PROPERTY PUBLIC Alarms : I_Alarms]]></Declaration>
       <Get Name="Get" Id="{95ea016a-702e-4295-b252-e198dec88e26}">

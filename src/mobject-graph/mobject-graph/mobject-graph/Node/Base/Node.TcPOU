@@ -57,6 +57,18 @@ END_VAR
         <ST><![CDATA[AddInput := InputPorts.AddDataAsInputPort(Name, Data);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="AddMetadata" Id="{7537f1c9-8f79-00b5-1961-3ebfa452305f}">
+      <Declaration><![CDATA[METHOD PUBLIC AddMetadata : I_HostMetadata
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Metadatum.AddDataAsMetadata(Name, Data);
+AddMetadata := THIS^;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="AddOutput" Id="{d2ca7345-1329-099c-256e-314ef745dda3}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED AddOutput : I_OutputPort
 VAR_INPUT

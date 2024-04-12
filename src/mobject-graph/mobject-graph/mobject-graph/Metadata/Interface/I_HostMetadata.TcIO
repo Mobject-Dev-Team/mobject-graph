@@ -3,6 +3,14 @@
   <Itf Name="I_HostMetadata" Id="{de299323-ae26-4fca-8708-1ea7c86e8f21}">
     <Declaration><![CDATA[INTERFACE I_HostMetadata EXTENDS __SYSTEM.IQueryInterface
 ]]></Declaration>
+    <Method Name="AddMetadata" Id="{93efb1bc-3fa5-051a-0e66-49d675cefc5d}">
+      <Declaration><![CDATA[METHOD PUBLIC AddMetadata : I_HostMetadata
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+]]></Declaration>
+    </Method>
     <Property Name="Metadatum" Id="{ff3ce6a8-7126-4425-9724-441dfcb735fd}">
       <Declaration><![CDATA[PROPERTY Metadatum : I_Metadatum]]></Declaration>
       <Get Name="Get" Id="{17482e91-f039-4e0b-84e5-7f5e9ec0fc0a}">
