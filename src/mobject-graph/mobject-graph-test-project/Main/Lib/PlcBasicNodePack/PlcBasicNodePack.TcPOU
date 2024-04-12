@@ -7,7 +7,6 @@ VAR
 	booleanDisplayNode : BooleanDisplayNode;
 	intLiteralNode : IntLiteralNode;
 	intDisplayNode : IntDisplayNode;
-	notGate : NotGate;
 END_VAR
 ]]></Declaration>
     <Implementation>
