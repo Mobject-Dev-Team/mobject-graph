@@ -3,7 +3,6 @@
   <POU Name="MAIN" Id="{1c7dbdb3-3ad9-058e-2a75-807bd1bcee45}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR		
-	
 	button : DigitalInputNode;
 	lamp : DigitalOutputNode;
 	

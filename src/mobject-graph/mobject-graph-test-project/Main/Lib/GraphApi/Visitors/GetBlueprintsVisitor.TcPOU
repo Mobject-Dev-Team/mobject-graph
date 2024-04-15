@@ -42,7 +42,7 @@ END_VAR
         <ST><![CDATA[serializer.StartObject();
 
 serializer.AddKeyString('name',VisitingContent.Name);
-serializer.Addkey('datatype');
+serializer.Addkey('type');
 VisitingContent.Data.SerializeTypeWith(serializer);
 
 IF VisitingContent.Metadatum.HasMetadata THEN
@@ -120,7 +120,7 @@ END_VAR
         <ST><![CDATA[serializer.StartObject();
 
 serializer.AddKeyString('name',VisitingInputPort.Name);
-serializer.Addkey('datatype');
+serializer.Addkey('type');
 VisitingInputPort.Data.SerializeTypeWith(serializer);
 
 IF VisitingInputPort.Metadatum.HasMetadata THEN
@@ -244,7 +244,7 @@ END_VAR
         <ST><![CDATA[serializer.StartObject();
 
 serializer.AddKeyString('name',VisitingOutputPort.Name);
-serializer.Addkey('datatype');
+serializer.Addkey('type');
 VisitingOutputPort.Data.SerializeTypeWith(serializer);
 
 IF VisitingOutputPort.Metadatum.HasMetadata THEN
@@ -267,7 +267,7 @@ END_VAR
         <ST><![CDATA[serializer.StartObject();
 
 serializer.AddKeyString('name',VisitingProperty.Name);
-serializer.Addkey('datatype');
+serializer.Addkey('type');
 VisitingProperty.Data.SerializeTypeWith(serializer);
 serializer.Addkey('defaultValue');
 VisitingProperty.Data.SerializeWith(serializer);
