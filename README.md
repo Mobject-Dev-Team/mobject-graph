@@ -1,3 +1,5 @@
+Please note, this is still pre-release, so documentation and guides will follow.  Please check for branches for the current version.  There will be "how to make this work" guides coming soon once the actual release is made. 
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./docs/images/logo-dark.svg">
