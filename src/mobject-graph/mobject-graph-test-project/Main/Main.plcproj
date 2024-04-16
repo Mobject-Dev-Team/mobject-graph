@@ -100,6 +100,7 @@
     </PlaceholderReference>
     <PlaceholderReference Include="Tc2_Utilities">
       <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Utilities</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
@@ -132,7 +133,7 @@
     <LibraryReference Include="mobject-server,0.2.0,mobject">
       <Namespace>mobject_server</Namespace>
     </LibraryReference>
-    <LibraryReference Include="mobject-types,0.1.1,mobject">
+    <LibraryReference Include="mobject-types,0.1.2,mobject">
       <Namespace>mobject_types</Namespace>
     </LibraryReference>
   </ItemGroup>
