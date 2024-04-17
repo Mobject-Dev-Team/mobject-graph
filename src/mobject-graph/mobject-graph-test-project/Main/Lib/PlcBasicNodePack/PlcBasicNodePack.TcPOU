@@ -7,6 +7,7 @@ VAR
 	booleanDisplayNode : BooleanDisplayNode;
 	intLiteralNode : IntLiteralNode;
 	intDisplayNode : IntDisplayNode;
+	PlaygroundNode : PlaygroundNode;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -22,7 +23,8 @@ END_VAR
         <ST><![CDATA[NodeFactory.AddNodeAsPrototype('PlcBasic.Bool.BoolLiteral',booleanLiteralNode);
 NodeFactory.AddNodeAsPrototype('PlcBasic.Bool.BoolDisplay',booleanDisplayNode);
 NodeFactory.AddNodeAsPrototype('PlcBasic.Int.IntLiteral',intLiteralNode);
-NodeFactory.AddNodeAsPrototype('PlcBasic.Int.IntDisplay',intDisplayNode);]]></ST>
+NodeFactory.AddNodeAsPrototype('PlcBasic.Int.IntDisplay',intDisplayNode);
+NodeFactory.AddNodeAsPrototype('PlcBasic.Playground',PlaygroundNode);]]></ST>
       </Implementation>
     </Method>
   </POU>

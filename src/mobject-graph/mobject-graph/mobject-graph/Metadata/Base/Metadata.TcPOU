@@ -96,7 +96,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[Serializer.StartObject();
 Serializer.AddKeyString('name',_name);
-Serializer.Addkey('type');
+Serializer.Addkey('datatype');
 _data.SerializeTypeWith(Serializer);
 Serializer.AddkeyObject('value',_data);
 Serializer.EndObject();]]></ST>

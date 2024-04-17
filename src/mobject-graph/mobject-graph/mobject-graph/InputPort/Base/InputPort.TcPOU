@@ -204,7 +204,7 @@ END_VAR]]></Declaration>
         <ST><![CDATA[Serializer.StartObject();
 Serializer.AddKeyString('name',_name);
 Serializer.AddKeyBool('connected',isConnected);
-Serializer.Addkey('type');
+Serializer.Addkey('datatype');
 _data.SerializeTypeWith(Serializer);
 Serializer.AddkeyObject('value',_data);
 metadataHost.SerializeWith(Serializer);

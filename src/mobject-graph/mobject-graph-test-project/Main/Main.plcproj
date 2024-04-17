@@ -57,6 +57,9 @@
     <Compile Include="Lib\PlcBasicNodePack\Node\Hardware\DigitalOutputNode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Lib\PlcBasicNodePack\Node\PlaygroundNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Lib\PlcBasicNodePack\Node\Literals\IntLiteralNode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -115,6 +118,9 @@
     <LibraryReference Include="mobject-collections,1.1.0,mobject">
       <Namespace>mobject_collections</Namespace>
     </LibraryReference>
+    <LibraryReference Include="mobject-datatypes,0.2.0,mobject">
+      <Namespace>mobject_datatypes</Namespace>
+    </LibraryReference>
     <LibraryReference Include="mobject-deserialization,0.1.0,mobject">
       <Namespace>mobject_deserialization</Namespace>
     </LibraryReference>
@@ -132,9 +138,6 @@
     </LibraryReference>
     <LibraryReference Include="mobject-server,0.2.0,mobject">
       <Namespace>mobject_server</Namespace>
-    </LibraryReference>
-    <LibraryReference Include="mobject-types,0.1.2,mobject">
-      <Namespace>mobject_types</Namespace>
     </LibraryReference>
   </ItemGroup>
   <ItemGroup>

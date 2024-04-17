@@ -418,6 +418,9 @@
     <LibraryReference Include="mobject-converters,1.0.1,mobject">
       <Namespace>mobject_converters</Namespace>
     </LibraryReference>
+    <LibraryReference Include="mobject-datatypes,0.2.0,mobject">
+      <Namespace>mobject_datatypes</Namespace>
+    </LibraryReference>
     <LibraryReference Include="mobject-deserialization,0.1.0,mobject">
       <Namespace>mobject_deserialization</Namespace>
     </LibraryReference>
@@ -438,9 +441,6 @@
     </LibraryReference>
     <LibraryReference Include="mobject-serialization,0.4.0,mobject">
       <Namespace>mobject_serialization</Namespace>
-    </LibraryReference>
-    <LibraryReference Include="mobject-types,0.1.2,mobject">
-      <Namespace>mobject_types</Namespace>
     </LibraryReference>
   </ItemGroup>
   <ProjectExtensions>
