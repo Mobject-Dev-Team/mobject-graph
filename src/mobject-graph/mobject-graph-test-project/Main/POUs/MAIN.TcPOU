@@ -34,7 +34,8 @@ END_VAR]]></Declaration>
 
 END_IF
 
-graphApi.Graphs.Execute();]]></ST>
+graphApi.Graphs.Execute();
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

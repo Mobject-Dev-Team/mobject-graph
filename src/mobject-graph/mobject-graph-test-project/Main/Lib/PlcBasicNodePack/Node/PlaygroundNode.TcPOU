@@ -4,12 +4,10 @@
     <Declaration><![CDATA[{attribute 'no_explicit_call' := 'do not call this FB directly'}{attribute 'enable_dynamic_creation'}
 FUNCTION_BLOCK FINAL PlaygroundNode EXTENDS Node
 VAR
-	value1 : _INT(0);
-	value2 : _INT(-100);
-	value3 : _INT(123);
-	minimum : _INT(-10);
-	maximum : _INT(20);
-	onlyOdd : _BOOL(TRUE);
+	in : _BOOL(FALSE);
+	value1 : _INT(22);
+	value2 : _INT(123);
+	value3 : _REAL(1.2);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -32,13 +30,9 @@ VAR_INPUT
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[AddParameter('value1', value1)
-	.AddMetadata('maximumValue',maximum)
-	.AddMetadata('minimumValue',minimum);
-AddParameter('value2', value2)
-	.AddMetadata('minimumValue',minimum)
-	.AddMetadata('onlyOdd', onlyOdd);
-	
+        <ST><![CDATA[AddInput('in',in);
+AddParameter('value1', value1);
+AddParameter('value2', value2);
 AddParameter('value3', value3);]]></ST>
       </Implementation>
     </Method>
