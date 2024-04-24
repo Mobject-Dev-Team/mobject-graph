@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_HostGraphs" Id="{0ac488b4-54d0-4c12-951b-d9b20b69f03c}">
+    <Declaration><![CDATA[INTERFACE I_HostGraphs
+]]></Declaration>
+    <Property Name="Graphs" Id="{197e5d25-ba9a-43e7-a4b6-3950cb5aa040}">
+      <Declaration><![CDATA[PROPERTY Graphs : I_Graphs]]></Declaration>
+      <Get Name="Get" Id="{3b5e175c-76af-4cff-899c-968aa8efffa9}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

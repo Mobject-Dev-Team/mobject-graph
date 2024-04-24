@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_NodeExecuteBeginEvent" Id="{bf42bf61-5858-4802-b0c4-2b98bed0b96c}">
+    <Declaration><![CDATA[INTERFACE I_NodeExecuteBeginEvent EXTENDS I_Event
+]]></Declaration>
+    <Property Name="Target" Id="{1552a38c-b4b5-4dc1-88ca-319e144ef719}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Node]]></Declaration>
+      <Get Name="Get" Id="{bb5d5f4d-b0f6-41ed-a4f5-df5634ea05d2}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

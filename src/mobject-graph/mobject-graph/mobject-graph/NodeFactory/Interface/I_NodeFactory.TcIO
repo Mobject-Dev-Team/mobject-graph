@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_NodeFactory" Id="{2ae1d928-51bf-4ed8-811b-dc47305a656d}">
+    <Declaration><![CDATA[INTERFACE I_NodeFactory
+]]></Declaration>
+    <Method Name="Accept" Id="{b0ae614b-beef-4757-be0e-d67e429dc9e6}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_NodeFactoryVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddNodeAsPrototype" Id="{5cc1f61e-3ab9-4da6-942a-426dcea5d072}">
+      <Declaration><![CDATA[METHOD AddNodeAsPrototype : I_NodePrototype
+VAR_INPUT
+	Path : T_MAXSTRING;
+	Node : I_Node;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddNodePrototype" Id="{5e6e7e68-3672-48ec-972a-631f6a2ecf00}">
+      <Declaration><![CDATA[METHOD PUBLIC AddNodePrototype
+VAR_INPUT
+	NodePrototype : I_NodePrototype;
+END_VAR]]></Declaration>
+    </Method>
+    <Property Name="NodePrototypes" Id="{a8149b6d-3eee-4af6-a6e3-435d34547470}">
+      <Declaration><![CDATA[PROPERTY PUBLIC ABSTRACT NodePrototypes : I_NodePrototypes]]></Declaration>
+      <Get Name="Get" Id="{9ac3f6b0-e423-45e8-9c21-f149606775da}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TryCreateNodeByType" Id="{def66c15-6c82-4766-af2e-25bfc0bf125d}">
+      <Declaration><![CDATA[METHOD PUBLIC TryCreateNodeByType : BOOL
+VAR_INPUT
+	Path : T_MAXSTRING;
+	Destination : REFERENCE TO I_Node;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

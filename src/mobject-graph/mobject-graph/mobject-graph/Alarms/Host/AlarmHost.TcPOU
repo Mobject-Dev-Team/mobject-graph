@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="AlarmHost" Id="{32c840a4-1cd1-4a9b-ac12-14909db5dd9e}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK AlarmHost IMPLEMENTS I_Alarms, I_Serializable
+VAR
+	hostParent : I_HostAlarms;
+	eventTarget : I_EventTarget;
+	alarms : Stack;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{4097f6ba-c9d9-4c64-8bec-d7faa08083df}" />
+    <Folder Name="Protected" Id="{5099cb49-2c9a-4bfc-adfd-ac06c9d046ab}" />
+    <Method Name="Accept" Id="{b34f4890-c59d-44c5-81f9-9f734914a8c3}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_AlarmVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	alarm : I_Alarm;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := alarms.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF enumerator.TryGet(alarm) THEN
+		alarm.Accept(Visitor);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddAlarm" Id="{ff0f1474-5d7f-4412-a12a-1c8d7ed8b51a}">
+      <Declaration><![CDATA[METHOD PUBLIC AddAlarm
+VAR_INPUT
+	Alarm : I_Alarm;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[alarms.Push(Alarm);
+EmitOnAlarmAddedEvent(Alarm);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnAlarmAddedEvent" Id="{518d7ade-b3e5-43c5-a19a-d55dc5b5ec20}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnAlarmAddedEvent
+VAR_INPUT
+	Alarm : I_Alarm;
+END_VAR
+VAR
+	pAlarmAddedEvent : POINTER TO AlarmAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eventTarget = 0 THEN
+	RETURN;
+END_IF
+
+pAlarmAddedEvent := __NEW(AlarmAddedEvent(Target := Alarm));
+eventTarget.Emit('OnAlarmAdded',pAlarmAddedEvent^);
+pAlarmAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{0d4eab0b-5e3b-4823-9ba5-815e44607e58}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Parent : I_HostAlarms;
+	ParentEventTarget : I_EventTarget;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[hostParent := Parent;
+eventTarget := parentEventTarget;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="HasAlarms" Id="{dcc5643e-6a41-0f91-09c9-d7dc750c8bc4}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasAlarms : BOOL]]></Declaration>
+      <Get Name="Get" Id="{094e2c76-c6b6-01f7-1912-67b6845ddf0e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasAlarms := alarms.Count > 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="HasRaisedAlarm" Id="{4af15c5c-8ca9-42ec-8077-223f00d6f97c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedAlarm : BOOL]]></Declaration>
+      <Get Name="Get" Id="{a2bb2c1e-57c7-4018-af06-d363e412529a}">
+        <Declaration><![CDATA[VAR
+	enumerator : I_ForwardEnumerator;
+	alarm : I_Alarm;
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[enumerator := alarms.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF NOT enumerator.TryGet(alarm) THEN
+		CONTINUE;
+	END_IF
+	
+	IF alarm.Active THEN
+		HasRaisedAlarm := TRUE;
+		EXIT;
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="SerializeWith" Id="{0b71ee63-597d-438c-9534-649946bbe1d4}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	alarm : I_Alarm;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF alarms.Count = 0 THEN
+	RETURN;
+END_IF
+
+Serializer.AddKey('alarms');
+Serializer.StartArray();
+
+enumerator := alarms.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(alarm) THEN
+		alarm.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+Serializer.EndArray();
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

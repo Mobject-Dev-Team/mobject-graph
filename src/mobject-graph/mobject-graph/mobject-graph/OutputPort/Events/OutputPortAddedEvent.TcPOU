@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="OutputPortAddedEvent" Id="{21375b9c-1552-4b10-95fd-ba4c2ea9b3bf}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK OutputPortAddedEvent EXTENDS Disposable IMPLEMENTS I_OutputPortAddedEvent
+VAR
+	_target : I_OutputPort;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{72a7be70-1a7e-4d06-b78c-42e4fa4cd919}" />
+    <Method Name="FB_init" Id="{7ffacdef-1d78-4ce7-9212-ba82cae6a157}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Target : I_OutputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[This^._target := Target;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Target" Id="{8b54dab6-8b32-4c36-8f87-e725eb2b2538}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_OutputPort]]></Declaration>
+      <Get Name="Get" Id="{a74b36e8-17b0-4951-a2dd-e665d74d1fce}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Target := _target;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

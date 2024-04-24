@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Graphs" Id="{951d9b9f-0d21-4119-85d8-5f1838899413}">
+    <Declaration><![CDATA[INTERFACE I_Graphs
+]]></Declaration>
+    <Method Name="Accept" Id="{54d2d02f-6a91-4a74-9079-446fa8814598}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	visitor : I_GraphVisitor;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddGraph" Id="{90a0035e-dcf5-428e-898f-d1e948d22cbd}">
+      <Declaration><![CDATA[METHOD PUBLIC AddGraph
+VAR_INPUT
+	Graph : I_Graph;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="DisposeAll" Id="{21aed2cc-9028-4fbe-8468-1e8f498b3ce3}">
+      <Declaration><![CDATA[METHOD PUBLIC DisposeAll
+VAR_INPUT
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="Execute" Id="{6119cf6c-d178-4de9-8048-ab77f35b465d}">
+      <Declaration><![CDATA[METHOD PUBLIC Execute
+VAR_INPUT
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="RemoveGraph" Id="{1c2c3884-1bfb-4852-a19e-605aaba989e4}">
+      <Declaration><![CDATA[METHOD PUBLIC RemoveGraph
+VAR_INPUT
+	Graph : I_Graph;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="TryGetGraphByUuid" Id="{909d1a17-01b0-49e0-9481-8d294f4c61b7}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetGraphByUuid : BOOL
+VAR_INPUT
+	Uuid : T_MAXSTRING;
+	Destination : REFERENCE TO I_Graph;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

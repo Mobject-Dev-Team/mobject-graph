@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="OutputPortHost" Id="{9f11d3e1-d75a-45d0-9087-0ce67c4ca23b}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK OutputPortHost IMPLEMENTS I_OutputPorts, I_Serializable
+VAR
+	hostParent : I_HostOutputPorts;
+	eventTarget : I_EventTarget;
+	ports : Dictionary;
+	selfCreatedOutputPorts : Stack;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{09e383b9-299e-4acb-98bb-e6391739a011}" />
+    <Folder Name="Destructor" Id="{fc6b1e08-7862-40b1-9974-1e36d46978f9}" />
+    <Folder Name="Private" Id="{0c47c7a7-2e9f-49e6-bde8-477691801b44}" />
+    <Folder Name="Protected" Id="{48e952bb-8571-4d0b-90ea-33ae57fbc344}" />
+    <Method Name="Accept" Id="{890b8901-54dd-4658-a4cb-e657550f20ee}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_OutputPortVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	port : I_OutputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := ports.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF enumerator.TryGet(port) THEN
+		port.Accept(Visitor);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsOutputPort" Id="{b3af1bb3-cf3a-4ac9-83bf-bc9c36d8f2d4}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsOutputPort : I_OutputPort
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+VAR
+	port : I_OutputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[port := CreateOutputPort(Name, Data);
+selfCreatedOutputPorts.Push(port);
+AddDataAsOutputPort := port;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddOutputPort" Id="{94f6bb2c-e44c-40cf-b492-caf78b4c9ca8}">
+      <Declaration><![CDATA[METHOD PUBLIC AddOutputPort
+VAR_INPUT
+	OutputPort : I_OutputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ports.AddOrUpdate(OutputPort.Name, OutputPort);
+EmitOnPortAddedEvent(OutputPort);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateOutputPort" Id="{799ffbd9-41fd-4213-b626-d56b609cfe35}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateOutputPort : I_OutputPort
+VAR_INPUT
+	PortName : T_MAXSTRING;
+	PortData : I_Datatype;
+END_VAR
+VAR
+	pPort : POINTER TO OutputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pPort := __NEW(OutputPort(Name := PortName, Data := PortData, Parent := hostParent));
+CreateOutputPort := pPort^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSelfCreatedOutputPorts" Id="{42dd1c66-6706-4960-a9c8-4e5d5fea478c}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedOutputPorts : BOOL
+VAR
+	port : I_OutputPort;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedOutputPorts.TryPop(port) DO
+	port.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnPortAddedEvent" Id="{3061dc40-a6f2-4d94-b101-8eb4e65023a9}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnPortAddedEvent
+VAR_INPUT
+	Port : I_OutputPort;
+END_VAR
+VAR
+	pOutputPortAddedEvent : POINTER TO OutputPortAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eventTarget = 0 THEN
+	RETURN;
+END_IF
+
+pOutputPortAddedEvent := __NEW(OutputPortAddedEvent(Target := Port));
+eventTarget.Emit('OnOutputPortAdded',pOutputPortAddedEvent^);
+pOutputPortAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{1875cea7-92ed-4a9d-8f6a-20a131dc5520}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DisposeSelfCreatedOutputPorts();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{f7d4a49a-93a3-451d-ae2a-5e64636f4512}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Parent : I_HostOutputPorts;
+	ParentEventTarget : I_EventTarget;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[hostParent := Parent;
+eventTarget := parentEventTarget;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="HasOutputPorts" Id="{58ab4f9a-8ae2-0185-3499-d5dab1b0e8e7}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasOutputPorts : BOOL]]></Declaration>
+      <Get Name="Get" Id="{e514a7ff-6a86-074b-082a-aaa37f517857}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasOutputPorts := ports.Count > 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="SerializeWith" Id="{fef83317-a734-4674-981e-d49068bb97e1}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	port : I_OutputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF ports.Count = 0 THEN
+	RETURN;
+END_IF
+
+Serializer.AddKey('outputPorts');
+Serializer.StartArray();
+
+enumerator := ports.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(port) THEN
+		port.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+Serializer.EndArray();
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetOutputPortByName" Id="{ad4dfefe-a004-4255-aaab-4e223f115d52}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetOutputPortByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_OutputPort;
+END_VAR
+VAR
+	port : I_OutputPort;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT ports.TryGetValue(Name, port) THEN
+	RETURN;
+END_IF
+
+Destination := port;
+TryGetOutputPortByName := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

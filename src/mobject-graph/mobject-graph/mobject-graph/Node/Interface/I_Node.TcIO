@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Node" Id="{c7fe7db8-e5b5-493f-89de-ce411fbe90f1}">
+    <Declaration><![CDATA[INTERFACE I_Node EXTENDS I_Disposable, I_HostContent, I_HostInputPorts, I_HostOutputPorts, I_HostAlarms, I_HostParameters, I_HostExtensions, I_HostMetadata, I_EventEmitter, I_Deserializable, I_Serializable
+]]></Declaration>
+    <Method Name="Accept" Id="{3b748c0f-1097-4f58-b766-99b78e1902fb}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_NodeVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Clone" Id="{5465cef7-3e38-4221-a083-2796d252cc4d}">
+      <Declaration><![CDATA[METHOD Clone : I_Node
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Execute" Id="{ef78bbdf-aab1-403f-9e89-67287a1d445c}">
+      <Declaration><![CDATA[METHOD PUBLIC Execute
+]]></Declaration>
+    </Method>
+    <Property Name="Id" Id="{eca3800d-5167-4caf-95a2-3dc6470823d9}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Id : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{914f137a-939e-4208-8553-46cf7eafb463}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Mode" Id="{f796cc9f-66b6-4884-803a-b8002e8cab4f}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Mode : DINT]]></Declaration>
+      <Get Name="Get" Id="{bb35de38-10df-42a4-8101-66fce5da92c7}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Order" Id="{8a675645-2f7d-4226-aba0-aa7852e6360c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Order : DINT]]></Declaration>
+      <Get Name="Get" Id="{62f06775-93f4-46b5-807f-a64eeacc2f1d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

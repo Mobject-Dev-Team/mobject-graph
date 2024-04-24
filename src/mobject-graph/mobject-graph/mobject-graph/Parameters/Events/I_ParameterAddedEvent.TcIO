@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_ParameterAddedEvent" Id="{8c23deb0-2d4b-49a2-b5cf-d2f917c264f6}">
+    <Declaration><![CDATA[INTERFACE I_ParameterAddedEvent EXTENDS I_Event]]></Declaration>
+    <Property Name="TargetParameter" Id="{82403ab7-23ac-437d-9d73-e41f90411bcb}">
+      <Declaration><![CDATA[PROPERTY PUBLIC TargetParameter : I_Parameter]]></Declaration>
+      <Get Name="Get" Id="{6b33cfed-1029-4a7a-9d83-b6454db88557}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

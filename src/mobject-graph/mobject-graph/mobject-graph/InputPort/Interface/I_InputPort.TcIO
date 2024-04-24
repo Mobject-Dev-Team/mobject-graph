@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_InputPort" Id="{4eaa12e0-87ee-4df4-9639-d79bba316658}">
+    <Declaration><![CDATA[INTERFACE I_InputPort EXTENDS I_Disposable, I_EventEmitter, I_EventHandler, I_Serializable, I_HostMetadata
+]]></Declaration>
+    <Method Name="Accept" Id="{98dc0b80-1bed-450d-a58d-4101c3cc4c2c}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_InputPortVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Connected" Id="{5e665c21-d03e-439d-8803-33e8ad9f305a}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Connected : BOOL]]></Declaration>
+      <Get Name="Get" Id="{d2919df1-cf1e-46db-8b8f-a10d4df84bc4}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Data" Id="{ce0de539-5c6c-4e4e-b9c5-fc1f185fa4a8}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : I_Datatype]]></Declaration>
+      <Get Name="Get" Id="{dcc0c36a-a5e6-4770-b104-183d37fd5b38}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="Disconnect" Id="{78852aed-da6d-4039-a84c-44fa40e84e60}">
+      <Declaration><![CDATA[METHOD PUBLIC Disconnect]]></Declaration>
+    </Method>
+    <Property Name="Name" Id="{6fead192-86c6-48f3-a60f-5fa42c9778f6}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{867dc276-dcf5-4bbd-a1f7-13bbaed017a9}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TryConnectTo" Id="{fe348aef-e042-4cf6-9f88-1546383de30a}">
+      <Declaration><![CDATA[METHOD PUBLIC TryConnectTo : BOOL
+VAR_INPUT
+	OutputPort : I_OutputPort;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

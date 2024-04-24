@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Alarm" Id="{dc64a02b-06d6-4cd6-bb49-ecdb4c808ffc}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK ABSTRACT Alarm IMPLEMENTS I_Alarm]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Abstract" Id="{5c2dccff-8f73-4f38-99b0-0f34aeffa2e8}" />
+    <Folder Name="Constructor" Id="{04ae702e-640d-4d81-b27b-89d8b86cec46}" />
+    <Method Name="Accept" Id="{cb96dbd8-c488-49a7-8481-6535755fd321}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_AlarmVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitAlarm(this^);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Active" Id="{b38435b1-3786-40d3-9015-61a5a18fb496}" FolderPath="Abstract\">
+      <Declaration><![CDATA[PROPERTY ABSTRACT Active : BOOL]]></Declaration>
+      <Get Name="Get" Id="{db4f51d3-ea95-4356-b237-909d78d4cf9c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Clear" Id="{4b1d35fc-269d-4478-9303-7ca63493254d}" FolderPath="Abstract\">
+      <Declaration><![CDATA[METHOD ABSTRACT Clear
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{c56eac3a-81df-4abd-83f3-880c190ff443}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Parent : I_HostAlarms;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RegisterWithParent(Parent);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Message" Id="{0fbccf42-8732-44ef-b561-8de47087a052}" FolderPath="Abstract\">
+      <Declaration><![CDATA[PROPERTY ABSTRACT Message : T_MaxString]]></Declaration>
+      <Get Name="Get" Id="{fe52d97c-2162-4120-ba0d-42aa6ff7b326}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Reason" Id="{1e9d7ed8-a7d6-4aa9-9157-c12bfbfb87f2}" FolderPath="Abstract\">
+      <Declaration><![CDATA[PROPERTY ABSTRACT Reason : T_MaxString]]></Declaration>
+      <Get Name="Get" Id="{f38c9c34-4550-4d70-8e00-5fd8be5615ea}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="RegisterWithParent" Id="{8717cda6-ea38-404c-9eb7-e5632b2f7e4f}">
+      <Declaration><![CDATA[METHOD RegisterWithParent
+VAR_INPUT
+	Parent : I_HostAlarms;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Parent = 0 THEN
+	RETURN;
+END_IF
+
+Parent.Alarms.AddAlarm(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{2d3a51b2-3b6b-44a7-b71a-926f8c47e140}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	isActive : BOOL := Active;
+	errorMessage : T_MAXSTRING := Message;
+	reasonMessage : T_MAXSTRING := Reason;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartObject();
+Serializer.AddKeyString('message',errorMessage);
+Serializer.AddKeyBool('active',isActive);
+
+IF reasonMessage <> '' THEN
+	Serializer.AddKeyString('reason',reasonMessage);
+END_IF
+
+Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

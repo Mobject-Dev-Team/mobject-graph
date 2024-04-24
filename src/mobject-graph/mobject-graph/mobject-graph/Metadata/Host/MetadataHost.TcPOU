@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MetadataHost" Id="{ec580a31-b2b9-4018-a76a-d247bf1e66fd}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK MetadataHost IMPLEMENTS I_Metadatum, I_Serializable
+VAR
+	hostParent : I_HostMetadata;
+	eventTarget : I_EventTarget;
+	meta : Dictionary;
+	selfCreatedMetadata : Stack;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{88873452-ba8a-4a76-ae61-9cd712781c70}" />
+    <Folder Name="Destructor" Id="{5215da2d-cb42-4011-8f73-48d14ea98030}" />
+    <Folder Name="Private" Id="{2beef7e7-921a-4617-a09c-73e22c06b330}" />
+    <Folder Name="Protected" Id="{f66dcab9-fb40-4819-9e9a-2e46fe2de103}" />
+    <Method Name="Accept" Id="{99502431-f6ba-45f2-9be6-02e56a4d0740}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_MetadataVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	metadata : I_Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := meta.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF enumerator.TryGet(metadata) THEN
+		metadata.Accept(Visitor);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddDataAsMetadata" Id="{81581471-6307-487b-82da-774b6c952948}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsMetadata : I_Metadata
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+VAR
+	metadata : I_Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[metadata := CreateMetadata(Name, Data);
+selfCreatedMetadata.Push(metadata);
+AddDataAsMetadata := metadata;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddMetadata" Id="{2775fe00-c23b-4d8f-935f-49a303ff88ee}">
+      <Declaration><![CDATA[METHOD PUBLIC AddMetadata
+VAR_INPUT
+	Metadata : I_Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[meta.AddOrUpdate(Metadata.Name, Metadata);
+EmitOnMetadataAddedEvent(Metadata);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateMetadata" Id="{3e7ada84-f581-41b4-8cf8-c8261f84d3dd}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateMetadata : I_Metadata
+VAR_INPUT
+	MetadataName : T_MAXSTRING;
+	MetadataData : I_Datatype;
+END_VAR
+VAR
+	pMetadata : POINTER TO Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pMetadata := __NEW(Metadata(Name := MetadataName, Data := MetadataData, Parent := hostParent));
+CreateMetadata := pMetadata^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSelfCreatedMetadata" Id="{5cfcb4a2-3130-442d-912e-1f06b68acab6}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PROTECTED DisposeSelfCreatedMetadata : BOOL
+VAR
+	metadata : I_Metadata;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedMetadata.TryPop(metadata) DO
+	metadata.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnMetadataAddedEvent" Id="{c8541682-660e-437b-b878-f5fd89e96593}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnMetadataAddedEvent
+VAR_INPUT
+	Metadata : I_Metadata;
+END_VAR
+VAR
+	pMetadataAddedEvent : POINTER TO MetadataAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eventTarget = 0 THEN
+	RETURN;
+END_IF
+
+pMetadataAddedEvent := __NEW(MetadataAddedEvent(Target := Metadata));
+eventTarget.Emit('OnMetadataAdded',pMetadataAddedEvent^);
+pMetadataAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{772f0fa4-9bdf-44b5-891a-aa3085ffa4e5}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DisposeSelfCreatedMetadata();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{82f36728-2d7e-41ee-bc92-a97258c9d434}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Parent : I_HostMetadata;
+	ParentEventTarget : I_EventTarget;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[hostParent := Parent;
+eventTarget := ParentEventTarget;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="HasMetadata" Id="{9d56891e-6a18-0078-3d79-3084b698502c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasMetadata : BOOL]]></Declaration>
+      <Get Name="Get" Id="{07280d45-6ef8-06d3-3613-31e506ad8ae7}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasMetadata := meta.Count > 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="SerializeWith" Id="{8109586c-4f47-42ee-b50b-8e7ec1425f80}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	metadata : I_Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF meta.Count = 0 THEN
+	RETURN;
+END_IF
+
+Serializer.AddKey('metadata');
+Serializer.StartArray();
+
+enumerator := meta.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(metadata) THEN
+		metadata.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+Serializer.EndArray();
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetMetadataByName" Id="{ec4bda78-3782-41a3-9a98-f6ef89a0f5fe}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetMetadataByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Metadata;
+END_VAR
+VAR
+	metadata : I_Metadata;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT meta.TryGetValue(Name, metadata) THEN
+	RETURN;
+END_IF
+
+Destination := metadata;
+TryGetMetadataByName := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

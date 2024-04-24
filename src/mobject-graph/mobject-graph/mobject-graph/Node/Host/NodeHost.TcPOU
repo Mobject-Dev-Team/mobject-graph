@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NodeHost" Id="{94550ad4-5c7d-48c8-abe8-de2c0a64252c}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK NodeHost IMPLEMENTS I_Nodes, I_Serializable
+VAR
+	hostParent : I_HostNodes;
+	eventTarget : I_EventTarget;
+	nodes : Dictionary;
+	nodesInOrder : LinkedList;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{6d31f29e-d98e-48e6-bd9b-306f43bf97e1}" />
+    <Folder Name="Protected" Id="{f2e8bfe1-f55b-4f71-9544-0b966ddbe398}" />
+    <Method Name="Accept" Id="{82f77bed-622d-4472-9ec2-87234df8b81e}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_NodeVisitor;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := nodes.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF enumerator.TryGet(node) THEN
+		node.Accept(Visitor);
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddNode" Id="{61111174-f337-4dbc-8283-ea8e9cfab287}">
+      <Declaration><![CDATA[METHOD PUBLIC AddNode
+VAR_INPUT
+	Node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodes.AddOrUpdate(Node.id, Node);
+UpdateExecutionOrder(Node);
+EmitOnNodeAddedEvent(Node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="EmitOnNodeAddedEvent" Id="{ae6421b4-7458-4436-b831-0550f915e498}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED EmitOnNodeAddedEvent
+VAR_INPUT
+	Node : I_Node;
+END_VAR
+VAR
+	pNodeAddedEvent : POINTER TO NodeAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eventTarget = 0 THEN
+	RETURN;
+END_IF
+
+pNodeAddedEvent := __NEW(NodeAddedEvent(Target := Node));
+eventTarget.Emit('OnNodeAdded',pNodeAddedEvent^);
+pNodeAddedEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Execute" Id="{93906193-d273-4784-8a7d-4e6848c104ed}">
+      <Declaration><![CDATA[METHOD PUBLIC Execute
+VAR_INPUT
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := nodesInOrder.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(node) THEN
+		node.Execute();
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{2dd03000-3672-4a07-8807-8ef83f774afa}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Parent : I_HostNodes;
+	parentEventTarget : I_EventTarget;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[hostParent := Parent;
+eventTarget := parentEventTarget;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="HasNodes" Id="{bc9a2333-a5a9-0d80-29bd-ba707b99e3bf}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasNodes : BOOL]]></Declaration>
+      <Get Name="Get" Id="{c5f61ad7-9f7f-0a89-12c5-feb82a74ed7a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasNodes := nodes.Count > 0;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="RemoveNode" Id="{b3867099-74d5-4e35-b89b-24944e04330f}">
+      <Declaration><![CDATA[METHOD PUBLIC RemoveNode
+VAR_INPUT
+	Node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodes.Remove(Node.Id);
+nodesInOrder.Remove(Node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{0ce4412d-97e4-47d9-94c1-b1fd3800cb0a}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF nodes.Count = 0 THEN
+	RETURN;
+END_IF
+
+Serializer.AddKey('nodes');
+Serializer.StartArray();
+
+enumerator := nodes.GetEnumerator();
+
+WHILE enumerator.MoveNext() DO
+	IF enumerator.TryGet(node) THEN
+		node.SerializeWith(Serializer);
+	END_IF
+END_WHILE
+
+Serializer.EndArray();
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeFrom" Id="{c4dbe3ee-14be-4de9-8449-2400c87022b6}">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
+END_VAR
+VAR
+	nodeDeserializer : I_Deserializer;
+	nodesEnumerator : I_DeserializerArrayForwardEnumerator;
+	nodeId : T_MAXSTRING;
+	node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodeDeserializer := Deserializer.GetKeyArray('nodes');
+nodesEnumerator := nodeDeserializer.GetArrayEnumerator();
+
+WHILE nodesEnumerator.MoveNext() DO
+	
+	IF NOT nodesEnumerator.Current.TryGetKeyString('id',nodeId, Feedback) THEN
+		CONTINUE;
+	END_IF
+	
+	IF NOT TryGetNodeById(nodeId, node)THEN
+		CONTINUE;
+	END_IF
+	
+	node.TryDeserializeFrom(nodesEnumerator.Current, Feedback);
+
+END_WHILE
+
+nodesEnumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetNodeById" Id="{fc1d8da3-e2f2-4d63-aba0-e38916a81437}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetNodeById : BOOL
+VAR_INPUT
+	Id : T_MAXSTRING;
+	Destination : REFERENCE TO I_Node;
+END_VAR
+VAR
+	node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT nodes.TryGetValue(Id, node) THEN
+	RETURN;
+END_IF
+
+Destination := node;
+TryGetNodeById := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="UpdateExecutionOrder" Id="{ec8998e3-846b-4e84-b661-1186b021dc31}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED UpdateExecutionOrder
+VAR_INPUT
+	Node : I_Node;
+END_VAR
+VAR
+	currentPosition : I_LinkedListNode;
+	currentNode : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// is the list empty?
+IF nodesInOrder.First = 0 THEN
+	// if so, add our node first and jump out as done.
+	nodesInOrder.AddFirst(Node);
+	RETURN;
+END_IF
+
+// if not empty, then is our node higher priorty than the first in the list. 
+NodesInOrder.First.TryGet(currentNode); 
+IF currentNode.Order > Node.Order THEN
+	// if yes, we are now first, jump out as done. 
+	nodesInOrder.AddFirst(Node);
+	RETURN;
+END_IF
+
+// here, the list has something in it, and we have less priority than the node in first place.
+
+// get the last node in the list and remember this as "currentPosition" 
+currentPosition := nodesInOrder.Last;
+
+WHILE (TRUE) DO
+	
+	currentPosition.TryGet(currentNode); 
+	// is the current position higer priority than our node?
+	IF currentNode.Order <= Node.Order THEN
+		// if so, then we go after, jump out as we are done. 
+		nodesInOrder.AddAfter(currentPosition, Node);
+		RETURN;
+	END_IF
+	
+	// move one up the list towards the top and try again.
+	currentPosition := currentPosition.Previous;
+
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Parameters" Id="{062edb1f-457b-4873-87d5-c259f2c488a1}">
+    <Declaration><![CDATA[INTERFACE I_Parameters
+]]></Declaration>
+    <Method Name="Accept" Id="{3a16eb56-84de-4cbe-93df-840b6a1e6e37}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_ParameterVisitor;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddDataAsParameter" Id="{19236629-dcdf-4757-afa1-0f5ce88c51e2}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsParameter : I_Parameter
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddParameter" Id="{0a3fa470-91f6-4109-be0b-6b4f3fdd3712}">
+      <Declaration><![CDATA[METHOD AddParameter
+VAR_INPUT
+	Parameter : I_Parameter;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="HasParameters" Id="{5283ba88-90d0-0e9c-26ef-fef42f57e62d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasParameters : BOOL]]></Declaration>
+      <Get Name="Get" Id="{fa077192-3461-0fda-0596-79eec91c12d3}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TryGetParameterByName" Id="{69d9d93c-b35b-43f3-a3f1-7dfd1697741f}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetParameterByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Parameter;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Extension" Id="{8ac7b2c9-5c38-4780-b32e-134f1c230d16}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK Extension EXTENDS Disposable IMPLEMENTS I_Extension
+VAR
+	_name : T_MAXSTRING;
+	eventEmitter : EventEmitter;
+	inputPortHost : InputPortHost(THIS^, eventEmitter);
+	outputPortHost : OutputPortHost(THIS^, eventEmitter);
+	parameterHost : ParameterHost(THIS^, eventEmitter);
+	contentHost : ContentHost(THIS^, eventEmitter);
+	alarmHost : AlarmHost(THIS^, eventEmitter);
+	metadataHost : MetadataHost(THIS^, eventEmitter);
+	deserializationFailedAlarm : DeserializationFailedAlarm(THIS^);
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{e2fa132a-df47-4d80-943f-0757a42d94ae}" />
+    <Method Name="Accept" Id="{c2d85c76-9431-4c14-8ff5-79e11f782333}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_ExtensionVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitExtension(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddMetadata" Id="{f2addbcd-14f3-0a89-15e5-56d36063222e}">
+      <Declaration><![CDATA[METHOD PUBLIC AddMetadata : I_HostMetadata
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Metadatum.AddDataAsMetadata(Name, Data);
+AddMetadata := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Alarms" Id="{7a9d58bb-1bd2-477c-8b87-11fa3ac91181}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Alarms : I_Alarms]]></Declaration>
+      <Get Name="Get" Id="{e2e4c3c0-367e-4f2c-93d3-b034a6193124}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Alarms := alarmHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Contents" Id="{d4deca99-c794-4842-9f14-2120be9cdc35}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Contents : I_Contents]]></Declaration>
+      <Get Name="Get" Id="{6b8cac52-6ee9-48c0-b6d7-deb24e0974c5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Contents := contentHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_init" Id="{194b9380-c1ce-437f-9678-bce9e9aee887}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Name : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_name := Name;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="HasRaisedAlarm" Id="{4c3dd4a1-3f0e-441e-a770-d854acec24f5}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasRaisedAlarm : BOOL]]></Declaration>
+      <Get Name="Get" Id="{d127264d-ae92-4a8e-b80e-ba8b6a9d61df}">
+        <Declaration><![CDATA[VAR
+END_VAR]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasRaisedAlarm := alarmHost.HasRaisedAlarm;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="InputPorts" Id="{3e312d95-ab25-4eca-af6a-c42cecf8b452}">
+      <Declaration><![CDATA[PROPERTY PUBLIC InputPorts : I_InputPorts]]></Declaration>
+      <Get Name="Get" Id="{db14c4a7-51cc-493f-872c-cdc8a77f85bc}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[InputPorts := inputPortHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Metadatum" Id="{eab8e526-6a6c-4991-bdcf-4229c8e8a72b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Metadatum : I_Metadatum]]></Declaration>
+      <Get Name="Get" Id="{c1bfc407-406b-4ae3-805d-fffc431f10cc}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Metadatum := metadataHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Name" Id="{c85fa46e-ae0e-48b2-be11-4ec1413abe4e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{b20c0a68-16b8-4d8a-ae96-15a0b0d9c536}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Name := _name;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="OffEvent" Id="{6835458e-f377-4a82-8de0-709c8a6186bb}">
+      <Declaration><![CDATA[METHOD PUBLIC OffEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OffEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnceEvent" Id="{12d2564f-8b36-4596-8526-8ba3d0358ff0}">
+      <Declaration><![CDATA[METHOD PUBLIC OnceEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnceEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnEvent" Id="{e99a5517-2019-486d-8aee-8229c32d654c}">
+      <Declaration><![CDATA[METHOD PUBLIC OnEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="OutputPorts" Id="{2185d460-f262-46ff-a85e-79554489b2d3}">
+      <Declaration><![CDATA[PROPERTY PUBLIC OutputPorts : I_OutputPorts]]></Declaration>
+      <Get Name="Get" Id="{03e5674a-3fff-4e57-bf57-4fb7138aaabf}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[OutputPorts := outputPortHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Parameters" Id="{a78eeb0a-232e-4885-afc3-eea8a907e31d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parameters : I_Parameters]]></Declaration>
+      <Get Name="Get" Id="{c460ccdb-7185-41a6-8d7c-02e232aa6cf2}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parameters := parameterHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="SerializeWith" Id="{6685483b-02aa-44da-bca9-467fc317fca6}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartObject();
+Serializer.AddKeyString('name',_name);
+inputPortHost.SerializeWith(Serializer);
+outputPortHost.SerializeWith(Serializer);
+parameterHost.SerializeWith(Serializer);
+contentHost.SerializeWith(Serializer);
+alarmHost.SerializeWith(Serializer);
+metadataHost.SerializeWith(Serializer);
+Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryDeserializeFrom" Id="{f1cd085b-4b54-41dd-a2be-f0cb8ced9794}">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeFrom : BOOL
+VAR_INPUT
+	Deserializer : I_Deserializer;
+	Feedback : I_DeserializerFeedback;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DeserializationFailedAlarm.Clear();
+
+IF NOT parameterHost.TryDeserializeFrom(Deserializer, Feedback) THEN
+	DeserializationFailedAlarm.Raise('Failed to deserialize parameters');
+	RETURN;
+END_IF
+
+TryDeserializeFrom := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

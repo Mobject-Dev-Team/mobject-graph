@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_InputPorts" Id="{71bbf865-1e29-4075-b9c2-e305690245b8}">
+    <Declaration><![CDATA[INTERFACE I_InputPorts
+]]></Declaration>
+    <Method Name="Accept" Id="{65e9e350-b4da-4b31-beb2-b7dd75c935ea}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_InputPortVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="AddDataAsInputPort" Id="{fa5250ab-a88e-4b57-81f9-a513fe6d8457}">
+      <Declaration><![CDATA[METHOD PUBLIC AddDataAsInputPort : I_InputPort
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddInputPort" Id="{e9138a76-36f7-41c8-9618-e82fbbae5526}">
+      <Declaration><![CDATA[METHOD AddInputPort
+VAR_INPUT
+	InputPort : I_InputPort;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="HasInputPorts" Id="{b8fc60d2-1664-03ce-145d-f823df0158f7}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasInputPorts : BOOL]]></Declaration>
+      <Get Name="Get" Id="{5d8ad959-8a8b-013d-0aa6-a01ebc41069b}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TryGetInputPortByName" Id="{03568ac7-b326-418d-92c6-36ccec2fe85b}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetInputPortByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_InputPort;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

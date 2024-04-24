@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Content" Id="{8268082f-e0da-4736-8a31-6cb56eb46ad7}">
+    <Declaration><![CDATA[INTERFACE I_Content EXTENDS I_Disposable, I_Serializable, I_HostMetadata, I_EventEmitter
+]]></Declaration>
+    <Method Name="Accept" Id="{ddc7663f-8a0d-4689-a7bf-dae701b14870}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_ContentVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Data" Id="{fdc4bcaf-99b3-4031-805d-8a2c9d7de194}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : I_DataType]]></Declaration>
+      <Get Name="Get" Id="{491b7e3d-3afe-4ea2-8112-d4e570e7393f}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Name" Id="{d004cf86-9b7d-499e-9926-83b7454d4545}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{64f31005-5a08-4557-915b-37f81f02a977}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Parent" Id="{f00da09a-328f-4e37-a1b7-2e95a26bf197}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parent : I_HostContent]]></Declaration>
+      <Get Name="Get" Id="{a7f929da-be10-4e83-8adc-60c4d1ec66b8}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

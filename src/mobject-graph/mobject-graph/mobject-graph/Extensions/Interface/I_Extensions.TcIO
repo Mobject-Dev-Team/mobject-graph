@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Extensions" Id="{7db66379-e861-4d2c-a5d6-50c9090adb8f}">
+    <Declaration><![CDATA[INTERFACE I_Extensions
+]]></Declaration>
+    <Method Name="Accept" Id="{ed7ca7fe-c97f-4965-aab1-6b8e2c9438db}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_ExtensionVisitor;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddExtension" Id="{3e68d2ee-2c9a-4e4f-8ad4-40deaaf44331}">
+      <Declaration><![CDATA[METHOD AddExtension
+VAR_INPUT
+	Extension : I_Extension;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="HasExtensions" Id="{5c37140e-d17a-0a09-0a2d-5a38a65d1f12}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasExtensions : BOOL]]></Declaration>
+      <Get Name="Get" Id="{af99cbd2-ca70-0d4f-0f23-17ec6485740d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TryGetExtensionByName" Id="{5b8e704e-81bf-4c64-a676-068e39f90b17}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetExtensionByName : BOOL
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Destination : REFERENCE TO I_Extension;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

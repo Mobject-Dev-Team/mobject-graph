@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Nodes" Id="{c7bb15f9-1eb4-436a-9915-c62c2fbf6d53}">
+    <Declaration><![CDATA[INTERFACE I_Nodes
+]]></Declaration>
+    <Method Name="Accept" Id="{075c2acf-8b17-488d-9dc7-c94280aab56d}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_NodeVisitor;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="AddNode" Id="{7c6ef1cb-77dd-4b7a-b9b8-e23e3e7b0e99}">
+      <Declaration><![CDATA[METHOD AddNode
+VAR_INPUT
+	Node : I_Node;
+END_VAR]]></Declaration>
+    </Method>
+    <Property Name="HasNodes" Id="{608d2b7e-39ad-04a0-20b2-169ee296276d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasNodes : BOOL]]></Declaration>
+      <Get Name="Get" Id="{c8564dc9-675b-0ae6-116c-1a5e907b6ea7}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TryGetNodeById" Id="{08a8932c-41d1-49f6-947f-fc49e0d12e42}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetNodeById : BOOL
+VAR_INPUT
+	Id : T_MAXSTRING;
+	Destination : REFERENCE TO I_Node;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

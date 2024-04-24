@@ -36,9 +36,17 @@
     </SelectedLibraryCategories>
   </PropertyGroup>
   <ItemGroup>
+    <PlaceholderReference Include="Tc2_Standard">
+      <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Standard</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc2_System">
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Utilities">
+      <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Utilities</Namespace>
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
@@ -47,13 +55,393 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="_Internal" />
+    <Folder Include="Alarms" />
+    <Folder Include="Alarms\Base" />
+    <Folder Include="Alarms\Events" />
+    <Folder Include="Alarms\Host" />
+    <Folder Include="Alarms\Interfaces" />
+    <Folder Include="Content" />
+    <Folder Include="Content\Base" />
+    <Folder Include="Content\Events" />
+    <Folder Include="Content\Host" />
+    <Folder Include="Content\Interface" />
+    <Folder Include="Errors" />
+    <Folder Include="Extensions" />
+    <Folder Include="Extensions\Base" />
+    <Folder Include="Extensions\Events" />
+    <Folder Include="Extensions\Host" />
+    <Folder Include="Extensions\Interface" />
+    <Folder Include="Extensions\Namespace" />
+    <Folder Include="Graph" />
+    <Folder Include="GraphFramework\Interface" />
+    <Folder Include="Graph\Events" />
+    <Folder Include="Graph\Host" />
+    <Folder Include="Graph\Interfaces" />
+    <Folder Include="Graph\Base" />
+    <Folder Include="InputPort" />
+    <Folder Include="InputPort\Base" />
+    <Folder Include="InputPort\Events" />
+    <Folder Include="InputPort\Host" />
+    <Folder Include="InputPort\Interface" />
+    <Folder Include="Metadata" />
+    <Folder Include="Metadata\Base" />
+    <Folder Include="Metadata\Events" />
+    <Folder Include="Metadata\Host" />
+    <Folder Include="Metadata\Interface" />
+    <Folder Include="GraphFramework" />
+    <Folder Include="Node" />
+    <Folder Include="NodeFactory" />
+    <Folder Include="NodeFactory\Base" />
+    <Folder Include="NodeFactory\Interface" />
+    <Folder Include="NodePack" />
+    <Folder Include="NodePrototype" />
+    <Folder Include="NodePrototype\Host" />
+    <Folder Include="NodePrototype\Interface" />
+    <Folder Include="NodePrototype\Base" />
+    <Folder Include="Node\Base" />
+    <Folder Include="Node\Events" />
+    <Folder Include="Node\Host" />
+    <Folder Include="Node\Interface" />
+    <Folder Include="OutputPort" />
+    <Folder Include="OutputPort\Base" />
+    <Folder Include="OutputPort\Events" />
+    <Folder Include="OutputPort\Host" />
+    <Folder Include="OutputPort\Interface" />
+    <Folder Include="Parameters" />
+    <Folder Include="Parameters\Base" />
+    <Folder Include="Parameters\Events" />
+    <Folder Include="Parameters\Host" />
+    <Folder Include="Parameters\Interface" />
+    <Folder Include="Visitors" />
+    <Folder Include="Visitors\Interfaces" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Alarms\Base\Alarm.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Alarms\DeserializationFailedAlarm.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Alarms\DeserializationFailedNodeNotSupportedAlarm.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Alarms\Events\AlarmAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Alarms\Events\I_AlarmAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Alarms\FunctionFailedAlarm.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Alarms\Host\AlarmHost.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Alarms\Interfaces\I_Alarm.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Alarms\Interfaces\I_Alarms.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Alarms\Interfaces\I_HostAlarms.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Content\Base\Content.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Content\Events\ContentAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Content\Events\I_ContentAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Content\Host\ContentHost.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Content\Interface\I_Content.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Content\Interface\I_Contents.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Content\Interface\I_HostContent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Errors\MissingNodePrototypeDeserializationError.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\Base\Extension.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\Events\ExtensionAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\Events\I_ExtensionAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\Host\ExtensionHost.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\Interface\I_Extension.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\Interface\I_Extensions.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\Interface\I_HostExtensions.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\Namespace\ExtensionNamespace.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GraphFramework\GraphFramework.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GraphFramework\Interface\I_GraphFramework.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Graph\Base\Graph.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Graph\Events\GraphAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Graph\Events\I_GraphAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Graph\Host\GraphHost.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Graph\Interfaces\I_Graph.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Graph\Interfaces\I_Graphs.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Graph\Interfaces\I_HostGraphs.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InputPort\Base\InputPort.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InputPort\Events\InputPortAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InputPort\Events\InputPortChangedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InputPort\Events\I_InputPortAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InputPort\Events\I_InputPortChangedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InputPort\Host\InputPortHost.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InputPort\Interface\I_HostInputPorts.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InputPort\Interface\I_InputPort.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InputPort\Interface\I_InputPorts.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Base\Metadata.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Events\I_MetadataAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Events\MetadataAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Host\MetadataHost.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Interface\I_HostMetadata.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Interface\I_Metadata.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Metadata\Interface\I_Metadatum.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NodeFactory\Base\NodeFactory.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NodeFactory\Interface\I_NodeFactory.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NodePack\I_NodePack.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NodePrototype\Base\NodePrototype.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NodePrototype\Host\NodePrototypeHost.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NodePrototype\Interface\I_NodePrototype.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NodePrototype\Interface\I_NodePrototypes.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Base\Node.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Events\I_NodeAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Events\I_NodeExecuteBeginEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Events\I_NodeExecuteEndEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Events\I_NodePreExecuteEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Events\NodeAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Events\NodeExecuteBeginEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Events\NodeExecuteEndEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Events\NodePreExecuteEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Host\NodeHost.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Interface\I_HostNodes.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Interface\I_Node.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Interface\I_Nodes.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OutputPort\Base\OutputPort.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OutputPort\Events\I_OutputPortAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OutputPort\Events\I_OutputPortChangedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OutputPort\Events\OutputPortAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OutputPort\Events\OutputPortChangedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OutputPort\Host\OutputPortHost.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OutputPort\Interface\I_HostOutputPorts.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OutputPort\Interface\I_OutputPort.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OutputPort\Interface\I_OutputPorts.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parameters\Base\Parameter.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parameters\Events\I_ParameterAddedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parameters\Events\ParameterAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parameters\Host\ParameterHost.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parameters\Interface\I_HostParameters.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parameters\Interface\I_Parameter.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parameters\Interface\I_Parameters.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visitors\Interfaces\I_AlarmVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visitors\Interfaces\I_ContentVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visitors\Interfaces\I_ExtensionVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visitors\Interfaces\I_GraphVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visitors\Interfaces\I_InputPortVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visitors\Interfaces\I_MetadataVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visitors\Interfaces\I_NodeFactoryVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visitors\Interfaces\I_NodePrototypeVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visitors\Interfaces\I_NodeVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visitors\Interfaces\I_OutputPortVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visitors\Interfaces\I_ParameterVisitor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <LibraryReference Include="mobject-collections,1.1.0,mobject">
+      <Namespace>mobject_collections</Namespace>
+    </LibraryReference>
+    <LibraryReference Include="mobject-datatypes,0.4.0,mobject">
+      <Namespace>mobject_datatypes</Namespace>
+    </LibraryReference>
+    <LibraryReference Include="mobject-deserialization,0.1.0,mobject">
+      <Namespace>mobject_deserialization</Namespace>
+    </LibraryReference>
+    <LibraryReference Include="mobject-disposable,1.0.0,mobject">
+      <Namespace>mobject_disposable</Namespace>
+    </LibraryReference>
+    <LibraryReference Include="mobject-enumerable,1.1.0,mobject">
+      <Namespace>mobject_enumerable</Namespace>
+    </LibraryReference>
+    <LibraryReference Include="mobject-errors,0.2.0,mobject">
+      <Namespace>mobject_errors</Namespace>
+    </LibraryReference>
+    <LibraryReference Include="mobject-events,1.0.0,mobject">
+      <Namespace>mobject_events</Namespace>
+    </LibraryReference>
+    <LibraryReference Include="mobject-serialization,0.4.0,mobject">
+      <Namespace>mobject_serialization</Namespace>
+    </LibraryReference>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-  <Data>
-    <o xml:space="preserve" t="OptionKey">
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{40450F57-0AA3-4216-96F3-5444ECB29763}</v>
@@ -74,13 +462,13 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-  </Data>
-  <TypeList>
-    <Type n="Hashtable">System.Collections.Hashtable</Type>
-    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-    <Type n="String">System.String</Type>
-  </TypeList>
-</XmlArchive>
+        </Data>
+        <TypeList>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>

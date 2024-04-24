@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_NodePrototype" Id="{bdb453bc-5a57-421d-b123-ac91467b8c03}">
+    <Declaration><![CDATA[INTERFACE I_NodePrototype EXTENDS I_Disposable
+]]></Declaration>
+    <Method Name="Accept" Id="{366fd43a-bff6-43ac-ad51-46889d5e807e}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_NodePrototypeVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Clone" Id="{440e2f18-cc78-4552-ae6b-502e6b3008ae}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Node" Id="{b3045315-d1b5-4d5e-a05c-1072061948db}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Node : I_Node]]></Declaration>
+      <Get Name="Get" Id="{52768432-d8f6-420b-8bb3-8857014f1fe7}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Path" Id="{3a017e7f-53d6-4af2-9231-348f9d24272f}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Path : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{b8fbeff6-25a9-4713-bf4b-df5493516c3c}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

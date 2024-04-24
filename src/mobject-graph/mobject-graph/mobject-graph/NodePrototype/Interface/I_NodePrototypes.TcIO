@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_NodePrototypes" Id="{db51c4b5-809b-4c54-95d5-5fa08c92fe8e}">
+    <Declaration><![CDATA[INTERFACE I_NodePrototypes
+]]></Declaration>
+    <Method Name="Accept" Id="{20048756-eb31-4de1-bd66-cd1ead8d69a0}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_NodePrototypeVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="HasNodePrototypes" Id="{26e6d624-d752-06f3-2b7f-863472e96820}">
+      <Declaration><![CDATA[PROPERTY PUBLIC HasNodePrototypes : BOOL]]></Declaration>
+      <Get Name="Get" Id="{23727720-c27c-0a22-104a-393a041d9e2d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

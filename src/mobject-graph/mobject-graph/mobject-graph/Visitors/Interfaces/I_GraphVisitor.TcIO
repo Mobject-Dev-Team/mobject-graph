@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_GraphVisitor" Id="{8f09db5b-eb4f-46b4-8dcb-6f37fa95677f}">
+    <Declaration><![CDATA[INTERFACE I_GraphVisitor]]></Declaration>
+    <Method Name="VisitGraph" Id="{45f8c81d-001c-429e-bb38-1b3935bcfeee}">
+      <Declaration><![CDATA[METHOD VisitGraph
+VAR_INPUT
+	VisitingGraph : I_Graph;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Graph" Id="{89d98ae3-29d0-4e5c-b063-52a6e9e3c16f}">
+    <Declaration><![CDATA[INTERFACE I_Graph EXTENDS I_Disposable, I_HostNodes, I_HostContent, I_HostInputPorts, I_HostOutputPorts, I_HostAlarms, I_HostParameters, I_HostExtensions, I_HostMetadata, I_EventEmitter, I_Deserializable, I_Serializable
+]]></Declaration>
+    <Method Name="Accept" Id="{c7c53937-a7cd-454a-b48b-1f18602505ea}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_GraphVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Execute" Id="{0f689714-06bd-40cc-a7f6-1c91d31978fa}">
+      <Declaration><![CDATA[METHOD Execute
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Reset" Id="{d6893363-6315-4b97-90f0-daa9eb335a96}">
+      <Declaration><![CDATA[METHOD PUBLIC Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Uuid" Id="{b8d88539-c77f-44cf-9bea-3cd6b3a41273}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Uuid : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{868594a6-e0da-4c12-9901-f57e5519d4f3}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

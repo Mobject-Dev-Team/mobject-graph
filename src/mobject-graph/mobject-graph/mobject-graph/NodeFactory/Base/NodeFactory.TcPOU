@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="NodeFactory" Id="{9bb934bc-3d6b-4a80-8f12-d8c6b6609615}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK NodeFactory IMPLEMENTS I_NodeFactory
+VAR
+	prototypeHost : NodePrototypeHost;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Accept" Id="{91671abb-4cdb-48d7-b860-390a912050aa}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_NodeFactoryVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitNodeFactory(this^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddNodeAsPrototype" Id="{077358e7-1170-4669-a42f-652e2de8ad7f}">
+      <Declaration><![CDATA[METHOD AddNodeAsPrototype : I_NodePrototype
+VAR_INPUT
+	Path : T_MAXSTRING;
+	Node : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddNodeAsPrototype := prototypeHost.AddNodeAsPrototype(Path, Node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddNodePrototype" Id="{5d4368a2-77b8-4d6a-8f3d-fca8bd7492f0}">
+      <Declaration><![CDATA[METHOD PUBLIC AddNodePrototype
+VAR_INPUT
+	NodePrototype : I_NodePrototype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[prototypeHost.AddNodePrototype(NodePrototype);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="NodePrototypes" Id="{b501e16b-1b46-4f1d-8bb1-13af5fcd6f6c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC NodePrototypes : I_NodePrototypes]]></Declaration>
+      <Get Name="Get" Id="{9aef88ab-3f29-4169-98d4-722445a1a15f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NodePrototypes := prototypeHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="TryCreateNodeByType" Id="{68609f47-80f5-4a73-88d8-7d78720ddfbb}">
+      <Declaration><![CDATA[METHOD PUBLIC TryCreateNodeByType : BOOL
+VAR_INPUT
+	Path : T_MAXSTRING;
+	Destination : REFERENCE TO I_Node;
+END_VAR
+VAR
+	nodePrototype : I_NodePrototype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT prototypeHost.TryGetNodePrototypeByPath(Path, nodePrototype) THEN
+	RETURN;
+END_IF
+
+Destination := nodePrototype.Clone();
+TryCreateNodeByType := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

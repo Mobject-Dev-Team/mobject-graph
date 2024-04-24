@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="OutputPort" Id="{df54375a-2ed8-4a98-83a7-32e9134d7f8e}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK OutputPort EXTENDS Disposable IMPLEMENTS I_OutputPort
+VAR
+	_name : T_MAXSTRING;
+	_data : I_Datatype;
+	parent : I_HostOutputPorts;
+	eventEmitter : EventEmitter;
+	metadataHost : MetadataHost(THIS^, eventEmitter);
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{94be3236-c240-4adf-a127-e98e578ce7a8}" />
+    <Folder Name="Protected" Id="{286662f3-c9cb-4596-91f7-ef933675ac47}" />
+    <Method Name="Accept" Id="{0ba486fd-b20c-4b70-9dbc-e77265dd7019}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_OutputPortVisitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Visitor.VisitOutputPort(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddMetadata" Id="{544f0ffb-1e2a-0ada-0d4f-c1f0c069885c}">
+      <Declaration><![CDATA[METHOD PUBLIC AddMetadata : I_HostMetadata
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Metadatum.AddDataAsMetadata(Name, Data);
+AddMetadata := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Data" Id="{c0ca8a5e-f372-4a0e-b7d6-cbfa151ce606}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : I_Datatype]]></Declaration>
+      <Get Name="Get" Id="{2bcffafc-f474-44bc-9cd6-579aa5013b29}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Data := _data;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="EmitOnOutputPortChangeEvent" Id="{610ce088-a1a4-4922-a39b-e13b6338f733}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD Protected EmitOnOutputPortChangeEvent
+VAR_INPUT
+	PortChanged : I_OutputPort;
+END_VAR
+VAR
+	pOutputPortChangeEvent : POINTER TO OutputPortChangedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pOutputPortChangeEvent := __NEW(OutputPortChangedEvent(Target := PortChanged));
+eventEmitter.Emit('OnOutputPortChanged',pOutputPortChangeEvent^);
+pOutputPortChangeEvent^.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{348366d5-3f88-4a1f-8d3f-2c1b679004b7}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+	Parent : I_HostOutputPorts;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_name := Name;
+_data := Data;
+RegisterWithParent(Parent);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Metadatum" Id="{0040041d-0ff5-4728-96d7-5159d9e8d66c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Metadatum : I_Metadatum]]></Declaration>
+      <Get Name="Get" Id="{6e235664-4f43-42f9-974f-1ae8192329ca}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Metadatum := metadataHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Name" Id="{6023202d-4ce9-44a4-a6a2-f287d9ce9337}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{cfac4afa-235e-4631-a423-76e79399ab2f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Name := _name;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="OffEvent" Id="{e5b08d53-46e7-4cc7-9a95-0052317b2bac}">
+      <Declaration><![CDATA[METHOD PUBLIC OffEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OffEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnceEvent" Id="{e7b4b085-931c-4d5f-b6ab-0a4aaa08e394}">
+      <Declaration><![CDATA[METHOD PUBLIC OnceEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnceEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnEvent" Id="{57eb2e08-4094-43c3-90c3-c6c7cdab0780}">
+      <Declaration><![CDATA[METHOD PUBLIC OnEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterWithParent" Id="{1ac87078-888f-4f9c-bd30-a25541e8be19}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterWithParent
+VAR_INPUT
+	Parent : I_HostOutputPorts;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Parent = 0 THEN
+	RETURN;
+END_IF
+
+THIS^.parent := Parent;
+Parent.OutputPorts.AddOutputPort(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SerializeWith" Id="{2a865388-e36e-4565-aefe-ce255501ba8e}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartObject();
+Serializer.AddKeyString('name',_name);
+Serializer.Addkey('datatype');
+_data.SerializeTypeWith(Serializer);
+Serializer.AddkeyObject('value',_data);
+metadataHost.SerializeWith(Serializer);
+Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

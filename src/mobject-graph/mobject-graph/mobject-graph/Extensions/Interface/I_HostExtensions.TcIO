@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_HostExtensions" Id="{b1b6432d-8eed-4ace-82b3-ad4e1dbae0ac}">
+    <Declaration><![CDATA[INTERFACE I_HostExtensions EXTENDS __SYSTEM.IQueryInterface
+]]></Declaration>
+    <Property Name="Extensions" Id="{a1047a26-9a42-462d-b26d-b066f3ced646}">
+      <Declaration><![CDATA[PROPERTY Extensions : I_Extensions]]></Declaration>
+      <Get Name="Get" Id="{d1eff404-b942-4f56-ad60-ead29496521d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Metadata" Id="{b3ff1f0d-66e5-4d74-bc1c-93275596b47e}">
+    <Declaration><![CDATA[INTERFACE I_Metadata EXTENDS I_Disposable, I_Serializable
+]]></Declaration>
+    <Method Name="Accept" Id="{b40cc3f0-b84a-4d50-8d80-6038db1973b9}">
+      <Declaration><![CDATA[METHOD PUBLIC Accept
+VAR_INPUT
+	Visitor : I_MetadataVisitor;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Data" Id="{b7855313-3f6b-071a-2940-a3c23cc0c517}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : I_DataType]]></Declaration>
+      <Get Name="Get" Id="{4d6ad305-0619-0bdc-24bc-1943e07717f7}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Name" Id="{a976b692-b413-4da8-8139-60908d7dd759}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{4593a570-1b6e-4626-aead-cc492a933f45}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="SerializeWith" Id="{a9e244ba-5227-41f1-a6d5-b2b58d6d0ec1}">
+      <Declaration><![CDATA[METHOD PUBLIC SerializeWith
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>
