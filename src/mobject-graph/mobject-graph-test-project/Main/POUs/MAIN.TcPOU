@@ -3,39 +3,9 @@
   <POU Name="MAIN" Id="{1c7dbdb3-3ad9-058e-2a75-807bd1bcee45}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR		
-	button : DigitalInputNode;
-	lamp : DigitalOutputNode;
-	
-	graphFramework : GraphFramework;
-	
-	plcBasicDatatypePack : PlcBasicDatatypePack;
-	plcBasicNodePack : PlcBasicNodePack;
-	
-	server : RpcServer;
-	graphApi : graphApi(graphFramework);	
-	
-	initialise: BOOL;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF NOT initialise THEN
-	
-	// setup graph
-	graphFramework.InstallDatatypePack(plcBasicDatatypePack);
-	graphFramework.InstallNodePack(plcBasicNodePack);
-	
-	graphFramework.NodeFactory.AddNodeAsPrototype('Inputs.Button',button);
-	graphFramework.NodeFactory.AddNodeAsPrototype('Outputs.Lamp',lamp);
-
-	// setup the api
-	graphApi.RegisterWith(server);
-
-	// done
-	initialise := TRUE;
-
-END_IF
-
-graphApi.Graphs.Execute();
-]]></ST>
+      <ST><![CDATA[]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

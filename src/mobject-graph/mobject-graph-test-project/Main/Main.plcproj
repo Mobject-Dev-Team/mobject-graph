@@ -19,59 +19,6 @@
     <Released>false</Released>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Lib\GraphApi\GraphApi.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphApi\Handlers\GetStatusRpcHandler.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphApi\Handlers\GetBlueprintsRpcHandler.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphApi\Handlers\GetDatatypesRpcHandler.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphApi\Handlers\GetContentValueHandler.TcPOU">
-      <SubType>Code</SubType>
-      <ExcludeFromBuild>false</ExcludeFromBuild>
-    </Compile>
-    <Compile Include="Lib\GraphApi\Handlers\CreateGraphRpcHandler.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphApi\Handlers\CreateGraphMultiUserRpcHandler.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\GraphApi\Visitors\RetrieveNodeContentValue.TcPOU">
-      <SubType>Code</SubType>
-      <ExcludeFromBuild>false</ExcludeFromBuild>
-    </Compile>
-    <Compile Include="Lib\GraphApi\Visitors\GetBlueprintsVisitor.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\Node\Display\IntDisplayNode.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\Node\Hardware\DigitalInputNode.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\Node\Hardware\DigitalOutputNode.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\Node\PlaygroundNode.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\Node\Literals\IntLiteralNode.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\PlcBasicNodePack.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\Node\Display\BooleanDisplayNode.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Lib\PlcBasicNodePack\Node\Literals\BooleanLiteralNode.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
@@ -80,15 +27,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Lib" />
-    <Folder Include="Lib\GraphApi\Handlers" />
-    <Folder Include="Lib\GraphApi\Visitors" />
-    <Folder Include="Lib\GraphApi" />
-    <Folder Include="Lib\PlcBasicNodePack" />
-    <Folder Include="Lib\PlcBasicNodePack\Node" />
-    <Folder Include="Lib\PlcBasicNodePack\Node\Display" />
-    <Folder Include="Lib\PlcBasicNodePack\Node\Literals" />
-    <Folder Include="Lib\PlcBasicNodePack\Node\Hardware" />
     <Folder Include="Tests" />
     <Folder Include="POUs" />
   </ItemGroup>
@@ -115,29 +53,8 @@
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
-    <LibraryReference Include="mobject-collections,1.1.0,mobject">
-      <Namespace>mobject_collections</Namespace>
-    </LibraryReference>
-    <LibraryReference Include="mobject-datatypes,0.3.0,mobject">
-      <Namespace>mobject_datatypes</Namespace>
-    </LibraryReference>
-    <LibraryReference Include="mobject-deserialization,0.1.0,mobject">
-      <Namespace>mobject_deserialization</Namespace>
-    </LibraryReference>
-    <LibraryReference Include="mobject-events,1.0.0,mobject">
-      <Namespace>mobject_events</Namespace>
-    </LibraryReference>
     <LibraryReference Include="mobject-graph,0.1.0,mobject">
       <Namespace>mobject_graph</Namespace>
-    </LibraryReference>
-    <LibraryReference Include="mobject-json,1.4.0,mobject">
-      <Namespace>mobject_json</Namespace>
-    </LibraryReference>
-    <LibraryReference Include="mobject-serialization,0.4.0,mobject">
-      <Namespace>mobject_serialization</Namespace>
-    </LibraryReference>
-    <LibraryReference Include="mobject-server,0.3.0,mobject">
-      <Namespace>mobject_server</Namespace>
     </LibraryReference>
   </ItemGroup>
   <ItemGroup>
