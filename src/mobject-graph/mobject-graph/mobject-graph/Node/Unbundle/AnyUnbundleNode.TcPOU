@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="AnyUnbundleNode" Id="{9da9d17d-8f95-05b9-3066-b350ce339eb9}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK FINAL AnyUnbundleNode EXTENDS Node
+VAR
+	in : I_StructuredDatatype;
+	out : I_StructuredDatatype;
+	datatypeOperations : DatatypeOperations;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{53374dc9-1a41-0d6d-2df4-c034dc328d58}" />
+    <Folder Name="Destructor" Id="{704309dd-3c31-0c51-2d2f-093722a1eb09}" />
+    <Method Name="Clone" Id="{d5092720-a3e3-0290-2e59-0d5e19a884b5}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
+VAR
+	pNode : POINTER TO AnyUnbundleNode;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pNode := __NEW(AnyUnbundleNode(StructuredDatatype := in));
+Clone := pNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{c93ba948-a059-080d-0b22-fa4b2cc112b6}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+in.Dispose();
+out.Dispose();
+datatypeOperations.Clear();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{6d73a23f-9352-0cce-0488-37c65e51bf54}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	StructuredDatatype : I_StructuredDatatype;
+END_VAR
+VAR
+	enumerator : I_KeyValueForwardEnumerator;
+	member : I_Datatype;
+	memberClone : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StructuredDatatype.Clone().TryResolveAsStructuredDatatype(in);
+AddInput('in', in);
+
+StructuredDatatype.Clone().TryResolveAsStructuredDatatype(out);
+enumerator := out.Members.GetMemberEnumerator();
+
+WHILE enumerator.MoveNext() DO 
+	IF enumerator.TryGet(member) THEN
+		memberClone := member.Clone();
+		datatypeOperations.AddMemoryCopyOperation(member, memberClone);
+		AddOutput(enumerator.key, memberClone);
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnExecute" Id="{817379c7-6aaf-0b06-1b2f-5dbcbadf2ed9}">
+      <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[memcpy(out.Address, in.Address, in.Size);
+datatypeOperations.Execute();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

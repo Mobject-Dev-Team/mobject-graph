@@ -19,7 +19,7 @@
     <Company>mobject</Company>
     <Released>false</Released>
     <Title>mobject-graph</Title>
-    <ProjectVersion>0.2.0</ProjectVersion>
+    <ProjectVersion>0.3.0</ProjectVersion>
     <DefaultNamespace>mobject-graph</DefaultNamespace>
     <Placeholder>mobject-graph</Placeholder>
     <Author>mobject dev team</Author>
@@ -93,6 +93,7 @@
     <Folder Include="NodeFactory" />
     <Folder Include="NodeFactory\Base" />
     <Folder Include="NodeFactory\Interface" />
+    <Folder Include="NodeFactory\Datatype" />
     <Folder Include="NodePack" />
     <Folder Include="NodePrototype" />
     <Folder Include="NodePrototype\Host" />
@@ -102,6 +103,10 @@
     <Folder Include="Node\Events" />
     <Folder Include="Node\Host" />
     <Folder Include="Node\Interface" />
+    <Folder Include="Node\Literal" />
+    <Folder Include="Node\Display" />
+    <Folder Include="Node\Bundle" />
+    <Folder Include="Node\Unbundle" />
     <Folder Include="OutputPort" />
     <Folder Include="OutputPort\Base" />
     <Folder Include="OutputPort\Events" />
@@ -272,6 +277,9 @@
     <Compile Include="NodeFactory\Base\NodeFactory.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="NodeFactory\Datatype\DatatypeNodeFactory.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="NodeFactory\Interface\I_NodeFactory.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -291,6 +299,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Node\Base\Node.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Bundle\AnyBundleNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Unbundle\AnyUnbundleNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Display\AnyDisplayNode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Node\Events\I_NodeAddedEvent.TcIO">
@@ -327,6 +344,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Node\Interface\I_Nodes.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Literal\AnyLiteralNode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OutputPort\Base\OutputPort.TcPOU">
@@ -415,7 +435,7 @@
     <LibraryReference Include="mobject-collections,1.1.0,mobject">
       <Namespace>mobject_collections</Namespace>
     </LibraryReference>
-    <LibraryReference Include="mobject-datatypes,0.5.0,mobject">
+    <LibraryReference Include="mobject-datatypes,0.6.0,mobject">
       <Namespace>mobject_datatypes</Namespace>
     </LibraryReference>
     <LibraryReference Include="mobject-deserialization,0.1.0,mobject">

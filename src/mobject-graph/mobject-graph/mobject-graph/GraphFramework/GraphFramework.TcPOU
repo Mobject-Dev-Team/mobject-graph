@@ -8,6 +8,7 @@ FUNCTION_BLOCK GraphFramework IMPLEMENTS I_GraphFramework
 VAR
 	_nodeFactory : NodeFactory;
 	_datatypes : Datatypes;
+	datatypeNodeFactory : DatatypeNodeFactory(_datatypes,_nodeFactory);
 END_VAR
 ]]></Declaration>
     <Implementation>
