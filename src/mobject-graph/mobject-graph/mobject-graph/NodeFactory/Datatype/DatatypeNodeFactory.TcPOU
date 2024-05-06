@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="DatatypeNodeFactory" Id="{4b37bcb1-5b3c-084f-07b9-ae97280523f0}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK DatatypeNodeFactory IMPLEMENTS I_EventHandler
+VAR
+	datatypes : I_Datatypes;
+	nodeFactory : I_NodeFactory;
+	selfCreatedNodes : Stack;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{e3789508-846c-0b51-2172-792a6f0219f8}" />
+    <Folder Name="Destructor" Id="{701769ec-9c4f-0439-3c64-bffc00c04cc1}" />
+    <Folder Name="Private" Id="{4b06c450-3c9d-05a3-396d-cb8d55dbfe99}" />
+    <Folder Name="Protected" Id="{cd03c763-398a-08df-367f-955179e76b46}" />
+    <Method Name="CreateBundleNode" Id="{83d7bec4-800e-07e4-1251-d19d776aaebf}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateBundleNode : I_Node
+VAR_INPUT
+	NodeDatatype : I_StructuredDatatype;
+END_VAR
+VAR
+	pAnyBundleNode : POINTER TO AnyBundleNode;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pAnyBundleNode := __NEW(AnyBundleNode(StructuredDatatype := NodeDatatype));
+CreateBundleNode := pAnyBundleNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateDisplayNode" Id="{f5bc0ba5-7ab2-0bcf-066f-b58003dd2c5a}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateDisplayNode : I_Node
+VAR_INPUT
+	NodeDatatype : I_Datatype;
+END_VAR
+VAR
+	pAnyDisplayNode : POINTER TO AnyDisplayNode;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pAnyDisplayNode := __NEW(AnyDisplayNode(Datatype := NodeDatatype));
+CreateDisplayNode := pAnyDisplayNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateLiteralNode" Id="{c52fa6c0-781b-0d47-0d80-60de41af51f8}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateLiteralNode : I_Node
+VAR_INPUT
+	NodeDatatype : I_Datatype;
+END_VAR
+VAR
+	pAnyLiteralNode : POINTER TO AnyLiteralNode;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pAnyLiteralNode := __NEW(AnyLiteralNode(Datatype := NodeDatatype));
+CreateLiteralNode := pAnyLiteralNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateUnbundleNode" Id="{8cd0562e-322b-0354-0533-ad232dd1bace}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateUnbundleNode : I_Node
+VAR_INPUT
+	NodeDatatype : I_StructuredDatatype;
+END_VAR
+VAR
+	pAnyUnbundleNode : POINTER TO AnyUnbundleNode;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pAnyUnbundleNode := __NEW(AnyUnbundleNode(StructuredDatatype := NodeDatatype));
+CreateUnbundleNode := pAnyUnbundleNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DeregisterWithDatatypes" Id="{d281941f-7d1b-0268-2c8d-f7207a072f5a}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DeregisterWithDatatypes
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF datatypes = 0 THEN
+	RETURN;
+END_IF
+
+datatypes.OffEvent('OnDatatypeAdded',THIS^);
+datatypes := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisposeSelfCreatedNodes" Id="{a525719b-3852-0c1a-02d2-da99c688807e}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DisposeSelfCreatedNodes : BOOL
+VAR
+	node : I_Node;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE selfCreatedNodes.TryPop(node) DO
+	node.Dispose();
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{9d20964f-f8ef-0067-23b5-16439e649fce}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+DeregisterWithDatatypes();
+DisposeSelfCreatedNodes();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{82b14753-77c4-0521-20cf-034a973976ca}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Datatypes : I_Datatypes;
+	NodeFactory : I_NodeFactory;	
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.datatypes := Datatypes;
+THIS^.nodeFactory := NodeFactory;
+
+RegisterWithDatatypes();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="HandleEvent" Id="{3ed2b7a8-ed88-0dfd-0753-1eb08b58ec83}">
+      <Declaration><![CDATA[METHOD PUBLIC HandleEvent
+VAR_INPUT
+	Event : I_Event;
+END_VAR
+VAR
+	datatypeAddedEvent : I_DatatypeAddedEvent;
+	aliasDatatypeAddedEvent : I_AliasDatatypeAddedEvent;
+	enumDatatypeAddedEvent : I_EnumDatatypeAddedEvent;
+	structuredDatatypeAddedEvent : I_StructuredDatatypeAddedEvent;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF __QUERYINTERFACE(event, datatypeAddedEvent) THEN
+	RegisterPrimitiveLiteralNodeOfType(datatypeAddedEvent.Target);
+	RegisterPrimitiveDisplayNodeOfType(datatypeAddedEvent.Target);
+	RETURN;
+END_IF
+
+IF __QUERYINTERFACE(event, aliasDatatypeAddedEvent) THEN
+	RegisterUdtLiteralNodeOfType(aliasDatatypeAddedEvent.Target);
+	RegisterUdtDisplayNodeOfType(aliasDatatypeAddedEvent.Target);
+	RETURN;
+END_IF
+
+IF __QUERYINTERFACE(event, enumDatatypeAddedEvent) THEN
+	RegisterUdtLiteralNodeOfType(enumDatatypeAddedEvent.Target);
+	RegisterUdtDisplayNodeOfType(enumDatatypeAddedEvent.Target);
+	RETURN;
+END_IF
+
+IF __QUERYINTERFACE(event, structuredDatatypeAddedEvent) THEN
+	RegisterUdtLiteralNodeOfType(structuredDatatypeAddedEvent.Target);
+	RegisterUdtDisplayNodeOfType(structuredDatatypeAddedEvent.Target);
+	RegisterBundleNodeOfType(structuredDatatypeAddedEvent.Target);
+	RegisterUnbundleNodeOfType(structuredDatatypeAddedEvent.Target);
+	RETURN;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterBundleNodeOfType" Id="{78fd56dc-3ec7-0403-2845-c9223880cd60}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterBundleNodeOfType
+VAR_INPUT
+	NodeDatatype : I_StructuredDatatype;
+END_VAR
+VAR
+	node : I_Node;
+	path : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[node := CreateBundleNode(NodeDatatype);
+selfCreatedNodes.Push(node);
+path := concat('Bundle/',NodeDatatype.Identifier);
+nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterPrimitiveDisplayNodeOfType" Id="{87ceec21-b9ce-007c-065c-0e277e7a5dd8}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterPrimitiveDisplayNodeOfType
+VAR_INPUT
+	NodeDatatype : I_Datatype;
+END_VAR
+VAR
+	node : I_Node;
+	path : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[node := CreateDisplayNode(NodeDatatype);
+selfCreatedNodes.Push(node);
+path := concat('Display/',NodeDatatype.TypeName);
+nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterPrimitiveLiteralNodeOfType" Id="{dda91e61-4003-0e96-067e-8b75dd3a9867}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterPrimitiveLiteralNodeOfType
+VAR_INPUT
+	NodeDatatype : I_Datatype;
+END_VAR
+VAR
+	node : I_Node;
+	path : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[node := CreateLiteralNode(NodeDatatype);
+selfCreatedNodes.Push(node);
+path := concat('Literal/',NodeDatatype.TypeName);
+nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterUdtDisplayNodeOfType" Id="{88226159-8e0c-06ab-09a6-1ed46c9f31a9}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterUdtDisplayNodeOfType
+VAR_INPUT
+	NodeDatatype : I_UserDefinedDatatype;
+END_VAR
+VAR
+	node : I_Node;
+	path : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[node := CreateDisplayNode(NodeDatatype);
+selfCreatedNodes.Push(node);
+path := concat('Display/',NodeDatatype.Identifier);
+nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterUdtLiteralNodeOfType" Id="{065152af-1dfe-001f-0f3f-26f0fa875b3a}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterUdtLiteralNodeOfType
+VAR_INPUT
+	NodeDatatype : I_UserDefinedDatatype;
+END_VAR
+VAR
+	node : I_Node;
+	path : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[node := CreateLiteralNode(NodeDatatype);
+selfCreatedNodes.Push(node);
+path := concat('Literal/',NodeDatatype.Identifier);
+nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterUnbundleNodeOfType" Id="{473b20bb-d3d6-0876-14f0-3d4dd1a1b689}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterUnbundleNodeOfType
+VAR_INPUT
+	NodeDatatype : I_StructuredDatatype;
+END_VAR
+VAR
+	node : I_Node;
+	path : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[node := CreateUnbundleNode(NodeDatatype);
+selfCreatedNodes.Push(node);
+path := concat('Unbundle/',NodeDatatype.Identifier);
+nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterWithDatatypes" Id="{d67b5db8-9b52-0eb6-3579-8cacdc723474}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE RegisterWithDatatypes
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF datatypes = 0 THEN
+	RETURN;
+END_IF
+
+datatypes.OnEvent('OnDatatypeAdded',THIS^);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
