@@ -19,7 +19,7 @@
     <Company>mobject</Company>
     <Released>false</Released>
     <Title>mobject-graph</Title>
-    <ProjectVersion>0.3.0</ProjectVersion>
+    <ProjectVersion>0.4.0</ProjectVersion>
     <DefaultNamespace>mobject-graph</DefaultNamespace>
     <Placeholder>mobject-graph</Placeholder>
     <Author>mobject dev team</Author>
@@ -432,13 +432,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <LibraryReference Include="mobject-collections,1.1.0,mobject">
+    <LibraryReference Include="mobject-collections,1.2.0,mobject">
       <Namespace>mobject_collections</Namespace>
     </LibraryReference>
-    <LibraryReference Include="mobject-datatypes,0.6.0,mobject">
+    <LibraryReference Include="mobject-datatypes,0.7.0,mobject">
       <Namespace>mobject_datatypes</Namespace>
     </LibraryReference>
-    <LibraryReference Include="mobject-deserialization,0.1.0,mobject">
+    <LibraryReference Include="mobject-deserialization,0.2.0,mobject">
       <Namespace>mobject_deserialization</Namespace>
     </LibraryReference>
     <LibraryReference Include="mobject-disposable,1.0.0,mobject">

@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.0-alpha
+
+- updated to support mobject-collections v1.2.0
+- updated to support deserialization v0.2.0
+- updated to support mobject-datatypes v0.7.0
+
 ## v0.3.0-alpha
 
 - added autogeneration of literal, display, unbundle and bundle nodes
