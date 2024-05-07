@@ -5,6 +5,7 @@
 - updated to support mobject-collections v1.2.0
 - updated to support deserialization v0.2.0
 - updated to support mobject-datatypes v0.7.0
+- changed hosts to OrderedDictionary
 
 ## v0.3.0-alpha
 

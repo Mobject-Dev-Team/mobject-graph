@@ -8,7 +8,7 @@ FUNCTION_BLOCK NodeHost IMPLEMENTS I_Nodes, I_Serializable
 VAR
 	hostParent : I_HostNodes;
 	eventTarget : I_EventTarget;
-	nodes : Dictionary;
+	nodes : OrderedDictionary;
 	nodesInOrder : LinkedList;
 END_VAR
 ]]></Declaration>

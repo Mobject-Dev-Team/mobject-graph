@@ -8,7 +8,7 @@ FUNCTION_BLOCK InputPortHost IMPLEMENTS I_InputPorts, I_Serializable
 VAR
 	hostParent : I_HostInputPorts;
 	eventTarget : I_EventTarget;
-	ports : Dictionary;
+	ports : OrderedDictionary;
 	selfCreatedInputPorts : Stack;
 END_VAR
 ]]></Declaration>

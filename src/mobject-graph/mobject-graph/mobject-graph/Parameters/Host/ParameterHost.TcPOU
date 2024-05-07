@@ -8,7 +8,7 @@ FUNCTION_BLOCK ParameterHost IMPLEMENTS I_Parameters, I_Serializable
 VAR
 	hostParent : I_HostParameters;
 	eventTarget : I_EventTarget;
-	parameters : Dictionary;
+	parameters : OrderedDictionary;
 	selfCreatedParameters : Stack;
 END_VAR
 ]]></Declaration>
