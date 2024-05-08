@@ -8,7 +8,7 @@ FUNCTION_BLOCK MetadataHost IMPLEMENTS I_Metadatum, I_Serializable
 VAR
 	hostParent : I_HostMetadata;
 	eventTarget : I_EventTarget;
-	meta : Dictionary;
+	meta : OrderedDictionary;
 	selfCreatedMetadata : Stack;
 END_VAR
 ]]></Declaration>

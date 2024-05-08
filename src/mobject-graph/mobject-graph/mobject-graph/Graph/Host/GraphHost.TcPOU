@@ -8,7 +8,7 @@ FUNCTION_BLOCK GraphHost IMPLEMENTS I_Graphs, I_Serializable
 VAR
 	hostParent : I_HostGraphs;
 	eventTarget : I_EventTarget;
-	graphs : Dictionary;	
+	graphs : OrderedDictionary;	
 END_VAR
 ]]></Declaration>
     <Implementation>

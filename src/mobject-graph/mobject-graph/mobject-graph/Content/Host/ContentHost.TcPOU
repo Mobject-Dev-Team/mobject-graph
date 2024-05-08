@@ -8,7 +8,7 @@ FUNCTION_BLOCK ContentHost IMPLEMENTS I_Contents, I_Serializable
 VAR
 	hostParent : I_HostContent;
 	eventTarget : I_EventTarget;
-	contents : Dictionary;
+	contents : OrderedDictionary;
 	selfCreatedContent : Stack;
 END_VAR
 ]]></Declaration>
