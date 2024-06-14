@@ -51,6 +51,8 @@ END_VAR
 VAR
 	enumerator : I_KeyValueForwardEnumerator;
 	member : I_Datatype;
+	memberAsBit : I_BitDatatype;
+	_bool : Pointer to _BOOL;
 	memberClone : I_Datatype;
 END_VAR]]></Declaration>
       <Implementation>
@@ -62,9 +64,18 @@ enumerator := out.Members.GetMemberEnumerator();
 
 WHILE enumerator.MoveNext() DO 
 	IF enumerator.TryGet(member) THEN
-		memberClone := member.Clone();
-		datatypeOperations.AddMemoryCopyOperation(member, memberClone);
-		AddOutput(enumerator.key, memberClone);
+		IF member.TryResolveAsBitDatatype(memberAsBit) THEN
+			// if the element is a _bit then this needs to be treated differently (as you cannot simply memcpy
+			// a bit, as it sits next to other data. Instead, a bool is added in it's place.	
+			_bool := __NEW(_BOOL(InitialValue := memberAsBit.Value));
+			datatypeOperations.AddWriteBitToBoolOperation(memberAsBit, _bool^);
+			AddOutput(enumerator.Key, _bool^);
+		ELSE
+			// for all other datatypes,
+			memberClone := member.Clone();
+			datatypeOperations.AddMemoryCopyOperation(member, memberClone);
+			AddOutput(enumerator.key, memberClone);
+		END_IF		
 	END_IF
 END_WHILE
 
