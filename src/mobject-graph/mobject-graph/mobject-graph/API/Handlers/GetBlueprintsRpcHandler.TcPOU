@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="GetBlueprintsRpcHandler" Id="{c8f66f90-e7e3-49d6-b7b6-2f16dc6e40e9}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK GetBlueprintsRpcHandler IMPLEMENTS I_AsynchronousRpcHandler
+VAR
+	nodeFactory : I_NodeFactory;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Handle" Id="{b0d553f5-6d18-4f5a-ac74-32ac309a6ede}">
+      <Declaration><![CDATA[METHOD Handle
+VAR_INPUT
+	Parameters : I_Deserializer;
+	Response : I_AsynchronousRpcResponse;
+END_VAR
+VAR
+	visitor : GetBlueprintsVisitor;
+	serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF nodeFactory = 0 THEN
+	Response.RejectWithMessage('GetBlueprintsRpcHandler has not been initialized with a valid nodeFactory object');
+	RETURN;
+END_IF
+
+serializer := Response.GetSerializer();
+visitor.Initialize(serializer);
+nodeFactory.Accept(visitor);
+
+Response.CompleteWithSerializer(serializer);
+serializer.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{0d327fe8-8e2a-41ef-ac2a-53373485afd6}">
+      <Declaration><![CDATA[METHOD PUBLIC Initialize
+VAR_INPUT
+	NodeFactory : I_NodeFactory;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[this^.nodeFactory := NodeFactory;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

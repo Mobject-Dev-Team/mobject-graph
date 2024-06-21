@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.7.0-alpha
+
+- updated to support mobject-core v0.1.0
+- merged mobject-graph-api for simplicity
+- added dependency to mobject-server v0.8.0
+
+## v0.6.0-alpha
+
+- updated to support mobject-datatypes v0.10.0, this brings the ability to support interfaces
+- updated to also include interface datatypes where needed
+
 ## v0.5.0-alpha
 
 - updated to support mobject-datatypes v0.9.0, this brings the ability to support \_bit
@@ -31,3 +42,47 @@
 ## v0.1.0-alpha
 
 - Initial
+
+# History
+
+## mobject-graph-api v0.8.0-alpha
+
+- added support for mobject-graph v0.6.0
+
+## mobject-graph-api v0.7.0-alpha
+
+- added support for mobject-server v0.7.0
+- changed api to now support plc cycle "async" processing
+
+## mobject-graph-api v0.6.0-alpha
+
+- added support for mobject-graph v0.5.0
+- added support for mobject-deserialization v0.3.0
+- added support for mobject-server v0.6.0
+- added support for mobject-collections v1.3.0
+- added support for mobject-events v1.1.0
+- added support for mobject-serialization v0.5.0
+
+## mobject-graph-api v0.5.0-alpha
+
+- added support for mobject-collections v1.2.0
+- added support for mobject-deserialization v0.2.0
+- added support for mobject-graph v0.4.0
+- added support for mobject-server v0.5.0
+
+## mobject-graph-api v0.4.0-alpha
+
+- added support for mobject-server v0.4.0
+
+## mobject-graph-api v0.3.0-alpha
+
+- added support for mobject-graph v0.3.0
+
+## mobject-graph-api v0.2.0-alpha
+
+- removed datatypes until they are needed
+- added support for mobject-graph v0.2.0
+
+## mobject-graph-api v0.1.0-alpha
+
+- Initial code

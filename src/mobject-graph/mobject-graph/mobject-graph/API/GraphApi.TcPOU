@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="GraphApi" Id="{bbeaa71e-faa8-4020-94ac-c51b0ba5f637}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK GraphApi IMPLEMENTS I_RpcApi, I_HostGraphs, I_EventEmitter
+VAR
+	graphFramework : I_GraphFramework;
+	eventEmitter : EventEmitter;
+	graphHost : GraphHost(THIS^, eventEmitter);
+	createGraphRpcHandler : CreateGraphRpcHandler;
+	createGraphMultiUserRpcHandler : CreateGraphMultiUserRpcHandler;
+	getStatusRpcHandler : GetStatusRpcHandler;
+	getBlueprintsRpcHandler : GetBlueprintsRpcHandler;
+	getContentValueHandler : GetContentValueHandler;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{3247a7d8-0cdf-41a7-b3ec-00d25e5860b9}" />
+    <Folder Name="Destructor" Id="{983f8a90-ec8c-4c25-8a21-35742fc4254f}" />
+    <Method Name="FB_exit" Id="{4eb785ac-97f2-4e9f-bd85-4c70f39c8c99}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+graphs.DisposeAll();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{b497c453-9953-44d6-988c-3152593a8346}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	GraphFramework : I_GraphFramework;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.graphFramework := GraphFramework;
+getBlueprintsRpcHandler.Initialize(GraphFramework.NodeFactory);
+getStatusRpcHandler.Initialize(graphHost);
+createGraphRpcHandler.Initialize(GraphFramework, graphHost);
+createGraphMultiUserRpcHandler.Initialize(GraphFramework, graphHost);
+getContentValueHandler.Initialize(graphHost);]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Graphs" Id="{7459a2e4-4645-45ec-bd04-a073ccef6af0}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Graphs : I_Graphs]]></Declaration>
+      <Get Name="Get" Id="{ca3f37f6-bbbb-4cbf-ade0-2bc41c362246}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Graphs := graphHost;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="OffEvent" Id="{453e0cb5-5eec-4608-8791-b408daa4f546}">
+      <Declaration><![CDATA[METHOD PUBLIC OffEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OffEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnceEvent" Id="{635c4793-06f8-4101-842b-634a7c40f36e}">
+      <Declaration><![CDATA[METHOD PUBLIC OnceEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnceEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnEvent" Id="{8449549f-e645-46b8-856f-f2a55623aa58}">
+      <Declaration><![CDATA[METHOD PUBLIC OnEvent
+VAR_INPUT
+	EventName : T_MaxString;
+	EventHandler : I_EventHandler;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterWith" Id="{16f43e44-1c8f-40af-91d9-0c94f14c9a34}">
+      <Declaration><![CDATA[METHOD RegisterWith
+VAR_INPUT
+	Server : I_RpcServer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Server.RegisterAsynchronousRpcHandler('CreateGraph',createGraphRpcHandler);
+Server.RegisterAsynchronousRpcHandler('CreateGraphMultiUser',createGraphMultiUserRpcHandler);
+Server.RegisterAsynchronousRpcHandler('GetStatus',getStatusRpcHandler);
+Server.RegisterAsynchronousRpcHandler('GetBlueprints',getBlueprintsRpcHandler);
+Server.RegisterAsynchronousRpcHandler('GetContentValue',getContentValueHandler);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
