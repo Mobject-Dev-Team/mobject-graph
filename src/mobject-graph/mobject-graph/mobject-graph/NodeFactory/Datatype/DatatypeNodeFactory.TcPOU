@@ -137,6 +137,7 @@ VAR
 	aliasDatatypeAddedEvent : I_AliasDatatypeAddedEvent;
 	enumDatatypeAddedEvent : I_EnumDatatypeAddedEvent;
 	structuredDatatypeAddedEvent : I_StructuredDatatypeAddedEvent;
+	interfaceDatatypeAddedEvent : I_InterfaceDatatypeAddedEvent;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF __QUERYINTERFACE(event, datatypeAddedEvent) THEN
@@ -154,6 +155,12 @@ END_IF
 IF __QUERYINTERFACE(event, enumDatatypeAddedEvent) THEN
 	RegisterUdtLiteralNodeOfType(enumDatatypeAddedEvent.Target);
 	RegisterUdtDisplayNodeOfType(enumDatatypeAddedEvent.Target);
+	RETURN;
+END_IF
+
+IF __QUERYINTERFACE(event, interfaceDatatypeAddedEvent) THEN
+	RegisterInterfaceLiteralNodeOfType(interfaceDatatypeAddedEvent.Target);
+	RegisterInterfaceDisplayNodeOfType(interfaceDatatypeAddedEvent.Target);
 	RETURN;
 END_IF
 
@@ -178,7 +185,45 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[node := CreateBundleNode(NodeDatatype);
 selfCreatedNodes.Push(node);
-path := concat('Bundle/',NodeDatatype.Identifier);
+path := concat('Bundle/',NodeDatatype.TypeName);
+path := concat(path, '/');
+path := concat(path, NodeDatatype.Identifier);
+nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterInterfaceDisplayNodeOfType" Id="{7be2175b-0a3b-02e2-1c61-137313917382}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterInterfaceDisplayNodeOfType
+VAR_INPUT
+	NodeDatatype : I_InterfaceDatatype;
+END_VAR
+VAR
+	node : I_Node;
+	path : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[node := CreateDisplayNode(NodeDatatype);
+selfCreatedNodes.Push(node);
+path := concat('Display/',NodeDatatype.TypeName);
+path := concat(path, '/');
+path := concat(path, NodeDatatype.Identifier);
+nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterInterfaceLiteralNodeOfType" Id="{56adc14e-1ed1-0ff7-38cf-3244c05df985}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterInterfaceLiteralNodeOfType
+VAR_INPUT
+	NodeDatatype : I_InterfaceDatatype;
+END_VAR
+VAR
+	node : I_Node;
+	path : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[node := CreateLiteralNode(NodeDatatype);
+selfCreatedNodes.Push(node);
+path := concat('Literal/',NodeDatatype.TypeName);
+path := concat(path, '/');
+path := concat(path, NodeDatatype.Identifier);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
@@ -226,7 +271,9 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[node := CreateDisplayNode(NodeDatatype);
 selfCreatedNodes.Push(node);
-path := concat('Display/',NodeDatatype.Identifier);
+path := concat('Display/',NodeDatatype.TypeName);
+path := concat(path, '/');
+path := concat(path, NodeDatatype.Identifier);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
@@ -242,7 +289,9 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[node := CreateLiteralNode(NodeDatatype);
 selfCreatedNodes.Push(node);
-path := concat('Literal/',NodeDatatype.Identifier);
+path := concat('Literal/UDT/',NodeDatatype.TypeName);
+path := concat(path, '/');
+path := concat(path, NodeDatatype.Identifier);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
@@ -258,7 +307,9 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[node := CreateUnbundleNode(NodeDatatype);
 selfCreatedNodes.Push(node);
-path := concat('Unbundle/',NodeDatatype.Identifier);
+path := concat('Unbundle/',NodeDatatype.TypeName);
+path := concat(path, '/');
+path := concat(path, NodeDatatype.Identifier);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>

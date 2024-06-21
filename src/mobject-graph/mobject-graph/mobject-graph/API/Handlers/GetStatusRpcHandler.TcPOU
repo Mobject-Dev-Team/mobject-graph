@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="GetStatusRpcHandler" Id="{e43733d1-2b9d-0d57-2c56-297d7cb96473}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK GetStatusRpcHandler IMPLEMENTS I_AsynchronousRpcHandler
+VAR
+	graphs : I_Graphs;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Handle" Id="{7c90d084-aa8b-0ce3-0190-ef646ce0c933}">
+      <Declaration><![CDATA[METHOD Handle
+VAR_INPUT
+	Parameters : I_Deserializer;
+	Response : I_AsynchronousRpcResponse;
+END_VAR
+VAR
+	graphUuid : T_MAXSTRING;
+	graph : I_Graph;
+	feedback : DeserializerFeedback;
+	serializer : I_Serializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT Parameters.TryGetKeyString('graphUuid', graphUuid, feedback) THEN
+	Response.RejectWithMessage(feedback.FirstError.Message);
+	RETURN;
+END_IF
+
+IF NOT graphs.TryGetGraphByUuid(graphUuid,graph) THEN
+	Response.RejectWithMessage(concat('Unknown UUID : ',graphUuid));
+	RETURN;
+END_IF
+
+serializer := Response.GetSerializer();
+graph.SerializeWith(serializer);
+Response.CompleteWithObject(graph);
+serializer.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{50297957-5699-0c6b-00c4-db0634e0cc7c}">
+      <Declaration><![CDATA[METHOD PUBLIC Initialize
+VAR_INPUT
+	Graphs : I_Graphs;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.graphs := Graphs;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

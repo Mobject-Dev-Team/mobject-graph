@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="GetContentValueHandler" Id="{052f16de-9301-4a08-b6ad-ea39afce0927}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK GetContentValueHandler IMPLEMENTS I_AsynchronousRpcHandler
+VAR
+	graphs : I_Graphs;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Handle" Id="{8662b19e-987e-446d-a626-fb1cbf5261d8}">
+      <Declaration><![CDATA[METHOD Handle
+VAR_INPUT
+	Parameters : I_Deserializer;
+	Response : I_AsynchronousRpcResponse;
+END_VAR
+VAR
+	graphUuid : T_MAXSTRING;
+	nodeId : T_MAXSTRING;
+	contentName : T_MAXSTRING;
+	visitor : RetrieveNodeContentValue;
+	serializer : I_Serializer;
+	feedback : DeserializerFeedback;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT Parameters.TryGetKeyString('graphUuid', graphUuid, feedback) THEN
+	Response.RejectWithMessage(feedback.FirstError.Message);
+	RETURN;
+END_IF
+
+IF NOT Parameters.TryGetKeyString('nodeId', nodeId, feedback) THEN
+	Response.RejectWithMessage(feedback.FirstError.Message);
+	RETURN;
+END_IF
+
+IF NOT Parameters.TryGetKeyString('contentName', contentName, feedback) THEN
+	Response.RejectWithMessage(feedback.FirstError.Message);
+	RETURN;
+END_IF
+
+serializer := Response.GetSerializer();
+visitor.Initialize(graphUuid, nodeId, contentName, serializer);
+graphs.Accept(visitor);
+
+IF visitor.Error THEN
+	Response.RejectWithMessage(visitor.ErrorMessage);
+	serializer.Dispose();
+	RETURN;
+END_IF
+
+IF NOT visitor.Done THEN
+	Response.RejectWithMessage('Invalid graphUuid');
+	serializer.Dispose();
+	RETURN;
+END_IF
+
+Response.CompleteWithSerializer(serializer);
+serializer.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{e241656e-201d-476e-930c-d55b2bd6015a}">
+      <Declaration><![CDATA[METHOD PUBLIC Initialize
+VAR_INPUT
+	Graphs : I_Graphs;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[this^.graphs := Graphs;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

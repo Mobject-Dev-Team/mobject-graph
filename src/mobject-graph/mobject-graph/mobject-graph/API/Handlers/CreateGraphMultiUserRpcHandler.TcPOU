@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="CreateGraphMultiUserRpcHandler" Id="{d6b88ddc-1f3f-4bc6-9cec-7511e5f75694}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK CreateGraphMultiUserRpcHandler IMPLEMENTS I_AsynchronousRpcHandler
+VAR
+	graphFramework : I_GraphFramework;
+	graphs : I_Graphs;
+	userGraphs : Dictionary;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Handle" Id="{2fa8f613-f7ff-45a2-bdd0-f1d9eaa294a4}">
+      <Declaration><![CDATA[METHOD Handle
+VAR_INPUT
+	Parameters : I_Deserializer;
+	Response : I_AsynchronousRpcResponse;
+END_VAR
+VAR
+	clientId : T_MAXSTRING;
+	graphUuid : T_MAXSTRING;
+	graph : I_Graph;
+	feedback : DeserializerFeedback;
+	graphDeserializer : I_Deserializer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT Parameters.TryGetKeyString('clienId', clientId, feedback) THEN
+	Response.RejectWithMessage(feedback.FirstError.Message);
+	RETURN;
+END_IF
+
+IF NOT userGraphs.TryGetValue(clientId, graphUuid) THEN
+	IF graphs.TryGetGraphByUuid(graphUuid,graph) THEN
+		graphs.RemoveGraph(graph);
+		graph.Dispose();
+	END_IF
+	userGraphs.Remove(clientId);
+END_IF
+
+graph := graphFramework.Create();
+graphDeserializer := Parameters.GetKeyObject('graph');
+
+IF NOT graph.TryDeserializeFrom(graphDeserializer, feedback) THEN
+	Response.RejectWithMessage(feedback.FirstError.Message);
+	graph.Dispose();
+	RETURN;
+END_IF
+
+graphUuid := graph.Uuid;
+userGraphs.AddOrUpdate(clientId, graphUuid);
+graphs.AddGraph(graph);
+Response.CompleteWithObject(graph);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{6117f436-a2fa-4784-a767-69b747ee1b47}">
+      <Declaration><![CDATA[METHOD PUBLIC Initialize
+VAR_INPUT
+	GraphFramework : I_GraphFramework;
+	Graphs : I_Graphs;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.graphFramework := GraphFramework;
+THIS^.graphs := Graphs;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
