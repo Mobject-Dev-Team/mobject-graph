@@ -1,5 +1,20 @@
 # Changelog
 
+## v0.9.0-alpha
+
+- added option to install a whole pack (both nodepack and datatype pack at the same time)
+- improved efficiency of the getStatus and loadGraph api calls
+- updated to support mobject-core v0.3.0
+- added iec primitive datatypes pack
+- changed api to take server as a constructor
+- changed api to use cyclic call
+- updated to support mobject-server v0.10.0
+- performance updates
+  - GetStatus RPC API - now provides condensed output
+  - CreateGraph RPC API - now provides condensed output
+  - All hosts now use NOT.IsEmpty rather than .Count > 0.
+  - Execute no longer creates enumerator each call.
+
 ## v0.8.0-alpha
 
 - updated to support mobject-core v0.2.0

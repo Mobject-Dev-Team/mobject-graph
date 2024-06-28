@@ -15,6 +15,13 @@ END_VAR
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
+    <Method Name="Install" Id="{1b3dea12-ac6d-0c7a-30a8-f1233e671c1b}">
+      <Declaration><![CDATA[METHOD PUBLIC Install
+VAR_INPUT
+	Pack : I_GraphPack;
+END_VAR
+]]></Declaration>
+    </Method>
     <Property Name="NodeFactory" Id="{edf7f767-4697-41c5-b9ba-9bf9e9d25a3b}">
       <Declaration><![CDATA[PROPERTY PUBLIC NodeFactory : I_NodeFactory]]></Declaration>
       <Get Name="Get" Id="{f1017b5c-4b53-42cc-8ed6-f8ae79e6a313}">

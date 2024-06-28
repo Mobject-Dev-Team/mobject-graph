@@ -145,7 +145,7 @@ eventTarget := ParentEventTarget;]]></ST>
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[HasMetadata := meta.Count > 0;]]></ST>
+          <ST><![CDATA[HasMetadata := NOT meta.IsEmpty;]]></ST>
         </Implementation>
       </Get>
     </Property>

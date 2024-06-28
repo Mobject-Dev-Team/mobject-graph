@@ -103,7 +103,7 @@ END_IF
 IF VisitingExtension.Contents.HasContents THEN
 	serializer.addkey('contents');
 	serializer.StartArray();
-	VisitingExtension.Parameters.Accept(THIS^);
+	VisitingExtension.Contents.Accept(THIS^);
 	serializer.EndArray();
 END_IF
 
