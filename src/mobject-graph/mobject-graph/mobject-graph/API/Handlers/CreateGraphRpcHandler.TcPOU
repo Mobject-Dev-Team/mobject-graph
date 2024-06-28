@@ -24,6 +24,8 @@ VAR
 	graph : I_Graph;
 	feedback : DeserializerFeedback;
 	graphDeserializer : I_Deserializer;
+	serializer : I_Serializer;
+	getStatusVisitor : GetStatusVisitor;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF graphs.TryGetGraphByUuid(lastGraphUuid,graph) THEN
@@ -43,7 +45,12 @@ END_IF
 
 lastGraphUuid := graph.Uuid;
 graphs.AddGraph(graph);
-Response.CompleteWithObject(graph);]]></ST>
+
+serializer := Response.GetSerializer();
+getStatusVisitor.Initialize(serializer);
+getStatusVisitor.VisitGraph(graph);
+Response.CompleteWithSerializer(serializer);
+serializer.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="Initialize" Id="{6f5caa5d-c012-44e1-8933-f5f8ca304953}">

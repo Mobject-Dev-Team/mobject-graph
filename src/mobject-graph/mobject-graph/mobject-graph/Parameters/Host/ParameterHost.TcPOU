@@ -145,7 +145,7 @@ eventTarget := ParentEventTarget;]]></ST>
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[HasParameters := parameters.Count > 0;]]></ST>
+          <ST><![CDATA[HasParameters := NOT parameters.IsEmpty;]]></ST>
         </Implementation>
       </Get>
     </Property>

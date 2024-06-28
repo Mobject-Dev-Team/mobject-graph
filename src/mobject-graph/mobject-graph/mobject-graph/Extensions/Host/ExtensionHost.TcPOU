@@ -88,7 +88,7 @@ eventTarget := parentEventTarget;]]></ST>
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[HasExtensions := extensions.Count > 0;]]></ST>
+          <ST><![CDATA[HasExtensions := not extensions.IsEmpty;]]></ST>
         </Implementation>
       </Get>
     </Property>

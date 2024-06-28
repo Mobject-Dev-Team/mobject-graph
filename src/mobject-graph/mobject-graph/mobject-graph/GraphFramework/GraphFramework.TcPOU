@@ -35,24 +35,15 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="InstallDatatypePack" Id="{411c3c3d-3406-4c46-aa67-4c736fa7073a}">
-      <Declaration><![CDATA[METHOD PUBLIC InstallDatatypePack
+    <Method Name="Install" Id="{e4dda167-98bc-0854-02d5-43a8f02f58db}">
+      <Declaration><![CDATA[METHOD PUBLIC Install
 VAR_INPUT
-	DatatypePack : I_DatatypePack;
+	Pack : I_GraphPack;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[DatatypePack.RegisterWith(Datatypes);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="InstallNodePack" Id="{b8bf889c-c29f-42aa-aac8-841789b4f4d4}">
-      <Declaration><![CDATA[METHOD PUBLIC InstallNodePack
-VAR_INPUT
-	NodePack : I_NodePack;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[NodePack.RegisterWithNodeFactory(NodeFactory);]]></ST>
+        <ST><![CDATA[Pack.RegisterWithDatatypes(Datatypes);
+Pack.RegisterWithNodeFactory(NodeFactory);]]></ST>
       </Implementation>
     </Method>
     <Property Name="NodeFactory" Id="{2a4f3a49-3a80-4475-bdc3-fa7105b5ece9}">

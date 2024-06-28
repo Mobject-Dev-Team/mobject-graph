@@ -145,7 +145,7 @@ eventTarget := parentEventTarget;]]></ST>
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[HasOutputPorts := ports.Count > 0;]]></ST>
+          <ST><![CDATA[HasOutputPorts := NOT ports.IsEmpty;]]></ST>
         </Implementation>
       </Get>
     </Property>

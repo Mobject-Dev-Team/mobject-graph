@@ -10,12 +10,15 @@ VAR
 	eventTarget : I_EventTarget;
 	nodes : OrderedDictionary;
 	nodesInExecutionOrder : LinkedList;
+	executeEnumerator : I_ForwardEnumerator;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{6d31f29e-d98e-48e6-bd9b-306f43bf97e1}" />
+    <Folder Name="Destructor" Id="{1d344f19-2c26-08d7-2b51-a1e9e7637fec}" />
+    <Folder Name="Private" Id="{122825d1-e6d6-0b5f-13a3-66b772f541c7}" />
     <Folder Name="Protected" Id="{f2e8bfe1-f55b-4f71-9544-0b966ddbe398}" />
     <Method Name="Accept" Id="{82f77bed-622d-4472-9ec2-87234df8b81e}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
@@ -48,7 +51,32 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[nodes.AddOrUpdate(Node.id, Node);
 UpdateExecutionOrder(Node);
-EmitOnNodeAddedEvent(Node);]]></ST>
+EmitOnNodeAddedEvent(Node);
+CreateExecuteEnumerator();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateExecuteEnumerator" Id="{8fdaa205-1bdd-0a27-015c-fa508e3525b3}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateExecuteEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF executeEnumerator <> 0 THEN
+	executeEnumerator.Dispose();
+END_IF
+
+executeEnumerator := nodesInExecutionOrder.GetEnumerator();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DestroyExecuteEnumerator" Id="{61daf550-fc96-08be-18c8-d125a6a18e90}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE DestroyExecuteEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF executeEnumerator <> 0 THEN
+	executeEnumerator.Dispose();
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitOnNodeAddedEvent" Id="{ae6421b4-7458-4436-b831-0550f915e498}" FolderPath="Protected\">
@@ -74,19 +102,30 @@ pNodeAddedEvent^.Dispose();]]></ST>
 VAR_INPUT
 END_VAR
 VAR
-	enumerator : I_ForwardEnumerator;
 	node : I_Node;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[enumerator := nodesInExecutionOrder.GetEnumerator();
+        <ST><![CDATA[executeEnumerator.Reset();
 
-WHILE enumerator.MoveNext() DO
-	IF enumerator.TryGet(node) THEN
+WHILE executeEnumerator.MoveNext() DO
+	IF executeEnumerator.TryGet(node) THEN
 		node.Execute();
 	END_IF
-END_WHILE
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{53b4398a-04fb-079c-1c49-4235f68ff212}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
 
-enumerator.Dispose();]]></ST>
+DestroyExecuteEnumerator();]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{2dd03000-3672-4a07-8807-8ef83f774afa}" FolderPath="Constructor\">
@@ -100,7 +139,8 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[hostParent := Parent;
-eventTarget := parentEventTarget;]]></ST>
+eventTarget := parentEventTarget;
+CreateExecuteEnumerator();]]></ST>
       </Implementation>
     </Method>
     <Property Name="HasNodes" Id="{bc9a2333-a5a9-0d80-29bd-ba707b99e3bf}">
@@ -110,7 +150,7 @@ eventTarget := parentEventTarget;]]></ST>
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[HasNodes := nodes.Count > 0;]]></ST>
+          <ST><![CDATA[HasNodes := NOT nodes.IsEmpty;]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -121,7 +161,8 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[nodes.Remove(Node.Id);
-nodesInExecutionOrder.Remove(Node);]]></ST>
+nodesInExecutionOrder.Remove(Node);
+CreateExecuteEnumerator();]]></ST>
       </Implementation>
     </Method>
     <Method Name="SerializeWith" Id="{0ce4412d-97e4-47d9-94c1-b1fd3800cb0a}">

@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="GetStatusVisitor" Id="{0408c78c-4c75-0ea5-05aa-3edfad5743bf}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK GetStatusVisitor IMPLEMENTS I_GraphVisitor, I_NodeVisitor, I_ExtensionVisitor, I_ContentVisitor, I_AlarmVisitor
+VAR
+	serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Initialize" Id="{50eeedc5-1620-080d-278a-014f0ebd0957}">
+      <Declaration><![CDATA[METHOD PUBLIC Initialize
+VAR_INPUT
+	Serializer : I_Serializer;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.serializer := Serializer;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitAlarm" Id="{51640307-ffb9-0d18-33dd-ab54c26945f1}">
+      <Declaration><![CDATA[METHOD VisitAlarm
+VAR_INPUT
+	VisitingAlarm : I_Alarm;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF VisitingAlarm.Active THEN
+	serializer.AddString(VisitingAlarm.Message);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitContent" Id="{22c9e9dd-5599-0303-3c0c-3c57ef57450d}">
+      <Declaration><![CDATA[METHOD VisitContent
+VAR_INPUT
+	VisitingContent : I_Content;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[serializer.StartObject();
+
+serializer.AddKeyString('name',VisitingContent.Name);
+serializer.AddKeyObject('value',VisitingContent.Data);
+
+serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitExtension" Id="{d896d509-b693-039d-2c42-f75f40dbb07e}">
+      <Declaration><![CDATA[METHOD VisitExtension
+VAR_INPUT
+	VisitingExtension : I_Extension;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Serializer.StartObject();
+Serializer.AddKeyString('name',VisitingExtension.Name);
+
+IF VisitingExtension.Alarms.HasAlarms THEN
+	serializer.addkey('alarms');
+	serializer.StartArray();
+	VisitingExtension.Alarms.Accept(THIS^);
+	serializer.EndArray();
+END_IF
+
+IF VisitingExtension.Contents.HasContents THEN
+	serializer.addkey('contents');
+	serializer.StartArray();
+	VisitingExtension.Contents.Accept(THIS^);
+	serializer.EndArray();
+END_IF
+
+Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitGraph" Id="{4af93bcf-eb3e-0b18-3231-1d9fbd898cae}">
+      <Declaration><![CDATA[METHOD VisitGraph
+VAR_INPUT
+	VisitingGraph : I_Graph;
+END_VAR
+VAR
+	includeInGetStatusVisitor : IncludeInGetStatusVisitor;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[serializer.StartObject();
+
+serializer.addKeyString('uuid',VisitingGraph.Uuid);
+
+IF VisitingGraph.Alarms.HasRaisedAlarm THEN
+	serializer.addkey('alarms');
+	serializer.StartArray();
+	VisitingGraph.Alarms.Accept(THIS^);
+	serializer.EndArray();
+END_IF
+
+IF includeInGetStatusVisitor.CheckExtensions(VisitingGraph) THEN
+	serializer.addkey('extensions');
+	serializer.StartArray();
+	VisitingGraph.Extensions.Accept(THIS^);
+	serializer.EndArray();
+END_IF
+
+IF VisitingGraph.Contents.HasContents THEN
+	serializer.addkey('contents');
+	serializer.StartArray();
+	VisitingGraph.Contents.Accept(THIS^);
+	serializer.EndArray();
+END_IF
+
+IF VisitingGraph.Nodes.HasNodes THEN
+	serializer.addkey('nodes');
+	serializer.StartArray();
+	VisitingGraph.Nodes.Accept(THIS^);
+	serializer.EndArray();
+END_IF
+
+serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitNode" Id="{f1a539ea-39c2-0d44-3bc2-5291c994797e}">
+      <Declaration><![CDATA[METHOD VisitNode
+VAR_INPUT
+	VisitingNode : I_Node;
+END_VAR
+VAR
+	includeInGetStatusVisitor : IncludeInGetStatusVisitor;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT includeInGetStatusVisitor.CheckNode(VisitingNode) THEN
+	RETURN;
+END_IF
+
+serializer.StartObject();
+serializer.addKeyString('id', VisitingNode.Id);
+
+IF VisitingNode.Alarms.HasRaisedAlarm THEN
+	serializer.addkey('alarms');
+	serializer.StartArray();
+	VisitingNode.Alarms.Accept(THIS^);
+	serializer.EndArray();
+END_IF
+
+IF includeInGetStatusVisitor.CheckExtensions(VisitingNode) THEN
+	serializer.addkey('extensions');
+	serializer.StartArray();
+	VisitingNode.Extensions.Accept(THIS^);
+	serializer.EndArray();
+END_IF
+
+IF VisitingNode.Contents.HasContents THEN
+	serializer.addkey('contents');
+	serializer.StartArray();
+	VisitingNode.Contents.Accept(THIS^);
+	serializer.EndArray();
+END_IF
+
+serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

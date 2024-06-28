@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="IncludeInGetStatusVisitor" Id="{3f72f1f5-693d-0de7-3022-90d76f47b3f6}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK IncludeInGetStatusVisitor IMPLEMENTS I_NodeVisitor, I_ExtensionVisitor
+VAR
+	shouldInclude : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CheckExtensions" Id="{3490a3c0-2e73-05fe-3cc9-f3095e25ce5d}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckExtensions : BOOL;
+VAR_INPUT
+	ExtensionHost : I_HostExtensions;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[shouldInclude := FALSE;
+ExtensionHost.Extensions.Accept(THIS^);
+CheckExtensions := shouldInclude;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckNode" Id="{29825072-064a-06c5-3cb5-4a3305f4ee4a}">
+      <Declaration><![CDATA[METHOD PUBLIC CheckNode : BOOL;
+VAR_INPUT
+	Node : I_Node;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[shouldInclude := FALSE;
+Node.Accept(THIS^);
+CheckNode := shouldInclude;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitExtension" Id="{4ea2726e-d4c6-0e58-3259-22e3a504db33}">
+      <Declaration><![CDATA[METHOD VisitExtension
+VAR_INPUT
+	VisitingExtension : I_Extension;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF VisitingExtension.Contents.HasContents THEN
+	shouldInclude := TRUE;
+	RETURN;
+END_IF
+
+IF VisitingExtension.Alarms.HasRaisedAlarm THEN
+	shouldInclude := TRUE;
+	RETURN;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VisitNode" Id="{e924b76b-31eb-0f79-2bc6-4bb7c3cad70a}">
+      <Declaration><![CDATA[METHOD VisitNode
+VAR_INPUT
+	VisitingNode : I_Node;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF VisitingNode.Contents.HasContents THEN
+	shouldInclude := TRUE;
+	RETURN;
+END_IF
+
+IF VisitingNode.Alarms.HasRaisedAlarm THEN
+	shouldInclude := TRUE;
+	RETURN;
+END_IF
+
+IF VisitingNode.Extensions.HasExtensions THEN
+	VisitingNode.Extensions.Accept(THIS^);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

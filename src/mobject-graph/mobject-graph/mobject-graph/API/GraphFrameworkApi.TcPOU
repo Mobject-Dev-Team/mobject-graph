@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="GraphApi" Id="{bbeaa71e-faa8-4020-94ac-c51b0ba5f637}" SpecialFunc="None">
+  <POU Name="GraphFrameworkApi" Id="{bbeaa71e-faa8-4020-94ac-c51b0ba5f637}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK GraphApi IMPLEMENTS I_RpcApi, I_HostGraphs, I_EventEmitter
+FUNCTION_BLOCK GraphFrameworkApi IMPLEMENTS I_RpcApi, I_HostGraphs, I_EventEmitter
 VAR
 	graphFramework : I_GraphFramework;
 	eventEmitter : EventEmitter;
@@ -21,6 +21,15 @@ END_VAR
     </Implementation>
     <Folder Name="Constructor" Id="{3247a7d8-0cdf-41a7-b3ec-00d25e5860b9}" />
     <Folder Name="Destructor" Id="{983f8a90-ec8c-4c25-8a21-35742fc4254f}" />
+    <Method Name="CyclicCall" Id="{61535b54-c31a-0f24-2b44-201dd4ecdbfb}">
+      <Declaration><![CDATA[METHOD PUBLIC CyclicCall
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[graphHost.Execute();]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_exit" Id="{4eb785ac-97f2-4e9f-bd85-4c70f39c8c99}" FolderPath="Destructor\">
       <Declaration><![CDATA[METHOD FB_exit : BOOL
 VAR_INPUT
@@ -45,6 +54,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[THIS^.graphFramework := GraphFramework;
+
 getBlueprintsRpcHandler.Initialize(GraphFramework.NodeFactory);
 getStatusRpcHandler.Initialize(graphHost);
 createGraphRpcHandler.Initialize(GraphFramework, graphHost);
@@ -93,18 +103,28 @@ END_VAR]]></Declaration>
         <ST><![CDATA[eventEmitter.OnEvent(EventName, EventHandler);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="RegisterWith" Id="{16f43e44-1c8f-40af-91d9-0c94f14c9a34}">
-      <Declaration><![CDATA[METHOD RegisterWith
+    <Method Name="RegisterAsynchronousRpcHandlersWith" Id="{16f43e44-1c8f-40af-91d9-0c94f14c9a34}">
+      <Declaration><![CDATA[METHOD RegisterAsynchronousRpcHandlersWith
 VAR_INPUT
-	Server : I_RpcServer;
+	Host : I_HostAsynchronousRpcHandlers;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Server.RegisterAsynchronousRpcHandler('CreateGraph',createGraphRpcHandler);
-Server.RegisterAsynchronousRpcHandler('CreateGraphMultiUser',createGraphMultiUserRpcHandler);
-Server.RegisterAsynchronousRpcHandler('GetStatus',getStatusRpcHandler);
-Server.RegisterAsynchronousRpcHandler('GetBlueprints',getBlueprintsRpcHandler);
-Server.RegisterAsynchronousRpcHandler('GetContentValue',getContentValueHandler);]]></ST>
+        <ST><![CDATA[Host.RegisterHandler('CreateGraph',createGraphRpcHandler);
+Host.RegisterHandler('CreateGraphMultiUser',createGraphMultiUserRpcHandler);
+Host.RegisterHandler('GetStatus',getStatusRpcHandler);
+Host.RegisterHandler('GetBlueprints',getBlueprintsRpcHandler);
+Host.RegisterHandler('GetContentValue',getContentValueHandler);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterSynchronousRpcHandlersWith" Id="{9cdb3985-6a52-0982-12b5-714e24122e9a}">
+      <Declaration><![CDATA[METHOD RegisterSynchronousRpcHandlersWith
+VAR_INPUT
+	Host : I_HostSynchronousRpcHandlers;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// no implementation]]></ST>
       </Implementation>
     </Method>
   </POU>

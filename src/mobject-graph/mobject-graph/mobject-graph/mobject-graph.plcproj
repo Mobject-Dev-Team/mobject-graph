@@ -19,7 +19,7 @@
     <Company>mobject</Company>
     <Released>false</Released>
     <Title>mobject-graph</Title>
-    <ProjectVersion>0.8.0</ProjectVersion>
+    <ProjectVersion>0.9.0</ProjectVersion>
     <DefaultNamespace>mobject-graph</DefaultNamespace>
     <Placeholder>mobject-graph</Placeholder>
     <Author>mobject dev team</Author>
@@ -92,6 +92,8 @@
     <Folder Include="Metadata\Interface" />
     <Folder Include="GraphFramework" />
     <Folder Include="API" />
+    <Folder Include="GraphPack" />
+    <Folder Include="IecDatatypesPack" />
     <Folder Include="Node" />
     <Folder Include="NodeFactory" />
     <Folder Include="NodeFactory\Base" />
@@ -154,7 +156,7 @@
     <Compile Include="Alarms\Interfaces\I_HostAlarms.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="API\GraphApi.TcPOU">
+    <Compile Include="API\GraphFrameworkApi.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="API\Handlers\CreateGraphMultiUserRpcHandler.TcPOU">
@@ -173,6 +175,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="API\Visitors\GetBlueprintsVisitor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="API\Visitors\GetStatusVisitor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="API\Visitors\IncludeInGetStatusVisitor.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="API\Visitors\RetrieveNodeContentValue.TcPOU">
@@ -232,6 +240,9 @@
     <Compile Include="GraphFramework\Interface\I_GraphFramework.TcIO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GraphPack\I_GraphPack.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Graph\Base\Graph.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -251,6 +262,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Graph\Interfaces\I_HostGraphs.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IecDatatypesPack\IecDatatypesPack.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InputPort\Base\InputPort.TcPOU">
@@ -459,10 +473,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <LibraryReference Include="mobject-core,0.2.0,mobject">
+    <LibraryReference Include="mobject-core,0.3.0,mobject">
       <Namespace>mobject_core</Namespace>
     </LibraryReference>
-    <LibraryReference Include="mobject-server,0.9.0,mobject">
+    <LibraryReference Include="mobject-server,0.10.0,mobject">
       <Namespace>mobject_server</Namespace>
     </LibraryReference>
   </ItemGroup>

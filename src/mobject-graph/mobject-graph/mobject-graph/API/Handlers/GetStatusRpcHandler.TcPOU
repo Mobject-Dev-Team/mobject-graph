@@ -23,6 +23,7 @@ VAR
 	graph : I_Graph;
 	feedback : DeserializerFeedback;
 	serializer : I_Serializer;
+	getStatusVisitor : GetStatusVisitor;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF NOT Parameters.TryGetKeyString('graphUuid', graphUuid, feedback) THEN
@@ -36,8 +37,9 @@ IF NOT graphs.TryGetGraphByUuid(graphUuid,graph) THEN
 END_IF
 
 serializer := Response.GetSerializer();
-graph.SerializeWith(serializer);
-Response.CompleteWithObject(graph);
+getStatusVisitor.Initialize(serializer);
+getStatusVisitor.VisitGraph(graph);
+Response.CompleteWithSerializer(serializer);
 serializer.Dispose();]]></ST>
       </Implementation>
     </Method>

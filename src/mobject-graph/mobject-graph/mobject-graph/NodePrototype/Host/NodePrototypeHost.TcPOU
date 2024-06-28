@@ -111,7 +111,7 @@ DisposeSelfCreatedNodePrototypes();]]></ST>
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[HasNodePrototypes := prototypes.Count > 0;]]></ST>
+          <ST><![CDATA[HasNodePrototypes := NOT prototypes.IsEmpty;]]></ST>
         </Implementation>
       </Get>
     </Property>
