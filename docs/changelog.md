@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.10.0-alpha
+
+- added support for single parameter updates via the api
+- updated to support mobject-server v0.11.0
+
 ## v0.9.0-alpha
 
 - added option to install a whole pack (both nodepack and datatype pack at the same time)

@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="UpdateParameterValueHandler" Id="{20bd08bb-8de1-095c-2141-ffb1215a844b}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK UpdateParameterValueHandler IMPLEMENTS I_AsynchronousRpcHandler
+VAR
+	graphs : I_Graphs;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Handle" Id="{c00622bc-480e-01df-029b-ff105310bac4}">
+      <Declaration><![CDATA[METHOD Handle
+VAR_INPUT
+	Parameters : I_Deserializer;
+	Response : I_AsynchronousRpcResponse;
+END_VAR
+VAR
+	graphUuid : T_MAXSTRING;
+	graph : I_Graph;
+	nodeId : T_MAXSTRING;
+	node : I_Node;
+	parameterName : T_MAXSTRING;
+	parameter : I_Parameter;
+	visitor : RetrieveNodeContentValue;
+	serializer : I_Serializer;
+	feedback : DeserializerFeedback;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT Parameters.TryGetKeyString('graphUuid', graphUuid, feedback) THEN
+	Response.RejectWithMessage(feedback.FirstError.Message);
+	RETURN;
+END_IF
+
+IF NOT graphs.TryGetGraphByUuid(graphUuid, graph) THEN
+	Response.RejectWithMessage('Invalid or missing graphUuid');
+	RETURN;
+END_IF
+
+IF NOT Parameters.TryGetKeyString('nodeId', nodeId, feedback) THEN
+	Response.RejectWithMessage(feedback.FirstError.Message);
+	RETURN;
+END_IF
+
+IF NOT graph.Nodes.TryGetNodeById(nodeId, node) THEN
+	Response.RejectWithMessage('Invalid or missing nodeId');
+	RETURN;
+END_IF
+
+IF NOT Parameters.TryGetKeyString('parameterName', parameterName, feedback) THEN
+	Response.RejectWithMessage(feedback.FirstError.Message);
+	RETURN;
+END_IF
+
+IF NOT node.Parameters.TryGetParameterByName(parameterName, parameter) THEN
+	Response.RejectWithMessage('Invalid or missing parameterName');
+	RETURN;
+END_IF
+
+IF NOT Parameters.TryDeserializeKeyToObject ('parameterValue', parameter, feedback) THEN
+	Response.RejectWithMessage(feedback.FirstError.Message);
+	RETURN;
+END_IF
+
+Response.CompleteWithString('done');]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{e6f6a763-5346-0789-1b86-3e4a03b9da06}">
+      <Declaration><![CDATA[METHOD PUBLIC Initialize
+VAR_INPUT
+	Graphs : I_Graphs;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[this^.graphs := Graphs;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
