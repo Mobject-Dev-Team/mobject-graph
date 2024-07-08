@@ -53,7 +53,7 @@
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
-    <LibraryReference Include="mobject-graph,0.8.0,mobject">
+    <LibraryReference Include="mobject-graph,0.10.0,mobject">
       <Namespace>mobject_graph</Namespace>
     </LibraryReference>
   </ItemGroup>

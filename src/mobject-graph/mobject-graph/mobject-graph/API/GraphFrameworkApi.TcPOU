@@ -14,6 +14,7 @@ VAR
 	getStatusRpcHandler : GetStatusRpcHandler;
 	getBlueprintsRpcHandler : GetBlueprintsRpcHandler;
 	getContentValueHandler : GetContentValueHandler;
+	updateParameterValueHandler : UpdateParameterValueHandler;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -59,7 +60,8 @@ getBlueprintsRpcHandler.Initialize(GraphFramework.NodeFactory);
 getStatusRpcHandler.Initialize(graphHost);
 createGraphRpcHandler.Initialize(GraphFramework, graphHost);
 createGraphMultiUserRpcHandler.Initialize(GraphFramework, graphHost);
-getContentValueHandler.Initialize(graphHost);]]></ST>
+getContentValueHandler.Initialize(graphHost);
+updateParameterValueHandler.Initialize(graphHost);]]></ST>
       </Implementation>
     </Method>
     <Property Name="Graphs" Id="{7459a2e4-4645-45ec-bd04-a073ccef6af0}">
@@ -114,7 +116,8 @@ END_VAR
 Host.RegisterHandler('CreateGraphMultiUser',createGraphMultiUserRpcHandler);
 Host.RegisterHandler('GetStatus',getStatusRpcHandler);
 Host.RegisterHandler('GetBlueprints',getBlueprintsRpcHandler);
-Host.RegisterHandler('GetContentValue',getContentValueHandler);]]></ST>
+Host.RegisterHandler('GetContentValue',getContentValueHandler);
+Host.RegisterHandler('UpdateParameterValue',updateParameterValueHandler);]]></ST>
       </Implementation>
     </Method>
     <Method Name="RegisterSynchronousRpcHandlersWith" Id="{9cdb3985-6a52-0982-12b5-714e24122e9a}">
