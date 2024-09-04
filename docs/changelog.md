@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.11.0-alpha
+
+- updated to support mobject-server v0.12.0
+
 ## v0.10.0-alpha
 
 - added support for single parameter updates via the api
