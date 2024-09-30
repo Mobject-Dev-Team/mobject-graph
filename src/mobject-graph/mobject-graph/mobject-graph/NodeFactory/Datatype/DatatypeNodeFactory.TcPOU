@@ -185,9 +185,7 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[node := CreateBundleNode(NodeDatatype);
 selfCreatedNodes.Push(node);
-path := concat('Bundle/',NodeDatatype.TypeName);
-path := concat(path, '/');
-path := concat(path, NodeDatatype.Identifier);
+path := concat('Bundle/', NodeDatatype.Identifier);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
@@ -203,9 +201,7 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[node := CreateDisplayNode(NodeDatatype);
 selfCreatedNodes.Push(node);
-path := concat('Display/',NodeDatatype.TypeName);
-path := concat(path, '/');
-path := concat(path, NodeDatatype.Identifier);
+path := concat('Display/', NodeDatatype.Identifier);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
@@ -221,9 +217,7 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[node := CreateLiteralNode(NodeDatatype);
 selfCreatedNodes.Push(node);
-path := concat('Literal/',NodeDatatype.TypeName);
-path := concat(path, '/');
-path := concat(path, NodeDatatype.Identifier);
+path := concat('Literal/', NodeDatatype.Identifier);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
@@ -271,9 +265,7 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[node := CreateDisplayNode(NodeDatatype);
 selfCreatedNodes.Push(node);
-path := concat('Display/',NodeDatatype.TypeName);
-path := concat(path, '/');
-path := concat(path, NodeDatatype.Identifier);
+path := concat('Display/', NodeDatatype.Identifier);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
@@ -289,9 +281,7 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[node := CreateLiteralNode(NodeDatatype);
 selfCreatedNodes.Push(node);
-path := concat('Literal/UDT/',NodeDatatype.TypeName);
-path := concat(path, '/');
-path := concat(path, NodeDatatype.Identifier);
+path := concat('Literal/', NodeDatatype.Identifier);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
@@ -307,9 +297,7 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[node := CreateUnbundleNode(NodeDatatype);
 selfCreatedNodes.Push(node);
-path := concat('Unbundle/',NodeDatatype.TypeName);
-path := concat(path, '/');
-path := concat(path, NodeDatatype.Identifier);
+path := concat('Unbundle/', NodeDatatype.Identifier);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>

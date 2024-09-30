@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="Node" Id="{dea4a6e6-88e8-4a03-84ea-b39393a5373f}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
+{attribute 'hide_all_locals'}
 FUNCTION_BLOCK ABSTRACT Node EXTENDS Disposable IMPLEMENTS I_Node
 VAR
 	_id : T_MAXSTRING;
@@ -102,6 +103,17 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="CheckIfNodeExecutionIsBlocked" Id="{e6c90d14-caf8-469c-8e84-a87816f43889}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CheckIfNodeExecutionIsBlocked : BOOL;
+VAR
+	nodePreExecuteEvent : NodePreExecuteEvent(THIS^);
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eventEmitter.Emit('OnNodePreExecute',nodePreExecuteEvent);
+CheckIfNodeExecutionIsBlocked := nodePreExecuteEvent.ExecuteCancelled;
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="Clone" Id="{864cba3a-3ba1-492d-b1fd-367b7ddeeac3}" FolderPath="Abstract\">
       <Declaration><![CDATA[METHOD PUBLIC ABSTRACT Clone : I_Node
 VAR_INPUT
@@ -124,53 +136,25 @@ END_VAR
     <Method Name="EmitNodeExecuteBeginEvent" Id="{77ca6a46-059c-4018-b367-fa23a314306c}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE EmitNodeExecuteBeginEvent : BOOL;
 VAR
-	pNodeExecuteBeginEvent : POINTER TO NodeExecuteBeginEvent;
+	nodeExecuteBeginEvent : NodeExecuteBeginEvent(THIS^);
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pNodeExecuteBeginEvent := __NEW(NodeExecuteBeginEvent(Target := THIS^));
-eventEmitter.Emit('OnNodeExecuteBegin',pNodeExecuteBeginEvent^);
-pNodeExecuteBeginEvent^.Dispose();]]></ST>
+        <ST><![CDATA[eventEmitter.Emit('OnNodeExecuteBegin',nodeExecuteBeginEvent);]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitNodeExecuteEndEvent" Id="{a42b5b3b-ff9d-471e-a9b1-7e26b88f78ad}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE EmitNodeExecuteEndEvent : BOOL;
 VAR
-	pNodeExecuteEndEvent : POINTER TO NodeExecuteEndEvent;
+	nodeExecuteEndEvent : NodeExecuteEndEvent(THIS^);
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pNodeExecuteEndEvent := __NEW(NodeExecuteEndEvent(Target := THIS^));
-eventEmitter.Emit('OnNodeExecuteEnd',pNodeExecuteEndEvent^);
-pNodeExecuteEndEvent^.Dispose();]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="EmitOnNodePreExecuteEvent" Id="{e6c90d14-caf8-469c-8e84-a87816f43889}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PRIVATE EmitOnNodePreExecuteEvent : BOOL;
-VAR_INPUT
-	CancelRequested : REFERENCE TO BOOL;
-END_VAR
-VAR
-	pNodePreExecuteEvent : POINTER TO NodePreExecuteEvent;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[pNodePreExecuteEvent := __NEW(NodePreExecuteEvent(Target := THIS^));
-eventEmitter.Emit('OnNodePreExecute',pNodePreExecuteEvent^);
-
-IF pNodePreExecuteEvent^.ExecuteCancelled THEN
-	CancelRequested := TRUE;
-END_IF
-
-pNodePreExecuteEvent^.Dispose();]]></ST>
+        <ST><![CDATA[eventEmitter.Emit('OnNodeExecuteEnd',nodeExecuteEndEvent);]]></ST>
       </Implementation>
     </Method>
     <Method Name="Execute" Id="{53111ca4-ff22-4d20-85e1-3d604fc86fe1}">
-      <Declaration><![CDATA[METHOD PUBLIC Execute
-VAR
-	cancelExecuteResponse : BOOL := FALSE;
-END_VAR]]></Declaration>
+      <Declaration><![CDATA[METHOD PUBLIC Execute]]></Declaration>
       <Implementation>
-        <ST><![CDATA[EmitOnNodePreExecuteEvent(cancelExecuteResponse);
-
-IF cancelExecuteResponse THEN
+        <ST><![CDATA[IF CheckIfNodeExecutionIsBlocked() THEN
 	RETURN;
 END_IF
 

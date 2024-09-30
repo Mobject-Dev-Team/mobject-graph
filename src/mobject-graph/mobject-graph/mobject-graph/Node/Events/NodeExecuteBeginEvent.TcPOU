@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="NodeExecuteBeginEvent" Id="{099dccbd-4b03-47d2-99bd-82fca18aee68}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -14,6 +14,7 @@ END_VAR]]></Declaration>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{1a6c8cd5-bcb5-4c10-b56d-6c473d81d706}" />
+    <Folder Name="Private" Id="{0f2e204c-84d7-0f1f-1847-44be591a564f}" />
     <Property Name="CpuCounterHighBytes" Id="{cedc6650-b823-42b9-aa58-ff8fb90d7bb7}">
       <Declaration><![CDATA[PROPERTY PUBLIC CpuCounterHighBytes : UDINT]]></Declaration>
       <Get Name="Get" Id="{a8c57d2d-cb61-4738-b92e-97af1cc14593}">
@@ -42,13 +43,21 @@ VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	Target : I_Node;
-END_VAR
-VAR
-	getCount : GETCPUCOUNTER;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[_target := Target;
-getCount(cpuCntLoDW => _cpuCounterLowBytes, cpuCntHiDW => _cpuCounterHighBytes);]]></ST>
+UpdateCpuCounter();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Reinitialize" Id="{2b9e3380-da6b-0164-1c51-e38e95004e87}">
+      <Declaration><![CDATA[METHOD PUBLIC Reinitialize
+VAR_INPUT
+	Target : I_Node;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_target := Target;
+UpdateCpuCounter();]]></ST>
       </Implementation>
     </Method>
     <Property Name="Target" Id="{ed5dfaf5-a388-4a64-96b4-f9ac8b1cd611}">
@@ -62,5 +71,16 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="UpdateCpuCounter" Id="{a7fd9b6b-05c6-0a21-199a-f22b86eaed1f}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE UpdateCpuCounter
+VAR_INPUT
+END_VAR
+VAR
+	getCount : GETCPUCOUNTER;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[getCount(cpuCntLoDW => _cpuCounterLowBytes, cpuCntHiDW => _cpuCounterHighBytes);]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

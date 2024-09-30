@@ -1,8 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <Itf Name="I_NodeExecuteEndEvent" Id="{2e85dd43-4463-4c45-aae0-9bd8f223fe4e}">
     <Declaration><![CDATA[INTERFACE I_NodeExecuteEndEvent EXTENDS I_Event
 ]]></Declaration>
+    <Property Name="CpuCounterHighBytes" Id="{b1179647-0966-03b1-1d04-2df626491413}">
+      <Declaration><![CDATA[PROPERTY PUBLIC CpuCounterHighBytes : UDINT]]></Declaration>
+      <Get Name="Get" Id="{5aee0dad-0ceb-0412-15ae-c9e2fb2de15b}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="CpuCounterLowBytes" Id="{64a02129-d2cf-0053-067e-a2551997bb98}">
+      <Declaration><![CDATA[PROPERTY PUBLIC CpuCounterLowBytes : UDINT]]></Declaration>
+      <Get Name="Get" Id="{9b87d76c-46cd-0cb1-0f0f-967154155ec0}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Property Name="Target" Id="{ec3f884e-0ea0-43c3-96f1-19fb0f3723e1}">
       <Declaration><![CDATA[PROPERTY PUBLIC Target : I_Node]]></Declaration>
       <Get Name="Get" Id="{6bfbe76f-3f78-46bd-8222-a68d733fb8ff}">

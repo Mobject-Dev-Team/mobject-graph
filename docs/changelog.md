@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.12.0-alpha
+
+- updated to support mobject-core v0.4.0
+- corrected default path for enums
+- fixed memory leak in unbundle and bundle nodes
+- updated to support mobject-server v0.14.0
+
 ## v0.11.0-alpha
 
 - updated to support mobject-server v0.12.0

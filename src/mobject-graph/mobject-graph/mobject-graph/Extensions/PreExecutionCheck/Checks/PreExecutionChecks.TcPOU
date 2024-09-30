@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="PreExecutionChecks" Id="{4f154e26-796d-080d-24a3-a63a8f61ff8a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PreExecutionChecks IMPLEMENTS I_PreExecutionChecks
+VAR
+	hasFailed : BOOL;
+	hasFailedReason : T_MAXSTRING;
+END_VAR;
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Fail" Id="{0bd7c90c-6f50-0f13-001d-8a21681125d1}">
+      <Declaration><![CDATA[METHOD PUBLIC Fail
+VAR_INPUT
+	Message : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF hasFailed THEN
+	RETURN;
+END_IF
+
+hasFailed := TRUE;
+hasFailedReason := Message;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Failed" Id="{e294c8a8-8b74-08ab-1d00-60c5721ae57d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Failed : BOOL]]></Declaration>
+      <Get Name="Get" Id="{58aceef9-6f7e-02f2-119b-60cda279c115}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Failed := hasFailed;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="IsFalse" Id="{c9a51ccb-e070-0fe4-0935-bebcecc81d65}">
+      <Declaration><![CDATA[METHOD PUBLIC IsFalse
+VAR_INPUT
+	Actual : BOOL;
+	Message : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF hasFailed THEN
+	RETURN;
+END_IF
+
+IF NOT Actual THEN
+	RETURN;
+END_IF
+
+hasFailed := TRUE;
+hasFailedReason := Message;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsTrue" Id="{8f0afc7a-f89f-0972-35c1-5a79962a141d}">
+      <Declaration><![CDATA[METHOD PUBLIC IsTrue
+VAR_INPUT
+	Actual : BOOL;
+	Message : T_MAXSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF hasFailed THEN
+	RETURN;
+END_IF
+
+IF Actual THEN
+	RETURN;
+END_IF
+
+hasFailed := TRUE;
+hasFailedReason := Message;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Passed" Id="{080476fa-4916-0720-298d-b8d0d34d0113}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Passed : BOOL]]></Declaration>
+      <Get Name="Get" Id="{0f981c83-8beb-0453-070f-53df2356258d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Passed := not hasFailed;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Reason" Id="{bd1454b5-8342-07df-1a61-a42e487082ca}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Reason : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{48fadb59-c617-0c53-3221-f148c2615e9c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Reason := hasFailedReason;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Reset" Id="{f111bc43-d56c-0934-0426-37024ae13b4d}">
+      <Declaration><![CDATA[METHOD PUBLIC Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[hasFailed := FALSE;
+hasFailedReason := '';]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="Extension" Id="{8ac7b2c9-5c38-4780-b32e-134f1c230d16}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
+{attribute 'hide_all_locals'}
 FUNCTION_BLOCK Extension EXTENDS Disposable IMPLEMENTS I_Extension
 VAR
 	_name : T_MAXSTRING;
+	_parent : I_HostExtensions;
 	eventEmitter : EventEmitter;
 	inputPortHost : InputPortHost(THIS^, eventEmitter);
 	outputPortHost : OutputPortHost(THIS^, eventEmitter);
@@ -20,6 +22,7 @@ END_VAR]]></Declaration>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{e2fa132a-df47-4d80-943f-0757a42d94ae}" />
+    <Folder Name="Protected" Id="{600cde5a-f526-03d2-1972-8f756ca519e8}" />
     <Method Name="Accept" Id="{c2d85c76-9431-4c14-8ff5-79e11f782333}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
@@ -28,6 +31,28 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Visitor.VisitExtension(THIS^);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddContent" Id="{0f917303-57db-0e31-09c9-7ec26ec41fe1}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddContent : I_Content
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddContent := Contents.AddDataAsContent(Name, Data);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddInput" Id="{2581c864-368b-062b-2420-fc4a344b3c81}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddInput : I_InputPort
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddInput := InputPorts.AddDataAsInputPort(Name, Data);]]></ST>
       </Implementation>
     </Method>
     <Method Name="AddMetadata" Id="{f2addbcd-14f3-0a89-15e5-56d36063222e}">
@@ -40,6 +65,28 @@ END_VAR
       <Implementation>
         <ST><![CDATA[Metadatum.AddDataAsMetadata(Name, Data);
 AddMetadata := THIS^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddOutput" Id="{8d942aae-84b8-0551-371a-141e14b70a72}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddOutput : I_OutputPort
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddOutput := OutputPorts.AddDataAsOutputPort(Name, Data);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddParameter" Id="{fbb602a7-dd34-0193-1623-f33becde78d3}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED AddParameter : I_Parameter
+VAR_INPUT
+	Name : T_MAXSTRING;
+	Data : I_Datatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddParameter := Parameters.AddDataAsParameter(Name, Data);]]></ST>
       </Implementation>
     </Method>
     <Property Name="Alarms" Id="{7a9d58bb-1bd2-477c-8b87-11fa3ac91181}">
@@ -70,9 +117,11 @@ VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	Name : T_MAXSTRING;
+	Parent : I_HostExtensions;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[_name := Name;]]></ST>
+        <ST><![CDATA[_name := Name;
+RegisterWithParent(Parent);]]></ST>
       </Implementation>
     </Method>
     <Property Name="HasRaisedAlarm" Id="{4c3dd4a1-3f0e-441e-a770-d854acec24f5}">
@@ -170,6 +219,31 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Property Name="Parent" Id="{c55a2944-e008-06dc-1879-15847c089e2e}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Parent : I_HostExtensions]]></Declaration>
+      <Get Name="Get" Id="{4f3f87b8-092f-0670-104f-8505892f987f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Parent := _parent;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="RegisterWithParent" Id="{b5b82bae-9e1c-0474-17d5-193b4bb784ed}">
+      <Declaration><![CDATA[METHOD PUBLIC RegisterWithParent
+VAR_INPUT
+	Parent : I_HostExtensions;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Parent = 0 THEN
+	RETURN;
+END_IF
+
+_parent := Parent;
+Parent.Extensions.AddExtension(THIS^);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="SerializeWith" Id="{6685483b-02aa-44da-bca9-467fc317fca6}">
       <Declaration><![CDATA[METHOD PUBLIC SerializeWith
 VAR_INPUT

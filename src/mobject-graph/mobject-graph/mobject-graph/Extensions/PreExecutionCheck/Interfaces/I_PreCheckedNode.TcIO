@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <Itf Name="I_PreCheckedNode" Id="{9d2922fd-0cec-0187-3dc2-0ce1252a6e77}">
+    <Declaration><![CDATA[INTERFACE I_PreCheckedNode EXTENDS I_Node
+]]></Declaration>
+    <Method Name="PreExecutionCheck" Id="{2c3f7400-7730-03dc-1914-2b9df26598c4}">
+      <Declaration><![CDATA[METHOD PreExecutionCheck
+VAR_INPUT
+	Check : I_PreExecutionChecks;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

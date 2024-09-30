@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="NodePreExecuteEvent" Id="{6e27cc1e-c310-4d8f-82e7-28ae5f2b4bcc}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -43,6 +43,17 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[_target := Target;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Reinitialize" Id="{f74bec14-fa04-0cac-3a60-0f5190f71efb}">
+      <Declaration><![CDATA[METHOD PUBLIC Reinitialize
+VAR_INPUT
+	Target : I_Node;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_cancelExecute := FALSE;
+_target := Target;]]></ST>
       </Implementation>
     </Method>
     <Property Name="Target" Id="{e8cc0ba3-4643-4d25-ba56-3a31b949649f}">
