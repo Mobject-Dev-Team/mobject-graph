@@ -6,6 +6,7 @@
 - corrected default path for enums
 - fixed memory leak in unbundle and bundle nodes
 - updated to support mobject-server v0.14.0
+- corrected get status visitor to return raised alarms
 
 ## v0.11.0-alpha
 
