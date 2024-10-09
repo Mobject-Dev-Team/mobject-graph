@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="NodeHost" Id="{94550ad4-5c7d-48c8-abe8-de2c0a64252c}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -125,7 +125,8 @@ END_VAR
 	RETURN;
 END_IF
 
-DestroyExecuteEnumerator();]]></ST>
+DestroyExecuteEnumerator();
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{2dd03000-3672-4a07-8807-8ef83f774afa}" FolderPath="Constructor\">
@@ -150,7 +151,8 @@ CreateExecuteEnumerator();]]></ST>
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[HasNodes := NOT nodes.IsEmpty;]]></ST>
+          <ST><![CDATA[//HasNodes := NOT nodes.IsEmpty;
+HasNodes := NOT nodes.IsEmpty OR NOT nodesInExecutionOrder.IsEmpty;]]></ST>
         </Implementation>
       </Get>
     </Property>
