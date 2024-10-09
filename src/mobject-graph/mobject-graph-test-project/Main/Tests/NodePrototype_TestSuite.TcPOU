@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="NodePrototype_TestSuite" Id="{59225eec-d0a1-017c-00ae-7488ac9d105a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK NodePrototype_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestNodeReturnsExpected();
+TestPathReturnsExpected();
+]]></ST>
+    </Implementation>
+    <Method Name="TestNodeReturnsExpected" Id="{a746e6bd-1217-0285-017a-45d033d8889c}">
+      <Declaration><![CDATA[METHOD TestNodeReturnsExpected
+VAR
+    node : TestNode;
+	prototype : NodePrototype('TestPath', node);
+	expected : I_Node;
+	actual : I_Node;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestNodeReturnsExpected');
+
+expected := node;
+actual := prototype.Node;
+
+AssertEquals(
+	Expected := expected, 
+	Actual := actual,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestPathReturnsExpected" Id="{560cf1fe-7e5d-0b39-3a80-bce40cb526a0}">
+      <Declaration><![CDATA[METHOD TestPathReturnsExpected
+VAR
+    node : TestNode;
+	prototype : NodePrototype('TestPath', node);
+	expected : T_MAXSTRING := 'TestPath';
+	actual : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestPathReturnsExpected');
+
+actual := prototype.Path;
+
+AssertEquals_STRING(
+	Expected := expected, 
+	Actual := actual,
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
