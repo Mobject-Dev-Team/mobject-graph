@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="DatatypeNodeFactory" Id="{4b37bcb1-5b3c-084f-07b9-ae97280523f0}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -18,17 +18,30 @@ END_VAR
     <Folder Name="Destructor" Id="{701769ec-9c4f-0439-3c64-bffc00c04cc1}" />
     <Folder Name="Private" Id="{4b06c450-3c9d-05a3-396d-cb8d55dbfe99}" />
     <Folder Name="Protected" Id="{cd03c763-398a-08df-367f-955179e76b46}" />
-    <Method Name="CreateBundleNode" Id="{83d7bec4-800e-07e4-1251-d19d776aaebf}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED CreateBundleNode : I_Node
+    <Method Name="CreateArrayBundleNode" Id="{e5b29f80-1b2d-01b9-2f29-0873e73e2153}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateArrayBundleNode : I_Node
 VAR_INPUT
-	NodeDatatype : I_StructuredDatatype;
+	NodeDatatype : I_ArrayDatatype;
 END_VAR
 VAR
-	pAnyBundleNode : POINTER TO AnyBundleNode;
+	pAnyBundleNode : POINTER TO AnyArrayBundleNode;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pAnyBundleNode := __NEW(AnyBundleNode(StructuredDatatype := NodeDatatype));
-CreateBundleNode := pAnyBundleNode^;]]></ST>
+        <ST><![CDATA[pAnyBundleNode := __NEW(AnyArrayBundleNode(ArrayDatatype := NodeDatatype));
+CreateArrayBundleNode := pAnyBundleNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateArrayUnbundleNode" Id="{ad556d76-f2d4-0873-2393-b46e303dfe51}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateArrayUnbundleNode : I_Node
+VAR_INPUT
+	NodeDatatype : I_ArrayDatatype;
+END_VAR
+VAR
+	pAnyUnbundleNode : POINTER TO AnyArrayUnbundleNode;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pAnyUnbundleNode := __NEW(AnyArrayUnbundleNode(ArrayDatatype := NodeDatatype));
+CreateArrayUnbundleNode := pAnyUnbundleNode^;]]></ST>
       </Implementation>
     </Method>
     <Method Name="CreateDisplayNode" Id="{f5bc0ba5-7ab2-0bcf-066f-b58003dd2c5a}" FolderPath="Protected\">
@@ -57,17 +70,30 @@ END_VAR]]></Declaration>
 CreateLiteralNode := pAnyLiteralNode^;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="CreateUnbundleNode" Id="{8cd0562e-322b-0354-0533-ad232dd1bace}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED CreateUnbundleNode : I_Node
+    <Method Name="CreateStructureBundleNode" Id="{83d7bec4-800e-07e4-1251-d19d776aaebf}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateStructureBundleNode : I_Node
 VAR_INPUT
 	NodeDatatype : I_StructuredDatatype;
 END_VAR
 VAR
-	pAnyUnbundleNode : POINTER TO AnyUnbundleNode;
+	pAnyBundleNode : POINTER TO AnyStructureBundleNode;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pAnyUnbundleNode := __NEW(AnyUnbundleNode(StructuredDatatype := NodeDatatype));
-CreateUnbundleNode := pAnyUnbundleNode^;]]></ST>
+        <ST><![CDATA[pAnyBundleNode := __NEW(AnyStructureBundleNode(StructuredDatatype := NodeDatatype));
+CreateStructureBundleNode := pAnyBundleNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateStructureUnbundleNode" Id="{8cd0562e-322b-0354-0533-ad232dd1bace}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateStructureUnbundleNode : I_Node
+VAR_INPUT
+	NodeDatatype : I_StructuredDatatype;
+END_VAR
+VAR
+	pAnyUnbundleNode : POINTER TO AnyStructureUnbundleNode;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pAnyUnbundleNode := __NEW(AnyStructureUnbundleNode(StructuredDatatype := NodeDatatype));
+CreateStructureUnbundleNode := pAnyUnbundleNode^;]]></ST>
       </Implementation>
     </Method>
     <Method Name="DeregisterWithDatatypes" Id="{d281941f-7d1b-0268-2c8d-f7207a072f5a}" FolderPath="Private\">
@@ -138,6 +164,7 @@ VAR
 	enumDatatypeAddedEvent : I_EnumDatatypeAddedEvent;
 	structuredDatatypeAddedEvent : I_StructuredDatatypeAddedEvent;
 	interfaceDatatypeAddedEvent : I_InterfaceDatatypeAddedEvent;
+	arrayDatatypeAddedEvent : I_ArrayDatatypeAddedEvent;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF __QUERYINTERFACE(event, datatypeAddedEvent) THEN
@@ -167,25 +194,50 @@ END_IF
 IF __QUERYINTERFACE(event, structuredDatatypeAddedEvent) THEN
 	RegisterUdtLiteralNodeOfType(structuredDatatypeAddedEvent.Target);
 	RegisterUdtDisplayNodeOfType(structuredDatatypeAddedEvent.Target);
-	RegisterBundleNodeOfType(structuredDatatypeAddedEvent.Target);
-	RegisterUnbundleNodeOfType(structuredDatatypeAddedEvent.Target);
+	RegisterStructureBundleNodeOfType(structuredDatatypeAddedEvent.Target);
+	RegisterStructureUnbundleNodeOfType(structuredDatatypeAddedEvent.Target);
 	RETURN;
-END_IF]]></ST>
+END_IF
+
+IF __QUERYINTERFACE(event, arrayDatatypeAddedEvent) THEN
+	RegisterUdtLiteralNodeOfType(arrayDatatypeAddedEvent.Target);
+	RegisterUdtDisplayNodeOfType(arrayDatatypeAddedEvent.Target);
+	RegisterArrayBundleNodeOfType(arrayDatatypeAddedEvent.Target);
+	RegisterArrayUnbundleNodeOfType(arrayDatatypeAddedEvent.Target);
+	RETURN;
+END_IF
+]]></ST>
       </Implementation>
     </Method>
-    <Method Name="RegisterBundleNodeOfType" Id="{78fd56dc-3ec7-0403-2845-c9223880cd60}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED RegisterBundleNodeOfType
+    <Method Name="RegisterArrayBundleNodeOfType" Id="{e449e57b-91e6-0b1f-114b-7384f6362ffc}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterArrayBundleNodeOfType
 VAR_INPUT
-	NodeDatatype : I_StructuredDatatype;
+	NodeDatatype : I_ArrayDatatype;
 END_VAR
 VAR
 	node : I_Node;
 	path : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[node := CreateBundleNode(NodeDatatype);
+        <ST><![CDATA[node := CreateArrayBundleNode(NodeDatatype);
 selfCreatedNodes.Push(node);
 path := concat('Bundle/', NodeDatatype.Identifier);
+nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterArrayUnbundleNodeOfType" Id="{2d68de51-073f-0ab9-069d-f8bab82ee4d2}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterArrayUnbundleNodeOfType
+VAR_INPUT
+	NodeDatatype : I_ArrayDatatype;
+END_VAR
+VAR
+	node : I_Node;
+	path : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[node := CreateArrayUnbundleNode(NodeDatatype);
+selfCreatedNodes.Push(node);
+path := concat('Unbundle/', NodeDatatype.Identifier);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
@@ -253,6 +305,38 @@ path := concat('Literal/',NodeDatatype.TypeName);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="RegisterStructureBundleNodeOfType" Id="{78fd56dc-3ec7-0403-2845-c9223880cd60}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterStructureBundleNodeOfType
+VAR_INPUT
+	NodeDatatype : I_StructuredDatatype;
+END_VAR
+VAR
+	node : I_Node;
+	path : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[node := CreateStructureBundleNode(NodeDatatype);
+selfCreatedNodes.Push(node);
+path := concat('Bundle/', NodeDatatype.Identifier);
+nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterStructureUnbundleNodeOfType" Id="{473b20bb-d3d6-0876-14f0-3d4dd1a1b689}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterStructureUnbundleNodeOfType
+VAR_INPUT
+	NodeDatatype : I_StructuredDatatype;
+END_VAR
+VAR
+	node : I_Node;
+	path : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[node := CreateStructureUnbundleNode(NodeDatatype);
+selfCreatedNodes.Push(node);
+path := concat('Unbundle/', NodeDatatype.Identifier);
+nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="RegisterUdtDisplayNodeOfType" Id="{88226159-8e0c-06ab-09a6-1ed46c9f31a9}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED RegisterUdtDisplayNodeOfType
 VAR_INPUT
@@ -282,22 +366,6 @@ END_VAR]]></Declaration>
         <ST><![CDATA[node := CreateLiteralNode(NodeDatatype);
 selfCreatedNodes.Push(node);
 path := concat('Literal/', NodeDatatype.Identifier);
-nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="RegisterUnbundleNodeOfType" Id="{473b20bb-d3d6-0876-14f0-3d4dd1a1b689}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED RegisterUnbundleNodeOfType
-VAR_INPUT
-	NodeDatatype : I_StructuredDatatype;
-END_VAR
-VAR
-	node : I_Node;
-	path : T_MAXSTRING;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[node := CreateUnbundleNode(NodeDatatype);
-selfCreatedNodes.Push(node);
-path := concat('Unbundle/', NodeDatatype.Identifier);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>

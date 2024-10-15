@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="AnyBundleNode" Id="{30feea8b-ca1a-082b-3962-d12b4eb6fdba}" SpecialFunc="None">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="AnyStructureBundleNode" Id="{30feea8b-ca1a-082b-3962-d12b4eb6fdba}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK FINAL AnyBundleNode EXTENDS Node
+FUNCTION_BLOCK FINAL AnyStructureBundleNode EXTENDS Node
 VAR
 	in : I_StructuredDatatype;
 	out : I_StructuredDatatype;
@@ -19,10 +19,10 @@ END_VAR]]></Declaration>
     <Method Name="Clone" Id="{58fd7af0-b23d-088b-3067-86103d6b2cc4}">
       <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
 VAR
-	pNode : POINTER TO AnyBundleNode;
+	pNode : POINTER TO AnyStructureBundleNode;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pNode := __NEW(AnyBundleNode(StructuredDatatype := in));
+        <ST><![CDATA[pNode := __NEW(AnyStructureBundleNode(StructuredDatatype := in));
 Clone := pNode^;]]></ST>
       </Implementation>
     </Method>

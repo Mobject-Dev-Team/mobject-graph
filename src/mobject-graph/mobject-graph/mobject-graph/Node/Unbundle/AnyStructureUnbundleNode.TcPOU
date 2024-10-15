@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="AnyUnbundleNode" Id="{9da9d17d-8f95-05b9-3066-b350ce339eb9}" SpecialFunc="None">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="AnyStructureUnbundleNode" Id="{9da9d17d-8f95-05b9-3066-b350ce339eb9}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK FINAL AnyUnbundleNode EXTENDS Node
+FUNCTION_BLOCK FINAL AnyStructureUnbundleNode EXTENDS Node
 VAR
 	in : I_StructuredDatatype;
 	out : I_StructuredDatatype;
@@ -19,10 +19,10 @@ END_VAR]]></Declaration>
     <Method Name="Clone" Id="{d5092720-a3e3-0290-2e59-0d5e19a884b5}">
       <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
 VAR
-	pNode : POINTER TO AnyUnbundleNode;
+	pNode : POINTER TO AnyStructureUnbundleNode;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pNode := __NEW(AnyUnbundleNode(StructuredDatatype := in));
+        <ST><![CDATA[pNode := __NEW(AnyStructureUnbundleNode(StructuredDatatype := in));
 Clone := pNode^;]]></ST>
       </Implementation>
     </Method>
