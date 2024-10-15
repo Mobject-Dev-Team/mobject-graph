@@ -165,6 +165,13 @@ VAR
 	structuredDatatypeAddedEvent : I_StructuredDatatypeAddedEvent;
 	interfaceDatatypeAddedEvent : I_InterfaceDatatypeAddedEvent;
 	arrayDatatypeAddedEvent : I_ArrayDatatypeAddedEvent;
+	breakout : INT;
+	aliasDatatype : I_AliasDatatype;
+	aliasAsArray : I_ArrayDatatype;
+	aliasAsStructure : I_StructuredDatatype;
+END_VAR
+VAR CONSTANT
+	MAX_ALIAS_DEPTH : INT := 100;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF __QUERYINTERFACE(event, datatypeAddedEvent) THEN
@@ -176,6 +183,25 @@ END_IF
 IF __QUERYINTERFACE(event, aliasDatatypeAddedEvent) THEN
 	RegisterUdtLiteralNodeOfType(aliasDatatypeAddedEvent.Target);
 	RegisterUdtDisplayNodeOfType(aliasDatatypeAddedEvent.Target);
+	
+	breakout := 0;
+	aliasDatatype := aliasDatatypeAddedEvent.Target;
+	WHILE (breakout < MAX_ALIAS_DEPTH) DO
+		breakout := breakout + 1 ;
+		IF NOT aliasDatatype.BaseDatatype.TryResolveAsAliasDatatype(aliasDatatype) THEN
+			EXIT;
+		END_IF
+	END_WHILE
+	
+	// at this point we have the lowest level alias who's base type is not alias (or we reached a breakout)
+	IF aliasDatatype.BaseDatatype.TryResolveAsArrayDatatype(aliasAsArray) THEN
+		RegisterAliasArrayBundleNodeOfType(aliasDatatype,aliasAsArray);
+		RegisterAliasArrayUnbundleNodeOfType(aliasDatatype,aliasAsArray);
+	ELSIF aliasDatatype.BaseDatatype.TryResolveAsStructuredDatatype(aliasAsStructure) THEN
+		RegisterAliasStructureBundleNodeOfType(aliasDatatype,aliasAsStructure);
+		RegisterAliasStructureUnbundleNodeOfType(aliasDatatype,aliasAsStructure);
+	END_IF
+		
 	RETURN;
 END_IF
 
@@ -207,6 +233,74 @@ IF __QUERYINTERFACE(event, arrayDatatypeAddedEvent) THEN
 	RETURN;
 END_IF
 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterAliasArrayBundleNodeOfType" Id="{954de1eb-4c41-0cca-289c-865f8db6e544}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterAliasArrayBundleNodeOfType
+VAR_INPUT
+	AliasDatatype : I_AliasDatatype;
+	NodeDatatype : I_ArrayDatatype;
+END_VAR
+VAR
+	node : I_Node;
+	path : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[node := CreateArrayBundleNode(NodeDatatype);
+selfCreatedNodes.Push(node);
+path := concat('Bundle/', AliasDatatype.Identifier);
+nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterAliasArrayUnbundleNodeOfType" Id="{46101f08-133c-03e0-024c-4aa329164013}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterAliasArrayUnbundleNodeOfType
+VAR_INPUT
+	AliasDatatype : I_AliasDatatype;
+	NodeDatatype : I_ArrayDatatype;
+END_VAR
+VAR
+	node : I_Node;
+	path : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[node := CreateArrayUnbundleNode(NodeDatatype);
+selfCreatedNodes.Push(node);
+path := concat('Unbundle/', AliasDatatype.Identifier);
+nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterAliasStructureBundleNodeOfType" Id="{78fd56dc-3ec7-0403-2845-c9223880cd60}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterAliasStructureBundleNodeOfType
+VAR_INPUT
+	AliasDatatype : I_AliasDatatype;
+	NodeDatatype : I_StructuredDatatype;
+END_VAR
+VAR
+	node : I_Node;
+	path : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[node := CreateStructureBundleNode(NodeDatatype);
+selfCreatedNodes.Push(node);
+path := concat('Bundle/', AliasDatatype.Identifier);
+nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterAliasStructureUnbundleNodeOfType" Id="{7915d208-88b8-097f-3ff7-7eee6f424cd1}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED RegisterAliasStructureUnbundleNodeOfType
+VAR_INPUT
+	AliasDatatype : I_AliasDatatype;
+	NodeDatatype : I_StructuredDatatype;
+END_VAR
+VAR
+	node : I_Node;
+	path : T_MAXSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[node := CreateStructureUnbundleNode(NodeDatatype);
+selfCreatedNodes.Push(node);
+path := concat('Unbundle/', AliasDatatype.Identifier);
+nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
     <Method Name="RegisterArrayBundleNodeOfType" Id="{e449e57b-91e6-0b1f-114b-7384f6362ffc}" FolderPath="Protected\">
@@ -305,7 +399,7 @@ path := concat('Literal/',NodeDatatype.TypeName);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="RegisterStructureBundleNodeOfType" Id="{78fd56dc-3ec7-0403-2845-c9223880cd60}" FolderPath="Protected\">
+    <Method Name="RegisterStructureBundleNodeOfType" Id="{c76eb81e-9bd3-0a25-0dc6-7837d54205c1}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED RegisterStructureBundleNodeOfType
 VAR_INPUT
 	NodeDatatype : I_StructuredDatatype;
