@@ -1,33 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
-  <POU Name="AnyArrayUnbundleNode" Id="{cc98870f-ea4b-0b17-259e-faff7f813b14}" SpecialFunc="None">
+  <POU Name="AnyAliasArrayUnbundleNode" Id="{be2049ea-f94f-0afc-1684-99c173d9fcde}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK FINAL AnyArrayUnbundleNode EXTENDS Node
+FUNCTION_BLOCK FINAL AnyAliasArrayUnbundleNode EXTENDS Node
 VAR
-	in : I_ArrayDatatype;
-	out : I_ArrayDatatype;
+	in : I_AliasDatatype;
+	out : I_AliasDatatype;
 	datatypeOperations : DatatypeOperations;
 	selfMadeElements : Stack;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="Constructor" Id="{51b07b87-8bbb-0f1a-175a-9e443fbc4175}" />
-    <Folder Name="Destructor" Id="{a66b0234-7c08-07b5-22ff-ade7c760fd8d}" />
-    <Folder Name="Private" Id="{7742c731-4712-0abe-1eef-fa71a0f5a54c}" />
-    <Method Name="Clone" Id="{31ec22a3-11c5-05be-1610-deb21deb73c6}">
+    <Folder Name="Constructor" Id="{737f132d-dfd8-0d7a-2f18-bcd8e8f9eda4}" />
+    <Folder Name="Destructor" Id="{0222d058-5114-00ab-261c-573c3e98ea36}" />
+    <Folder Name="Private" Id="{693e2721-1410-00d9-3518-9e71fb5d43fe}" />
+    <Method Name="Clone" Id="{6fcde091-fbde-0544-17fa-5bb41cd39319}">
       <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
 VAR
-	pNode : POINTER TO AnyArrayUnbundleNode;
+	pNode : POINTER TO AnyAliasArrayUnbundleNode;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pNode := __NEW(AnyArrayUnbundleNode(ArrayDatatype := in));
+        <ST><![CDATA[pNode := __NEW(AnyAliasArrayUnbundleNode(AliasDatatype := in));
 Clone := pNode^;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ConfigureFor1DArray" Id="{9de4195c-f752-034b-0173-e8bd4f251659}" FolderPath="Private\">
+    <Method Name="ConfigureFor1DArray" Id="{9ebf6bcb-92e9-0b7f-3c1e-df4302762513}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE ConfigureFor1DArray
 VAR_INPUT
 	array1D : I_ArrayDatatype_1D;
@@ -61,7 +61,7 @@ END_FOR
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ConfigureFor2DArray" Id="{e0f64f01-0fc8-0d1b-2bbb-eff0636bc3e1}" FolderPath="Private\">
+    <Method Name="ConfigureFor2DArray" Id="{26ec5332-05a6-097b-2362-d78723db266c}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE ConfigureFor2DArray
 VAR_INPUT
 	array2D : I_ArrayDatatype_2D;
@@ -107,7 +107,7 @@ END_FOR
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ConfigureFor3DArray" Id="{f6a5718c-c7f3-0d5e-1d1c-530b94349f47}" FolderPath="Private\">
+    <Method Name="ConfigureFor3DArray" Id="{cea2e501-44d9-0b11-3e57-96c9144fcf94}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE ConfigureFor3DArray
 VAR_INPUT
 	array3D : I_ArrayDatatype_3D;
@@ -165,7 +165,7 @@ END_FOR
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="FB_exit" Id="{4c5c8a0c-7c1b-0c90-1493-04c9075cbd78}" FolderPath="Destructor\">
+    <Method Name="FB_exit" Id="{c734f2a6-b4e1-0930-3c3c-2bb916b57afe}" FolderPath="Destructor\">
       <Declaration><![CDATA[METHOD FB_exit : BOOL
 VAR_INPUT
 	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
@@ -189,34 +189,36 @@ WHILE selfMadeElements.TryPop(element) DO
 END_WHILE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="FB_init" Id="{6954ffed-8cb2-0a0c-0db5-a269e9f94e1c}" FolderPath="Constructor\">
+    <Method Name="FB_init" Id="{357549f7-0850-0c2a-1cbe-8f805cd79cde}" FolderPath="Constructor\">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	ArrayDatatype : I_ArrayDatatype;
+	AliasDatatype : I_AliasDatatype;
 END_VAR
 VAR
+	outAsArray : I_ArrayDatatype;
 	outAs1D : I_ArrayDatatype_1D;
 	outAs2D : I_ArrayDatatype_2D;
 	outAs3D : I_ArrayDatatype_3D;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ArrayDatatype.Clone().TryResolveAsArrayDatatype(in);
+        <ST><![CDATA[AliasDatatype.Clone().TryResolveAsAliasDatatype(in);
 AddInput('in', in);
 
-ArrayDatatype.Clone().TryResolveAsArrayDatatype(out);
+AliasDatatype.Clone().TryResolveAsAliasDatatype(out);
+out.RootDatatype.TryResolveAsArrayDatatype(outAsArray);
 
-IF out.TryResolveAs1DArrayDatatype(outAs1D) THEN
+IF outAsArray.TryResolveAs1DArrayDatatype(outAs1D) THEN
 	ConfigureFor1DArray(outAs1D);
-ELSIF out.TryResolveAs2DArrayDatatype(outAs2D) THEN
+ELSIF outAsArray.TryResolveAs2DArrayDatatype(outAs2D) THEN
 	ConfigureFor2DArray(outAs2D);
-ELSIF out.TryResolveAs3DArrayDatatype(outAs3D) THEN
+ELSIF outAsArray.TryResolveAs3DArrayDatatype(outAs3D) THEN
 	ConfigureFor3DArray(outAs3D);
 END_IF]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Get1DIndexName" Id="{fd4ed2a4-cce0-0718-02c9-c5d0dd9bdee4}" FolderPath="Private\">
+    <Method Name="Get1DIndexName" Id="{cb711b63-be71-06a4-1df4-02d36a5f3f53}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE Get1DIndexName : T_MAXSTRING
 VAR_INPUT
 	Index : DINT;
@@ -226,7 +228,7 @@ END_VAR]]></Declaration>
 Get1DIndexName := concat(Get1DIndexName,']');]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Get2DIndexName" Id="{262ec75e-f9d0-0494-3e1b-f92679358d92}" FolderPath="Private\">
+    <Method Name="Get2DIndexName" Id="{b4effffa-8887-027b-32eb-492cbef32b07}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE Get2DIndexName : T_MAXSTRING
 VAR_INPUT
 	Index1 : DINT;
@@ -239,7 +241,7 @@ Get2DIndexName := concat(Get2DIndexName,DINT_TO_STRING(Index2));
 Get2DIndexName := concat(Get2DIndexName,']');]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Get3DIndexName" Id="{090d3e47-8c4e-0c56-2021-4d495d384d2d}" FolderPath="Private\">
+    <Method Name="Get3DIndexName" Id="{40c0222a-27c6-0452-1cbd-5a8efa9a17a0}" FolderPath="Private\">
       <Declaration><![CDATA[METHOD PRIVATE Get3DIndexName : T_MAXSTRING
 VAR_INPUT
 	Index1 : DINT;
@@ -255,7 +257,7 @@ Get3DIndexName := concat(Get3DIndexName,DINT_TO_STRING(Index3));
 Get3DIndexName := concat(Get3DIndexName,']');]]></ST>
       </Implementation>
     </Method>
-    <Method Name="OnExecute" Id="{e91289f6-a406-065f-1854-513c953c64ec}">
+    <Method Name="OnExecute" Id="{4577f0a5-ba6f-0ca0-12cb-48ff8919fff7}">
       <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT
 VAR
 END_VAR]]></Declaration>

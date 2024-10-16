@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="AnyAliasStructureBundleNode" Id="{a5c5b034-1af2-00d8-0f2e-b57b15f20efe}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK FINAL AnyAliasStructureBundleNode EXTENDS Node
+VAR
+	in : I_AliasDatatype;
+	out : I_AliasDatatype;
+	datatypeOperations : DatatypeOperations;
+	selfMadeMembers : Stack;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{85b5e740-da2e-0886-2af2-1c15d5fb76d0}" />
+    <Folder Name="Destructor" Id="{11b080ad-9371-0c9d-1e3b-acd2e1976124}" />
+    <Method Name="Clone" Id="{77dffb4f-3826-0646-00ce-35d53309fbff}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
+VAR
+	pNode : POINTER TO AnyAliasStructureBundleNode;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pNode := __NEW(AnyAliasStructureBundleNode(AliasDatatype := in));
+Clone := pNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{52546ee1-c581-0635-2d38-4b7990b6429c}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+VAR
+	member : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+in.Dispose();
+out.Dispose();
+datatypeOperations.Clear();
+
+WHILE selfMadeMembers.TryPop(member) DO
+	IF member <> 0 THEN 
+		member.dispose();
+	END_IF
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{0731742d-15e3-0e22-33ae-c4d9ab1825f7}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	AliasDatatype : I_AliasDatatype;
+END_VAR
+VAR
+	inAsStructured : I_StructuredDatatype;
+	enumerator : I_KeyValueForwardEnumerator;
+	member : I_Datatype;
+	memberAsBit : I_BitDatatype;
+	memberAsBool : I_Datatype;
+	_bool : pointer to _BOOL;
+	memberClone : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AliasDatatype.Clone().TryResolveAsAliasDatatype(out);
+AddOutput('out', out);
+
+AliasDatatype.Clone().TryResolveAsAliasDatatype(in);
+in.RootDatatype.TryResolveAsStructuredDatatype(inAsStructured);
+enumerator := inAsStructured.Members.GetMemberEnumerator();
+
+WHILE enumerator.MoveNext() DO 
+	IF enumerator.TryGet(member) THEN
+		IF member.TryResolveAsBitDatatype(memberAsBit) THEN
+			// if the element is a _bit then this needs to be treated differently (as you cannot simply memcpy
+			// a bit, as it sits next to other data. Instead, a bool is added in it's place.	
+			_bool := __NEW(_BOOL(InitialValue := memberAsBit.Value));
+			datatypeOperations.AddWriteBoolToBitOperation(_bool^, memberAsBit);
+			AddInput(enumerator.Key, _bool^);
+			memberAsBool := _bool^;
+			selfMadeMembers.Push(memberAsBool);
+		ELSE
+			// for all other datatypes,
+			memberClone := member.Clone();
+			datatypeOperations.AddMemoryCopyOperation(memberClone, member);
+			AddInput(enumerator.key, memberClone);
+			selfMadeMembers.Push(memberClone);
+		END_IF
+	END_IF
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnExecute" Id="{17e22d61-9d7b-0a3b-3c8f-278e254ab564}">
+      <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[datatypeOperations.Execute();
+memcpy(out.Address, in.Address, in.Size);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

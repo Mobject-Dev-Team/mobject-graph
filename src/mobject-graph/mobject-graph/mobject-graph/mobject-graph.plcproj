@@ -412,10 +412,16 @@
     <Compile Include="Node\Base\Node.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Node\Bundle\AnyAliasArrayBundleNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Node\Bundle\AnyStructureBundleNode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Node\Bundle\AnyArrayBundleNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Bundle\AnyAliasStructureBundleNode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Node\Events\I_NodeAddedEvent.TcIO">
@@ -442,6 +448,9 @@
     <Compile Include="Node\Events\NodePreExecuteEvent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Node\Unbundle\AnyAliasArrayUnbundleNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Node\Unbundle\AnyStructureUnbundleNode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -464,6 +473,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Node\Unbundle\AnyArrayUnbundleNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Unbundle\AnyAliasStructureUnbundleNode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OutputPort\Base\OutputPort.TcPOU">
