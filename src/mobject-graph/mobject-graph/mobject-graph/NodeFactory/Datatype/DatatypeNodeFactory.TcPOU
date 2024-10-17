@@ -232,10 +232,10 @@ END_VAR
 	RegisterUdtDisplayNodeOfType(aliasDatatype);
 	
 	// at this point we have the lowest level alias who's base type is not alias (or we reached a breakout)
-	IF aliasDatatype.RootDatatype.TryResolveAsArrayDatatype(arrayDatatype) THEN
+	IF aliasDatatype.Root.TryResolveAsArrayDatatype(arrayDatatype) THEN
 		RegisterAliasArrayBundleNodeOfType(aliasDatatype);
 		RegisterAliasArrayUnbundleNodeOfType(aliasDatatype);
-	ELSIF aliasDatatype.RootDatatype.TryResolveAsStructuredDatatype(structureDatatype) THEN
+	ELSIF aliasDatatype.Root.TryResolveAsStructuredDatatype(structureDatatype) THEN
 		RegisterAliasStructureBundleNodeOfType(aliasDatatype);
 		RegisterAliasStructureUnbundleNodeOfType(aliasDatatype);
 	END_IF

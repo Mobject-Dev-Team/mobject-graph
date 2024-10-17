@@ -207,7 +207,7 @@ END_VAR]]></Declaration>
 AddInput('in', in);
 
 AliasDatatype.Clone().TryResolveAsAliasDatatype(out);
-out.RootDatatype.TryResolveAsArrayDatatype(outAsArray);
+out.Root.TryResolveAsArrayDatatype(outAsArray);
 
 IF outAsArray.TryResolveAs1DArrayDatatype(outAs1D) THEN
 	ConfigureFor1DArray(outAs1D);

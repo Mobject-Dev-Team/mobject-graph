@@ -71,7 +71,7 @@ END_VAR]]></Declaration>
 AddInput('in', in);
 
 AliasDatatype.Clone().TryResolveAsAliasDatatype(out);
-out.RootDatatype.TryResolveAsStructuredDatatype(outAsStructure);
+out.Root.TryResolveAsStructuredDatatype(outAsStructure);
 enumerator := outAsStructure.Members.GetMemberEnumerator();
 
 WHILE enumerator.MoveNext() DO 
