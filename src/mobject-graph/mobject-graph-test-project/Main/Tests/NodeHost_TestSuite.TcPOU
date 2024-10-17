@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="NodeHost_TestSuite" Id="{af5a2382-f67d-088b-0d67-e801e7a84d5b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK NodeHost_TestSuite EXTENDS TcUnit.FB_TestSuite
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TestHasNodesAfterInit();
+TestHasNodesAfterAdding();
+TestRemoveNode();
+]]></ST>
+    </Implementation>
+    <Method Name="TestHasNodesAfterAdding" Id="{ca16de11-bd66-0b63-01d1-b38b00b2b72d}">
+      <Declaration><![CDATA[METHOD TestHasNodesAfterAdding
+VAR
+    node : TestNode;
+	host : NodeHost(0, 0);
+	actual : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestHasNodesAfterAdding');
+
+host.AddNode(Node);
+
+actual := host.HasNodes;
+
+AssertTrue(
+	Condition := actual, 
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestHasNodesAfterInit" Id="{7a54fd2e-c59c-03bd-214c-a20f7cde67d9}">
+      <Declaration><![CDATA[METHOD TestHasNodesAfterInit
+VAR
+	host : NodeHost(0, 0);
+	actual : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestHasNodesAfterInit');
+
+actual := host.HasNodes;
+
+AssertFalse(
+	Condition := actual, 
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestRemoveNode" Id="{ab22d906-cbf2-0dde-257f-a2c4a2eca94d}">
+      <Declaration><![CDATA[METHOD TestRemoveNode
+VAR CONSTANT
+    NODES_TO_TEST : INT := 10;
+END_VAR
+VAR
+    nodes : ARRAY [1..NODES_TO_TEST] OF TestNode;
+    index : INT;
+	host : NodeHost(0, 0);
+	actual : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestRemoveNode');
+
+FOR index := 1 TO NODES_TO_TEST BY 1 DO
+    nodes[index].SetId(TO_STRING(index));
+    host.AddNode(nodes[index]);
+END_FOR
+
+FOR index := 1 TO NODES_TO_TEST BY 1 DO
+    host.RemoveNode(nodes[index]);
+END_FOR
+
+actual := host.HasNodes;
+
+AssertFalse(
+	Condition := actual, 
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

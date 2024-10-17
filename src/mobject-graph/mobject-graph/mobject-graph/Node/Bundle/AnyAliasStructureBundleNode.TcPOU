@@ -1,36 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="AnyUnbundleNode" Id="{9da9d17d-8f95-05b9-3066-b350ce339eb9}" SpecialFunc="None">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="AnyAliasStructureBundleNode" Id="{a5c5b034-1af2-00d8-0f2e-b57b15f20efe}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK FINAL AnyUnbundleNode EXTENDS Node
+FUNCTION_BLOCK FINAL AnyAliasStructureBundleNode EXTENDS Node
 VAR
-	in : I_StructuredDatatype;
-	out : I_StructuredDatatype;
+	in : I_AliasDatatype;
+	out : I_AliasDatatype;
 	datatypeOperations : DatatypeOperations;
+	selfMadeMembers : Stack;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="Constructor" Id="{53374dc9-1a41-0d6d-2df4-c034dc328d58}" />
-    <Folder Name="Destructor" Id="{704309dd-3c31-0c51-2d2f-093722a1eb09}" />
-    <Method Name="Clone" Id="{d5092720-a3e3-0290-2e59-0d5e19a884b5}">
+    <Folder Name="Constructor" Id="{85b5e740-da2e-0886-2af2-1c15d5fb76d0}" />
+    <Folder Name="Destructor" Id="{11b080ad-9371-0c9d-1e3b-acd2e1976124}" />
+    <Method Name="Clone" Id="{77dffb4f-3826-0646-00ce-35d53309fbff}">
       <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
 VAR
-	pNode : POINTER TO AnyUnbundleNode;
+	pNode : POINTER TO AnyAliasStructureBundleNode;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[pNode := __NEW(AnyUnbundleNode(StructuredDatatype := in));
+        <ST><![CDATA[pNode := __NEW(AnyAliasStructureBundleNode(AliasDatatype := in));
 Clone := pNode^;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="FB_exit" Id="{c93ba948-a059-080d-0b22-fa4b2cc112b6}" FolderPath="Destructor\">
+    <Method Name="FB_exit" Id="{52546ee1-c581-0635-2d38-4b7990b6429c}" FolderPath="Destructor\">
       <Declaration><![CDATA[METHOD FB_exit : BOOL
 VAR_INPUT
 	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
 END_VAR
-]]></Declaration>
+VAR
+	member : I_Datatype;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF bInCopyCode THEN
 	RETURN;
@@ -38,29 +41,38 @@ END_IF
 
 in.Dispose();
 out.Dispose();
-datatypeOperations.Clear();]]></ST>
+datatypeOperations.Clear();
+
+WHILE selfMadeMembers.TryPop(member) DO
+	IF member <> 0 THEN 
+		member.dispose();
+	END_IF
+END_WHILE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="FB_init" Id="{6d73a23f-9352-0cce-0488-37c65e51bf54}" FolderPath="Constructor\">
+    <Method Name="FB_init" Id="{0731742d-15e3-0e22-33ae-c4d9ab1825f7}" FolderPath="Constructor\">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	StructuredDatatype : I_StructuredDatatype;
+	AliasDatatype : I_AliasDatatype;
 END_VAR
 VAR
+	inAsStructured : I_StructuredDatatype;
 	enumerator : I_KeyValueForwardEnumerator;
 	member : I_Datatype;
 	memberAsBit : I_BitDatatype;
-	_bool : Pointer to _BOOL;
+	memberAsBool : I_Datatype;
+	_bool : pointer to _BOOL;
 	memberClone : I_Datatype;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[StructuredDatatype.Clone().TryResolveAsStructuredDatatype(in);
-AddInput('in', in);
+        <ST><![CDATA[AliasDatatype.Clone().TryResolveAsAliasDatatype(out);
+AddOutput('out', out);
 
-StructuredDatatype.Clone().TryResolveAsStructuredDatatype(out);
-enumerator := out.Members.GetMemberEnumerator();
+AliasDatatype.Clone().TryResolveAsAliasDatatype(in);
+in.Root.TryResolveAsStructuredDatatype(inAsStructured);
+enumerator := inAsStructured.Members.GetMemberEnumerator();
 
 WHILE enumerator.MoveNext() DO 
 	IF enumerator.TryGet(member) THEN
@@ -68,27 +80,30 @@ WHILE enumerator.MoveNext() DO
 			// if the element is a _bit then this needs to be treated differently (as you cannot simply memcpy
 			// a bit, as it sits next to other data. Instead, a bool is added in it's place.	
 			_bool := __NEW(_BOOL(InitialValue := memberAsBit.Value));
-			datatypeOperations.AddWriteBitToBoolOperation(memberAsBit, _bool^);
-			AddOutput(enumerator.Key, _bool^);
+			datatypeOperations.AddWriteBoolToBitOperation(_bool^, memberAsBit);
+			AddInput(enumerator.Key, _bool^);
+			memberAsBool := _bool^;
+			selfMadeMembers.Push(memberAsBool);
 		ELSE
 			// for all other datatypes,
 			memberClone := member.Clone();
-			datatypeOperations.AddMemoryCopyOperation(member, memberClone);
-			AddOutput(enumerator.key, memberClone);
-		END_IF		
+			datatypeOperations.AddMemoryCopyOperation(memberClone, member);
+			AddInput(enumerator.key, memberClone);
+			selfMadeMembers.Push(memberClone);
+		END_IF
 	END_IF
 END_WHILE
 
 enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="OnExecute" Id="{817379c7-6aaf-0b06-1b2f-5dbcbadf2ed9}">
+    <Method Name="OnExecute" Id="{17e22d61-9d7b-0a3b-3c8f-278e254ab564}">
       <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT
 VAR
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[memcpy(out.Address, in.Address, in.Size);
-datatypeOperations.Execute();]]></ST>
+        <ST><![CDATA[datatypeOperations.Execute();
+memcpy(out.Address, in.Address, in.Size);]]></ST>
       </Implementation>
     </Method>
   </POU>

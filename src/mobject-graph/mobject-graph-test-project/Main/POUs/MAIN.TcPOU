@@ -1,11 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="MAIN" Id="{1c7dbdb3-3ad9-058e-2a75-807bd1bcee45}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
-VAR		
+VAR
+    nodeHost_TestSuite : NodeHost_TestSuite;
+    nodePrototype_TestSuite : NodePrototype_TestSuite;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[TcUnit.RUN();
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="TestNode" Id="{742e5d1b-6d5a-0ae1-0d77-7a5b67fa5319}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL TestNode EXTENDS Node
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Clone" Id="{59346da4-47b6-0941-30c2-f0bc5cf38500}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnExecute" Id="{d3f7e7fb-03f0-0202-1599-9d475e196221}">
+      <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetId" Id="{fe7e0319-7d10-0992-1191-1ae8bc11f3b4}">
+      <Declaration><![CDATA[METHOD SetId
+VAR_INPUT
+    Id : T_MaxString;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^._id := Id;
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

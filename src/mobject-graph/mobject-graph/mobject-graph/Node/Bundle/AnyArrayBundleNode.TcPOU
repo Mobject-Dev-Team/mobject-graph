@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="AnyArrayBundleNode" Id="{d66fecef-1795-0737-2947-8a8f04ec8d0a}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK FINAL AnyArrayBundleNode EXTENDS Node
+VAR
+	in : I_ArrayDatatype;
+	out : I_ArrayDatatype;
+	datatypeOperations : DatatypeOperations;
+	selfMadeElements : Stack;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{979eaf3c-9076-08c1-088e-6c0968ecf293}" />
+    <Folder Name="Destructor" Id="{f2636c31-43cc-0f74-0acf-2bce3f6c4f82}" />
+    <Folder Name="Private" Id="{3811c098-146b-0fb3-2c9c-72a5606811e8}" />
+    <Method Name="Clone" Id="{3761b6c6-97dc-0f24-13c1-7a4ed308d5ed}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
+VAR
+	pNode : POINTER TO AnyArrayBundleNode;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pNode := __NEW(AnyArrayBundleNode(ArrayDatatype := in));
+Clone := pNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ConfigureFor1DArray" Id="{ce163611-ee5a-015b-0379-c9c2639f8c95}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE ConfigureFor1DArray
+VAR_INPUT
+	array1D : I_ArrayDatatype_1D;
+END_VAR
+VAR
+	lowerBound : DINT;
+	upperBound : DINT;
+	i : DINT;
+	element : I_Datatype;
+	elementClone : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT array1D.TryGetLowerBound(1, lowerBound) THEN
+	RETURN;
+END_IF
+
+IF NOT array1D.TryGetUpperBound(1, upperBound) THEN
+	RETURN;
+END_IF
+
+FOR i := lowerBound TO upperBound DO
+	
+	IF array1D.TryGetElementAsDatatypeByIndex(i, element) THEN
+		elementClone := element.Clone();
+		datatypeOperations.AddMemoryCopyOperation(elementClone, element);
+		AddInput(Get1DIndexName(i), elementClone);
+		selfMadeElements.Push(elementClone);
+	END_IF
+	
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ConfigureFor2DArray" Id="{055f3b4d-1834-0527-2e6e-f89f02d00f28}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE ConfigureFor2DArray
+VAR_INPUT
+	array2D : I_ArrayDatatype_2D;
+END_VAR
+VAR
+	lowerBoundD1 : DINT;
+	upperBoundD1 : DINT;
+	lowerBoundD2 : DINT;
+	upperBoundD2 : DINT;
+	i, j : DINT;
+	element : I_Datatype;
+	elementClone : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT array2D.TryGetLowerBound(1, lowerBoundD1) THEN
+	RETURN;
+END_IF
+
+IF NOT array2D.TryGetUpperBound(1, upperBoundD1) THEN
+	RETURN;
+END_IF
+
+IF NOT array2D.TryGetLowerBound(2, lowerBoundD2) THEN
+	RETURN;
+END_IF
+
+IF NOT array2D.TryGetUpperBound(2, upperBoundD2) THEN
+	RETURN;
+END_IF
+
+FOR i := lowerBoundD1 TO upperBoundD1 DO
+	FOR j := lowerBoundD2 TO upperBoundD2 DO
+	
+		IF array2D.TryGetElementAsDatatypeByIndex(i, j, element) THEN
+			elementClone := element.Clone();
+			datatypeOperations.AddMemoryCopyOperation(elementClone, element);
+			AddInput(Get2DIndexName(i,j), elementClone);
+			selfMadeElements.Push(elementClone);
+		END_IF
+	
+	END_FOR
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ConfigureFor3DArray" Id="{0ca0edb3-0f9c-0f5a-0083-07506d4b0fa2}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE ConfigureFor3DArray
+VAR_INPUT
+	array3D : I_ArrayDatatype_3D;
+END_VAR
+VAR
+	lowerBoundD1 : DINT;
+	upperBoundD1 : DINT;
+	lowerBoundD2 : DINT;
+	upperBoundD2 : DINT;
+	lowerBoundD3 : DINT;
+	upperBoundD3 : DINT;
+	i, j, k : DINT;
+	element : I_Datatype;
+	elementClone : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT array3D.TryGetLowerBound(1, lowerBoundD1) THEN
+	RETURN;
+END_IF
+
+IF NOT array3D.TryGetUpperBound(1, upperBoundD1) THEN
+	RETURN;
+END_IF
+
+IF NOT array3D.TryGetLowerBound(2, lowerBoundD2) THEN
+	RETURN;
+END_IF
+
+IF NOT array3D.TryGetUpperBound(2, upperBoundD2) THEN
+	RETURN;
+END_IF
+
+IF NOT array3D.TryGetLowerBound(3, lowerBoundD3) THEN
+	RETURN;
+END_IF
+
+IF NOT array3D.TryGetUpperBound(3, upperBoundD3) THEN
+	RETURN;
+END_IF
+
+FOR i := lowerBoundD1 TO upperBoundD1 DO
+	FOR j := lowerBoundD2 TO upperBoundD2 DO
+		FOR k := lowerBoundD3 TO upperBoundD3 DO
+	
+			IF array3D.TryGetElementAsDatatypeByIndex(i, j, k, element) THEN
+				elementClone := element.Clone();
+				datatypeOperations.AddMemoryCopyOperation(elementClone, element);
+				AddInput(Get3DIndexName(i,j,k), elementClone);
+				selfMadeElements.Push(elementClone);
+			END_IF
+			
+		END_FOR
+	END_FOR
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{e94b016d-f36b-0b10-010b-b52aa4a4a663}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+VAR
+	element : I_Datatype;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+in.Dispose();
+out.Dispose();
+datatypeOperations.Clear();
+
+WHILE selfMadeElements.TryPop(element) DO
+	IF element <> 0 THEN 
+		element.dispose();
+	END_IF
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{d751a2ac-ac35-0ede-00d5-61a9f7914fa6}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	ArrayDatatype : I_ArrayDatatype;
+END_VAR
+VAR
+	inAs1D : I_ArrayDatatype_1D;
+	inAs2D : I_ArrayDatatype_2D;
+	inAs3D : I_ArrayDatatype_3D;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ArrayDatatype.Clone().TryResolveAsArrayDatatype(out);
+AddOutput('out', out);
+
+ArrayDatatype.Clone().TryResolveAsArrayDatatype(in);
+
+IF in.TryResolveAs1DArrayDatatype(inAs1D) THEN
+	ConfigureFor1DArray(inAs1D);
+ELSIF in.TryResolveAs2DArrayDatatype(inAs2D) THEN
+	ConfigureFor2DArray(inAs2D);
+ELSIF in.TryResolveAs3DArrayDatatype(inAs3D) THEN
+	ConfigureFor3DArray(inAs3D);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Get1DIndexName" Id="{20dc23c1-a474-04f4-34da-0426f8c7485f}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE Get1DIndexName : T_MAXSTRING
+VAR_INPUT
+	Index : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Get1DIndexName := concat('[',DINT_TO_STRING(Index));
+Get1DIndexName := concat(Get1DIndexName,']');]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Get2DIndexName" Id="{2d244a1f-186d-070c-0713-1a13e1263f2d}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE Get2DIndexName : T_MAXSTRING
+VAR_INPUT
+	Index1 : DINT;
+	Index2 : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Get2DIndexName := concat('[',DINT_TO_STRING(Index1));
+Get2DIndexName := concat(Get2DIndexName,',');
+Get2DIndexName := concat(Get2DIndexName,DINT_TO_STRING(Index2));
+Get2DIndexName := concat(Get2DIndexName,']');]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Get3DIndexName" Id="{00bdd208-f14b-0eae-29e2-cb5fc182a5d9}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE Get3DIndexName : T_MAXSTRING
+VAR_INPUT
+	Index1 : DINT;
+	Index2 : DINT;
+	Index3 : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Get3DIndexName := concat('[',DINT_TO_STRING(Index1));
+Get3DIndexName := concat(Get3DIndexName,',');
+Get3DIndexName := concat(Get3DIndexName,DINT_TO_STRING(Index2));
+Get3DIndexName := concat(Get3DIndexName,',');
+Get3DIndexName := concat(Get3DIndexName,DINT_TO_STRING(Index3));
+Get3DIndexName := concat(Get3DIndexName,']');]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnExecute" Id="{de4703d0-72e6-04f8-0958-489c14fca965}">
+      <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[datatypeOperations.Execute();
+memcpy(out.Address, in.Address, in.Size);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
