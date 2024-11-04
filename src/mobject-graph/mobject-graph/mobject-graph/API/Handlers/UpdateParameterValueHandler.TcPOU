@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="UpdateParameterValueHandler" Id="{20bd08bb-8de1-095c-2141-ffb1215a844b}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -65,7 +65,7 @@ IF NOT Parameters.TryDeserializeKeyToObject ('parameterValue', parameter, feedba
 	RETURN;
 END_IF
 
-Response.CompleteWithString('done');]]></ST>
+Response.CompleteWithString(graphUuid);]]></ST>
       </Implementation>
     </Method>
     <Method Name="Initialize" Id="{e6f6a763-5346-0789-1b86-3e4a03b9da06}">
@@ -75,7 +75,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[this^.graphs := Graphs;]]></ST>
+        <ST><![CDATA[THIS^.graphs := Graphs;]]></ST>
       </Implementation>
     </Method>
   </POU>
