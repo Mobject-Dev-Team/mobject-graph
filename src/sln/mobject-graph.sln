@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # TcXaeShell Solution File, Format Version 11.00
 VisualStudioVersion = 15.0.33403.129
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{DFBE7525-6864-4E62-8B2E-D530D69D9D96}") = "mobject-graph", "mobject-graph\mobject-graph.tspproj", "{FE4F7BAE-8C5F-4D7D-8896-C85382BB9EB5}"
+Project("{DFBE7525-6864-4E62-8B2E-D530D69D9D96}") = "lib", "lib\lib.tspproj", "{FE4F7BAE-8C5F-4D7D-8896-C85382BB9EB5}"
 EndProject
-Project("{B1E792BE-AA5F-4E3C-8C82-674BF9C0715B}") = "mobject-graph-test-project", "mobject-graph-test-project\mobject-graph-test-project.tsproj", "{133EED47-F1E9-484F-ACA9-68FC7AD000D4}"
+Project("{B1E792BE-AA5F-4E3C-8C82-674BF9C0715B}") = "libTest", "libTest\libTest.tsproj", "{133EED47-F1E9-484F-ACA9-68FC7AD000D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
