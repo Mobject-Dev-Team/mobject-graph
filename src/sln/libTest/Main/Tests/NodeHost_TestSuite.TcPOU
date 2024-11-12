@@ -9,6 +9,7 @@ END_VAR
       <ST><![CDATA[TestHasNodesAfterInit();
 TestHasNodesAfterAdding();
 TestRemoveNode();
+TestTryGetNodeById();
 ]]></ST>
     </Implementation>
     <Method Name="TestHasNodesAfterAdding" Id="{ca16de11-bd66-0b63-01d1-b38b00b2b72d}">
@@ -80,6 +81,47 @@ END_FOR
 actual := host.HasNodes;
 
 AssertFalse(
+	Condition := actual, 
+	Message := 'Did not produce the expected result'
+);
+
+TEST_FINISHED();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TestTryGetNodeById" Id="{cf4f562b-2c3b-0e42-17f7-8efc5ad19bff}">
+      <Declaration><![CDATA[METHOD TestTryGetNodeById
+VAR CONSTANT
+    NODES_TO_TEST : INT := 10;
+END_VAR
+VAR
+    nodes : ARRAY [1..NODES_TO_TEST] OF TestNode;
+    guids : ARRAY [1..NODES_TO_TEST] OF T_MaxString := ['54E2a4bf-7608-4ba2-b7a0-cc0d122ca5b9',
+                                                        '36b64dc1-33b7-4132-ace0-8e026acf58da',
+                                                        '9E922f40-7a98-462a-9571-b394f5afad1e',
+                                                        '5dee9f3f-35b7-4e74-8e59-b921d102c5b9',
+                                                        '55ee8e9d-3a44-4E6b-81aa-9c2f4ce65bce',
+                                                        '1192e990-56ea-4185-a4ad-a2e7413437b3',
+                                                        'dafdbd2c-5f76-403d-8f89-c6aec472b210',
+                                                        '4e1a0640-6b80-4880-91d1-47f8fc8f9be7',
+                                                        '5f950222-f5dd-4bce-914e-b4a0d60d2e77',
+                                                        '17190E2e-6ca3-40a2-80c5-b209cf3c06a5'];
+    index : INT;	
+    host : NodeHost(0, 0);
+    foundNode : I_Node;
+	actual : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('TestTryGetNodeById');
+
+FOR index := 1 TO NODES_TO_TEST BY 1 DO
+    nodes[index].SetId(guids[index]);
+    host.AddNode(nodes[index]);
+END_FOR
+
+actual := host.TryGetNodeById('5dee9f3f-35b7-4e74-8e59-b921d102c5b9', foundNode);
+
+AssertTrue(
 	Condition := actual, 
 	Message := 'Did not produce the expected result'
 );
