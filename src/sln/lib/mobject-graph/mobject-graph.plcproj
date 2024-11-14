@@ -19,7 +19,7 @@
     <Company>mobject</Company>
     <Released>false</Released>
     <Title>mobject-graph</Title>
-    <ProjectVersion>0.14.0</ProjectVersion>
+    <ProjectVersion>0.15.0</ProjectVersion>
     <DefaultNamespace>mobject-graph</DefaultNamespace>
     <Placeholder>mobject-graph</Placeholder>
     <Author>mobject dev team</Author>
