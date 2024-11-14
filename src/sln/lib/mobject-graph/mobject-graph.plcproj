@@ -424,6 +424,9 @@
     <Compile Include="Node\Bundle\AnyAliasStructureBundleNode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Node\Display\AnyInterfaceDisplayNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Node\Events\I_NodeAddedEvent.TcIO">
       <SubType>Code</SubType>
     </Compile>

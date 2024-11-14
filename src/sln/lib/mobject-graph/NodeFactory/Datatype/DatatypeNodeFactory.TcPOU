@@ -109,6 +109,19 @@ END_VAR]]></Declaration>
 CreateDisplayNode := pAnyDisplayNode^;]]></ST>
       </Implementation>
     </Method>
+    <Method Name="CreateInterfaceDisplayNode" Id="{47793241-fb5b-0de0-300e-5cabec018061}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateInterfaceDisplayNode : I_Node
+VAR_INPUT
+	NodeDatatype : I_InterfaceDatatype;
+END_VAR
+VAR
+	pAnyInterfaceDisplayNode : POINTER TO AnyInterfaceDisplayNode;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pAnyInterfaceDisplayNode := __NEW(AnyInterfaceDisplayNode(Datatype := NodeDatatype));
+CreateInterfaceDisplayNode := pAnyInterfaceDisplayNode^;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="CreateLiteralNode" Id="{c52fa6c0-781b-0d47-0d80-60de41af51f8}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED CreateLiteralNode : I_Node
 VAR_INPUT
@@ -388,7 +401,7 @@ VAR
 	path : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[node := CreateDisplayNode(NodeDatatype);
+        <ST><![CDATA[node := CreateInterfaceDisplayNode(NodeDatatype);
 selfCreatedNodes.Push(node);
 path := concat('Display/', NodeDatatype.Identifier);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
