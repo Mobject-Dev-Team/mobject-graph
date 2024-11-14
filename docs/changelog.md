@@ -2,7 +2,8 @@
 
 ## v0.15.0-alpha
 
-TBA
+- updated to support mobject-core v0.6.0
+- updated to support mobject-server v0.16.0
 
 ## v0.14.0-alpha
 
