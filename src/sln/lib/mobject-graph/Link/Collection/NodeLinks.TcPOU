@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="NodeLinks" Id="{d9098e1c-8cee-0ddf-1e5f-028f526f4024}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK NodeLinks EXTENDS disposable IMPLEMENTS I_NodeLinks
+VAR
+	links : OrderedDictionary;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Destructor" Id="{4ffc81dd-cb2e-0de8-3ffa-bd3070cb19e3}" />
+    <Folder Name="Private" Id="{d404d682-2a35-0a24-04c2-fdeb77cfdb32}" />
+    <Method Name="Clear" Id="{5118df76-86d8-020e-09fd-c4c8a9a2bae2}">
+      <Declaration><![CDATA[METHOD PUBLIC Clear
+VAR_INPUT
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	link : I_NodeLink;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := links.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF enumerator.TryGet(link) THEN
+		link.Dispose();
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();
+links.Clear();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Create" Id="{115eda85-cbbb-00d3-3652-a2a1f5ebcabe}">
+      <Declaration><![CDATA[METHOD PUBLIC Create : I_NodeLink
+VAR_INPUT
+	LinkId : T_MAXSTRING;
+	LinkSourceNode : I_Node;
+	LinkSourcePort : I_OutputPort;
+	LinkDestinationNode : I_Node;
+	LinkDestinationPort : I_InputPort;
+END_VAR
+VAR
+	link : I_NodeLink;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[link := CreateNewLink(
+	LinkId, 
+	LinkSourceNode,
+	LinkSourcePort,
+	LinkDestinationNode,
+	LinkDestinationPort
+);
+
+links.AddOrUpdate(link.Id, link);
+Create := link;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CreateNewLink" Id="{1ec8bed5-323d-0a6f-021a-4aeb344f39a4}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE CreateNewLink : I_NodeLink
+VAR_INPUT
+	LinkId : T_MAXSTRING;
+	LinkSourceNode : I_Node;
+	LinkSourcePort : I_OutputPort;
+	LinkDestinationNode : I_Node;
+	LinkDestinationPort : I_InputPort;
+END_VAR
+VAR
+	pLink : POINTER TO Link;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pLink := __NEW(
+	Link(
+		Id := LinkId, 
+		SourceNode := LinkSourceNode,
+		SourcePort := LinkSourcePort,
+		DestinationNode := LinkDestinationNode,
+		DestinationPort := LinkDestinationPort
+	)
+);
+
+CreateNewLink := pLink^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisconnectAll" Id="{53b5ea80-2557-044d-140d-69e4ca68f716}">
+      <Declaration><![CDATA[METHOD PUBLIC DisconnectAll
+VAR_INPUT
+END_VAR
+VAR
+	enumerator : I_ForwardEnumerator;
+	link : I_NodeLink;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[enumerator := links.GetEnumerator();
+
+WHILE (enumerator.MoveNext()) DO
+	
+	IF enumerator.TryGet(link) THEN
+		link.Disconnect();
+	END_IF
+
+END_WHILE
+
+enumerator.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{f61e70a4-aaca-0a9b-014f-ab1e0cca45d8}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+Clear();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetKeyValueEnumerator" Id="{9f67fe5d-c2c6-0c69-114d-9d3d1fa05913}">
+      <Declaration><![CDATA[METHOD PUBLIC GetKeyValueEnumerator : I_KeyValueForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetKeyValueEnumerator := links.GetKeyValueEnumerator();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryGetLinkById" Id="{7db9b018-127f-02fa-390e-089e9c450a7f}">
+      <Declaration><![CDATA[METHOD PUBLIC TryGetLinkById : BOOL
+VAR_INPUT
+	Id : T_MAXSTRING;
+	Destination : REFERENCE TO I_NodeLink;
+END_VAR
+VAR
+	link : I_NodeLink;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT links.TryGetValue(Id, link) THEN
+	RETURN;
+END_IF
+
+Destination := link;
+TryGetLinkById := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

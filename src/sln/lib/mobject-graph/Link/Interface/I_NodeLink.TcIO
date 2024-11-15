@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <Itf Name="I_NodeLink" Id="{5ac3f71b-2cd2-04e1-24ce-4f6fd005f1da}">
+    <Declaration><![CDATA[INTERFACE I_NodeLink EXTENDS I_Disposable
+]]></Declaration>
+    <Property Name="DestinationNode" Id="{00c52e29-7f05-090e-0d6d-b302984cc122}">
+      <Declaration><![CDATA[PROPERTY PUBLIC DestinationNode : I_Node]]></Declaration>
+      <Get Name="Get" Id="{84607cb3-61e1-0831-3e99-81b2e5d0eac1}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="DestinationPort" Id="{a90df5ed-2a6c-02dd-29c3-a0d9abc89bf9}">
+      <Declaration><![CDATA[PROPERTY PUBLIC DestinationPort : I_InputPort]]></Declaration>
+      <Get Name="Get" Id="{608d191e-db5f-026f-0533-db656139ebb6}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="Disconnect" Id="{9ebf37a6-8ffd-0a35-2921-749b3d74711a}">
+      <Declaration><![CDATA[METHOD PUBLIC Disconnect
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Id" Id="{64fb8a26-de13-0eb8-3d11-45a825b3580b}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Id : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{de402756-d901-0749-3a5f-d84acf0d4d91}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="SourceNode" Id="{93ba859f-00f6-095a-39f5-00f28f2e4b11}">
+      <Declaration><![CDATA[PROPERTY PUBLIC SourceNode : I_Node]]></Declaration>
+      <Get Name="Get" Id="{6a64ace9-3317-0f02-3d43-3ed37b237bf4}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="SourcePort" Id="{8f5e3895-57ad-0d88-222f-155af834482c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC SourcePort : I_OutputPort]]></Declaration>
+      <Get Name="Get" Id="{4d9dbd43-54a0-03e3-335d-14518b67e4d4}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TryConnect" Id="{7c8d830c-5d5a-0214-2e0a-eb5b5be3fe5d}">
+      <Declaration><![CDATA[METHOD PUBLIC TryConnect : BOOL;
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

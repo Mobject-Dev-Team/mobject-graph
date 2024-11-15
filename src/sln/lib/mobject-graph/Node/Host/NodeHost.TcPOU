@@ -144,6 +144,15 @@ eventTarget := parentEventTarget;
 CreateExecuteEnumerator();]]></ST>
       </Implementation>
     </Method>
+    <Method Name="GetNodesInOrderEnumerator" Id="{b5ad29ae-0d16-0c8c-09c1-93faceaaf69b}">
+      <Declaration><![CDATA[METHOD PUBLIC GetNodesInOrderEnumerator : I_ForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetNodesInOrderEnumerator := nodesInExecutionOrder.GetEnumerator();]]></ST>
+      </Implementation>
+    </Method>
     <Property Name="HasNodes" Id="{bc9a2333-a5a9-0d80-29bd-ba707b99e3bf}">
       <Declaration><![CDATA[PROPERTY PUBLIC HasNodes : BOOL]]></Declaration>
       <Get Name="Get" Id="{c5f61ad7-9f7f-0a89-12c5-feb82a74ed7a}">

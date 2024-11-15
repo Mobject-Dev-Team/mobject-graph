@@ -142,6 +142,8 @@
     <Folder Include="InputPort\Events" />
     <Folder Include="InputPort\Host" />
     <Folder Include="InputPort\Interface" />
+    <Folder Include="Link\Collection" />
+    <Folder Include="Link\Interface" />
     <Folder Include="Metadata" />
     <Folder Include="Metadata\Base" />
     <Folder Include="Metadata\Events" />
@@ -149,6 +151,7 @@
     <Folder Include="Metadata\Interface" />
     <Folder Include="GraphFramework" />
     <Folder Include="API" />
+    <Folder Include="Link" />
     <Folder Include="Node\Events" />
     <Folder Include="Packs" />
     <Folder Include="Node" />
@@ -365,6 +368,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InputPort\Interface\I_InputPorts.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Link\Collection\NodeLinks.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Link\Interface\I_NodeLink.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Link\Interface\I_NodeLinks.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Link\Link.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Base\Metadata.TcPOU">
