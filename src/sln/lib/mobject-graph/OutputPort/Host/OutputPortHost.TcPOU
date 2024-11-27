@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="OutputPortHost" Id="{9f11d3e1-d75a-45d0-9087-0ce67c4ca23b}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -99,16 +99,15 @@ VAR_INPUT
 	Port : I_OutputPort;
 END_VAR
 VAR
-	pOutputPortAddedEvent : POINTER TO OutputPortAddedEvent;
+	outputPortAddedEvent : OutputPortAddedEvent(Target := Port);
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF eventTarget = 0 THEN
 	RETURN;
 END_IF
 
-pOutputPortAddedEvent := __NEW(OutputPortAddedEvent(Target := Port));
-eventTarget.Emit('OnOutputPortAdded',pOutputPortAddedEvent^);
-pOutputPortAddedEvent^.Dispose();]]></ST>
+eventTarget.Emit('OnOutputPortAdded', outputPortAddedEvent);
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_exit" Id="{1875cea7-92ed-4a9d-8f6a-20a131dc5520}" FolderPath="Destructor\">

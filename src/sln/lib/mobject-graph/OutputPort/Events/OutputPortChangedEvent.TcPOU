@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="OutputPortChangedEvent" Id="{95a17a8c-2acf-4450-a05e-5e86f1cb2a8a}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -21,7 +21,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[This^._target := Target;]]></ST>
+        <ST><![CDATA[THIS^._target := Target;]]></ST>
       </Implementation>
     </Method>
     <Property Name="Target" Id="{13bca94d-a048-45eb-982a-a7fac92b8c9d}">

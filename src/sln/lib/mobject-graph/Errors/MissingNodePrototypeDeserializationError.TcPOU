@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="MissingNodePrototypeDeserializationError" Id="{de96c2b8-f8dc-4d96-8fc2-c41036dcf68d}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -33,7 +33,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ nodeType := MissingType;]]></ST>
+        <ST><![CDATA[nodeType := MissingType;]]></ST>
       </Implementation>
     </Method>
     <Property Name="Message" Id="{76f31b03-0667-4b3c-ab9a-17ceefa5b2fa}">
