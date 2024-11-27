@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
-  <POU Name="ParameterAddedEvent" Id="{04bdbd93-c83e-46a8-b12e-cb3633e97c82}" SpecialFunc="None">
+  <POU Name="ParameterUpdatedEvent" Id="{9aee1605-6915-0070-07cf-dca051deefd5}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK ParameterAddedEvent EXTENDS Disposable IMPLEMENTS I_ParameterAddedEvent
+FUNCTION_BLOCK ParameterUpdatedEvent EXTENDS Disposable IMPLEMENTS I_ParameterUpdatedEvent
 VAR
 	_targetParameter : I_Parameter;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="Constructor" Id="{f3327044-872a-4e76-8e85-dd146d3a76c9}" />
-    <Method Name="FB_init" Id="{8c496390-6fb1-4cd5-a82d-1514795deb0e}" FolderPath="Constructor\">
+    <Folder Name="Constructor" Id="{ea62013f-407f-00ab-2a44-7b880f9ea242}" />
+    <Method Name="FB_init" Id="{df25cc75-92c3-0f66-2229-5ce0b212a433}" FolderPath="Constructor\">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
@@ -25,9 +25,9 @@ END_VAR
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="TargetParameter" Id="{694ef420-5dac-4410-aa5b-fc99f8894e8b}">
+    <Property Name="TargetParameter" Id="{1a47f78c-f489-0205-0800-4797f8a803e0}">
       <Declaration><![CDATA[PROPERTY PUBLIC TargetParameter : I_Parameter]]></Declaration>
-      <Get Name="Get" Id="{dd705d6a-26e7-47d6-9c2e-3eb89a79c274}">
+      <Get Name="Get" Id="{8dd4471b-1a99-0f37-237e-c62371e6869c}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>

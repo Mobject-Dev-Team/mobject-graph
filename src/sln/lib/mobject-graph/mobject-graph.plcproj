@@ -538,7 +538,13 @@
     <Compile Include="Parameters\Events\I_ParameterAddedEvent.TcIO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Parameters\Events\I_ParameterUpdatedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Parameters\Events\ParameterAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parameters\Events\ParameterUpdatedEvent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Parameters\Host\ParameterHost.TcPOU">

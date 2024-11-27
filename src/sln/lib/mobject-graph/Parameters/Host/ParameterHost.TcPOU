@@ -106,7 +106,8 @@ END_VAR]]></Declaration>
 	RETURN;
 END_IF
 
-eventTarget.Emit('OnParameterAdded',parameterAddedEvent);]]></ST>
+eventTarget.Emit('OnParameterAdded', parameterAddedEvent);
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitOnParameterUpdatedEvent" Id="{3017c142-29b3-0c38-3616-89391530551d}" FolderPath="Protected\">
@@ -115,14 +116,15 @@ VAR_INPUT
 	Parameter : I_Parameter;
 END_VAR
 VAR
-	parameterAddedEvent : ParameterAddedEvent(TargetParameter := Parameter);
+	parameterUpdatedEvent : ParameterUpdatedEvent(TargetParameter := Parameter);
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF eventTarget = 0 THEN
 	RETURN;
 END_IF
 
-eventTarget.Emit('OnParameterUpdated',parameterAddedEvent);]]></ST>
+eventTarget.Emit('OnParameterUpdated', parameterUpdatedEvent);
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_exit" Id="{aa9a8b9f-2eb6-4855-a769-b64ee090d943}" FolderPath="Destructor\">
