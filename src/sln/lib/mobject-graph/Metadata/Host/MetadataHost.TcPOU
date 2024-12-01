@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="MetadataHost" Id="{ec580a31-b2b9-4018-a76a-d247bf1e66fd}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -99,16 +99,15 @@ VAR_INPUT
 	Metadata : I_Metadata;
 END_VAR
 VAR
-	pMetadataAddedEvent : POINTER TO MetadataAddedEvent;
+	metadataAddedEvent : MetadataAddedEvent(Target := Metadata);
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF eventTarget = 0 THEN
 	RETURN;
 END_IF
 
-pMetadataAddedEvent := __NEW(MetadataAddedEvent(Target := Metadata));
-eventTarget.Emit('OnMetadataAdded',pMetadataAddedEvent^);
-pMetadataAddedEvent^.Dispose();]]></ST>
+eventTarget.Emit('OnMetadataAdded', metadataAddedEvent);
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_exit" Id="{772f0fa4-9bdf-44b5-891a-aa3085ffa4e5}" FolderPath="Destructor\">

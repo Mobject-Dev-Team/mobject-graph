@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <Itf Name="I_OutputPortAddedEvent" Id="{2ba242a2-35d9-488d-b10e-19a4c1a80baf}">
-    <Declaration><![CDATA[INTERFACE I_OutputPortAddedEvent extends I_Event
+    <Declaration><![CDATA[INTERFACE I_OutputPortAddedEvent EXTENDS I_Event
 ]]></Declaration>
     <Property Name="Target" Id="{26c70837-32f4-4e60-b2ef-d1a9b3644f1d}">
       <Declaration><![CDATA[PROPERTY PUBLIC Target : I_OutputPort]]></Declaration>

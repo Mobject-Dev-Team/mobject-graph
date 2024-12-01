@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="ExtensionAddedEvent" Id="{16fb207c-df7f-4483-807e-308c1110d203}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -22,7 +22,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[This^._target := Target;]]></ST>
+        <ST><![CDATA[THIS^._target := Target;]]></ST>
       </Implementation>
     </Method>
     <Property Name="Target" Id="{250b340f-7f16-4a32-a74b-87400bc7728d}">

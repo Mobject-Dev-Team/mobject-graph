@@ -1,38 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
-  <POU Name="InputPortChangedEvent" Id="{0b6e93f0-23d7-45cd-b831-56c837c77c83}" SpecialFunc="None">
+  <POU Name="ParameterUpdatedEvent" Id="{9aee1605-6915-0070-07cf-dca051deefd5}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
 {attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK InputPortChangedEvent EXTENDS Disposable IMPLEMENTS I_InputPortChangedEvent
+FUNCTION_BLOCK ParameterUpdatedEvent EXTENDS Disposable IMPLEMENTS I_ParameterUpdatedEvent
 VAR
-	_target : I_InputPort;
-END_VAR
-]]></Declaration>
+	_targetParameter : I_Parameter;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="Constructor" Id="{41d7c33b-d71c-4aea-bd39-bdc2e8b2065b}" />
-    <Method Name="FB_init" Id="{2248bd7c-a96c-410e-a1a8-9ce2844909cc}" FolderPath="Constructor\">
+    <Folder Name="Constructor" Id="{ea62013f-407f-00ab-2a44-7b880f9ea242}" />
+    <Method Name="FB_init" Id="{df25cc75-92c3-0f66-2229-5ce0b212a433}" FolderPath="Constructor\">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	Target : I_InputPort;
+	TargetParameter : I_Parameter;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^._target := Target;]]></ST>
+        <ST><![CDATA[THIS^._targetParameter := TargetParameter;
+]]></ST>
       </Implementation>
     </Method>
-    <Property Name="Target" Id="{6e91ab6d-976b-4bc4-9098-4fcc34dbf993}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Target : I_InputPort]]></Declaration>
-      <Get Name="Get" Id="{ce2fb73c-3af6-4b60-8d3f-7f45e27df121}">
+    <Property Name="TargetParameter" Id="{1a47f78c-f489-0205-0800-4797f8a803e0}">
+      <Declaration><![CDATA[PROPERTY PUBLIC TargetParameter : I_Parameter]]></Declaration>
+      <Get Name="Get" Id="{8dd4471b-1a99-0f37-237e-c62371e6869c}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[Target := _target;]]></ST>
+          <ST><![CDATA[TargetParameter := _targetParameter;]]></ST>
         </Implementation>
       </Get>
     </Property>

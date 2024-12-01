@@ -45,7 +45,7 @@ VAR_INPUT
 	Target : I_Node;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[_target := Target;
+        <ST><![CDATA[THIS^._target := Target;
 UpdateCpuCounter();]]></ST>
       </Implementation>
     </Method>
