@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="GraphFrameworkApi" Id="{bbeaa71e-faa8-4020-94ac-c51b0ba5f637}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -112,12 +112,13 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Host.RegisterHandler('CreateGraph',createGraphRpcHandler);
-Host.RegisterHandler('CreateGraphMultiUser',createGraphMultiUserRpcHandler);
-Host.RegisterHandler('GetStatus',getStatusRpcHandler);
-Host.RegisterHandler('GetBlueprints',getBlueprintsRpcHandler);
-Host.RegisterHandler('GetContentValue',getContentValueHandler);
-Host.RegisterHandler('UpdateParameterValue',updateParameterValueHandler);]]></ST>
+        <ST><![CDATA[Host.RegisterHandler('CreateGraph', createGraphRpcHandler);
+Host.RegisterHandler('CreateGraphMultiUser', createGraphMultiUserRpcHandler);
+Host.RegisterHandler('GetStatus', getStatusRpcHandler);
+Host.RegisterHandler('GetBlueprints', getBlueprintsRpcHandler);
+Host.RegisterHandler('GetContentValue', getContentValueHandler);
+Host.RegisterHandler('UpdateParameterValue', updateParameterValueHandler);
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="RegisterSynchronousRpcHandlersWith" Id="{9cdb3985-6a52-0982-12b5-714e24122e9a}">

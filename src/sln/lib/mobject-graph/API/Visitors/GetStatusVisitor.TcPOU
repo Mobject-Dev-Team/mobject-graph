@@ -59,7 +59,7 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[Serializer.StartObject();
-Serializer.AddKeyString('name',VisitingExtension.Name);
+Serializer.AddKeyString('name', VisitingExtension.Name);
 
 IF VisitingExtension.Alarms.HasAlarms THEN
 	serializer.addkey('alarms');

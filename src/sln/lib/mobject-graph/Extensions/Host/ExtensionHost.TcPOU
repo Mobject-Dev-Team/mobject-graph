@@ -45,7 +45,7 @@ VAR_INPUT
 	Extension : I_Extension;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[extensions.AddOrUpdate(Extension.Name,Extension);
+        <ST><![CDATA[extensions.AddOrUpdate(Extension.Name, Extension);
 EmitOnExtensionAddedEvent(Extension);]]></ST>
       </Implementation>
     </Method>

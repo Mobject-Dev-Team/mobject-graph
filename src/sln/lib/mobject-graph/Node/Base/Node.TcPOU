@@ -17,7 +17,7 @@ VAR
 	contentHost : ContentHost(THIS^, eventEmitter);
 	alarmHost : AlarmHost(THIS^, eventEmitter);
 	metadataHost : MetadataHost(THIS^, eventEmitter);
-	extensionHost : ExtensionHost(THIS^,eventEmitter);
+	extensionHost : ExtensionHost(THIS^, eventEmitter);
 	deserializationFailedAlarm : DeserializationFailedAlarm(THIS^);
 END_VAR]]></Declaration>
     <Implementation>

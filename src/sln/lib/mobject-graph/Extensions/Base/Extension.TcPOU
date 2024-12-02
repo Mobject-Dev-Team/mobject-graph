@@ -252,14 +252,15 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Serializer.StartObject();
-Serializer.AddKeyString('name',_name);
+Serializer.AddKeyString('name', _name);
 inputPortHost.SerializeWith(Serializer);
 outputPortHost.SerializeWith(Serializer);
 parameterHost.SerializeWith(Serializer);
 contentHost.SerializeWith(Serializer);
 alarmHost.SerializeWith(Serializer);
 metadataHost.SerializeWith(Serializer);
-Serializer.EndObject();]]></ST>
+Serializer.EndObject();
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryDeserializeFrom" Id="{f1cd085b-4b54-41dd-a2be-f0cb8ced9794}">
