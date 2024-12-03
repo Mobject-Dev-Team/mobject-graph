@@ -98,11 +98,11 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[Serializer.StartObject();
-Serializer.AddKeyString('message',errorMessage);
-Serializer.AddKeyBool('active',isActive);
+Serializer.AddKeyString('message', errorMessage);
+Serializer.AddKeyBool('active', isActive);
 
 IF reasonMessage <> '' THEN
-	Serializer.AddKeyString('reason',reasonMessage);
+	Serializer.AddKeyString('reason', reasonMessage);
 END_IF
 
 Serializer.EndObject();]]></ST>

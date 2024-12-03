@@ -109,7 +109,7 @@ VAR
 	nodePreExecuteEvent : NodePreExecuteEvent(THIS^);
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[eventEmitter.Emit('OnNodePreExecute',nodePreExecuteEvent);
+        <ST><![CDATA[eventEmitter.Emit('OnNodePreExecute', nodePreExecuteEvent);
 CheckIfNodeExecutionIsBlocked := nodePreExecuteEvent.ExecuteCancelled;
 ]]></ST>
       </Implementation>
@@ -139,7 +139,7 @@ VAR
 	nodeExecuteBeginEvent : NodeExecuteBeginEvent(THIS^);
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[eventEmitter.Emit('OnNodeExecuteBegin',nodeExecuteBeginEvent);]]></ST>
+        <ST><![CDATA[eventEmitter.Emit('OnNodeExecuteBegin', nodeExecuteBeginEvent);]]></ST>
       </Implementation>
     </Method>
     <Method Name="EmitNodeExecuteEndEvent" Id="{a42b5b3b-ff9d-471e-a9b1-7e26b88f78ad}" FolderPath="Private\">
@@ -148,7 +148,7 @@ VAR
 	nodeExecuteEndEvent : NodeExecuteEndEvent(THIS^);
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[eventEmitter.Emit('OnNodeExecuteEnd',nodeExecuteEndEvent);]]></ST>
+        <ST><![CDATA[eventEmitter.Emit('OnNodeExecuteEnd', nodeExecuteEndEvent);]]></ST>
       </Implementation>
     </Method>
     <Method Name="Execute" Id="{53111ca4-ff22-4d20-85e1-3d604fc86fe1}">
@@ -315,9 +315,9 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[Serializer.StartObject();
-Serializer.AddKeyString('id',_id);
-Serializer.AddKeyDint('order',_order);
-Serializer.AddKeyDint('mode',_mode);
+Serializer.AddKeyString('id', _id);
+Serializer.AddKeyDint('order', _order);
+Serializer.AddKeyDint('mode', _mode);
 inputPortHost.SerializeWith(Serializer);
 outputPortHost.SerializeWith(Serializer);
 parameterHost.SerializeWith(Serializer);

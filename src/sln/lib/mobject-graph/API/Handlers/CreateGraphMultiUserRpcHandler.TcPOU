@@ -36,7 +36,7 @@ END_VAR]]></Declaration>
 END_IF
 
 IF NOT userGraphs.TryGetValue(clientId, graphUuid) THEN
-	IF graphs.TryGetGraphByUuid(graphUuid,graph) THEN
+	IF graphs.TryGetGraphByUuid(graphUuid, graph) THEN
 		graphs.RemoveGraph(graph);
 		graph.Dispose();
 	END_IF

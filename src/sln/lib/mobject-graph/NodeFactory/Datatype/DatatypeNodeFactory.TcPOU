@@ -171,7 +171,7 @@ END_VAR
 	RETURN;
 END_IF
 
-datatypes.OffEvent('OnDatatypeAdded',THIS^);
+datatypes.OffEvent('OnDatatypeAdded', THIS^);
 datatypes := 0;]]></ST>
       </Implementation>
     </Method>
@@ -435,7 +435,7 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[node := CreateDisplayNode(NodeDatatype);
 selfCreatedNodes.Push(node);
-path := concat('Display/',NodeDatatype.TypeName);
+path := concat('Display/', NodeDatatype.TypeName);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
@@ -451,7 +451,7 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[node := CreateLiteralNode(NodeDatatype);
 selfCreatedNodes.Push(node);
-path := concat('Literal/',NodeDatatype.TypeName);
+path := concat('Literal/', NodeDatatype.TypeName);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
@@ -529,7 +529,7 @@ END_VAR
 	RETURN;
 END_IF
 
-datatypes.OnEvent('OnDatatypeAdded',THIS^);]]></ST>
+datatypes.OnEvent('OnDatatypeAdded', THIS^);]]></ST>
       </Implementation>
     </Method>
   </POU>

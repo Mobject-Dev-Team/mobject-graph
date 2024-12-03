@@ -222,7 +222,7 @@ nodesEnumerator := nodeDeserializer.GetArrayEnumerator();
 
 WHILE nodesEnumerator.MoveNext() DO
 	
-	IF NOT nodesEnumerator.Current.TryGetKeyString('id',nodeId, Feedback) THEN
+	IF NOT nodesEnumerator.Current.TryGetKeyString('id', nodeId, Feedback) THEN
 		CONTINUE;
 	END_IF
 	
