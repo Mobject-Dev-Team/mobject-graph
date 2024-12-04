@@ -96,7 +96,7 @@ enumerator.Dispose();]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnExecute" Id="{119d992e-1592-0b3d-060f-f7c35abc32d2}">
-      <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT
+      <Declaration><![CDATA[METHOD PROTECTED OnExecute
 VAR
 END_VAR]]></Declaration>
       <Implementation>

@@ -258,7 +258,7 @@ Get3DIndexName := concat(Get3DIndexName,']');]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnExecute" Id="{0d6719f1-b6cb-0717-0338-c69a98ec13c8}">
-      <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT
+      <Declaration><![CDATA[METHOD PROTECTED OnExecute
 VAR
 END_VAR]]></Declaration>
       <Implementation>

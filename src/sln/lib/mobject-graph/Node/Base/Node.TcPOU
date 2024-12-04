@@ -259,7 +259,7 @@ END_VAR]]></Declaration>
       </Implementation>
     </Method>
     <Method Name="OnExecute" Id="{f0f0499a-5f72-4d57-9065-48b06559724d}" FolderPath="Abstract\">
-      <Declaration><![CDATA[METHOD PROTECTED ABSTRACT OnExecute : HRESULT]]></Declaration>
+      <Declaration><![CDATA[METHOD PROTECTED ABSTRACT OnExecute]]></Declaration>
       <Implementation>
         <ST><![CDATA[]]></ST>
       </Implementation>
