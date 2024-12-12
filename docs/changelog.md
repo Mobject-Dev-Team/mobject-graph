@@ -5,6 +5,8 @@
 - updated to support mobject-core v0.6.0
 - updated to support mobject-server v0.16.0
 - corrected bug with port link order
+- general code tidy and removal of hresult from onExecute
+- added HardwareNode as a new abstract base. This simplifies making Hardware nodes as the clone and dispose is already correctly handled.
 
 ## v0.14.0-alpha
 

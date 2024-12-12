@@ -153,6 +153,7 @@
     <Folder Include="API" />
     <Folder Include="Link" />
     <Folder Include="Node\Events" />
+    <Folder Include="Node\Hardware" />
     <Folder Include="Packs" />
     <Folder Include="Node" />
     <Folder Include="NodeFactory" />
@@ -464,6 +465,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Node\Events\NodePreExecuteEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Hardware\HardwareNode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Node\Unbundle\AnyAliasArrayUnbundleNode.TcPOU">
