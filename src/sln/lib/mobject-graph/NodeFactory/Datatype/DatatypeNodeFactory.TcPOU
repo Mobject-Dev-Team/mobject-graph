@@ -225,7 +225,7 @@ VAR_INPUT
 END_VAR
 VAR
 	datatypeAddedEvent : I_DatatypeAddedEvent;
-	primativeDatatype : I_Datatype;
+	primitiveDatatype : I_Datatype;
 	aliasDatatypeAddedEvent : I_AliasDatatypeAddedEvent;
 	aliasDatatype : I_AliasDatatype;
 	enumDatatypeAddedEvent : I_EnumDatatypeAddedEvent;
@@ -288,9 +288,9 @@ IF __QUERYINTERFACE(event, arrayDatatypeAddedEvent) THEN
 END_IF
 
 IF __QUERYINTERFACE(event, datatypeAddedEvent) THEN
-	primativeDatatype := datatypeAddedEvent.Target;
-	RegisterPrimitiveLiteralNodeOfType(primativeDatatype);
-	RegisterPrimitiveDisplayNodeOfType(primativeDatatype);
+	primitiveDatatype := datatypeAddedEvent.Target;
+	RegisterPrimitiveLiteralNodeOfType(primitiveDatatype);
+	RegisterPrimitiveDisplayNodeOfType(primitiveDatatype);
 	RETURN;
 END_IF]]></ST>
       </Implementation>
