@@ -242,6 +242,9 @@
     <Compile Include="API\Visitors\GetBlueprintsVisitor.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="API\Visitors\GetPaginatedBlueprintsVisitor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="API\Visitors\GetStatusVisitor.TcPOU">
       <SubType>Code</SubType>
     </Compile>
