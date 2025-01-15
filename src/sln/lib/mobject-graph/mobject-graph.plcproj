@@ -221,9 +221,6 @@
     <Compile Include="API\GraphFrameworkApi.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="API\Handlers\CreateGraphMultiUserRpcHandler.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="API\Handlers\CreateGraphRpcHandler.TcPOU">
       <SubType>Code</SubType>
     </Compile>
