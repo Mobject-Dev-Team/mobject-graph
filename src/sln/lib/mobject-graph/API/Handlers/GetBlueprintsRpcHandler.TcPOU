@@ -42,7 +42,7 @@ IF Parameters.TryGetKeyUdint('offset', offset, feedback) AND_THEN Parameters.Try
 ELSE
 	// if the offset and limit are not supplied then try to get all blueprints
 	getBlueprintsVisitor.Initialize(serializer);
-	visitor := getPaginatedBlueprintsVisitor;
+	visitor := getBlueprintsVisitor;
 END_IF
 
 nodeFactory.Accept(visitor);
