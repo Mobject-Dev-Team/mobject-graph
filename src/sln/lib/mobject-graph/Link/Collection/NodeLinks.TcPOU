@@ -42,9 +42,9 @@ links.Clear();]]></ST>
 VAR_INPUT
 	LinkId : T_MAXSTRING;
 	LinkSourceNode : I_Node;
-	LinkSourcePort : I_OutputPort;
+	LinkSource : I_LinkSource;
 	LinkDestinationNode : I_Node;
-	LinkDestinationPort : I_InputPort;
+	LinkDestination : I_LinkDestination;
 END_VAR
 VAR
 	link : I_NodeLink;
@@ -53,9 +53,9 @@ END_VAR]]></Declaration>
         <ST><![CDATA[link := CreateNewLink(
 	LinkId, 
 	LinkSourceNode,
-	LinkSourcePort,
+	LinkSource,
 	LinkDestinationNode,
-	LinkDestinationPort
+	LinkDestination
 );
 
 links.AddOrUpdate(link.Id, link);
@@ -67,9 +67,9 @@ Create := link;]]></ST>
 VAR_INPUT
 	LinkId : T_MAXSTRING;
 	LinkSourceNode : I_Node;
-	LinkSourcePort : I_OutputPort;
+	LinkSource : I_LinkSource;
 	LinkDestinationNode : I_Node;
-	LinkDestinationPort : I_InputPort;
+	LinkDestination : I_LinkDestination;
 END_VAR
 VAR
 	pLink : POINTER TO Link;
@@ -79,9 +79,9 @@ END_VAR]]></Declaration>
 	Link(
 		Id := LinkId, 
 		SourceNode := LinkSourceNode,
-		SourcePort := LinkSourcePort,
+		Source := LinkSource,
 		DestinationNode := LinkDestinationNode,
-		DestinationPort := LinkDestinationPort
+		Destination := LinkDestination
 	)
 );
 

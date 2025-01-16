@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <Itf Name="I_LinkDestination" Id="{47d6d751-c45c-0a11-25d5-a90b9e650bea}">
+    <Declaration><![CDATA[INTERFACE I_LinkDestination
+]]></Declaration>
+    <Property Name="Connected" Id="{274512c4-02cb-0fc3-2098-48b07c51d71a}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Connected : BOOL]]></Declaration>
+      <Get Name="Get" Id="{a8a90f64-4723-03d5-17bf-5c3881807787}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Data" Id="{bb92110f-6a47-01db-360f-a5e3eb7309d8}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : I_Datatype]]></Declaration>
+      <Get Name="Get" Id="{fa5eed5a-6233-0e38-35c5-aed04667af8f}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="Disconnect" Id="{2f84ecf4-40b9-05e0-3fef-85bc181022be}">
+      <Declaration><![CDATA[METHOD PUBLIC Disconnect]]></Declaration>
+    </Method>
+    <Property Name="Name" Id="{3bfb0383-db68-023e-2e6e-e41c5a765cd0}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{9e3db619-f544-07bd-1879-79e5d12728e1}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="TryConnectTo" Id="{9c3c5c90-8dba-0e4f-3c00-1348fe633275}">
+      <Declaration><![CDATA[METHOD PUBLIC TryConnectTo : BOOL
+VAR_INPUT
+	Source : I_LinkSource;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

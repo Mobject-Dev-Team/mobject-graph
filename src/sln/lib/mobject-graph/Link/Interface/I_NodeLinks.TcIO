@@ -13,9 +13,9 @@ END_VAR]]></Declaration>
 VAR_INPUT
 	LinkId : T_MAXSTRING;
 	LinkSourceNode : I_Node;
-	LinkSourcePort : I_OutputPort;
+	LinkSource : I_LinkSource;
 	LinkDestinationNode : I_Node;
-	LinkDestinationPort : I_InputPort;
+	LinkDestination : I_LinkDestination;
 END_VAR]]></Declaration>
     </Method>
     <Method Name="DisconnectAll" Id="{8bba65c9-be92-0e81-37df-f0a1695700db}">

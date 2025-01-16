@@ -216,7 +216,7 @@ WHILE parametersEnumerator.MoveNext() DO
 	END_IF
 	
 	IF NOT parameter.TryDeserializeFrom(parametersEnumerator.Current, Feedback) THEN
-		RETURN;
+		CONTINUE;
 	END_IF
 	
 	EmitOnParameterUpdatedEvent(parameter);

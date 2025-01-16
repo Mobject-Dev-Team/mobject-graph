@@ -8,7 +8,7 @@ FUNCTION_BLOCK InputPort EXTENDS Disposable IMPLEMENTS I_InputPort
 VAR
 	_name : T_MAXSTRING;
 	_data : I_Datatype;
-	_connectedTo : I_OutputPort;
+	_connectedTo : I_LinkSource;
 	parent : I_HostInputPorts;
 	eventEmitter : EventEmitter;
 	metadataHost : MetadataHost(THIS^, eventEmitter);
@@ -17,7 +17,6 @@ END_VAR]]></Declaration>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{d6f4f4aa-8698-46ed-8175-65e59e2b3b48}" />
-    <Folder Name="Protected" Id="{1cc2ff75-1ccb-4287-84ca-6b9047e866f1}" />
     <Method Name="Accept" Id="{e3242ab8-dbc5-40db-b95e-f3ee772d8479}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
@@ -69,22 +68,8 @@ END_VAR
 	RETURN;
 END_IF
 
-_connectedTo.OffEvent('OnOutputPortChanged', THIS^);
 _connectedTo := 0;
 _data.ClearReference();]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="EmitOnInputPortChanged" Id="{52067677-5936-419a-9560-7526d763f3d5}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED EmitOnInputPortChanged
-VAR_INPUT
-	PortChanged : I_InputPort;
-END_VAR
-VAR
-	inputPortChangeEvent : InputPortChangedEvent(Target := PortChanged);
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[eventEmitter.Emit('OnInputPortChanged', inputPortChangeEvent);
-]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{e404802a-b16f-4b00-838c-2cafad6e8864}" FolderPath="Constructor\">
@@ -100,29 +85,6 @@ END_VAR]]></Declaration>
         <ST><![CDATA[_name := Name;
 _data := Data;
 RegisterWithParent(Parent);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="HandleEvent" Id="{7e761fa5-7073-44db-b002-9d35c60f42b2}">
-      <Declaration><![CDATA[METHOD PUBLIC HandleEvent
-VAR_INPUT
-	Event : I_Event;
-END_VAR
-VAR
-	outputPortChangedEvent : I_OutputPortChangedEvent;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF __QUERYINTERFACE(Event, outputPortChangedEvent) THEN
-	HandleOutputPortChangedEvent(outputPortChangedEvent.Target);
-END_IF]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="HandleOutputPortChangedEvent" Id="{7cf02196-38c9-413d-816d-8a18b6a04ca8}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD PROTECTED HandleOutputPortChangedEvent
-VAR_INPUT
-	Source : I_OutputPort;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[EmitOnInputPortChanged(THIS^);]]></ST>
       </Implementation>
     </Method>
     <Property Name="Metadatum" Id="{1a732f9f-0b2b-4649-a8b4-5381fd8facb4}">
@@ -147,7 +109,7 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="OffEvent" Id="{f0a7fff1-2155-40c3-a9e3-5afc12ed7646}">
+    <Method Name="OffEvent" Id="{84378b93-b379-06f3-28e4-9eeabcb1d178}">
       <Declaration><![CDATA[METHOD PUBLIC OffEvent
 VAR_INPUT
 	EventName : T_MaxString;
@@ -157,7 +119,7 @@ END_VAR]]></Declaration>
         <ST><![CDATA[eventEmitter.OffEvent(EventName, EventHandler);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="OnceEvent" Id="{8dd97194-5932-4ed1-bc2d-81d6f8224cd7}">
+    <Method Name="OnceEvent" Id="{a04b62cc-1f8d-0a04-26ca-896687e3f025}">
       <Declaration><![CDATA[METHOD PUBLIC OnceEvent
 VAR_INPUT
 	EventName : T_MaxString;
@@ -167,7 +129,7 @@ END_VAR]]></Declaration>
         <ST><![CDATA[eventEmitter.OnceEvent(EventName, EventHandler);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="OnEvent" Id="{ca03041e-4174-459d-b5b3-8e51f537d3b8}">
+    <Method Name="OnEvent" Id="{a355f69e-fcd3-0436-1d7a-6fd9ccdab395}">
       <Declaration><![CDATA[METHOD PUBLIC OnEvent
 VAR_INPUT
 	EventName : T_MaxString;
@@ -213,15 +175,14 @@ Serializer.EndObject();]]></ST>
     <Method Name="TryConnectTo" Id="{109bd18b-b652-41c1-bd1d-1bb3a3ede6af}">
       <Declaration><![CDATA[METHOD PUBLIC TryConnectTo : BOOL
 VAR_INPUT
-	OutputPort : I_OutputPort;
+	Source : I_LinkSource;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT _data.TryMakeReferenceTo(OutputPort.Data) THEN
+        <ST><![CDATA[IF NOT _data.TryMakeReferenceTo(Source.Data) THEN
 	RETURN;
 END_IF
 
-_connectedTo := OutputPort;
-_connectedTo.OnEvent('OnOutputPortChanged', THIS^);
+_connectedTo := Source;
 TryConnectTo := TRUE;]]></ST>
       </Implementation>
     </Method>

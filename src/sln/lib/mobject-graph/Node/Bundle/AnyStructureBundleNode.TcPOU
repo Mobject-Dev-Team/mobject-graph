@@ -79,14 +79,14 @@ WHILE enumerator.MoveNext() DO
 			// a bit, as it sits next to other data. Instead, a bool is added in it's place.	
 			_bool := __NEW(_BOOL(InitialValue := memberAsBit.Value));
 			datatypeOperations.AddWriteBoolToBitOperation(_bool^, memberAsBit);
-			AddInput(enumerator.Key, _bool^);
+			AddParameter(enumerator.Key, _bool^);
 			memberAsBool := _bool^;
 			selfMadeMembers.Push(memberAsBool);
 		ELSE
 			// for all other datatypes,
 			memberClone := member.Clone();
 			datatypeOperations.AddMemoryCopyOperation(memberClone, member);
-			AddInput(enumerator.key, memberClone);
+			AddParameter(enumerator.key, memberClone);
 			selfMadeMembers.Push(memberClone);
 		END_IF
 	END_IF

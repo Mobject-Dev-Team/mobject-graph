@@ -16,7 +16,6 @@ END_VAR]]></Declaration>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Constructor" Id="{94be3236-c240-4adf-a127-e98e578ce7a8}" />
-    <Folder Name="Protected" Id="{286662f3-c9cb-4596-91f7-ef933675ac47}" />
     <Method Name="Accept" Id="{0ba486fd-b20c-4b70-9dbc-e77265dd7019}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
 VAR_INPUT
@@ -50,19 +49,6 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="EmitOnOutputPortChangeEvent" Id="{610ce088-a1a4-4922-a39b-e13b6338f733}" FolderPath="Protected\">
-      <Declaration><![CDATA[METHOD Protected EmitOnOutputPortChangeEvent
-VAR_INPUT
-	PortChanged : I_OutputPort;
-END_VAR
-VAR
-	outputPortChangeEvent : OutputPortChangedEvent(Target := PortChanged);
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[eventEmitter.Emit('OnOutputPortChanged', outputPortChangeEvent);
-]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="FB_init" Id="{348366d5-3f88-4a1f-8d3f-2c1b679004b7}" FolderPath="Constructor\">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT

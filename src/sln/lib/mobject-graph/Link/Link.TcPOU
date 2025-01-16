@@ -8,9 +8,9 @@ FUNCTION_BLOCK Link EXTENDS Disposable IMPLEMENTS I_NodeLink
 VAR
 	_id : T_MAXSTRING;
 	_sourceNode : I_Node;
-	_sourcePort : I_OutputPort;
+	_source : I_LinkSource;
 	_destinationNode : I_Node;
-	_destinationPort : I_InputPort;
+	_destination : I_LinkDestination;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -18,6 +18,17 @@ END_VAR
     </Implementation>
     <Folder Name="Constructor" Id="{4dcdd44b-6c11-01fb-31e0-6b7b3246ec0c}" />
     <Folder Name="Destructor" Id="{a32a20f6-a006-053f-19bd-41787a441bfc}" />
+    <Property Name="Destination" Id="{1336c8d6-29c4-0732-3137-6c4cf5f74cb4}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Destination : I_LinkDestination]]></Declaration>
+      <Get Name="Get" Id="{f9d6dd71-a801-0986-1058-23d08561754f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Destination := _destination;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="DestinationNode" Id="{0a9121b0-3f2d-0f27-16f4-d3d5f9f6538c}">
       <Declaration><![CDATA[PROPERTY PUBLIC DestinationNode : I_Node]]></Declaration>
       <Get Name="Get" Id="{7b1e24eb-856d-0e55-1b23-4058f4ae5208}">
@@ -29,32 +40,21 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="DestinationPort" Id="{1336c8d6-29c4-0732-3137-6c4cf5f74cb4}">
-      <Declaration><![CDATA[PROPERTY PUBLIC DestinationPort : I_InputPort]]></Declaration>
-      <Get Name="Get" Id="{f9d6dd71-a801-0986-1058-23d08561754f}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[DestinationPort := _destinationPort;]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
     <Method Name="Disconnect" Id="{aece092b-7b77-0dc4-15c0-4d78059d0f33}">
       <Declaration><![CDATA[METHOD PUBLIC Disconnect
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF _sourcePort = 0 THEN
+        <ST><![CDATA[IF _source = 0 THEN
 	RETURN;
 END_IF
 
-IF _destinationPort = 0 THEN
+IF _destination = 0 THEN
 	RETURN;
 END_IF
 
-_destinationPort.Disconnect();]]></ST>
+_destination.Disconnect();]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_exit" Id="{9e43b312-2e04-0ceb-00c0-b3603511396a}" FolderPath="Destructor\">
@@ -78,17 +78,17 @@ VAR_INPUT
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	Id : T_MAXSTRING;
 	SourceNode : I_Node;
-	SourcePort : I_OutputPort;
+	Source : I_LinkSource;
 	DestinationNode : I_Node;
-	DestinationPort : I_InputPort;
+	Destination : I_LinkDestination;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[_id := Id;
 _sourceNode := SourceNode;
-_sourcePort := SourcePort;
+_source := Source;
 _destinationNode := DestinationNode;
-_destinationPort := DestinationPort;]]></ST>
+_destination := Destination;]]></ST>
       </Implementation>
     </Method>
     <Property Name="Id" Id="{28896bbe-8795-048e-247e-2e2f6d5fbec0}">
@@ -99,6 +99,17 @@ END_VAR
 ]]></Declaration>
         <Implementation>
           <ST><![CDATA[Id := _id;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Source" Id="{5be7ccc1-47dc-0da9-148a-e14f1c8a5464}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Source : I_LinkSource]]></Declaration>
+      <Get Name="Get" Id="{3550acb7-82b2-00c9-02dd-4f06168b4d54}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Source := _source;]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -113,32 +124,21 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="SourcePort" Id="{5be7ccc1-47dc-0da9-148a-e14f1c8a5464}">
-      <Declaration><![CDATA[PROPERTY PUBLIC SourcePort : I_OutputPort]]></Declaration>
-      <Get Name="Get" Id="{3550acb7-82b2-00c9-02dd-4f06168b4d54}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[SourcePort := _sourcePort;]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
     <Method Name="TryConnect" Id="{0c662646-c55b-0903-0a83-cd66da798c79}">
       <Declaration><![CDATA[METHOD PUBLIC TryConnect : BOOL;
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF _sourcePort = 0 THEN
+        <ST><![CDATA[IF _source = 0 THEN
 	RETURN;
 END_IF
 
-IF _destinationPort = 0 THEN
+IF _destination = 0 THEN
 	RETURN;
 END_IF
 
-TryConnect := _destinationPort.TryConnectTo(_sourcePort);]]></ST>
+TryConnect := _destination.TryConnectTo(_source);]]></ST>
       </Implementation>
     </Method>
   </POU>

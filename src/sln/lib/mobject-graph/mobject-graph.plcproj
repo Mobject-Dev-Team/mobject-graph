@@ -350,13 +350,7 @@
     <Compile Include="InputPort\Events\InputPortAddedEvent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="InputPort\Events\InputPortChangedEvent.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="InputPort\Events\I_InputPortAddedEvent.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="InputPort\Events\I_InputPortChangedEvent.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InputPort\Host\InputPortHost.TcPOU">
@@ -372,6 +366,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Link\Collection\NodeLinks.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Link\Interface\I_LinkDestination.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Link\Interface\I_LinkSource.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Link\Interface\I_NodeLink.TcIO">
@@ -506,13 +506,7 @@
     <Compile Include="OutputPort\Events\I_OutputPortAddedEvent.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="OutputPort\Events\I_OutputPortChangedEvent.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="OutputPort\Events\OutputPortAddedEvent.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OutputPort\Events\OutputPortChangedEvent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OutputPort\Host\OutputPortHost.TcPOU">
