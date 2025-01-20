@@ -21,7 +21,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[This^._target := Target;]]></ST>
+        <ST><![CDATA[THIS^._target := Target;]]></ST>
       </Implementation>
     </Method>
     <Property Name="Target" Id="{ada082d6-08ce-4cb6-bc5a-56b8b336abbf}">

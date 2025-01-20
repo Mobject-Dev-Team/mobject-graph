@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="GetBlueprintsVisitor" Id="{0dcaa14d-60c2-05ce-28e2-aab02bc9d2d0}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -41,7 +41,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[serializer.StartObject();
 
-serializer.AddKeyString('name',VisitingContent.Name);
+serializer.AddKeyString('name', VisitingContent.Name);
 serializer.Addkey('datatype');
 VisitingContent.Data.SerializeTypeWith(serializer);
 
@@ -63,7 +63,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Serializer.StartObject();
-Serializer.AddKeyString('name',VisitingExtension.Name);
+Serializer.AddKeyString('name', VisitingExtension.Name);
 
 IF VisitingExtension.Metadatum.HasMetadata THEN
 	serializer.addkey('metadata');
@@ -119,7 +119,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[serializer.StartObject();
 
-serializer.AddKeyString('name',VisitingInputPort.Name);
+serializer.AddKeyString('name', VisitingInputPort.Name);
 serializer.Addkey('datatype');
 VisitingInputPort.Data.SerializeTypeWith(serializer);
 
@@ -141,8 +141,8 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[serializer.StartObject();
-serializer.AddKeyString('name',VisitingMetadatum.Name);
-serializer.AddkeyObject('value',VisitingMetadatum.Data);
+serializer.AddKeyString('name', VisitingMetadatum.Name);
+serializer.AddkeyObject('value', VisitingMetadatum.Data);
 serializer.EndObject();]]></ST>
       </Implementation>
     </Method>
@@ -228,7 +228,7 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[serializer.StartObject();
-serializer.AddKeyString('path',VisitingPrototype.Path);
+serializer.AddKeyString('path', VisitingPrototype.Path);
 serializer.AddKey('node');
 VisitingPrototype.Node.Accept(THIS^);
 serializer.EndObject();]]></ST>
@@ -243,7 +243,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[serializer.StartObject();
 
-serializer.AddKeyString('name',VisitingOutputPort.Name);
+serializer.AddKeyString('name', VisitingOutputPort.Name);
 serializer.Addkey('datatype');
 VisitingOutputPort.Data.SerializeTypeWith(serializer);
 
@@ -266,7 +266,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[serializer.StartObject();
 
-serializer.AddKeyString('name',VisitingProperty.Name);
+serializer.AddKeyString('name', VisitingProperty.Name);
 serializer.Addkey('datatype');
 VisitingProperty.Data.SerializeTypeWith(serializer);
 serializer.Addkey('defaultValue');

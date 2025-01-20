@@ -53,7 +53,7 @@ FOR i := lowerBound TO upperBound DO
 	IF array1D.TryGetElementAsDatatypeByIndex(i, element) THEN
 		elementClone := element.Clone();
 		datatypeOperations.AddMemoryCopyOperation(elementClone, element);
-		AddInput(Get1DIndexName(i), elementClone);
+		AddParameter(Get1DIndexName(i), elementClone);
 		selfMadeElements.Push(elementClone);
 	END_IF
 	
@@ -98,7 +98,7 @@ FOR i := lowerBoundD1 TO upperBoundD1 DO
 		IF array2D.TryGetElementAsDatatypeByIndex(i, j, element) THEN
 			elementClone := element.Clone();
 			datatypeOperations.AddMemoryCopyOperation(elementClone, element);
-			AddInput(Get2DIndexName(i,j), elementClone);
+			AddParameter(Get2DIndexName(i,j), elementClone);
 			selfMadeElements.Push(elementClone);
 		END_IF
 	
@@ -155,7 +155,7 @@ FOR i := lowerBoundD1 TO upperBoundD1 DO
 			IF array3D.TryGetElementAsDatatypeByIndex(i, j, k, element) THEN
 				elementClone := element.Clone();
 				datatypeOperations.AddMemoryCopyOperation(elementClone, element);
-				AddInput(Get3DIndexName(i,j,k), elementClone);
+				AddParameter(Get3DIndexName(i,j,k), elementClone);
 				selfMadeElements.Push(elementClone);
 			END_IF
 			
@@ -256,7 +256,7 @@ Get3DIndexName := concat(Get3DIndexName,']');]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnExecute" Id="{de4703d0-72e6-04f8-0958-489c14fca965}">
-      <Declaration><![CDATA[METHOD PROTECTED OnExecute : HRESULT
+      <Declaration><![CDATA[METHOD PROTECTED OnExecute
 VAR
 END_VAR]]></Declaration>
       <Implementation>

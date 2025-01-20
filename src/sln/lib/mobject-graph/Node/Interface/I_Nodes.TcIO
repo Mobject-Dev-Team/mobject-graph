@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <Itf Name="I_Nodes" Id="{c7bb15f9-1eb4-436a-9915-c62c2fbf6d53}">
     <Declaration><![CDATA[INTERFACE I_Nodes
 ]]></Declaration>
@@ -14,6 +14,12 @@ END_VAR]]></Declaration>
 VAR_INPUT
 	Node : I_Node;
 END_VAR]]></Declaration>
+    </Method>
+    <Method Name="GetNodesInOrderEnumerator" Id="{a531acc3-9a79-0d0c-28ea-eb9a4f88d6dc}">
+      <Declaration><![CDATA[METHOD PUBLIC GetNodesInOrderEnumerator : I_ForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
     </Method>
     <Property Name="HasNodes" Id="{608d2b7e-39ad-04a0-20b2-169ee296276d}">
       <Declaration><![CDATA[PROPERTY PUBLIC HasNodes : BOOL]]></Declaration>

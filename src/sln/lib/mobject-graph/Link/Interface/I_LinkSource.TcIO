@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <Itf Name="I_LinkSource" Id="{f4bf910b-7c21-0bb0-11c3-43e2452b9c88}">
+    <Declaration><![CDATA[INTERFACE I_LinkSource
+]]></Declaration>
+    <Property Name="Data" Id="{23dedf69-2d7f-0966-04e2-ed35c475f0a3}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Data : I_Datatype]]></Declaration>
+      <Get Name="Get" Id="{ca4c9977-c674-02ae-00c4-45e31d7adca7}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Name" Id="{1f48b58f-cbd0-0636-385b-15d4e7da0403}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
+      <Get Name="Get" Id="{f92a9d4f-dda6-05d5-2a31-b4e54c506f84}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

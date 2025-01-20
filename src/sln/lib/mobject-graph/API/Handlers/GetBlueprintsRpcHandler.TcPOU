@@ -19,8 +19,13 @@ VAR_INPUT
 	Response : I_AsynchronousRpcResponse;
 END_VAR
 VAR
-	visitor : GetBlueprintsVisitor;
+	getBlueprintsVisitor : GetBlueprintsVisitor;
+	getPaginatedBlueprintsVisitor : GetPaginatedBlueprintsVisitor;
+	visitor : I_NodeFactoryVisitor;
 	serializer : I_Serializer;
+	feedback : DeserializerFeedback;
+	offset : UDINT;
+	maxLimit : UDINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF nodeFactory = 0 THEN
@@ -29,9 +34,18 @@ END_VAR]]></Declaration>
 END_IF
 
 serializer := Response.GetSerializer();
-visitor.Initialize(serializer);
-nodeFactory.Accept(visitor);
 
+IF Parameters.TryGetKeyUdint('offset', offset, feedback) AND_THEN Parameters.TryGetKeyUdint('limit', maxLimit, feedback) THEN
+	// if the offset and limit are provide then use the paginated visitor
+	getPaginatedBlueprintsVisitor.Initialize(serializer, offset, maxlimit);
+	visitor := getPaginatedBlueprintsVisitor;
+ELSE
+	// if the offset and limit are not supplied then try to get all blueprints
+	getBlueprintsVisitor.Initialize(serializer);
+	visitor := getBlueprintsVisitor;
+END_IF
+
+nodeFactory.Accept(visitor);
 Response.CompleteWithSerializer(serializer);
 serializer.Dispose();]]></ST>
       </Implementation>

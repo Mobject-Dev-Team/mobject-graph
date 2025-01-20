@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="GetStatusRpcHandler" Id="{e43733d1-2b9d-0d57-2c56-297d7cb96473}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -32,7 +32,7 @@ END_VAR]]></Declaration>
 END_IF
 
 IF NOT graphs.TryGetGraphByUuid(graphUuid,graph) THEN
-	Response.RejectWithMessage(concat('Unknown UUID : ',graphUuid));
+	Response.RejectWithMessage(concat('Unknown UUID : ', graphUuid));
 	RETURN;
 END_IF
 

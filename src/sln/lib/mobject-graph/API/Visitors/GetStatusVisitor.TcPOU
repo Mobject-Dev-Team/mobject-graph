@@ -31,8 +31,8 @@ END_VAR
       <Implementation>
         <ST><![CDATA[IF VisitingAlarm.Active THEN
 	serializer.StartObject();
-	serializer.AddKeyString('message',VisitingAlarm.Message);
-	serializer.AddKeyString('reason',VisitingAlarm.Reason);
+	serializer.AddKeyString('message', VisitingAlarm.Message);
+	serializer.AddKeyString('reason', VisitingAlarm.Reason);
 	serializer.EndObject();
 END_IF]]></ST>
       </Implementation>
@@ -46,8 +46,8 @@ END_VAR
       <Implementation>
         <ST><![CDATA[serializer.StartObject();
 
-serializer.AddKeyString('name',VisitingContent.Name);
-serializer.AddKeyObject('value',VisitingContent.Data);
+serializer.AddKeyString('name', VisitingContent.Name);
+serializer.AddKeyObject('value', VisitingContent.Data);
 
 serializer.EndObject();]]></ST>
       </Implementation>
@@ -59,7 +59,7 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[Serializer.StartObject();
-Serializer.AddKeyString('name',VisitingExtension.Name);
+Serializer.AddKeyString('name', VisitingExtension.Name);
 
 IF VisitingExtension.Alarms.HasAlarms THEN
 	serializer.addkey('alarms');
@@ -89,7 +89,7 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[serializer.StartObject();
 
-serializer.addKeyString('uuid',VisitingGraph.Uuid);
+serializer.addKeyString('uuid', VisitingGraph.Uuid);
 
 IF VisitingGraph.Alarms.HasRaisedAlarm THEN
 	serializer.addkey('alarms');

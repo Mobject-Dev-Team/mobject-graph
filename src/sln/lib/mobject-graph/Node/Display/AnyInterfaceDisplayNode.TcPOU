@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="AnyInterfaceDisplayNode" Id="{bc39b922-3d83-0130-2b11-7bb0ac973d48}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK FINAL AnyInterfaceDisplayNode EXTENDS Node
+VAR
+	in : I_InterfaceDatatype;
+	display : I_InterfaceDatatype;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Constructor" Id="{ecc6e8b9-3762-07d2-2a21-6d015e4a15f5}" />
+    <Folder Name="Destructor" Id="{45744eff-e2e7-061e-39b9-fc774905e918}" />
+    <Method Name="Clone" Id="{178d4b9f-f18e-07fb-3c25-e938c0c068a1}">
+      <Declaration><![CDATA[METHOD PUBLIC Clone : I_Node
+VAR
+	pNode : POINTER TO AnyInterfaceDisplayNode;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pNode := __NEW(AnyInterfaceDisplayNode(Datatype := in));
+Clone := pNode^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{e85702b0-9f4f-0abc-351a-5cfd9319eea2}" FolderPath="Destructor\">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInCopyCode THEN
+	RETURN;
+END_IF
+
+in.Dispose();
+display.Dispose();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{8b70c3e1-ec65-0e9a-1cf9-28c44c7d7644}" FolderPath="Constructor\">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Datatype : I_InterfaceDatatype;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Datatype.Clone().TryResolveAsInterfaceDatatype(THIS^.in);
+Datatype.Clone().TryResolveAsInterfaceDatatype(THIS^.display);
+
+AddInput('in', THIS^.in);
+AddContent('display', THIS^.display);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OnExecute" Id="{2e98590f-2783-02b3-02ff-8cd80273456f}">
+      <Declaration><![CDATA[METHOD PROTECTED OnExecute
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[display.TryCopyContentFrom(in);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

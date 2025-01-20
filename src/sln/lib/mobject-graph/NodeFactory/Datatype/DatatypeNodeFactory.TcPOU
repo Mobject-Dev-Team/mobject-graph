@@ -109,6 +109,19 @@ END_VAR]]></Declaration>
 CreateDisplayNode := pAnyDisplayNode^;]]></ST>
       </Implementation>
     </Method>
+    <Method Name="CreateInterfaceDisplayNode" Id="{47793241-fb5b-0de0-300e-5cabec018061}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED CreateInterfaceDisplayNode : I_Node
+VAR_INPUT
+	NodeDatatype : I_InterfaceDatatype;
+END_VAR
+VAR
+	pAnyInterfaceDisplayNode : POINTER TO AnyInterfaceDisplayNode;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[pAnyInterfaceDisplayNode := __NEW(AnyInterfaceDisplayNode(Datatype := NodeDatatype));
+CreateInterfaceDisplayNode := pAnyInterfaceDisplayNode^;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="CreateLiteralNode" Id="{c52fa6c0-781b-0d47-0d80-60de41af51f8}" FolderPath="Protected\">
       <Declaration><![CDATA[METHOD PROTECTED CreateLiteralNode : I_Node
 VAR_INPUT
@@ -158,7 +171,7 @@ END_VAR
 	RETURN;
 END_IF
 
-datatypes.OffEvent('OnDatatypeAdded',THIS^);
+datatypes.OffEvent('OnDatatypeAdded', THIS^);
 datatypes := 0;]]></ST>
       </Implementation>
     </Method>
@@ -212,7 +225,7 @@ VAR_INPUT
 END_VAR
 VAR
 	datatypeAddedEvent : I_DatatypeAddedEvent;
-	primativeDatatype : I_Datatype;
+	primitiveDatatype : I_Datatype;
 	aliasDatatypeAddedEvent : I_AliasDatatypeAddedEvent;
 	aliasDatatype : I_AliasDatatype;
 	enumDatatypeAddedEvent : I_EnumDatatypeAddedEvent;
@@ -275,9 +288,9 @@ IF __QUERYINTERFACE(event, arrayDatatypeAddedEvent) THEN
 END_IF
 
 IF __QUERYINTERFACE(event, datatypeAddedEvent) THEN
-	primativeDatatype := datatypeAddedEvent.Target;
-	RegisterPrimitiveLiteralNodeOfType(primativeDatatype);
-	RegisterPrimitiveDisplayNodeOfType(primativeDatatype);
+	primitiveDatatype := datatypeAddedEvent.Target;
+	RegisterPrimitiveLiteralNodeOfType(primitiveDatatype);
+	RegisterPrimitiveDisplayNodeOfType(primitiveDatatype);
 	RETURN;
 END_IF]]></ST>
       </Implementation>
@@ -388,7 +401,7 @@ VAR
 	path : T_MAXSTRING;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[node := CreateDisplayNode(NodeDatatype);
+        <ST><![CDATA[node := CreateInterfaceDisplayNode(NodeDatatype);
 selfCreatedNodes.Push(node);
 path := concat('Display/', NodeDatatype.Identifier);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
@@ -422,7 +435,7 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[node := CreateDisplayNode(NodeDatatype);
 selfCreatedNodes.Push(node);
-path := concat('Display/',NodeDatatype.TypeName);
+path := concat('Display/', NodeDatatype.TypeName);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
@@ -438,7 +451,7 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[node := CreateLiteralNode(NodeDatatype);
 selfCreatedNodes.Push(node);
-path := concat('Literal/',NodeDatatype.TypeName);
+path := concat('Literal/', NodeDatatype.TypeName);
 nodeFactory.AddNodeAsPrototype(path,node);]]></ST>
       </Implementation>
     </Method>
@@ -516,7 +529,7 @@ END_VAR
 	RETURN;
 END_IF
 
-datatypes.OnEvent('OnDatatypeAdded',THIS^);]]></ST>
+datatypes.OnEvent('OnDatatypeAdded', THIS^);]]></ST>
       </Implementation>
     </Method>
   </POU>

@@ -101,7 +101,7 @@ END_VAR
 	RETURN;
 END_IF
 
-parentAsPreCheckedNode.OnEvent('OnNodePreExecute', this^);]]></ST>
+parentAsPreCheckedNode.OnEvent('OnNodePreExecute', THIS^);]]></ST>
       </Implementation>
     </Method>
   </POU>

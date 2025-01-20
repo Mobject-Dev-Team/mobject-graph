@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="GraphHost" Id="{d8bdf358-836b-4db8-b696-af3292728ab1}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -77,16 +77,15 @@ VAR_INPUT
 	Graph : I_Graph;
 END_VAR
 VAR
-	pGraphAddedEvent : POINTER TO GraphAddedEvent;
+	graphAddedEvent : GraphAddedEvent(Target := Graph);
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF eventTarget = 0 THEN
 	RETURN;
 END_IF
 
-pGraphAddedEvent := __NEW(GraphAddedEvent(Target := Graph));
-eventTarget.Emit('OnGraphAdded',pGraphAddedEvent^);
-pGraphAddedEvent^.Dispose();]]></ST>
+eventTarget.Emit('OnGraphAdded', graphAddedEvent);
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="Execute" Id="{978f1528-b5ad-4c0e-8a71-79f347dfb578}">

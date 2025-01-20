@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="HardwareNode" Id="{85ece793-f676-085b-2f7b-4cfecfdbeded}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'linkalways'} 
+{attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
+{attribute 'enable_dynamic_creation'}
+{attribute 'hide_all_locals'}
+FUNCTION_BLOCK ABSTRACT HardwareNode EXTENDS Node
+VAR
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Clone" Id="{8067fbb0-4f7e-0a88-0a24-27338046bcf8}">
+      <Declaration><![CDATA[METHOD PUBLIC  Clone : I_Node
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Clone := THIS^;
+// hardware nodes are singletons, so when asked to clone, it instead returns itself.]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Dispose" Id="{f728237d-f743-00e5-278e-7f16c04a9ebf}">
+      <Declaration><![CDATA[METHOD PUBLIC Dispose
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// hardware nodes are singletons, so this remains empty as it should not be destroyed.]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

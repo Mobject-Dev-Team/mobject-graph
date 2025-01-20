@@ -85,16 +85,15 @@ VAR_INPUT
 	Node : I_Node;
 END_VAR
 VAR
-	pNodeAddedEvent : POINTER TO NodeAddedEvent;
+	nodeAddedEvent : NodeAddedEvent(Target := Node);
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF eventTarget = 0 THEN
 	RETURN;
 END_IF
 
-pNodeAddedEvent := __NEW(NodeAddedEvent(Target := Node));
-eventTarget.Emit('OnNodeAdded',pNodeAddedEvent^);
-pNodeAddedEvent^.Dispose();]]></ST>
+eventTarget.Emit('OnNodeAdded', nodeAddedEvent);
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="Execute" Id="{93906193-d273-4784-8a7d-4e6848c104ed}">
@@ -142,6 +141,15 @@ END_VAR
         <ST><![CDATA[hostParent := Parent;
 eventTarget := parentEventTarget;
 CreateExecuteEnumerator();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetNodesInOrderEnumerator" Id="{b5ad29ae-0d16-0c8c-09c1-93faceaaf69b}">
+      <Declaration><![CDATA[METHOD PUBLIC GetNodesInOrderEnumerator : I_ForwardEnumerator
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetNodesInOrderEnumerator := nodesInExecutionOrder.GetEnumerator();]]></ST>
       </Implementation>
     </Method>
     <Property Name="HasNodes" Id="{bc9a2333-a5a9-0d80-29bd-ba707b99e3bf}">
@@ -214,7 +222,7 @@ nodesEnumerator := nodeDeserializer.GetArrayEnumerator();
 
 WHILE nodesEnumerator.MoveNext() DO
 	
-	IF NOT nodesEnumerator.Current.TryGetKeyString('id',nodeId, Feedback) THEN
+	IF NOT nodesEnumerator.Current.TryGetKeyString('id', nodeId, Feedback) THEN
 		CONTINUE;
 	END_IF
 	

@@ -19,7 +19,7 @@
     <Company>mobject</Company>
     <Released>false</Released>
     <Title>mobject-graph</Title>
-    <ProjectVersion>0.14.0</ProjectVersion>
+    <ProjectVersion>0.15.0</ProjectVersion>
     <DefaultNamespace>mobject-graph</DefaultNamespace>
     <Placeholder>mobject-graph</Placeholder>
     <Author>mobject dev team</Author>
@@ -142,6 +142,8 @@
     <Folder Include="InputPort\Events" />
     <Folder Include="InputPort\Host" />
     <Folder Include="InputPort\Interface" />
+    <Folder Include="Link\Collection" />
+    <Folder Include="Link\Interface" />
     <Folder Include="Metadata" />
     <Folder Include="Metadata\Base" />
     <Folder Include="Metadata\Events" />
@@ -149,7 +151,9 @@
     <Folder Include="Metadata\Interface" />
     <Folder Include="GraphFramework" />
     <Folder Include="API" />
+    <Folder Include="Link" />
     <Folder Include="Node\Events" />
+    <Folder Include="Node\Hardware" />
     <Folder Include="Packs" />
     <Folder Include="Node" />
     <Folder Include="NodeFactory" />
@@ -217,9 +221,6 @@
     <Compile Include="API\GraphFrameworkApi.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="API\Handlers\CreateGraphMultiUserRpcHandler.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="API\Handlers\CreateGraphRpcHandler.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -236,6 +237,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="API\Visitors\GetBlueprintsVisitor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="API\Visitors\GetPaginatedBlueprintsVisitor.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="API\Visitors\GetStatusVisitor.TcPOU">
@@ -346,13 +350,7 @@
     <Compile Include="InputPort\Events\InputPortAddedEvent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="InputPort\Events\InputPortChangedEvent.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="InputPort\Events\I_InputPortAddedEvent.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="InputPort\Events\I_InputPortChangedEvent.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InputPort\Host\InputPortHost.TcPOU">
@@ -365,6 +363,24 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InputPort\Interface\I_InputPorts.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Link\Collection\NodeLinks.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Link\Interface\I_LinkDestination.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Link\Interface\I_LinkSource.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Link\Interface\I_NodeLink.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Link\Interface\I_NodeLinks.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Link\Link.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Base\Metadata.TcPOU">
@@ -424,6 +440,9 @@
     <Compile Include="Node\Bundle\AnyAliasStructureBundleNode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Node\Display\AnyInterfaceDisplayNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Node\Events\I_NodeAddedEvent.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -446,6 +465,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Node\Events\NodePreExecuteEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node\Hardware\HardwareNode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Node\Unbundle\AnyAliasArrayUnbundleNode.TcPOU">
@@ -484,13 +506,7 @@
     <Compile Include="OutputPort\Events\I_OutputPortAddedEvent.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="OutputPort\Events\I_OutputPortChangedEvent.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="OutputPort\Events\OutputPortAddedEvent.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OutputPort\Events\OutputPortChangedEvent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OutputPort\Host\OutputPortHost.TcPOU">
@@ -520,7 +536,13 @@
     <Compile Include="Parameters\Events\I_ParameterAddedEvent.TcIO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Parameters\Events\I_ParameterUpdatedEvent.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Parameters\Events\ParameterAddedEvent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Parameters\Events\ParameterUpdatedEvent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Parameters\Host\ParameterHost.TcPOU">
@@ -570,10 +592,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <LibraryReference Include="mobject-core,0.5.0,mobject">
+    <LibraryReference Include="mobject-core,0.6.0,mobject">
       <Namespace>mobject_core</Namespace>
     </LibraryReference>
-    <LibraryReference Include="mobject-server,0.15.0,mobject">
+    <LibraryReference Include="mobject-server,0.16.0,mobject">
       <Namespace>mobject_server</Namespace>
       <Parameters>
         <Parameter ListName="SERVERCONFIGURATION" xmlns="">

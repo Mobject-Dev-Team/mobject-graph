@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="ExtensionHost" Id="{1342cd0e-30df-4c6d-859e-45f9ea8ed804}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -45,7 +45,7 @@ VAR_INPUT
 	Extension : I_Extension;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[extensions.AddOrUpdate(Extension.Name,Extension);
+        <ST><![CDATA[extensions.AddOrUpdate(Extension.Name, Extension);
 EmitOnExtensionAddedEvent(Extension);]]></ST>
       </Implementation>
     </Method>
@@ -55,16 +55,15 @@ VAR_INPUT
 	Extension : I_Extension;
 END_VAR
 VAR
-	pExtensionAddedEvent : POINTER TO ExtensionAddedEvent;
+	extensionAddedEvent : ExtensionAddedEvent(Target := Extension);
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF eventTarget = 0 THEN
 	RETURN;
 END_IF
 
-pExtensionAddedEvent := __NEW(ExtensionAddedEvent(Target := Extension));
-eventTarget.Emit('OnExtensionAdded',pExtensionAddedEvent^);
-pExtensionAddedEvent^.Dispose();]]></ST>
+eventTarget.Emit('OnExtensionAdded', extensionAddedEvent);
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{4d716ee7-2d1a-4785-9f33-1378b60a0ebf}" FolderPath="Constructor\">

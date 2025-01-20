@@ -153,7 +153,7 @@
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
-    <LibraryReference Include="mobject-graph,0.14.0,mobject">
+    <LibraryReference Include="mobject-graph,0.15.0,mobject">
       <Namespace>mobject_graph</Namespace>
     </LibraryReference>
   </ItemGroup>

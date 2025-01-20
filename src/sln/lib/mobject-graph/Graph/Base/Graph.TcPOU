@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="Graph" Id="{5b276c05-1687-4349-9bef-f2fb235b963c}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -18,6 +18,7 @@ VAR
 	metadataHost : MetadataHost(THIS^, eventEmitter);
 	extensionHost : ExtensionHost(THIS^,eventEmitter);
 	selfCreatedNodes : Stack;
+	nodelinks : NodeLinks;
 	
 	deserializationFailedAlarm : DeserializationFailedAlarm(THIS^);
 	deserializationFailedNodeNotSupportedAlarm : DeserializationFailedNodeNotSupportedAlarm(THIS^);
@@ -117,7 +118,7 @@ END_VAR]]></Declaration>
 	RETURN;
 END_IF
 
-DisposeSelfCreatedNodes();]]></ST>
+Reset();]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{5b6c9d92-e7de-4442-8483-d529a9fd3648}" FolderPath="Constructor\">
@@ -234,6 +235,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[_uuid := '';
+nodeLinks.Clear();
 DisposeSelfCreatedNodes();]]></ST>
       </Implementation>
     </Method>
@@ -255,6 +257,48 @@ extensionHost.SerializeWith(Serializer);
 metadataHost.SerializeWith(Serializer);
 nodeHost.SerializeWith(Serializer);
 Serializer.EndObject();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TryConnectLinksInExecutionOrder" Id="{bb00a294-b2a5-0260-3e42-392e9576e6fc}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PRIVATE TryConnectLinksInExecutionOrder : BOOL
+VAR_INPUT
+END_VAR
+VAR
+	nodeEnumerator : I_ForwardEnumerator;
+	linkEnumerator : I_KeyValueForwardEnumerator;
+	nodeId : T_MAXSTRING;
+	node : I_Node;
+	link : I_NodeLink;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[nodeEnumerator := nodes.GetNodesInOrderEnumerator();
+linkEnumerator := nodelinks.GetKeyValueEnumerator();
+
+WHILE (nodeEnumerator.MoveNext()) DO
+	
+	IF nodeEnumerator.TryGet(node) THEN
+		nodeId := node.Id;
+		linkEnumerator.Reset();
+		
+		WHILE (linkEnumerator.MoveNext()) DO
+	
+			IF linkEnumerator.TryGet(link) AND_THEN link.SourceNode.Id = nodeId THEN
+				IF NOT link.TryConnect() THEN
+					linkEnumerator.Dispose();
+					nodeEnumerator.Dispose();
+					RETURN;	
+				END_IF
+			END_IF
+		
+		END_WHILE
+
+	END_IF
+
+END_WHILE
+
+linkEnumerator.Dispose();
+nodeEnumerator.Dispose();
+TryConnectLinksInExecutionOrder := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TryDeserializeFrom" Id="{f47829b3-c51e-4d94-ad9f-863847083721}">
@@ -288,7 +332,7 @@ IF NOT TryDeserializeNodes(Deserializer, Feedback) THEN
 	RETURN;
 END_IF
 
-IF NOT TryDeserializeLinks(Deserializer, Feedback) THEN
+IF NOT TryDeserializeNodeLinks(Deserializer, Feedback) THEN
 	RETURN;
 END_IF
 
@@ -296,8 +340,8 @@ _uuid := receivedUuid;
 TryDeserializeFrom := TRUE;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="TryDeserializeLinks" Id="{6dbb87fb-132e-45f3-a1d4-1f9f1a021a9a}" FolderPath="Private\">
-      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeLinks : BOOL
+    <Method Name="TryDeserializeNodeLinks" Id="{6dbb87fb-132e-45f3-a1d4-1f9f1a021a9a}" FolderPath="Private\">
+      <Declaration><![CDATA[METHOD PUBLIC TryDeserializeNodeLinks : BOOL
 VAR_INPUT
 	Deserializer : I_Deserializer;
 	Feedback : I_DeserializerFeedback;
@@ -306,14 +350,17 @@ VAR
 	linksDeserializer : I_Deserializer;
 	linksEnumerator : I_DeserializerArrayForwardEnumerator;
 	linkDeserializer : I_Deserializer;
+	linkId : T_MAXSTRING;
 	sourceNodeId : T_MAXSTRING;
-	sourcePortName : T_MAXSTRING;
+	sourceName : T_MAXSTRING;
 	destinationNodeId : T_MAXSTRING;
-	destinationPortName : T_MAXSTRING;
+	destinationName : T_MAXSTRING;
 	sourceNode : I_Node;
 	sourcePort : I_OutputPort;
 	destinationNode : I_Node;
 	destinationPort : I_InputPort;
+	destinationParameter : I_Parameter;
+	link : I_NodeLink;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[linksDeserializer := Deserializer.GetKeyArray('links');
@@ -323,14 +370,20 @@ WHILE linksEnumerator.MoveNext() DO
 	
 	linkDeserializer := linksEnumerator.Current.GetArray();
 	
+	IF NOT linkDeserializer.GetElementByIndex(0).TryGetString(linkId, Feedback) THEN
+		DeserializationFailedAlarm.Raise('Missing linkid from link');
+		linksEnumerator.Dispose();
+		RETURN;
+	END_IF
+	
 	IF NOT linkDeserializer.GetElementByIndex(1).TryGetString(sourceNodeId, Feedback) THEN
 		DeserializationFailedAlarm.Raise('Missing source node id from link');
 		linksEnumerator.Dispose();
 		RETURN;
 	END_IF
 	
-	IF NOT linkDeserializer.GetElementByIndex(2).TryGetString(sourcePortName, Feedback) THEN
-		DeserializationFailedAlarm.Raise('Missing source port name from link');
+	IF NOT linkDeserializer.GetElementByIndex(2).TryGetString(sourceName, Feedback) THEN
+		DeserializationFailedAlarm.Raise('Missing source name from link');
 		linksEnumerator.Dispose();
 		RETURN;
 	END_IF
@@ -341,8 +394,8 @@ WHILE linksEnumerator.MoveNext() DO
 		RETURN;
 	END_IF
 	
-	IF NOT linkDeserializer.GetElementByIndex(4).TryGetString(destinationPortName, Feedback) THEN
-		DeserializationFailedAlarm.Raise('Missing destination port name from link');
+	IF NOT linkDeserializer.GetElementByIndex(4).TryGetString(destinationName, Feedback) THEN
+		DeserializationFailedAlarm.Raise('Missing destination name from link');
 		linksEnumerator.Dispose();
 		RETURN;
 	END_IF
@@ -359,27 +412,33 @@ WHILE linksEnumerator.MoveNext() DO
 		RETURN;
 	END_IF
 	
-	IF NOT sourceNode.OutputPorts.TryGetOutputPortByName(sourcePortName, sourcePort) THEN
-		DeserializationFailedAlarm.Raise('Unable to get source port when creating link');
+	IF NOT sourceNode.OutputPorts.TryGetOutputPortByName(sourceName, sourcePort) THEN
+		DeserializationFailedAlarm.Raise('Unable to get source when creating link');
 		linksEnumerator.Dispose();
 		RETURN;
 	END_IF
 	
-	IF NOT destinationNode.InputPorts.TryGetInputPortByName(destinationPortName, destinationPort) THEN
+	// first try to find the name in the node input ports, then by node parameters
+	IF destinationNode.InputPorts.TryGetInputPortByName(destinationName, destinationPort) THEN
+		nodelinks.Create(linkId, sourceNode, sourcePort, destinationNode, destinationPort);
+	ELSIF  destinationNode.Parameters.TryGetParameterByName(destinationName, destinationParameter) THEN
+		nodelinks.Create(linkId, sourceNode, sourcePort, destinationNode, destinationParameter);
+	ELSE
 		DeserializationFailedAlarm.Raise('Unable to get destination port when creating link');
 		linksEnumerator.Dispose();
 		RETURN;
 	END_IF
 	
-	IF NOT destinationPort.TryConnectTo(sourcePort) THEN
-		DeserializationFailedAlarm.Raise('Unable to connect source to destination when creating link');
-		linksEnumerator.Dispose();
-		RETURN;
-	END_IF
-	
+
 END_WHILE
 
-TryDeserializeLinks := TRUE;
+IF NOT TryConnectLinksInExecutionOrder() THEN
+	DeserializationFailedAlarm.Raise('Unable to finalise links');
+	linksEnumerator.Dispose();
+	RETURN;
+END_IF
+
+TryDeserializeNodeLinks := TRUE;
 linksEnumerator.Dispose();]]></ST>
       </Implementation>
     </Method>

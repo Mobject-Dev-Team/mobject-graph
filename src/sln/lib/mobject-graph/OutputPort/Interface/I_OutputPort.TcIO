@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <Itf Name="I_OutputPort" Id="{54edf811-4913-4b57-ba71-6036e501fb67}">
-    <Declaration><![CDATA[INTERFACE I_OutputPort EXTENDS I_Disposable, I_EventEmitter, I_Serializable, I_HostMetadata
+    <Declaration><![CDATA[INTERFACE I_OutputPort EXTENDS I_Disposable, I_EventEmitter, I_Serializable, I_HostMetadata, I_LinkSource
 ]]></Declaration>
     <Method Name="Accept" Id="{aa3a9d71-ac12-40dd-ad8f-9235d7b1a13a}">
       <Declaration><![CDATA[METHOD PUBLIC Accept
@@ -10,17 +10,5 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
-    <Property Name="Data" Id="{34ffee89-5c75-49b2-aafa-017e8e6186a1}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Data : I_Datatype]]></Declaration>
-      <Get Name="Get" Id="{10893aa1-b180-457a-9faf-31a7b60cc29a}">
-        <Declaration><![CDATA[]]></Declaration>
-      </Get>
-    </Property>
-    <Property Name="Name" Id="{8cad4439-74ed-46aa-b235-a0ecf44a87f8}">
-      <Declaration><![CDATA[PROPERTY PUBLIC Name : T_MAXSTRING]]></Declaration>
-      <Get Name="Get" Id="{a6c91baa-e710-4c9a-97ce-8dfb6515fb62}">
-        <Declaration><![CDATA[]]></Declaration>
-      </Get>
-    </Property>
   </Itf>
 </TcPlcObject>

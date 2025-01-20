@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="Alarm" Id="{dc64a02b-06d6-4cd6-bb49-ecdb4c808ffc}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -17,7 +17,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Visitor.VisitAlarm(this^);]]></ST>
+        <ST><![CDATA[Visitor.VisitAlarm(THIS^);]]></ST>
       </Implementation>
     </Method>
     <Property Name="Active" Id="{b38435b1-3786-40d3-9015-61a5a18fb496}" FolderPath="Abstract\">
@@ -98,11 +98,11 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[Serializer.StartObject();
-Serializer.AddKeyString('message',errorMessage);
-Serializer.AddKeyBool('active',isActive);
+Serializer.AddKeyString('message', errorMessage);
+Serializer.AddKeyBool('active', isActive);
 
 IF reasonMessage <> '' THEN
-	Serializer.AddKeyString('reason',reasonMessage);
+	Serializer.AddKeyString('reason', reasonMessage);
 END_IF
 
 Serializer.EndObject();]]></ST>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="ParameterAddedEvent" Id="{04bdbd93-c83e-46a8-b12e-cb3633e97c82}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -21,7 +21,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[This^._targetParameter := TargetParameter;]]></ST>
+        <ST><![CDATA[THIS^._targetParameter := TargetParameter;
+]]></ST>
       </Implementation>
     </Method>
     <Property Name="TargetParameter" Id="{694ef420-5dac-4410-aa5b-fc99f8894e8b}">

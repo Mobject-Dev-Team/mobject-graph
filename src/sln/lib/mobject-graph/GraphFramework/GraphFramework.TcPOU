@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="GraphFramework" Id="{55908e16-d4de-485c-8d69-f119453fe181}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -8,7 +8,7 @@ FUNCTION_BLOCK GraphFramework IMPLEMENTS I_GraphFramework
 VAR
 	_nodeFactory : NodeFactory;
 	_datatypes : Datatypes;
-	datatypeNodeFactory : DatatypeNodeFactory(_datatypes,_nodeFactory);
+	datatypeNodeFactory : DatatypeNodeFactory(_datatypes, _nodeFactory);
 END_VAR
 ]]></Declaration>
     <Implementation>

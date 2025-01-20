@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="AlarmHost" Id="{32c840a4-1cd1-4a9b-ac12-14909db5dd9e}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -55,16 +55,15 @@ VAR_INPUT
 	Alarm : I_Alarm;
 END_VAR
 VAR
-	pAlarmAddedEvent : POINTER TO AlarmAddedEvent;
+	alarmAddedEvent : AlarmAddedEvent(Target := Alarm);
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF eventTarget = 0 THEN
 	RETURN;
 END_IF
 
-pAlarmAddedEvent := __NEW(AlarmAddedEvent(Target := Alarm));
-eventTarget.Emit('OnAlarmAdded',pAlarmAddedEvent^);
-pAlarmAddedEvent^.Dispose();]]></ST>
+eventTarget.Emit('OnAlarmAdded', alarmAddedEvent);
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{0d4eab0b-5e3b-4823-9ba5-815e44607e58}" FolderPath="Constructor\">
