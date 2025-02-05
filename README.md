@@ -1,4 +1,4 @@
-Please note, this is still pre-release, so documentation and guides will follow.  Please check for branches for the current version.  There will be "how to make this work" guides coming soon once the actual release is made. 
+Please note, this is still pre-release, so documentation and guides will follow. Please check for branches for the current version. There will be "how to make this work" guides coming soon once the actual release is made.
 
 <p align="center">
   <picture>
@@ -11,6 +11,10 @@ Please note, this is still pre-release, so documentation and guides will follow.
 ## The mobject-graph Library
 
 This is one of the many libraries of [mobject](http://mobject.org). This library focuses on the providing graphical programming abilities to TwinCAT.
+
+## Installation
+
+The latest version of the library is found in the root of the repo. To install in to TwinCAT 4024, simply navigate to the repo folder and double click on `install-library.bat`
 
 ## What is mobject?
 
