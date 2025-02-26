@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
   <POU Name="AnyLiteralNode" Id="{85e13415-5879-0ba5-1c1a-0b03249c2944}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -8,6 +8,9 @@ FUNCTION_BLOCK FINAL AnyLiteralNode EXTENDS Node
 VAR
 	value : I_Datatype;
 	out : I_Datatype;
+	
+	// meta
+	suppressInputPort : _BOOL(TRUE);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -51,7 +54,9 @@ END_VAR
         <ST><![CDATA[THIS^.value := Datatype.Clone();
 THIS^.out := Datatype.Clone();
 
-AddParameter('value', THIS^.value);
+AddParameter('value', THIS^.value)
+	.AddMetadata('suppressInput', suppressInputPort); // literals should not use input ports if available. 
+	
 AddOutput('out', THIS^.out);]]></ST>
       </Implementation>
     </Method>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
   <POU Name="IecDatatypesPack" Id="{2666e562-c85c-055a-3f7d-7f2306b44585}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'linkalways'} 
 {attribute 'no_explicit_call' := 'This FB is a CLASS and must be accessed using methods or properties'}
@@ -26,6 +26,7 @@ VAR
 	_usint : _USINT(0);
 	_word : _WORD(0);
     _string : _STRING('');
+	_pvoid : _PVOID;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -56,7 +57,8 @@ Datatypes.RegisterDatatype(_uint);
 Datatypes.RegisterDatatype(_ulint);
 Datatypes.RegisterDatatype(_usint);
 Datatypes.RegisterDatatype(_word);
-Datatypes.RegisterDatatype(_string);]]></ST>
+Datatypes.RegisterDatatype(_string);
+Datatypes.RegisterDatatype(_pvoid);]]></ST>
       </Implementation>
     </Method>
     <Method Name="RegisterWithNodeFactory" Id="{513ae6b0-e933-01a5-2d76-3d0641b2d460}">
